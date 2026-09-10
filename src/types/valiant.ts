@@ -1,16 +1,25 @@
 export type PolicyStatus = 'active' | 'pending_renewal' | 'lapsed' | 'cancelled';
 export type ClaimStatus = 'triaged' | 'adjuster_assigned' | 'under_investigation' | 'settled' | 'rejected';
-export type IncidentType = 'Property Damage' | 'Bodily Injury' | 'Cyber Breach' | 'Third-Party Liability';
-export type LineOfBusiness = 'General Liability' | 'Cyber Extortion & Tech E&O' | 'Commercial Property' | 'Executive Risk & D&O' | 'Commercial Auto Fleet' | 'Workers Compensation';
+export type IncidentType = 'Commercial Property Damage' | 'Bodily Injury & Premises' | 'Technology E&O / Data Breach' | 'Third-Party Liability' | 'Transit & Cargo Loss';
+export type LineOfBusiness = 
+  | 'Commercial General Liability' 
+  | 'Commercial Property & Business Interruption' 
+  | 'Technology E&O & Cyber Risk' 
+  | 'Directors & Officers (D&O)' 
+  | 'Commercial Auto Fleet' 
+  | 'Workers Compensation & Employers Liability';
 
 export interface CommercialAccount {
   id: string;
   company_name: string;
+  dba?: string;
   tax_id_ein: string;
   naics_code: string;
   industry_category: string;
+  headquarters_address: string;
   annual_revenue: number;
   full_time_employees: number;
+  annual_payroll: number;
   created_at: string;
 }
 
@@ -19,7 +28,9 @@ export interface Policy {
   account_id: string;
   policy_number: string;
   carrier_name: string;
-  line_of_business: string;
+  naic_number?: string;
+  iso_form_code?: string;
+  line_of_business: LineOfBusiness | string;
   aggregate_limit: number;
   occurrence_limit: number;
   deductible: number;
@@ -27,6 +38,7 @@ export interface Policy {
   expiration_date: string;
   status: PolicyStatus;
   annual_premium: number;
+  insured_name?: string;
   created_at: string;
 }
 
@@ -37,11 +49,13 @@ export interface CoiCertificate {
   holder_address: string;
   additional_insured: boolean;
   waiver_subrogation: boolean;
+  primary_noncontributory?: boolean;
   special_conditions?: string;
   issued_at: string;
   verification_hash: string;
   policy_number?: string;
   carrier_name?: string;
+  naic_number?: string;
   insured_name?: string;
 }
 
@@ -51,15 +65,18 @@ export interface ClaimFnol {
   policy_number?: string;
   incident_date: string;
   reported_date: string;
-  incident_type: IncidentType;
+  incident_type: IncidentType | string;
   description: string;
+  location: string;
   injuries_reported: boolean;
   police_report_filed: boolean;
+  police_report_number?: string;
   estimated_loss?: number;
   status: ClaimStatus;
   assigned_adjuster?: string;
   adjuster_email?: string;
   adjuster_phone?: string;
+  reserve_amount?: number;
   document_urls: string[];
 }
 
@@ -74,6 +91,7 @@ export interface NaicsCode {
 export interface CarrierQuote {
   carrierId: string;
   carrierName: string;
+  naicNumber?: string;
   syndicateName: string;
   amBestRating: string;
   spRating: string;
@@ -86,10 +104,11 @@ export interface CarrierQuote {
   keyExclusions: string[];
   underwritingConfidenceScore: number;
   quoteId: string;
+  admittedPaper?: boolean;
 }
 
 export interface QuoteFormData {
-  // Stage 1: Entity Profile
+  // Stage 1: Corporate Entity Profile
   companyName: string;
   jurisdiction: string;
   taxIdEin: string;
@@ -99,20 +118,23 @@ export interface QuoteFormData {
   contactEmail: string;
   contactPhone: string;
 
-  // Stage 2: Operational Exposures
+  // Stage 2: Operational Exposures & Loss History
   annualRevenue: number;
   grossPayroll: number;
   fullTimeEmployees: number;
   premisesSquareFootage: number;
+  fleetVehicleCount: number;
+  hasSprinklers: boolean;
   hasInternationalExposure: boolean;
   internationalCountries?: string;
   priorLosses3Years: number;
+  priorLossDetails?: string;
 
   // Stage 3: Coverage Customizer
-  lineOfBusiness: LineOfBusiness;
-  aggregateLimit: number; // 1M, 2M, 5M, 10M
+  lineOfBusiness: LineOfBusiness | string;
+  aggregateLimit: number;
   occurrenceLimit: number;
-  deductible: number; // 1000, 2500, 5000, 10000, 25000
+  deductible: number;
   includeCyberEndorsement: boolean;
   includeHiredAuto: boolean;
   includeEpliRider: boolean;
@@ -130,7 +152,13 @@ export interface QuoteFormData {
   binderNumber?: string;
 }
 
-export type EndorsementType = 'add_vehicle' | 'add_location' | 'equipment_schedule' | 'change_limits' | 'change_entity' | 'limit_increase';
+export type EndorsementType = 
+  | 'add_vehicle' 
+  | 'add_location' 
+  | 'equipment_schedule' 
+  | 'change_limits' 
+  | 'change_entity' 
+  | 'limit_increase';
 
 export interface EndorsementRequest {
   id: string;
@@ -146,9 +174,9 @@ export interface AppetiteSector {
   sector: string;
   naicsPrefix: string;
   chubbAppetite: 'Aggressive' | 'Selective' | 'Restricted' | 'Prohibited';
+  travelersAppetite?: 'Aggressive' | 'Selective' | 'Restricted' | 'Prohibited';
   aigAppetite: 'Aggressive' | 'Selective' | 'Restricted' | 'Prohibited';
   lloydsAppetite: 'Aggressive' | 'Selective' | 'Restricted' | 'Prohibited';
   maxCapacity: string;
   targetRisks: string[];
 }
-

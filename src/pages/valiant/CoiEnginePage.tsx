@@ -21,10 +21,10 @@ import { CoiCertificate } from '../../types/valiant';
 export const CoiEnginePage: React.FC = () => {
   const { policies, cois, issueCoi } = useValiantStore();
 
-  const [selectedPolicyId, setSelectedPolicyId] = useState(policies[0]?.id || 'pol-01');
-  const [holderName, setHolderName] = useState('Apex Enterprise Logistics LLC');
-  const [holderAddress, setHolderAddress] = useState('500 Madison Avenue, 14th Floor\nNew York, NY 10022');
-  const [attentionLine, setAttentionLine] = useState('Attn: Risk Management & Vendor Compliance');
+  const [selectedPolicyId, setSelectedPolicyId] = useState(policies[0]?.id || 'pol-cgl-01');
+  const [holderName, setHolderName] = useState('Prologis Americas Logistics Hub LLC');
+  const [holderAddress, setHolderAddress] = useState('2800 S. Desplaines Ave, Suite 300\nChicago, IL 60616');
+  const [attentionLine, setAttentionLine] = useState('Attn: Risk Management & Contract Compliance');
   const [additionalInsured, setAdditionalInsured] = useState(true);
   const [waiverSubrogation, setWaiverSubrogation] = useState(true);
   const [cancellationNotice, setCancellationNotice] = useState(true);
@@ -73,22 +73,22 @@ export const CoiEnginePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 flex flex-col selection:bg-[#0284C7] selection:text-white">
+    <div className="min-h-screen bg-[#06080c] text-slate-100 flex flex-col selection:bg-[#fb6504] selection:text-white font-sans">
       <ValiantNavbar />
 
       <main className="flex-1 py-12 relative overflow-hidden">
-        <div className="ambient-glow-cerulean -top-20" />
+        <div className="ambient-glow-orange -top-20" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
               <div className="flex items-center gap-2">
-                <span className="vgr-pill bg-[#0284C7]/10 text-[#38bdf8] border-[#0284C7]/30">
-                  <span className="vgr-pill__dot bg-[#0284C7]" />
+                <span className="rr-pill rr-pill--orange inline-flex">
+                  <span className="rr-pill__dot bg-[#fb6504]" />
                   Self-Service Servicing Rail
                 </span>
-                <span className="text-xs font-mono text-slate-400">ACORD 25 Specification</span>
+                <span className="text-xs font-mono text-slate-400">ACORD 25 (2026/03) Specification</span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
                 Instant Certificate of Insurance Engine
@@ -103,9 +103,9 @@ export const CoiEnginePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab('create')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === 'create'
-                    ? 'bg-[#0284C7] text-white shadow-sm'
+                    ? 'bg-[#fb6504] text-white shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -115,9 +115,9 @@ export const CoiEnginePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab('ledger')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === 'ledger'
-                    ? 'bg-[#0284C7] text-white shadow-sm'
+                    ? 'bg-[#fb6504] text-white shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -131,7 +131,7 @@ export const CoiEnginePage: React.FC = () => {
             /* Create View: Split 2-Column Interface */
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Left Column: Form Controls (Span 5) */}
-              <div className="lg:col-span-5 vgr-bento-card p-6 sm:p-7 shadow-2xl space-y-6">
+              <div className="lg:col-span-5 rr-surface-card p-6 sm:p-7 shadow-2xl space-y-6">
                 <div className="border-b border-white/[0.08] pb-3">
                   <h2 className="text-base font-bold text-white tracking-tight">
                     Certificate Holder Parameters
@@ -150,10 +150,10 @@ export const CoiEnginePage: React.FC = () => {
                     <select
                       value={selectedPolicyId}
                       onChange={(e) => setSelectedPolicyId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white focus:outline-none focus:border-[#0284C7] font-mono text-xs"
+                      className="w-full px-3 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white focus:outline-none focus:border-[#fb6504] font-mono text-xs"
                     >
                       {policies.map((p) => (
-                        <option key={p.id} value={p.id} className="bg-[#0E131F]">
+                        <option key={p.id} value={p.id} className="bg-[#0a0d16]">
                           {p.policy_number} • {p.line_of_business} (${p.aggregate_limit / 1000000}M)
                         </option>
                       ))}
@@ -170,8 +170,8 @@ export const CoiEnginePage: React.FC = () => {
                       required
                       value={holderName}
                       onChange={(e) => setHolderName(e.target.value)}
-                      placeholder="e.g. Apex Enterprise Logistics LLC"
-                      className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                      placeholder="e.g. Prologis Americas Logistics Hub LLC"
+                      className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                     />
                   </div>
 
@@ -185,7 +185,7 @@ export const CoiEnginePage: React.FC = () => {
                       value={attentionLine}
                       onChange={(e) => setAttentionLine(e.target.value)}
                       placeholder="e.g. Attn: Contract Administration"
-                      className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                      className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                     />
                   </div>
 
@@ -200,7 +200,7 @@ export const CoiEnginePage: React.FC = () => {
                       value={holderAddress}
                       onChange={(e) => setHolderAddress(e.target.value)}
                       placeholder="Street address, Suite, City, State, ZIP..."
-                      className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7] resize-none"
+                      className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] resize-none"
                     />
                   </div>
 
@@ -215,7 +215,7 @@ export const CoiEnginePage: React.FC = () => {
                         type="checkbox"
                         checked={additionalInsured}
                         onChange={(e) => setAdditionalInsured(e.target.checked)}
-                        className="w-4 h-4 rounded text-[#0284C7] accent-[#0284C7]"
+                        className="w-4 h-4 rounded text-[#fb6504] accent-[#fb6504]"
                       />
                       <div>
                         <div className="font-semibold text-white">Include as Additional Insured</div>
@@ -228,7 +228,7 @@ export const CoiEnginePage: React.FC = () => {
                         type="checkbox"
                         checked={waiverSubrogation}
                         onChange={(e) => setWaiverSubrogation(e.target.checked)}
-                        className="w-4 h-4 rounded text-[#0284C7] accent-[#0284C7]"
+                        className="w-4 h-4 rounded text-[#fb6504] accent-[#fb6504]"
                       />
                       <div>
                         <div className="font-semibold text-white">Waiver of Transfer of Rights (Subrogation)</div>
@@ -241,7 +241,7 @@ export const CoiEnginePage: React.FC = () => {
                         type="checkbox"
                         checked={cancellationNotice}
                         onChange={(e) => setCancellationNotice(e.target.checked)}
-                        className="w-4 h-4 rounded text-[#0284C7] accent-[#0284C7]"
+                        className="w-4 h-4 rounded text-[#fb6504] accent-[#fb6504]"
                       />
                       <div>
                         <div className="font-semibold text-white">30-Day Notice of Cancellation</div>
@@ -259,14 +259,14 @@ export const CoiEnginePage: React.FC = () => {
                       rows={3}
                       value={specialConditions}
                       onChange={(e) => setSpecialConditions(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7] text-xs font-mono resize-none"
+                      className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] text-xs font-mono resize-none"
                     />
                   </div>
 
                   <div className="pt-3">
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] hover:from-[#0369a1] hover:to-[#0284C7] text-white font-bold text-xs shadow-[0_0_25px_-5px_rgba(2,132,199,0.5)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-xs shadow-[0_0_25px_-5px_rgba(251,101,4,0.5)] transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                     >
                       <Download className="w-4 h-4" />
                       <span>Issue & Download Official ACORD 25 (PDF)</span>
@@ -305,7 +305,7 @@ export const CoiEnginePage: React.FC = () => {
             </div>
           ) : (
             /* Ledger View: Searchable History */
-            <div className="vgr-bento-card p-6 sm:p-8 shadow-2xl space-y-6">
+            <div className="rr-surface-card p-6 sm:p-8 shadow-2xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-bold text-white tracking-tight">
@@ -323,14 +323,14 @@ export const CoiEnginePage: React.FC = () => {
                     value={searchLedger}
                     onChange={(e) => setSearchLedger(e.target.value)}
                     placeholder="Search holder or SHA-256 hash..."
-                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7] font-mono"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] font-mono"
                   />
                 </div>
               </div>
 
               <div className="border border-white/[0.08] rounded-xl overflow-hidden">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-[#0E131F] font-mono text-[10px] uppercase text-slate-400 border-b border-white/[0.08]">
+                  <thead className="bg-[#0a0d16] font-mono text-[10px] uppercase text-slate-400 border-b border-white/[0.08]">
                     <tr>
                       <th className="py-3 px-4">Certificate ID</th>
                       <th className="py-3 px-4">Certificate Holder</th>
@@ -352,7 +352,7 @@ export const CoiEnginePage: React.FC = () => {
                           <td className="py-3.5 px-4 font-sans font-medium text-slate-200">
                             {c.holder_name}
                           </td>
-                          <td className="py-3.5 px-4 text-[#38bdf8]">
+                          <td className="py-3.5 px-4 text-[#fb6504]">
                             {c.policy_number || pol.policy_number}
                           </td>
                           <td className="py-3.5 px-4 text-slate-400 text-[11px]">
@@ -366,7 +366,7 @@ export const CoiEnginePage: React.FC = () => {
                                 onClick={() => handleCopyHash(c.verification_hash)}
                                 className="text-slate-500 hover:text-white"
                               >
-                                {copiedHash === c.verification_hash ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                                {copiedHash === c.verification_hash ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                               </button>
                             </div>
                           </td>
@@ -374,7 +374,7 @@ export const CoiEnginePage: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => generateAcord25Pdf(c, pol)}
-                              className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[#0284C7]/20 text-[#38bdf8] hover:bg-[#0284C7]/30 border border-[#0284C7]/30 text-xs font-sans font-semibold transition-colors"
+                              className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[#fb6504]/10 text-[#fb6504] hover:bg-[#fb6504]/20 border border-[#fb6504]/25 text-xs font-sans font-semibold transition-colors cursor-pointer"
                             >
                               <Download className="w-3 h-3" />
                               <span>PDF</span>

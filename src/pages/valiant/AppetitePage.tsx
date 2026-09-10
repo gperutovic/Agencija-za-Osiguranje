@@ -66,19 +66,19 @@ export const AppetitePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 flex flex-col selection:bg-[#0284C7] selection:text-white">
+    <div className="min-h-screen bg-[#06080c] text-slate-100 flex flex-col selection:bg-[#fb6504] selection:text-white font-sans">
       <ValiantNavbar />
 
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-10">
 
         {/* Hero Banner & Positioning */}
-        <div className="relative rounded-3xl bg-gradient-to-b from-[#0E131F] to-[#07090E] border border-white/[0.08] p-8 sm:p-12 overflow-hidden shadow-2xl">
-          <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#0284C7]/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-[#6366F1]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative rounded-3xl bg-[#0a0d16] border border-white/[0.08] p-8 sm:p-12 overflow-hidden shadow-2xl">
+          <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#fb6504]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-[#fb6504]/08 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.1] text-xs font-mono text-[#38bdf8]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.1] text-xs font-mono text-[#fb6504]">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Institutional Underwriting Appetite Index</span>
             </div>
@@ -105,7 +105,7 @@ export const AppetitePage: React.FC = () => {
             <div>
               <div className="text-[11px] font-mono text-slate-400 uppercase">Syndicate Rating</div>
               <div className="text-2xl font-black font-mono text-white mt-1">A.M. Best 'A++'</div>
-              <div className="text-[10px] text-[#38bdf8]">100% Admitted / Lloyd's</div>
+              <div className="text-[10px] text-[#fb6504]">100% Admitted / Lloyd's</div>
             </div>
             <div>
               <div className="text-[11px] font-mono text-slate-400 uppercase">Global NAICS Indexed</div>
@@ -116,15 +116,15 @@ export const AppetitePage: React.FC = () => {
         </div>
 
         {/* Search & Filter Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#0E131F] border border-white/[0.08]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl rr-surface-card">
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by industry sector, NAICS prefix, or target risk (e.g. SaaS, Robotics, Solar, Cold Storage)..."
-              className="w-full bg-[#07090E] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#0284C7] focus:outline-none font-sans"
+              placeholder="Search by industry sector, NAICS prefix, or target risk (e.g. Cold Storage, Logistics, Tech E&O, Fleet)..."
+              className="w-full bg-[#06080c] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#fb6504] focus:outline-none font-sans"
             />
           </div>
 
@@ -133,7 +133,7 @@ export const AppetitePage: React.FC = () => {
             <select
               value={selectedAppetiteFilter}
               onChange={(e) => setSelectedAppetiteFilter(e.target.value)}
-              className="bg-[#07090E] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-[#0284C7] focus:outline-none font-mono"
+              className="bg-[#06080c] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-[#fb6504] focus:outline-none font-mono"
             >
               <option value="all">All Risk Appetites</option>
               <option value="aggressive">Aggressive Appetite (Any Carrier)</option>
@@ -143,7 +143,7 @@ export const AppetitePage: React.FC = () => {
         </div>
 
         {/* Matrix Table */}
-        <div className="rounded-3xl bg-[#0E131F] border border-white/[0.08] overflow-hidden shadow-xl">
+        <div className="rounded-3xl rr-surface-card overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-white/[0.03] text-slate-400 font-mono uppercase tracking-wider border-b border-white/[0.06]">
@@ -193,7 +193,7 @@ export const AppetitePage: React.FC = () => {
                     <td className="p-5 text-right">
                       <Link
                         to={`/quote?naics=${item.naicsPrefix}00`}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white font-bold text-xs shadow-md shadow-sky-900/30 hover:scale-[1.03] transition-all whitespace-nowrap"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-xs shadow-md shadow-orange-900/30 hover:scale-[1.03] transition-all whitespace-nowrap cursor-pointer"
                       >
                         <span>Start Quote</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -210,14 +210,14 @@ export const AppetitePage: React.FC = () => {
               <AlertCircle className="w-8 h-8 text-amber-400 mx-auto" />
               <div className="text-sm font-bold text-white">No industry sectors matched your search query.</div>
               <p className="text-xs">
-                Try searching for general terms such as "SaaS", "Manufacturing", "Medical", or clear the active filter.
+                Try searching for general terms such as "Logistics", "Manufacturing", "Medical", or clear the active filter.
               </p>
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedAppetiteFilter('all');
                 }}
-                className="px-4 py-2 rounded-xl bg-white/[0.05] text-white text-xs font-semibold hover:bg-white/[0.1]"
+                className="px-4 py-2 rounded-xl bg-white/[0.05] text-white text-xs font-semibold hover:bg-white/[0.1] cursor-pointer"
               >
                 Reset Filter
               </button>
@@ -226,9 +226,9 @@ export const AppetitePage: React.FC = () => {
         </div>
 
         {/* Institutional Trust & Lloyd's Disclosure */}
-        <div className="p-6 rounded-3xl bg-[#0E131F]/60 border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-400">
+        <div className="p-6 rounded-3xl rr-surface-card flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-400">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#38bdf8] shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#fb6504] shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
@@ -240,7 +240,7 @@ export const AppetitePage: React.FC = () => {
           </div>
           <Link
             to="/quote"
-            className="px-5 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.1] font-semibold text-xs whitespace-nowrap transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-semibold text-xs whitespace-nowrap transition-all shadow-md shadow-orange-950/20 cursor-pointer"
           >
             Engage Specialty Broker
           </Link>

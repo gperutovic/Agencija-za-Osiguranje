@@ -113,7 +113,7 @@ export const EnterprisePortalPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 flex flex-col selection:bg-[#0284C7] selection:text-white">
+    <div className="min-h-screen bg-[#06080c] text-slate-100 flex flex-col selection:bg-[#fb6504] selection:text-white font-sans">
       <ValiantNavbar />
 
       <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8">
@@ -122,7 +122,7 @@ export const EnterprisePortalPage: React.FC = () => {
         {/* Top Header & Account Information */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/[0.08]">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#38bdf8]">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#fb6504]">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Commercial Policyholder Operations</span>
               <span className="text-slate-600">•</span>
@@ -142,13 +142,13 @@ export const EnterprisePortalPage: React.FC = () => {
               to="/portal/coi"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/[0.1] text-xs font-semibold transition-all hover:scale-[1.02]"
             >
-              <FileText className="w-4 h-4 text-[#38bdf8]" />
+              <FileText className="w-4 h-4 text-[#fb6504]" />
               <span>Issue ACORD 25 COI</span>
             </Link>
 
             <button
               onClick={() => setIsEndorsementModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/[0.1] text-xs font-semibold transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/[0.1] text-xs font-semibold transition-all hover:scale-[1.02] cursor-pointer"
             >
               <PlusCircle className="w-4 h-4 text-emerald-400" />
               <span>Request Endorsement</span>
@@ -156,7 +156,7 @@ export const EnterprisePortalPage: React.FC = () => {
 
             <Link
               to="/claims/file"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600/90 to-amber-700/90 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-semibold shadow-lg shadow-amber-900/20 transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white text-xs font-semibold shadow-lg shadow-orange-950/20 transition-all hover:scale-[1.02]"
             >
               <AlertTriangle className="w-4 h-4" />
               <span>Report FNOL Claim</span>
@@ -176,14 +176,14 @@ export const EnterprisePortalPage: React.FC = () => {
                   Policy Renewal Milestone (X-Date Imminent)
                 </div>
                 <div className="text-sm text-slate-200 mt-0.5">
-                  Policy <span className="font-mono text-white font-semibold">VGR-CP-2025-4421</span> (AIG Commercial Property) expires on <span className="font-mono text-white">2026-10-15</span> (Renewal term under review).
+                  Policy <span className="font-mono text-white font-semibold">VGR-CPP-2025-4421</span> (Travelers Property Casualty) expires on <span className="font-mono text-white">2026-10-15</span> (Renewal term under review).
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Link
                 to="/quote"
-                className="px-3.5 py-1.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold hover:bg-amber-400 transition-colors shadow-sm whitespace-nowrap"
+                className="px-3.5 py-1.5 rounded-lg bg-[#fb6504] hover:bg-[#ff7b1a] text-white text-xs font-bold transition-colors shadow-sm whitespace-nowrap"
               >
                 Instant Renewal Review
               </Link>
@@ -193,10 +193,10 @@ export const EnterprisePortalPage: React.FC = () => {
 
         {/* Aggregate Exposure & Coverage Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-2xl bg-[#0E131F] border border-white/[0.08] space-y-2">
+          <div className="p-5 rounded-2xl rr-surface-card space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono uppercase">
               <span>Total Aggregate Capacity</span>
-              <ShieldCheck className="w-4 h-4 text-[#0284C7]" />
+              <ShieldCheck className="w-4 h-4 text-[#fb6504]" />
             </div>
             <div className="text-2xl font-black font-mono text-white">
               ${(totalAggregateLimit / 1000000).toFixed(1)}M
@@ -207,7 +207,7 @@ export const EnterprisePortalPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#0E131F] border border-white/[0.08] space-y-2">
+          <div className="p-5 rounded-2xl rr-surface-card space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono uppercase">
               <span>Annual In-Force Premium</span>
               <TrendingUp className="w-4 h-4 text-emerald-400" />
@@ -220,10 +220,10 @@ export const EnterprisePortalPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#0E131F] border border-white/[0.08] space-y-2">
+          <div className="p-5 rounded-2xl rr-surface-card space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono uppercase">
               <span>Certificates (COI) Issued</span>
-              <FileCheck className="w-4 h-4 text-[#38bdf8]" />
+              <FileCheck className="w-4 h-4 text-[#fb6504]" />
             </div>
             <div className="text-2xl font-black font-mono text-white">
               {cois.length}
@@ -233,10 +233,10 @@ export const EnterprisePortalPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#0E131F] border border-white/[0.08] space-y-2">
+          <div className="p-5 rounded-2xl rr-surface-card space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono uppercase">
               <span>Dedicated Risk Adjuster</span>
-              <Phone className="w-4 h-4 text-purple-400" />
+              <Phone className="w-4 h-4 text-[#a855f7]" />
             </div>
             <div className="text-base font-bold text-white truncate">
               Marcus Vance
@@ -251,25 +251,25 @@ export const EnterprisePortalPage: React.FC = () => {
         <div className="flex items-center gap-2 border-b border-white/[0.08] overflow-x-auto pb-px">
           <button
             onClick={() => setActiveTab('policies')}
-            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold rounded-t-xl transition-all whitespace-nowrap ${
+            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold rounded-t-xl transition-all whitespace-nowrap cursor-pointer ${
               activeTab === 'policies'
-                ? 'bg-[#0E131F] text-white border-t-2 border-[#0284C7] shadow-sm'
+                ? 'bg-[#0a0d16] text-white border-t-2 border-[#fb6504] shadow-sm'
                 : 'text-slate-400 hover:text-white hover:bg-white/[0.02]'
             }`}
           >
-            <ShieldCheck className="w-4 h-4 text-[#0284C7]" />
+            <ShieldCheck className="w-4 h-4 text-[#fb6504]" />
             <span>Active Policies ({policies.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('cois')}
-            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold rounded-t-xl transition-all whitespace-nowrap ${
+            className={`flex items-center gap-2 px-5 py-3 text-xs font-semibold rounded-t-xl transition-all whitespace-nowrap cursor-pointer ${
               activeTab === 'cois'
-                ? 'bg-[#0E131F] text-white border-t-2 border-[#38bdf8] shadow-sm'
+                ? 'bg-[#0a0d16] text-white border-t-2 border-[#fb6504] shadow-sm'
                 : 'text-slate-400 hover:text-white hover:bg-white/[0.02]'
             }`}
           >
-            <FileText className="w-4 h-4 text-[#38bdf8]" />
+            <FileText className="w-4 h-4 text-[#fb6504]" />
             <span>Issued Certificates ({cois.length})</span>
           </button>
 
@@ -319,7 +319,7 @@ export const EnterprisePortalPage: React.FC = () => {
               </h3>
               <Link
                 to="/quote"
-                className="text-xs text-[#38bdf8] hover:underline flex items-center gap-1 font-mono"
+                className="text-xs text-[#fb6504] hover:underline flex items-center gap-1 font-mono"
               >
                 <span>Bind Additional Line of Business</span>
                 <ExternalLink className="w-3 h-3" />
@@ -330,7 +330,7 @@ export const EnterprisePortalPage: React.FC = () => {
               {policies.map((policy) => (
                 <div
                   key={policy.id}
-                  className="p-6 rounded-2xl bg-[#0E131F] border border-white/[0.08] hover:border-white/[0.16] transition-all space-y-5"
+                  className="p-6 rounded-2xl rr-surface-card hover:border-white/[0.16] transition-all space-y-5"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
                     <div>
@@ -357,15 +357,15 @@ export const EnterprisePortalPage: React.FC = () => {
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         onClick={() => handleDownloadBinder(policy)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-xs font-semibold text-white border border-white/[0.08] transition-all"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-xs font-semibold text-white border border-white/[0.08] transition-all cursor-pointer"
                       >
-                        <Download className="w-3.5 h-3.5 text-[#38bdf8]" />
+                        <Download className="w-3.5 h-3.5 text-[#fb6504]" />
                         <span>Download Policy Binder (PDF)</span>
                       </button>
 
                       <Link
                         to={`/portal/coi?policyId=${policy.id}`}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0284C7]/20 hover:bg-[#0284C7]/30 text-xs font-semibold text-[#38bdf8] border border-[#0284C7]/40 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#fb6504]/10 hover:bg-[#fb6504]/20 text-xs font-semibold text-[#fb6504] border border-[#fb6504]/25 transition-all"
                       >
                         <FileText className="w-3.5 h-3.5" />
                         <span>Generate COI</span>
@@ -376,7 +376,7 @@ export const EnterprisePortalPage: React.FC = () => {
                           setSelectedPolicyId(policy.id);
                           setIsEndorsementModalOpen(true);
                         }}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-xs font-semibold text-slate-300 hover:text-white border border-white/[0.08] transition-all"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-xs font-semibold text-slate-300 hover:text-white border border-white/[0.08] transition-all cursor-pointer"
                       >
                         <PlusCircle className="w-3.5 h-3.5 text-emerald-400" />
                         <span>Endorsement</span>
@@ -431,14 +431,14 @@ export const EnterprisePortalPage: React.FC = () => {
               </div>
               <Link
                 to="/portal/coi"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white text-xs font-bold shadow-md shadow-sky-900/30 hover:scale-[1.02] transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white text-xs font-bold shadow-md shadow-orange-950/30 hover:scale-[1.02] transition-all"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Issue New Certificate</span>
               </Link>
             </div>
 
-            <div className="rounded-2xl bg-[#0E131F] border border-white/[0.08] overflow-hidden">
+            <div className="rounded-2xl rr-surface-card overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-white/[0.03] text-slate-400 font-mono uppercase tracking-wider border-b border-white/[0.06]">
@@ -465,7 +465,7 @@ export const EnterprisePortalPage: React.FC = () => {
                         <td className="p-4">
                           <div className="flex flex-wrap gap-1">
                             {coi.additional_insured && (
-                              <span className="px-2 py-0.5 rounded bg-[#0284C7]/20 text-[#38bdf8] font-mono text-[10px]">
+                              <span className="px-2 py-0.5 rounded bg-[#fb6504]/10 text-[#fb6504] font-mono text-[10px]">
                                 Addl Insured
                               </span>
                             )}
@@ -484,7 +484,7 @@ export const EnterprisePortalPage: React.FC = () => {
                             <span className="text-slate-400">{coi.verification_hash.slice(0, 10)}...{coi.verification_hash.slice(-6)}</span>
                             <button
                               onClick={() => handleCopyHash(coi.verification_hash)}
-                              className="p-1 rounded hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors"
+                              className="p-1 rounded hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors cursor-pointer"
                               title="Copy SHA-256"
                             >
                               {copiedHash === coi.verification_hash ? (
@@ -498,9 +498,9 @@ export const EnterprisePortalPage: React.FC = () => {
                         <td className="p-4 text-right">
                           <button
                             onClick={() => handleDownloadCoiPdf(coi)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.08] font-semibold text-xs transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.08] font-semibold text-xs transition-colors cursor-pointer"
                           >
-                            <Download className="w-3.5 h-3.5 text-[#38bdf8]" />
+                            <Download className="w-3.5 h-3.5 text-[#fb6504]" />
                             <span>ACORD 25 PDF</span>
                           </button>
                         </td>
@@ -538,7 +538,7 @@ export const EnterprisePortalPage: React.FC = () => {
               {claims.map((claim) => (
                 <div
                   key={claim.id}
-                  className="p-6 rounded-2xl bg-[#0E131F] border border-white/[0.08] space-y-6"
+                  className="p-6 rounded-2xl rr-surface-card space-y-6"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
                     <div>
@@ -565,7 +565,7 @@ export const EnterprisePortalPage: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-slate-400 text-[10px] uppercase">Adjuster Hotline</div>
-                        <div className="text-[#38bdf8] font-semibold">{claim.adjuster_phone}</div>
+                        <div className="text-[#fb6504] font-semibold">{claim.adjuster_phone}</div>
                       </div>
                     </div>
                   </div>
@@ -590,10 +590,10 @@ export const EnterprisePortalPage: React.FC = () => {
                       </div>
 
                       <div className="flex flex-col items-center">
-                        <div className="w-7 h-7 rounded-full bg-[#0284C7]/20 border-2 border-[#0284C7] text-[#38bdf8] flex items-center justify-center font-mono font-bold mb-1.5 text-xs animate-pulse">
+                        <div className="w-7 h-7 rounded-full bg-[#fb6504]/10 border-2 border-[#fb6504] text-[#fb6504] flex items-center justify-center font-mono font-bold mb-1.5 text-xs animate-pulse">
                           3
                         </div>
-                        <span className="font-semibold text-[#38bdf8]">Loss Assessment</span>
+                        <span className="font-semibold text-[#fb6504]">Loss Assessment</span>
                         <span className="text-[10px] font-mono text-slate-400">In Progress</span>
                       </div>
 
@@ -639,14 +639,14 @@ export const EnterprisePortalPage: React.FC = () => {
               </div>
               <button
                 onClick={() => setIsEndorsementModalOpen(true)}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-950/30 transition-all hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-950/30 transition-all hover:scale-[1.02] cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>New Endorsement Request</span>
               </button>
             </div>
 
-            <div className="rounded-2xl bg-[#0E131F] border border-white/[0.08] overflow-hidden">
+            <div className="rounded-2xl rr-surface-card overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-white/[0.03] text-slate-400 font-mono uppercase tracking-wider border-b border-white/[0.06]">
@@ -713,7 +713,7 @@ export const EnterprisePortalPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {policies.map((policy) => (
-                <div key={`doc-binder-${policy.id}`} className="p-5 rounded-2xl bg-[#0E131F] border border-white/[0.08] flex flex-col justify-between space-y-4">
+                <div key={`doc-binder-${policy.id}`} className="p-5 rounded-2xl rr-surface-card flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono text-[10px] uppercase font-bold">
@@ -726,16 +726,16 @@ export const EnterprisePortalPage: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handleDownloadBinder(policy)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.1] text-xs font-semibold transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.1] text-xs font-semibold transition-colors cursor-pointer"
                   >
-                    <Download className="w-4 h-4 text-[#38bdf8]" />
+                    <Download className="w-4 h-4 text-[#fb6504]" />
                     <span>Download Binder PDF</span>
                   </button>
                 </div>
               ))}
 
               {cois.map((coi) => (
-                <div key={`doc-coi-${coi.id}`} className="p-5 rounded-2xl bg-[#0E131F] border border-white/[0.08] flex flex-col justify-between space-y-4">
+                <div key={`doc-coi-${coi.id}`} className="p-5 rounded-2xl rr-surface-card flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono text-[10px] uppercase font-bold">
@@ -748,7 +748,7 @@ export const EnterprisePortalPage: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handleDownloadCoiPdf(coi)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.1] text-xs font-semibold transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.1] text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <Download className="w-4 h-4 text-emerald-400" />
                     <span>Download ACORD 25 PDF</span>
@@ -764,10 +764,10 @@ export const EnterprisePortalPage: React.FC = () => {
       {/* ENDORSEMENT REQUEST MODAL */}
       {isEndorsementModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#0E131F] border border-white/[0.12] rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+          <div className="bg-[#0a0d16] border border-white/[0.12] rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
             <button
               onClick={() => setIsEndorsementModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-xl bg-white/[0.05] text-slate-400 hover:text-white"
+              className="absolute top-5 right-5 p-2 rounded-xl bg-white/[0.05] text-slate-400 hover:text-white cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -796,7 +796,7 @@ export const EnterprisePortalPage: React.FC = () => {
                 <select
                   value={selectedPolicyId}
                   onChange={(e) => setSelectedPolicyId(e.target.value)}
-                  className="w-full bg-[#07090E] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-[#0284C7] focus:outline-none"
+                  className="w-full bg-[#06080c] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-[#fb6504] focus:outline-none"
                 >
                   {policies.map(p => (
                     <option key={p.id} value={p.id}>
@@ -812,11 +812,11 @@ export const EnterprisePortalPage: React.FC = () => {
                   <select
                     value={endorsementType}
                     onChange={(e) => setEndorsementType(e.target.value as EndorsementType)}
-                    className="w-full bg-[#07090E] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-white focus:border-[#0284C7] focus:outline-none"
+                    className="w-full bg-[#06080c] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-white focus:border-[#fb6504] focus:outline-none"
                   >
-                    <option value="add_location">Add New Location / Facility</option>
-                    <option value="add_vehicle">Add Vehicle to Auto Schedule</option>
-                    <option value="equipment_schedule">Inland Marine Equipment Schedule</option>
+                    <option value="add_location">Add New Location / Cold Storage Facility</option>
+                    <option value="add_vehicle">Add Commercial Vehicle to Fleet</option>
+                    <option value="equipment_schedule">Inland Marine Equipment / IoT Sensors</option>
                     <option value="change_limits">Limit Increase / Exposure Modification</option>
                     <option value="change_entity">Entity Name / Address Update</option>
                   </select>
@@ -828,7 +828,7 @@ export const EnterprisePortalPage: React.FC = () => {
                     type="date"
                     value={endorsementEffectiveDate}
                     onChange={(e) => setEndorsementEffectiveDate(e.target.value)}
-                    className="w-full bg-[#07090E] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-[#0284C7] focus:outline-none"
+                    className="w-full bg-[#06080c] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-[#fb6504] focus:outline-none"
                     required
                   />
                 </div>
@@ -841,9 +841,9 @@ export const EnterprisePortalPage: React.FC = () => {
                 <textarea
                   value={endorsementDetails}
                   onChange={(e) => setEndorsementDetails(e.target.value)}
-                  placeholder="E.g., Add warehouse facility located at 742 Evergreen Terrace, Springfield, OR 97477. Total square footage: 15,000 sq ft, 100% sprinklered."
+                  placeholder="E.g., Add cold-storage distribution hub located at 4200 S Pulaski Rd, Chicago, IL 60632. Total area: 45,000 sq ft, 100% dry-pipe ESFR sprinklered with automated temperature monitoring."
                   rows={4}
-                  className="w-full bg-[#07090E] border border-white/[0.1] rounded-xl p-3 text-white placeholder:text-slate-500 focus:border-[#0284C7] focus:outline-none resize-none leading-relaxed"
+                  className="w-full bg-[#06080c] border border-white/[0.1] rounded-xl p-3 text-white placeholder:text-slate-500 focus:border-[#fb6504] focus:outline-none resize-none leading-relaxed"
                   required
                 />
               </div>
@@ -852,13 +852,13 @@ export const EnterprisePortalPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsEndorsementModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 font-semibold text-xs"
+                  className="px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 font-semibold text-xs cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs shadow-lg shadow-emerald-950/30 transition-all"
+                  className="px-5 py-2.5 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-xs shadow-lg shadow-orange-950/30 transition-all cursor-pointer"
                 >
                   Submit Endorsement Request
                 </button>

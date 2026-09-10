@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, 
   ArrowRight, 
-  Activity, 
+  Calendar, 
   Clock, 
-  Zap, 
   Layers, 
   TrendingUp, 
   Lock, 
-  CheckCircle2 
+  CheckCircle2, 
+  FileText, 
+  AlertTriangle, 
+  Building2, 
+  Briefcase, 
+  Award, 
+  Download,
+  Copy,
+  Check,
+  RefreshCw,
+  ExternalLink
 } from 'lucide-react';
 import { ValiantNavbar } from '../../components/valiant/Navbar';
 import { ValiantFooter } from '../../components/valiant/Footer';
@@ -20,232 +29,357 @@ import { AppetiteMatrixCell } from '../../components/valiant/bento/AppetiteMatri
 import { SecurityTrustCell } from '../../components/valiant/bento/SecurityTrustCell';
 
 export const ValiantHomePage: React.FC = () => {
+  // RankRush typewriter text rotation for target sectors
+  const sectors = [
+    'Cold-Chain & Warehousing',
+    'SaaS & Cloud Platforms',
+    'Life Sciences & MedTech',
+    'Precision Manufacturing',
+    'FinTech & Payment Rails',
+  ];
+  const [currentSectorIndex, setCurrentSectorIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSectorIndex((prev) => (prev + 1) % sectors.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 flex flex-col selection:bg-[#0284C7] selection:text-white">
+    <div className="min-h-screen bg-[#06080c] text-slate-100 flex flex-col selection:bg-[#fb6504] selection:text-white">
       <ValiantNavbar />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden">
-          {/* Dual Ambient Glowing Lighting */}
-          <div className="ambient-glow-cerulean" />
-          <div className="ambient-glow-indigo right-10 top-20" />
+        
+        {/* ========================================================================= */}
+        {/* SECTION 1: RANKRUSH-STYLE SPLIT-2 HERO WITH LIVE UNDERWRITING DASHBOARD   */}
+        {/* ========================================================================= */}
+        <section className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
+          {/* Ambient Radial Lighting Overlay */}
+          <div className="ambient-glow-orange" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-4xl mx-auto space-y-6">
-              {/* Header Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-mono text-[#38bdf8] backdrop-blur-md shadow-lg">
-                <span className="w-2 h-2 rounded-full bg-[#0284C7] animate-pulse" />
-                <span className="uppercase tracking-widest text-[11px] font-bold">
-                  AUTONOMOUS MULTI-CARRIER TRANSACTIONAL PLATFORM
-                </span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+              
+              {/* Left Column: Copy & CTAs (Span 7) */}
+              <div className="lg:col-span-7 space-y-6">
+                
+                {/* Eyebrow */}
+                <div className="eyebrow">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#fb6504]" />
+                  <span>Commercial Risk & Digital Brokerage</span>
+                </div>
+
+                {/* Main Headline */}
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.12]">
+                  Commercial Insurance for modern enterprises in{' '}
+                  <span className="rr-orange block sm:inline mt-1 sm:mt-0 transition-all duration-300">
+                    {sectors[currentSectorIndex]}.
+                  </span>
+                </h1>
+
+                {/* Subheading */}
+                <p className="text-slate-300 text-sm sm:text-base sm:leading-relaxed max-w-2xl">
+                  Automate multi-carrier quoting across Chubb, Travelers, and Lloyd’s of London. Generate cryptographically verified ACORD 25 certificates in 60 seconds, triage FNOL claims autonomously, and manage in-force risk through a unified digital console.
+                </p>
+
+                {/* Dual Buttons (Exact RankRush Button Row) */}
+                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                  <Link
+                    to="/quote"
+                    className="rr-btn rr-btn--primary text-sm py-3 px-6 shadow-xl shadow-orange-950/40"
+                  >
+                    <span>Start Multi-Carrier Quote</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <Link
+                    to="/appetite"
+                    className="rr-btn rr-btn--ghost text-sm py-3 px-5"
+                  >
+                    <Briefcase className="w-4 h-4 text-slate-400" />
+                    <span>View Carrier Appetite</span>
+                  </Link>
+                </div>
+
+                {/* Trust / Feature Strip (Exact RankRush Pill Card) */}
+                <div className="inline-flex flex-wrap items-center gap-3 p-2.5 px-4 rounded-xl bg-[#0a0d16]/90 border border-white/[0.06] backdrop-blur-md">
+                  <span className="rr-pill rr-pill--success">
+                    <span className="rr-pill__dot" />
+                    A++ CAPACITY
+                  </span>
+                  <span className="rr-label text-slate-400">INSTANT ACORD 25</span>
+                  <span className="text-slate-600 font-mono">•</span>
+                  <span className="rr-label text-slate-400">12 COMMERCIAL LINES</span>
+                  <span className="text-slate-600 font-mono">•</span>
+                  <span className="rr-label text-slate-400">&lt;120s BIND</span>
+                </div>
+
               </div>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
-                Enterprise Risk Architecture.{' '}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#38bdf8] via-[#0284C7] to-[#6366F1]">
-                  Underwritten in Minutes.
-                </span>
-              </h1>
-
-              {/* Subhead */}
-              <p className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto font-normal leading-relaxed">
-                Replace manual broker friction with institutional algorithmic risk underwriting, instant ACORD 25 certificates, and real-time carrier syndication.
-              </p>
-
-              {/* Quick Actions */}
-              <div className="pt-3 flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  to="/quote"
-                  className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-semibold text-sm text-white bg-gradient-to-r from-[#0284C7] to-[#0369a1] hover:from-[#0369a1] hover:to-[#0284C7] shadow-[0_0_35px_-5px_rgba(2,132,199,0.6)] border border-white/20 transition-all hover:scale-105 active:scale-95"
-                >
-                  <span>Launch Quote & Instant Bind</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-
-                <Link
-                  to="/portal/coi"
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-2xl font-semibold text-sm text-slate-200 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] transition-all"
-                >
-                  <span>Instant ACORD 25 Generator</span>
-                </Link>
-              </div>
-
-              {/* Live Operational Telemetry Bar */}
-              <div className="pt-10 max-w-5xl mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 p-4 rounded-2xl bg-[#0E131F]/80 border border-white/[0.08] backdrop-blur-xl shadow-2xl">
-                  {/* Metric 1 */}
-                  <div className="p-3 text-left">
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400 uppercase">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#38bdf8]" />
-                      <span>Active Capacity</span>
+              {/* Right Column: Live Interactive Commercial Policy Mockup (Span 5) */}
+              <div className="lg:col-span-5">
+                <div className="rr-surface-card p-5 sm:p-6 shadow-2xl border border-white/[0.08] space-y-4 relative overflow-hidden">
+                  
+                  {/* Card Header: Enterprise Account Telemetry */}
+                  <div className="flex items-center justify-between pb-3.5 border-b border-white/[0.06]">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                          Active Account In-Force
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white mt-0.5">
+                        Vanguard Cold-Chain Solutions
+                      </h4>
                     </div>
-                    <div className="text-xl sm:text-2xl font-extrabold text-white font-mono tabular-nums mt-1">
-                      $450M+
-                    </div>
-                    <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 mt-0.5">
-                      <TrendingUp className="w-2.5 h-2.5" />
-                      <span>Surplus Lines Deployed</span>
+
+                    <div className="text-right">
+                      <span className="text-[10px] font-mono text-slate-500 uppercase">Total Aggregate</span>
+                      <div className="text-sm font-mono font-black text-[#fb6504]">
+                        $19,000,000
+                      </div>
                     </div>
                   </div>
 
-                  {/* Metric 2 */}
-                  <div className="p-3 text-left border-l border-white/[0.06]">
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400 uppercase">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Mean FNOL Turnaround</span>
+                  {/* Active Policy Rows (Analogous to RankRush Live Keyword Tracking Rows) */}
+                  <div className="space-y-2.5">
+                    
+                    {/* Row 1: Commercial General Liability */}
+                    <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5 hover:border-white/[0.12] transition-colors">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#fb6504]" />
+                          <span className="font-bold text-white">Commercial General Liability</span>
+                        </div>
+                        <span className="rr-pill rr-pill--success font-mono text-[9px]">ACTIVE</span>
+                      </div>
+                      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <span>Chubb Federal (NAIC #22667)</span>
+                        <span className="text-slate-200 font-bold">$2M / $1M Limit</span>
+                      </div>
                     </div>
-                    <div className="text-xl sm:text-2xl font-extrabold text-white font-mono tabular-nums mt-1">
-                      1.4 Hours
+
+                    {/* Row 2: Commercial Property & Interruption */}
+                    <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5 hover:border-white/[0.12] transition-colors">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          <span className="font-bold text-white">Property & Interruption</span>
+                        </div>
+                        <span className="rr-pill rr-pill--warning font-mono text-[9px]">RENEWAL 34D</span>
+                      </div>
+                      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <span>Travelers Property Casualty</span>
+                        <span className="text-slate-200 font-bold">$12M Limit</span>
+                      </div>
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">
-                      98.2% Auto-Triaged
+
+                    {/* Row 3: Tech E&O & Cyber */}
+                    <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5 hover:border-white/[0.12] transition-colors">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                          <span className="font-bold text-white">Technology E&O & Cyber</span>
+                        </div>
+                        <span className="rr-pill rr-pill--violet font-mono text-[9px]">ACTIVE</span>
+                      </div>
+                      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <span>Lloyd’s Syndicate 2003</span>
+                        <span className="text-slate-200 font-bold">$5M Limit</span>
+                      </div>
                     </div>
+
                   </div>
 
-                  {/* Metric 3 */}
-                  <div className="p-3 text-left border-l border-white/[0.06]">
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400 uppercase">
-                      <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Platform Uptime</span>
+                  {/* Mockup Action Footer */}
+                  <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400">
+                      <FileText className="w-3.5 h-3.5 text-[#fb6504]" />
+                      <span>Last COI: Prologis Hub LLC</span>
                     </div>
-                    <div className="text-xl sm:text-2xl font-extrabold text-emerald-400 font-mono tabular-nums mt-1">
-                      99.99%
-                    </div>
-                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">
-                      High-Availability SLA
-                    </div>
+
+                    <Link
+                      to="/portal"
+                      className="text-xs font-semibold text-[#fb6504] hover:text-[#ff7b1a] flex items-center gap-1 font-mono"
+                    >
+                      <span>Open Portal</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
                   </div>
 
-                  {/* Metric 4 */}
-                  <div className="p-3 text-left border-l border-white/[0.06]">
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400 uppercase">
-                      <Zap className="w-3.5 h-3.5 text-[#6366F1]" />
-                      <span>Algorithmic Bind</span>
-                    </div>
-                    <div className="text-xl sm:text-2xl font-extrabold text-white font-mono tabular-nums mt-1">
-                      &lt; 120s
-                    </div>
-                    <div className="text-[10px] text-[#38bdf8] font-mono mt-0.5">
-                      Zero Manual Touch
-                    </div>
-                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         </section>
 
-        {/* The Responsive Bento Grid Section */}
-        <section className="pb-24 relative z-10">
+        {/* ========================================================================= */}
+        {/* CARRIER SYNDICATE TICKER STRIP                                            */}
+        {/* ========================================================================= */}
+        <section className="py-6 border-y border-white/[0.06] bg-[#080c14]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
-              <div>
-                <span className="vgr-pill bg-white/[0.04] text-slate-300 border-white/[0.08]">
-                  OPERATIONAL ARCHITECTURE
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-2">
-                  Institutional Transactional Capabilities
-                </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2 shrink-0">
+                <span className="w-2 h-2 rounded-full bg-[#fb6504]" />
+                <span>Underwriting Syndicates & Admitted Paper:</span>
               </div>
-              <div className="text-xs font-mono text-slate-400">
-                Connected to Lloyd's, Chubb, and AIG rating engines
+              <div className="flex flex-wrap items-center gap-6 sm:gap-8 text-xs font-mono text-slate-300 font-medium">
+                <span className="hover:text-white transition-colors">CHUBB GLOBAL (NAIC 22667)</span>
+                <span className="text-slate-600">•</span>
+                <span className="hover:text-white transition-colors">TRAVELERS PROPERTY (NAIC 25674)</span>
+                <span className="text-slate-600">•</span>
+                <span className="hover:text-white transition-colors">LLOYD’S SYNDICATES 2003 / 1882</span>
+                <span className="text-slate-600">•</span>
+                <span className="hover:text-white transition-colors">ZURICH AMERICAN (NAIC 16535)</span>
+                <span className="text-slate-600">•</span>
+                <span className="hover:text-white transition-colors">AIG COMMERCIAL (NAIC 19445)</span>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Asymmetrical Bento Grid */}
+        {/* ========================================================================= */}
+        {/* SECTION 2: THE 4-ENGINE UNDERWRITING LOOP (RANKRUSH SEQUENTIAL ARCH)      */}
+        {/* ========================================================================= */}
+        <section className="py-20 sm:py-28 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            
+            {/* Section Header */}
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="eyebrow justify-center">
+                <span>The Underwriting Loop · Four Core Engines</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+                From submission to certificate in under 120 seconds.
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Legacy commercial brokerages rely on paper ACORD forms and multi-day carrier back-and-forths. Valiant Global Risk connects programmatic rating algorithms directly with syndicate capacity.
+              </p>
+            </div>
+
+            {/* Bento Grid Architecture */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Cell 1: Underwriting Console (Span 8) */}
-              <UnderwritingConsoleCell />
+              
+              {/* Cell 1: Underwriting Rating Console (Span 8) */}
+              <div className="lg:col-span-8">
+                <UnderwritingConsoleCell />
+              </div>
 
-              {/* Cell 2: Certificate Previewer (Span 4) */}
-              <CoiPreviewerCell />
+              {/* Cell 2: ACORD 25 Certificate Engine (Span 4) */}
+              <div className="lg:col-span-4">
+                <CoiPreviewerCell />
+              </div>
 
               {/* Cell 3: FNOL Claims Triage (Span 4) */}
-              <FnolClaimsCell />
+              <div className="lg:col-span-4">
+                <FnolClaimsCell />
+              </div>
 
               {/* Cell 4: Appetite Matrix (Span 4) */}
-              <AppetiteMatrixCell />
+              <div className="lg:col-span-4">
+                <AppetiteMatrixCell />
+              </div>
 
-              {/* Cell 5: Security & Compliance Badges (Span 4) */}
-              <SecurityTrustCell />
+              {/* Cell 5: Regulatory Compliance & Trust (Span 4) */}
+              <div className="lg:col-span-4">
+                <SecurityTrustCell />
+              </div>
+
             </div>
+
           </div>
         </section>
 
-        {/* Carrier Syndicates Trust Marquee */}
-        <section className="py-12 border-y border-white/[0.06] bg-slate-950/40 relative">
+        {/* ========================================================================= */}
+        {/* SECTION 3: INSTITUTIONAL PERFORMANCE TELEMETRY                            */}
+        {/* ========================================================================= */}
+        <section className="py-16 border-t border-white/[0.06] bg-[#080c14]/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-6">
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-500">
-                Underwriting Syndicates & Global Carrier Partners
-              </span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity">
-              <div className="text-center font-bold text-slate-300 font-sans tracking-tight text-sm">
-                CHUBB
-                <div className="text-[10px] font-mono text-slate-500">A++ Superior</div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+              
+              <div className="space-y-1.5">
+                <div className="text-xs font-mono text-slate-400 uppercase">Syndicated Capacity</div>
+                <div className="text-3xl sm:text-4xl font-black font-mono text-white tracking-tight">
+                  $450M+
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Primary and layered casualty capacity via Lloyd’s Coverholder binding slips.
+                </p>
               </div>
-              <div className="text-center font-bold text-slate-300 font-sans tracking-tight text-sm">
-                LLOYD'S
-                <div className="text-[10px] font-mono text-slate-500">Syndicate 2003</div>
+
+              <div className="space-y-1.5">
+                <div className="text-xs font-mono text-slate-400 uppercase">Average Bind Turnaround</div>
+                <div className="text-3xl sm:text-4xl font-black font-mono text-[#fb6504] tracking-tight">
+                  1.4 Hours
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  From intake submission to fully executed digital binder delivery.
+                </p>
               </div>
-              <div className="text-center font-bold text-slate-300 font-sans tracking-tight text-sm">
-                AIG
-                <div className="text-[10px] font-mono text-slate-500">Commercial Risk</div>
+
+              <div className="space-y-1.5">
+                <div className="text-xs font-mono text-slate-400 uppercase">Automated Auto-Bind Rate</div>
+                <div className="text-3xl sm:text-4xl font-black font-mono text-white tracking-tight">
+                  84.2%
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Of commercial submissions bound without manual underwriter intervention.
+                </p>
               </div>
-              <div className="text-center font-bold text-slate-300 font-sans tracking-tight text-sm">
-                TRAVELERS
-                <div className="text-[10px] font-mono text-slate-500">Surety & Casualty</div>
+
+              <div className="space-y-1.5">
+                <div className="text-xs font-mono text-slate-400 uppercase">Certificates Dispatched</div>
+                <div className="text-3xl sm:text-4xl font-black font-mono text-white tracking-tight">
+                  24,000+
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  ACORD 25 certificates generated with SHA-256 cryptographic proof stamps.
+                </p>
               </div>
-              <div className="text-center font-bold text-slate-300 font-sans tracking-tight text-sm">
-                ZURICH
-                <div className="text-[10px] font-mono text-slate-500">Global Corporate</div>
-              </div>
-              <div className="text-center font-bold text-slate-300 font-sans tracking-tight text-sm">
-                MUNICH RE
-                <div className="text-[10px] font-mono text-slate-500">Reinsurance Facultative</div>
-              </div>
+
             </div>
           </div>
         </section>
 
-        {/* Bottom CTA Banner */}
+        {/* ========================================================================= */}
+        {/* SECTION 4: FINAL CALL TO ACTION BANNER (RANKRUSH FINALE)                  */}
+        {/* ========================================================================= */}
         <section className="py-20 relative overflow-hidden">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#0E131F] via-[#0A0E18] to-[#07090E] border border-[#0284C7]/30 shadow-[0_20px_60px_-15px_rgba(2,132,199,0.3)] text-center space-y-6">
-              <span className="vgr-pill bg-[#0284C7]/10 text-[#38bdf8] border-[#0284C7]/30">
-                ZERO BROKER FRICTION
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-                Ready to Programmatically Secure Your Balance Sheet?
-              </h2>
-              <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-                Generate real-time quotes from top A-rated syndicates, review exclusions side-by-side, sign the digital binder, and issue your first ACORD 25 COI.
-              </p>
-              <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  to="/quote"
-                  className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white font-semibold text-sm shadow-[0_0_30px_-5px_rgba(2,132,199,0.6)] hover:scale-105 transition-all"
-                >
-                  <span>Start Quote Funnel</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/portal"
-                  className="px-8 py-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 border border-white/[0.1] text-sm font-semibold transition-all"
-                >
-                  Access Enterprise Portal
-                </Link>
-              </div>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+            <div className="eyebrow justify-center">
+              <span>Ready for Modern Commercial Risk Architecture?</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              Bind your enterprise policy today with zero paperwork.
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+              Explore comparative rates across Tier-1 carriers, customize liability deductibles, and download your legally executed policy binder instantly.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+              <Link
+                to="/quote"
+                className="rr-btn rr-btn--primary text-sm py-3 px-6 shadow-xl shadow-orange-950/50"
+              >
+                <span>Start Multi-Carrier Quote</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/portal/coi"
+                className="rr-btn rr-btn--ghost text-sm py-3 px-5"
+              >
+                <span>Generate ACORD 25</span>
+              </Link>
             </div>
           </div>
         </section>
+
       </main>
 
       <ValiantFooter />
     </div>
   );
 };
-

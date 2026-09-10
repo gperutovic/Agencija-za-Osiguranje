@@ -5,66 +5,134 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color-scheme: dark;
-    background-color: #07090E;
+    background-color: #06080c;
   }
 
   body {
-    @apply bg-[#07090E] text-slate-100 antialiased;
+    background-color: #06080c;
+    color: #f1f5f9;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Valiant Global Risk & Bento Grid Paradigm */
-.vgr-surface {
-  background: #0E131F;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
+/* RankRush.ai Core Design Tokens */
+.rr-orange {
+  color: #fb6504;
+}
+
+.eyebrow {
+  font-family: 'Space Mono', 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fb6504;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rr-label {
+  font-family: 'Space Mono', 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rr-surface-card {
+  background: rgba(10, 13, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.rr-surface-card:hover {
+  border-color: rgba(251, 101, 4, 0.35);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 25px 0 rgba(251, 101, 4, 0.18);
+  transform: translateY(-2px);
 }
 
 .vgr-bento-card {
-  background: rgba(14, 19, 31, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 13, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: 1rem;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 14px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 
 .vgr-bento-card:hover {
-  border-color: rgba(2, 132, 199, 0.45);
-  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 25px 0 rgba(2, 132, 199, 0.25);
+  border-color: rgba(251, 101, 4, 0.35);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 25px 0 rgba(251, 101, 4, 0.18);
   transform: translateY(-2px);
 }
 
-.vgr-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+/* RankRush Pills & Status Indicators */
+.rr-pill {
+  font-family: 'Space Mono', 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 9999px;
+  padding: 3px 8px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: 1px solid;
 }
 
-.vgr-pill__dot {
+.rr-pill--orange {
+  color: #fb6504;
+  background: rgba(251, 101, 4, 0.12);
+  border-color: rgba(251, 101, 4, 0.26);
+}
+
+.rr-pill--success {
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.26);
+}
+
+.rr-pill--violet {
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.26);
+}
+
+.rr-pill--info {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.26);
+}
+
+.rr-pill--warning {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.26);
+}
+
+.rr-pill__dot {
   width: 6px;
   height: 6px;
   border-radius: 9999px;
   background-color: currentColor;
   box-shadow: 0 0 8px currentColor;
-  animation: vgr-pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: rr-pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes vgr-pulse-dot {
+@keyframes rr-pulse-dot {
   0%, 100% {
     opacity: 1;
     transform: scale(1);
@@ -75,68 +143,74 @@
   }
 }
 
-/* RankRush & Bento Legacy Helpers */
-.rr-surface-card {
-  background: rgba(14, 19, 31, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 1rem;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.rr-surface-card:hover {
-  border-color: rgba(2, 132, 199, 0.45);
-  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 20px 0 rgba(2, 132, 199, 0.2);
-}
-
-.rr-pill {
-  font-family: 'JetBrains Mono', 'Space Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 9999px;
+/* RankRush Primary & Ghost Buttons */
+.rr-btn {
+  font-family: 'Inter', 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 18px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
-.rr-pill__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  background-color: currentColor;
-  box-shadow: 0 0 8px currentColor;
-  animation: vgr-pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.rr-btn:active {
+  transform: scale(0.98);
 }
 
-/* Ambient Lighting Overlays */
-.ambient-glow-cerulean {
+.rr-btn--primary {
+  background: #fb6504;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px -3px rgba(251, 101, 4, 0.5);
+}
+
+.rr-btn--primary:hover {
+  background: #ff7b1a;
+  box-shadow: 0 0 30px -2px rgba(251, 101, 4, 0.7);
+  transform: translateY(-1px);
+}
+
+.rr-btn--ghost {
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rr-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Ambient Radial Orange Lighting */
+.ambient-glow-orange {
   position: absolute;
-  top: -150px;
+  top: -160px;
   left: 50%;
   transform: translateX(-50%);
-  width: 800px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(2, 132, 199, 0.22) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 75%);
+  width: 900px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(251, 101, 4, 0.2) 0%, rgba(251, 101, 4, 0.04) 45%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
 
-.ambient-glow-indigo {
+.ambient-glow-teal {
   position: absolute;
   width: 600px;
   height: 400px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0.03) 55%, transparent 75%);
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.12) 0%, rgba(20, 184, 166, 0.02) 50%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
 
 /* Custom Sleek Monospace Tabular Figures */
-.tabular-numbers {
+.tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
@@ -147,7 +221,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #07090E;
+  background: #06080c;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -157,15 +231,4 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
-}
-
-/* Print Styles */
-@media print {
-  header, footer, button, .no-print {
-    display: none !important;
-  }
-  body {
-    background: white !important;
-    color: black !important;
-  }
 }

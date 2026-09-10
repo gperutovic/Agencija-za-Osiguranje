@@ -21,7 +21,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    ctx.strokeStyle = '#38bdf8';
+    ctx.strokeStyle = '#fb6504';
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -110,7 +110,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
       onSignatureChange('', '');
       return;
     }
-    ctx.fillStyle = '#38bdf8';
+    ctx.fillStyle = '#fb6504';
     ctx.font = 'italic 32px "Caveat", "Brush Script MT", cursive, sans-serif';
     ctx.fillText(name, 20, 75);
     setHasDrawn(true);
@@ -131,7 +131,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
               clearCanvas();
             }}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${
-              mode === 'draw' ? 'bg-[#0284C7] text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              mode === 'draw' ? 'bg-[#fb6504] text-white shadow-sm font-semibold' : 'text-slate-400 hover:text-white'
             }`}
           >
             <PenTool className="w-3 h-3" />
@@ -144,7 +144,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
               renderTypedSignature(signatoryName);
             }}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${
-              mode === 'type' ? 'bg-[#0284C7] text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              mode === 'type' ? 'bg-[#fb6504] text-white shadow-sm font-semibold' : 'text-slate-400 hover:text-white'
             }`}
           >
             <Type className="w-3 h-3" />
@@ -157,12 +157,12 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
         type="text"
         value={signatoryName}
         onChange={handleNameChange}
-        placeholder="e.g. Elena Rostova"
-        className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7] focus:ring-1 focus:ring-[#0284C7] text-sm"
+        placeholder="e.g. Marcus Vance"
+        className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504] text-sm"
         required
       />
 
-      <div className="relative rounded-2xl border-2 border-dashed border-white/[0.15] bg-[#07090E] p-2 overflow-hidden group hover:border-[#0284C7]/50 transition-colors">
+      <div className="relative rounded-2xl border-2 border-dashed border-white/[0.15] bg-[#06080c] p-2 overflow-hidden group hover:border-[#fb6504]/50 transition-colors">
         <canvas
           ref={canvasRef}
           width={540}

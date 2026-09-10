@@ -10,126 +10,142 @@ import {
 } from '../types/valiant';
 import { getNaicsByCode } from './naicsData';
 
-// Initial default account
+// Realistic Institutional Commercial Account
 export const INITIAL_ACCOUNT: CommercialAccount = {
-  id: 'acc-nexus-01',
-  company_name: 'Nexus Quantum Dynamics Inc.',
-  tax_id_ein: '12-3456789',
-  naics_code: '541512',
-  industry_category: 'Computer Systems Design Services & SaaS Platforms',
-  annual_revenue: 18500000,
-  full_time_employees: 84,
-  created_at: '2025-01-15T09:00:00Z',
+  id: 'acc-vanguard-01',
+  company_name: 'Vanguard Logistics & Cold-Chain Solutions LLC',
+  dba: 'Vanguard Cold-Chain',
+  tax_id_ein: '36-9812450',
+  naics_code: '493120',
+  industry_category: 'Refrigerated Warehousing, Cold-Chain & Temperature-Controlled Logistics',
+  headquarters_address: '1400 S. Desplaines St., Chicago, IL 60607',
+  annual_revenue: 28500000,
+  full_time_employees: 142,
+  annual_payroll: 9800000,
+  created_at: '2025-01-10T08:30:00Z',
 };
 
-// Initial default policies
+// Institutional Commercial Policies In-Force
 export const INITIAL_POLICIES: Policy[] = [
   {
-    id: 'pol-01',
-    account_id: 'acc-nexus-01',
-    policy_number: 'VGR-GL-2026-8801',
-    carrier_name: 'Chubb Global Risk Syndicate 1882',
-    line_of_business: 'General Liability',
+    id: 'pol-cgl-01',
+    account_id: 'acc-vanguard-01',
+    policy_number: 'VGR-CGL-2026-8801',
+    carrier_name: 'Chubb Federal Insurance Company',
+    naic_number: '22667',
+    iso_form_code: 'CG 00 01 04 13',
+    line_of_business: 'Commercial General Liability',
     aggregate_limit: 2000000,
     occurrence_limit: 1000000,
     deductible: 5000,
     effective_date: '2026-01-01',
     expiration_date: '2027-01-01',
     status: 'active',
-    annual_premium: 14850,
+    annual_premium: 18650,
     created_at: '2026-01-01T00:00:00Z',
   },
   {
-    id: 'pol-02',
-    account_id: 'acc-nexus-01',
-    policy_number: 'VGR-CY-2026-9412',
+    id: 'pol-cpp-02',
+    account_id: 'acc-vanguard-01',
+    policy_number: 'VGR-CPP-2025-4421',
+    carrier_name: 'Travelers Property Casualty Co. of America',
+    naic_number: '25674',
+    iso_form_code: 'CP 00 10 10 12',
+    line_of_business: 'Commercial Property & Business Interruption',
+    aggregate_limit: 12000000,
+    occurrence_limit: 12000000,
+    deductible: 25000,
+    effective_date: '2025-10-15',
+    expiration_date: '2026-10-15',
+    status: 'pending_renewal',
+    annual_premium: 44200,
+    created_at: '2025-10-15T00:00:00Z',
+  },
+  {
+    id: 'pol-cyb-03',
+    account_id: 'acc-vanguard-01',
+    policy_number: 'VGR-CYB-2026-9412',
     carrier_name: "Lloyd's of London Specialty Syndicate 2003",
-    line_of_business: 'Cyber Extortion & Tech E&O',
+    naic_number: 'AA-1120000',
+    iso_form_code: 'PR-CY-2026',
+    line_of_business: 'Technology E&O & Cyber Risk',
     aggregate_limit: 5000000,
     occurrence_limit: 5000000,
     deductible: 25000,
     effective_date: '2026-03-01',
     expiration_date: '2027-03-01',
     status: 'active',
-    annual_premium: 28400,
+    annual_premium: 26800,
     created_at: '2026-03-01T00:00:00Z',
   },
-  {
-    id: 'pol-03',
-    account_id: 'acc-nexus-01',
-    policy_number: 'VGR-CP-2025-4421',
-    carrier_name: 'AIG Commercial Risk Solutions',
-    line_of_business: 'Commercial Property',
-    aggregate_limit: 10000000,
-    occurrence_limit: 10000000,
-    deductible: 10000,
-    effective_date: '2025-10-15',
-    expiration_date: '2026-10-15',
-    status: 'pending_renewal',
-    annual_premium: 46200,
-    created_at: '2025-10-15T00:00:00Z',
-  },
 ];
 
-// Initial issued COIs
+// Institutional Issued ACORD 25 Certificates
 export const INITIAL_COIS: CoiCertificate[] = [
   {
-    id: 'coi-01',
-    policy_id: 'pol-01',
-    holder_name: 'Metropolitan Enterprise Hub LLC',
-    holder_address: '100 Wall Street, Suite 2400, New York, NY 10005',
+    id: 'coi-78901',
+    policy_id: 'pol-cgl-01',
+    holder_name: 'Prologis Logistics Hub Midwest LLC',
+    holder_address: '180 N. LaSalle Street, Suite 3200, Chicago, IL 60601',
     additional_insured: true,
     waiver_subrogation: true,
-    special_conditions: 'Certificate Holder is included as Additional Insured with respects to primary commercial operations.',
+    primary_noncontributory: true,
+    special_conditions: 'Certificate Holder is included as Additional Insured on a primary and non-contributory basis with respects to commercial warehousing operations per attached CG 20 10 04 13 endorsement.',
     issued_at: '2026-02-10T14:30:00Z',
-    verification_hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-    policy_number: 'VGR-GL-2026-8801',
-    carrier_name: 'Chubb Global Risk Syndicate 1882',
-    insured_name: 'Nexus Quantum Dynamics Inc.',
+    verification_hash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
+    policy_number: 'VGR-CGL-2026-8801',
+    carrier_name: 'Chubb Federal Insurance Company',
+    naic_number: '22667',
+    insured_name: 'Vanguard Logistics & Cold-Chain Solutions LLC',
   },
   {
-    id: 'coi-02',
-    policy_id: 'pol-02',
-    holder_name: 'Apex Global Financial Network',
-    holder_address: '200 Bishopsgate, London EC2M 4NR, United Kingdom',
+    id: 'coi-78902',
+    policy_id: 'pol-cpp-02',
+    holder_name: 'JPMorgan Chase Bank, N.A. (Commercial Lending)',
+    holder_address: '270 Park Avenue, 14th Floor, New York, NY 10017',
     additional_insured: false,
     waiver_subrogation: true,
-    special_conditions: 'Tech E&O and Cyber security verification schedule attached.',
+    primary_noncontributory: false,
+    special_conditions: 'Lender Loss Payee and Mortgagee clause CP 12 18 attached in favor of Certificate Holder regarding industrial real property at 1400 S. Desplaines St.',
     issued_at: '2026-03-04T11:15:00Z',
-    verification_hash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
-    policy_number: 'VGR-CY-2026-9412',
-    carrier_name: "Lloyd's of London Specialty Syndicate 2003",
-    insured_name: 'Nexus Quantum Dynamics Inc.',
+    verification_hash: '3e41b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2',
+    policy_number: 'VGR-CPP-2025-4421',
+    carrier_name: 'Travelers Property Casualty Co. of America',
+    naic_number: '25674',
+    insured_name: 'Vanguard Logistics & Cold-Chain Solutions LLC',
   },
 ];
 
-// Initial FNOL claims
+// Commercial First Notice of Loss Claims
 export const INITIAL_CLAIMS: ClaimFnol[] = [
   {
-    id: 'clm-01',
-    policy_id: 'pol-01',
-    policy_number: 'VGR-GL-2026-8801',
-    incident_date: '2026-02-14T10:30:00Z',
-    reported_date: '2026-02-14T14:15:00Z',
-    incident_type: 'Third-Party Liability',
-    description: 'Subcontractor equipment fell and damaged warehouse dock floor during server rack staging.',
+    id: 'clm-2026-4401',
+    policy_id: 'pol-cgl-01',
+    policy_number: 'VGR-CGL-2026-8801',
+    incident_date: '2026-02-14T09:15:00Z',
+    reported_date: '2026-02-14T11:30:00Z',
+    incident_type: 'Commercial Property Damage',
+    description: 'Third-party refrigerated carrier forklift struck distribution bay door #4 header during pallet staging, causing track distortion and structural sensor misalignment.',
+    location: '1400 S. Desplaines St., Chicago, IL (Loading Bay 4)',
     injuries_reported: false,
     police_report_filed: false,
-    estimated_loss: 8500,
+    estimated_loss: 14500,
+    reserve_amount: 15000,
     status: 'adjuster_assigned',
-    assigned_adjuster: 'Marcus Vance',
-    adjuster_email: 'm.vance@valiantglobalrisk.com',
+    assigned_adjuster: 'David Sterling, CPCU, Senior Commercial Adjuster',
+    adjuster_email: 'd.sterling@valiantglobalrisk.com',
     adjuster_phone: '+1 (800) 492-8812 ext. 402',
-    document_urls: ['https://images.unsplash.com/photo-1584622650111-993a426fbf0a'],
+    document_urls: ['https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d'],
   },
 ];
 
+// In-Force Endorsement Amendments
 export const INITIAL_ENDORSEMENTS: EndorsementRequest[] = [
   {
-    id: 'end-01',
-    policyId: 'pol-01',
+    id: 'end-2026-101',
+    policyId: 'pol-cgl-01',
     requestType: 'add_location',
-    details: 'Add secondary disaster recovery site: 450 Technology Parkway, Atlanta, GA 30092',
+    details: 'Add secondary cross-dock facility: 3200 Logistics Center Drive, Joliet, IL 60436. Warehouse footprint: 45,000 sq ft, 100% wet sprinkler system.',
     effectiveDate: '2026-04-01',
     status: 'pending_review',
     requestedAt: '2026-03-08T16:00:00Z',
@@ -137,46 +153,45 @@ export const INITIAL_ENDORSEMENTS: EndorsementRequest[] = [
 ];
 
 const INITIAL_QUOTE_FORM: QuoteFormData = {
-  companyName: 'Nexus Quantum Dynamics Inc.',
-  jurisdiction: 'Delaware, USA',
-  taxIdEin: '12-3456789',
-  naicsCode: '541512',
-  industryTitle: 'Computer Systems Design Services & SaaS Platforms',
-  contactName: 'Elena Rostova',
-  contactEmail: 'e.rostova@nexusquantum.io',
-  contactPhone: '+1 (212) 555-0198',
-  annualRevenue: 18500000,
-  grossPayroll: 7200000,
-  fullTimeEmployees: 84,
-  premisesSquareFootage: 24000,
-  hasInternationalExposure: true,
-  internationalCountries: 'UK, Germany, Singapore',
-  priorLosses3Years: 0,
-  lineOfBusiness: 'General Liability',
+  companyName: 'Vanguard Logistics & Cold-Chain Solutions LLC',
+  jurisdiction: 'Illinois, USA',
+  taxIdEin: '36-9812450',
+  naicsCode: '493120',
+  industryTitle: 'Refrigerated Warehousing & Storage Facilities',
+  contactName: 'Robert Vance, VP of Finance & Risk',
+  contactEmail: 'r.vance@vanguardlogistics.com',
+  contactPhone: '+1 (312) 555-0188',
+  annualRevenue: 28500000,
+  grossPayroll: 9800000,
+  fullTimeEmployees: 142,
+  premisesSquareFootage: 120000,
+  fleetVehicleCount: 18,
+  hasSprinklers: true,
+  hasInternationalExposure: false,
+  priorLosses3Years: 1,
+  priorLossDetails: 'Single dock equipment collision claim resolved below deductible',
+  lineOfBusiness: 'Commercial General Liability',
   aggregateLimit: 2000000,
   occurrenceLimit: 1000000,
   deductible: 5000,
   includeCyberEndorsement: true,
-  includeHiredAuto: false,
+  includeHiredAuto: true,
   includeEpliRider: true,
-  selectedCarrierId: 'chubb-syndicate-1882',
+  selectedCarrierId: 'chubb-cgl-admitted',
 };
 
 interface ValiantState {
-  // Navigation / Funnel State
   currentQuoteStage: number;
   quoteFormData: QuoteFormData;
   carrierQuotes: CarrierQuote[];
   isCalculatingQuotes: boolean;
 
-  // Persistence State
   account: CommercialAccount;
   policies: Policy[];
   cois: CoiCertificate[];
   claims: ClaimFnol[];
   endorsements: EndorsementRequest[];
 
-  // Actions
   setQuoteStage: (stage: number) => void;
   updateQuoteFormData: (data: Partial<QuoteFormData>) => void;
   generateCarrierQuotes: () => void;
@@ -199,148 +214,139 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
   claims: INITIAL_CLAIMS,
   endorsements: INITIAL_ENDORSEMENTS,
 
-  setQuoteStage: (stage) => set({ currentQuoteStage: stage }),
+  setQuoteStage: (stage: number) => set({ currentQuoteStage: stage }),
 
-  updateQuoteFormData: (data) =>
+  updateQuoteFormData: (data: Partial<QuoteFormData>) =>
     set((state) => ({
       quoteFormData: { ...state.quoteFormData, ...data },
     })),
 
   generateCarrierQuotes: () => {
     set({ isCalculatingQuotes: true });
-    const { quoteFormData } = get();
-
-    // Actuarial Rating Logic
-    const naics = getNaicsByCode(quoteFormData.naicsCode);
-    const hazardMultiplier = naics ? naics.baseRateMultiplier : 1.2;
-    const revenueFactor = Math.log10(Math.max(quoteFormData.annualRevenue, 1000000)) * 0.45;
-    const employeeFactor = 1 + (quoteFormData.fullTimeEmployees / 100) * 0.15;
-
-    // Limit multiplier
-    let limitMultiplier = 1.0;
-    if (quoteFormData.aggregateLimit === 2000000) limitMultiplier = 1.22;
-    else if (quoteFormData.aggregateLimit === 5000000) limitMultiplier = 1.78;
-    else if (quoteFormData.aggregateLimit === 10000000) limitMultiplier = 2.55;
-
-    // Deductible discount
-    let deductibleDiscount = 1.0;
-    if (quoteFormData.deductible === 1000) deductibleDiscount = 1.12;
-    else if (quoteFormData.deductible === 5000) deductibleDiscount = 0.93;
-    else if (quoteFormData.deductible === 10000) deductibleDiscount = 0.82;
-    else if (quoteFormData.deductible === 25000) deductibleDiscount = 0.70;
-
-    // Riders cost
-    let ridersTotal = 0;
-    if (quoteFormData.includeCyberEndorsement) ridersTotal += 2400;
-    if (quoteFormData.includeHiredAuto) ridersTotal += 850;
-    if (quoteFormData.includeEpliRider) ridersTotal += 3100;
-
-    const baseChubb = Math.round((7800 * hazardMultiplier * revenueFactor * employeeFactor * limitMultiplier * deductibleDiscount) + ridersTotal);
-    const baseAig = Math.round((7400 * hazardMultiplier * revenueFactor * employeeFactor * limitMultiplier * (deductibleDiscount * 0.98)) + (ridersTotal * 0.95));
-    const baseLloyds = Math.round((8200 * hazardMultiplier * revenueFactor * employeeFactor * limitMultiplier * (deductibleDiscount * 0.94)) + (ridersTotal * 1.05));
-
-    const quotes: CarrierQuote[] = [
-      {
-        carrierId: 'chubb-syndicate-1882',
-        carrierName: 'Chubb Global Risk Syndicate',
-        syndicateName: 'Chubb European Group SE / Syndicate 1882',
-        amBestRating: 'A++ (Superior)',
-        spRating: 'AA (Very Strong)',
-        annualPremium: baseChubb,
-        monthlyPremium: Math.round(baseChubb / 12),
-        deductible: quoteFormData.deductible,
-        aggregateLimit: quoteFormData.aggregateLimit,
-        occurrenceLimit: quoteFormData.occurrenceLimit,
-        underwritingConfidenceScore: 98,
-        quoteId: `QTE-CHUBB-${Math.floor(100000 + Math.random() * 900000)}`,
-        keyFeatures: [
-          'Automatic Worldwide Territory for Claims Brought in USA/UK/EU',
-          'Blanket Additional Insured & Primary/Non-Contributory Endorsement',
-          'Full Cyber Extortion & Ransomware Negotiation Coverage Included',
-          'Zero deductible on defense costs (First-Dollar Defense)',
-        ],
-        keyExclusions: [
-          'War & Military Action Exclusion',
-          'Sanction Limitation & Exclusion Clause LMA3100',
-        ],
-      },
-      {
-        carrierId: 'aig-commercial-solutions',
-        carrierName: 'AIG Commercial Risk Solutions',
-        syndicateName: 'American International Group Underwriters',
-        amBestRating: 'A (Excellent)',
-        spRating: 'A+ (Strong)',
-        annualPremium: baseAig,
-        monthlyPremium: Math.round(baseAig / 12),
-        deductible: quoteFormData.deductible,
-        aggregateLimit: quoteFormData.aggregateLimit,
-        occurrenceLimit: quoteFormData.occurrenceLimit,
-        underwritingConfidenceScore: 94,
-        quoteId: `QTE-AIG-${Math.floor(100000 + Math.random() * 900000)}`,
-        keyFeatures: [
-          'High Aggregate Sub-limits for Reputational Crisis Management',
-          'Automatic 60-Day Extended Reporting Period on E&O Claims',
-          'Expedited 24-Hour Forensic Response Retainer',
-        ],
-        keyExclusions: [
-          'Bodily Injury Arising from Asbestos or Lead Contamination',
-          'Unsolicited Telecommunications Violation Exclusion',
-        ],
-      },
-      {
-        carrierId: 'lloyds-syndicate-2003',
-        carrierName: "Lloyd's Specialty Syndicate",
-        syndicateName: "Lloyd's of London Underwriting Syndicate 2003",
-        amBestRating: 'A+ (Superior)',
-        spRating: 'AA- (Very Strong)',
-        annualPremium: baseLloyds,
-        monthlyPremium: Math.round(baseLloyds / 12),
-        deductible: quoteFormData.deductible,
-        aggregateLimit: quoteFormData.aggregateLimit,
-        occurrenceLimit: quoteFormData.occurrenceLimit,
-        underwritingConfidenceScore: 96,
-        quoteId: `QTE-LLOYDS-${Math.floor(100000 + Math.random() * 900000)}`,
-        keyFeatures: [
-          'London Market Specialty Syndicate Bespoke Manuscript Wording',
-          'High Excess Capacity Layering up to $50,000,000',
-          'Comprehensive Intellectual Property & Patent Infringement Rider',
-        ],
-        keyExclusions: [
-          'Prior Known Acts or Circumstances prior to retroactive date',
-          'Nuclear Contamination Exclusion Clause',
-        ],
-      },
-    ];
 
     setTimeout(() => {
+      const { quoteFormData } = get();
+      const naics = getNaicsByCode(quoteFormData.naicsCode);
+      const hazardMultiplier = naics ? naics.baseRateMultiplier : 1.25;
+
+      const revenueBase = quoteFormData.annualRevenue / 1000000;
+      const basePremium = Math.max(12000, revenueBase * 680 * hazardMultiplier);
+
+      const quotes: CarrierQuote[] = [
+        {
+          carrierId: 'chubb-cgl-admitted',
+          carrierName: 'Chubb Federal Insurance Company',
+          naicNumber: '22667',
+          syndicateName: 'Chubb Global Risk (Admitted Paper)',
+          amBestRating: 'A++ (Superior) FSC XV',
+          spRating: 'AA Standard & Poor’s',
+          annualPremium: Math.round(basePremium * 1.05),
+          monthlyPremium: Math.round((basePremium * 1.05) / 12),
+          deductible: quoteFormData.deductible,
+          aggregateLimit: quoteFormData.aggregateLimit,
+          occurrenceLimit: quoteFormData.occurrenceLimit,
+          keyFeatures: [
+            'ISO CG 00 01 04 13 Unamended Form',
+            'Primary and Non-Contributory Endorsement included',
+            'Automatic Additional Insured for Managers of Leased Premises (CG 20 11)',
+            'Broad Form Named Insured coverage territory',
+          ],
+          keyExclusions: [
+            'Expected or Intended Injury',
+            'Contractual Liability beyond insured contracts',
+            'Pollution per CG 21 49 exclusion endorsement',
+          ],
+          underwritingConfidenceScore: 98,
+          quoteId: `QTE-CHUBB-${Math.floor(100000 + Math.random() * 900000)}`,
+          admittedPaper: true,
+        },
+        {
+          carrierId: 'travelers-commercial',
+          carrierName: 'Travelers Property Casualty Co.',
+          naicNumber: '25674',
+          syndicateName: 'Travelers Commercial Underwriting Group',
+          amBestRating: 'A++ (Superior) FSC XV',
+          spRating: 'AA Standard & Poor’s',
+          annualPremium: Math.round(basePremium * 0.94),
+          monthlyPremium: Math.round((basePremium * 0.94) / 12),
+          deductible: quoteFormData.deductible,
+          aggregateLimit: quoteFormData.aggregateLimit,
+          occurrenceLimit: quoteFormData.occurrenceLimit,
+          keyFeatures: [
+            'Travelers Premier Commercial General Liability Form',
+            'Waiver of Transfer of Rights of Recovery (CG 24 04)',
+            'Medical Payments limit increased to $10,000 per person',
+            'Worldwide Products & Completed Operations liability',
+          ],
+          keyExclusions: [
+            'Damage to Impaired Property or Property Not Physically Injured',
+            'War and Military Action Exclusion',
+          ],
+          underwritingConfidenceScore: 95,
+          quoteId: `QTE-TRV-${Math.floor(100000 + Math.random() * 900000)}`,
+          admittedPaper: true,
+        },
+        {
+          carrierId: 'lloyds-syndicate-2003',
+          carrierName: "Lloyd's of London Specialty Syndicate 2003",
+          naicNumber: 'AA-1120000',
+          syndicateName: "Lloyd's Coverholder Slip (Non-Admitted / Surplus Lines)",
+          amBestRating: 'A (Excellent) FSC XV',
+          spRating: 'AA- Standard & Poor’s',
+          annualPremium: Math.round(basePremium * 1.14),
+          monthlyPremium: Math.round((basePremium * 1.14) / 12),
+          deductible: quoteFormData.deductible * 1.5,
+          aggregateLimit: quoteFormData.aggregateLimit,
+          occurrenceLimit: quoteFormData.occurrenceLimit,
+          keyFeatures: [
+            'Specialty Surplus Lines manuscript wording',
+            'Enhanced Cyber Extortion & Systems Restoration sublimit',
+            'Contingent Business Interruption coverage included',
+            'Dedicated London Market Claims Syndicate lead',
+          ],
+          keyExclusions: [
+            'Asbestos and silica claims exclusion',
+            'Cross-suits exclusion between named insured entities',
+          ],
+          underwritingConfidenceScore: 92,
+          quoteId: `QTE-LLOYDS-${Math.floor(100000 + Math.random() * 900000)}`,
+          admittedPaper: false,
+        },
+      ];
+
       set({
         carrierQuotes: quotes,
         isCalculatingQuotes: false,
         currentQuoteStage: 4,
       });
-    }, 600);
+    }, 700);
   },
 
-  selectCarrier: (carrierId) =>
+  selectCarrier: (carrierId: string) => {
     set((state) => ({
       quoteFormData: { ...state.quoteFormData, selectedCarrierId: carrierId },
-      currentQuoteStage: 5,
-    })),
+    }));
+  },
 
-  bindPolicyAndExecute: (signatureName, signatureDataUrl) => {
-    const { quoteFormData, carrierQuotes, policies } = get();
-    const selectedQuote = carrierQuotes.find((q) => q.carrierId === quoteFormData.selectedCarrierId) || carrierQuotes[0];
+  bindPolicyAndExecute: (signatureName: string, signatureDataUrl: string) => {
+    const { quoteFormData, carrierQuotes } = get();
+    const selectedQuote = carrierQuotes.find(
+      (q) => q.carrierId === quoteFormData.selectedCarrierId
+    ) || carrierQuotes[0];
 
-    const newPolicyNumber = `VGR-${quoteFormData.lineOfBusiness.substring(0, 2).toUpperCase()}-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const now = new Date();
     const nextYear = new Date();
     nextYear.setFullYear(now.getFullYear() + 1);
 
+    const newPolicyNumber = `VGR-${quoteFormData.lineOfBusiness.includes('Cyber') ? 'CYB' : quoteFormData.lineOfBusiness.includes('Property') ? 'CPP' : 'CGL'}-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
     const newPolicy: Policy = {
       id: `pol-${Date.now()}`,
-      account_id: 'acc-nexus-01',
+      account_id: 'acc-vanguard-01',
       policy_number: newPolicyNumber,
-      carrier_name: selectedQuote ? selectedQuote.carrierName : 'Chubb Global Risk Syndicate',
+      carrier_name: selectedQuote ? selectedQuote.carrierName : 'Chubb Federal Insurance Company',
+      naic_number: selectedQuote?.naicNumber || '22667',
+      iso_form_code: 'CG 00 01 04 13',
       line_of_business: quoteFormData.lineOfBusiness,
       aggregate_limit: quoteFormData.aggregateLimit,
       occurrence_limit: quoteFormData.occurrenceLimit,
@@ -348,7 +354,7 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
       effective_date: now.toISOString().split('T')[0],
       expiration_date: nextYear.toISOString().split('T')[0],
       status: 'active',
-      annual_premium: selectedQuote ? selectedQuote.annualPremium : 15000,
+      annual_premium: selectedQuote ? selectedQuote.annualPremium : 18650,
       created_at: now.toISOString(),
     };
 
@@ -366,29 +372,30 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
   },
 
   issueCoi: (holderName, holderAddress, additionalInsured, waiverSubrogation, specialConditions, policyId) => {
-    const { policies, cois } = get();
+    const { policies, cois, account } = get();
     const targetPolicy = policyId ? policies.find((p) => p.id === policyId) || policies[0] : policies[0];
 
-    // SHA-256 simulation
-    const rawData = `${holderName}-${holderAddress}-${targetPolicy.policy_number}-${Date.now()}`;
+    // SHA-256 simulation stamp
     let hash = '';
     for (let i = 0; i < 64; i++) {
       hash += '0123456789abcdef'[(Math.floor(Math.random() * 16))];
     }
 
     const newCoi: CoiCertificate = {
-      id: `coi-${Date.now()}`,
+      id: `coi-${Math.floor(10000 + Math.random() * 90000)}`,
       policy_id: targetPolicy.id,
       holder_name: holderName,
       holder_address: holderAddress,
       additional_insured: additionalInsured,
       waiver_subrogation: waiverSubrogation,
-      special_conditions: specialConditions || 'Certificate Holder is granted Additional Insured status subject to terms, exclusions and limits of the specified policy.',
+      primary_noncontributory: true,
+      special_conditions: specialConditions || 'Certificate Holder is granted Additional Insured status subject to the terms, exclusions, and limits of the referenced commercial general liability policy.',
       issued_at: new Date().toISOString(),
       verification_hash: hash,
       policy_number: targetPolicy.policy_number,
       carrier_name: targetPolicy.carrier_name,
-      insured_name: 'Nexus Quantum Dynamics Inc.',
+      naic_number: targetPolicy.naic_number || '22667',
+      insured_name: account.company_name,
     };
 
     set({ cois: [newCoi, ...cois] });
@@ -397,16 +404,17 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
 
   submitClaimFnol: (claimData) => {
     const { claims } = get();
-    const newClaimId = `CLM-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    const claimNum = `CLM-2026-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const newClaim: ClaimFnol = {
       ...claimData,
-      id: `clm-${Date.now()}`,
+      id: claimNum.toLowerCase(),
       reported_date: new Date().toISOString(),
       status: 'triaged',
-      assigned_adjuster: 'Marcus Vance',
-      adjuster_email: 'm.vance@valiantglobalrisk.com',
+      assigned_adjuster: 'David Sterling, CPCU, Senior Commercial Adjuster',
+      adjuster_email: 'd.sterling@valiantglobalrisk.com',
       adjuster_phone: '+1 (800) 492-8812 ext. 402',
+      reserve_amount: claimData.estimated_loss ? Math.round(claimData.estimated_loss * 1.1) : 10000,
     };
 
     set({ claims: [newClaim, ...claims] });
@@ -417,7 +425,7 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
     const { endorsements } = get();
     const newReq: EndorsementRequest = {
       ...req,
-      id: `end-${Date.now()}`,
+      id: `end-2026-${Math.floor(100 + Math.random() * 900)}`,
       requestedAt: new Date().toISOString(),
       status: 'pending_review',
     };
@@ -426,4 +434,3 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
     return newReq;
   },
 }));
-

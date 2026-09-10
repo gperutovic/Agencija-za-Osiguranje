@@ -99,30 +99,30 @@ export const QuoteBindPage: React.FC = () => {
   ) || carrierQuotes[0];
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 flex flex-col selection:bg-[#0284C7] selection:text-white">
+    <div className="min-h-screen bg-[#06080c] text-slate-100 flex flex-col selection:bg-[#fb6504] selection:text-white font-sans">
       <ValiantNavbar />
 
       <main className="flex-1 py-12 relative overflow-hidden">
         {/* Subtle Ambient Background */}
-        <div className="ambient-glow-cerulean -top-20" />
+        <div className="ambient-glow-orange -top-20" />
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Header Title */}
           <div className="text-center space-y-2 mb-8">
-            <span className="vgr-pill bg-[#0284C7]/10 text-[#38bdf8] border-[#0284C7]/30">
-              <span className="vgr-pill__dot bg-[#0284C7]" />
-              Multi-Carrier Underwriting Funnel
+            <span className="rr-pill rr-pill--orange inline-flex">
+              <span className="rr-pill__dot bg-[#fb6504]" />
+              Multi-Carrier Commercial Underwriting Funnel
             </span>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Transactional Quote & Instant Bind Rail
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-mono">
-              Institutional pricing • Direct carrier syndicate capacity • Legally binding digital execution
+              Institutional capacity • Direct carrier syndicate pricing • Legally binding digital execution
             </p>
           </div>
 
           {/* 5-Stage Stepper Header */}
-          <div className="mb-10 p-3 rounded-2xl bg-[#0E131F]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl overflow-x-auto">
+          <div className="mb-10 p-3 rounded-2xl bg-[#0a0d16]/95 border border-white/[0.08] backdrop-blur-xl shadow-xl overflow-x-auto">
             <div className="flex items-center justify-between min-w-[620px]">
               {stages.map((st, idx) => {
                 const Icon = st.icon;
@@ -137,11 +137,11 @@ export const QuoteBindPage: React.FC = () => {
                         if (isCompleted) setQuoteStage(st.num);
                       }}
                       disabled={!isCompleted && !isCurrent}
-                      className={`flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all cursor-pointer ${
                         isCurrent
-                          ? 'bg-[#0284C7] text-white shadow-[0_0_15px_-3px_rgba(2,132,199,0.5)] font-semibold'
+                          ? 'bg-[#fb6504] text-white shadow-[0_0_15px_-3px_rgba(251,101,4,0.5)] font-semibold'
                           : isCompleted
-                          ? 'text-emerald-400 hover:bg-white/[0.04] cursor-pointer'
+                          ? 'text-emerald-400 hover:bg-white/[0.04]'
                           : 'text-slate-500 cursor-not-allowed opacity-60'
                       }`}
                     >
@@ -169,14 +169,14 @@ export const QuoteBindPage: React.FC = () => {
           </div>
 
           {/* Form Container */}
-          <div className="vgr-bento-card p-6 sm:p-10 shadow-2xl">
+          <div className="rr-surface-card p-6 sm:p-10 shadow-2xl">
             {/* ======================================================== */}
             {/* STAGE 1: ENTITY PROFILE */}
             {/* ======================================================== */}
             {currentQuoteStage === 1 && (
               <form onSubmit={handleStage1Next} className="space-y-6">
                 <div className="border-b border-white/[0.08] pb-4">
-                  <span className="text-xs font-mono text-[#38bdf8] uppercase tracking-wider font-bold">
+                  <span className="text-xs font-mono text-[#fb6504] uppercase tracking-wider font-bold">
                     Stage 1 of 5 • Corporate Identity
                   </span>
                   <h2 className="text-xl font-bold text-white tracking-tight mt-1">
@@ -197,8 +197,8 @@ export const QuoteBindPage: React.FC = () => {
                       required
                       value={quoteFormData.companyName}
                       onChange={(e) => updateQuoteFormData({ companyName: e.target.value })}
-                      placeholder="e.g. Nexus Quantum Dynamics Inc."
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                      placeholder="e.g. Vanguard Logistics & Cold-Chain Solutions LLC"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                     />
                   </div>
 
@@ -211,8 +211,8 @@ export const QuoteBindPage: React.FC = () => {
                       required
                       value={quoteFormData.jurisdiction}
                       onChange={(e) => updateQuoteFormData({ jurisdiction: e.target.value })}
-                      placeholder="e.g. Delaware, USA or New York, USA"
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                      placeholder="e.g. Illinois, USA or Delaware, USA"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                     />
                   </div>
 
@@ -225,8 +225,8 @@ export const QuoteBindPage: React.FC = () => {
                       required
                       value={quoteFormData.taxIdEin}
                       onChange={(e) => updateQuoteFormData({ taxIdEin: e.target.value })}
-                      placeholder="12-3456789"
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7] font-mono"
+                      placeholder="36-9812450"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] font-mono"
                     />
                   </div>
 
@@ -243,10 +243,10 @@ export const QuoteBindPage: React.FC = () => {
                           industryTitle: selected ? selected.title : quoteFormData.industryTitle,
                         });
                       }}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#0284C7] font-mono"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#fb6504] font-mono"
                     >
                       {NAICS_DATABASE.map((item) => (
-                        <option key={item.code} value={item.code} className="bg-[#0E131F]">
+                        <option key={item.code} value={item.code} className="bg-[#0a0d16]">
                           {item.code} - {item.title} ({item.hazardClass} Hazard)
                         </option>
                       ))}
@@ -255,7 +255,7 @@ export const QuoteBindPage: React.FC = () => {
                 </div>
 
                 <div className="pt-4 border-t border-white/[0.08]">
-                  <div className="text-xs font-mono text-slate-400 mb-3 uppercase">Primary Executive Contact</div>
+                  <div className="text-xs font-mono text-slate-400 mb-3 uppercase">Primary Corporate Officer / Risk Manager</div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <input
@@ -263,8 +263,8 @@ export const QuoteBindPage: React.FC = () => {
                         required
                         value={quoteFormData.contactName}
                         onChange={(e) => updateQuoteFormData({ contactName: e.target.value })}
-                        placeholder="Full Name"
-                        className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                        placeholder="Full Name (e.g. Marcus Vance)"
+                        className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                       />
                     </div>
                     <div>
@@ -274,7 +274,7 @@ export const QuoteBindPage: React.FC = () => {
                         value={quoteFormData.contactEmail}
                         onChange={(e) => updateQuoteFormData({ contactEmail: e.target.value })}
                         placeholder="Corporate Email"
-                        className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                       />
                     </div>
                     <div>
@@ -284,7 +284,7 @@ export const QuoteBindPage: React.FC = () => {
                         value={quoteFormData.contactPhone}
                         onChange={(e) => updateQuoteFormData({ contactPhone: e.target.value })}
                         placeholder="Direct Phone"
-                        className="w-full px-3 py-2 rounded-xl bg-[#07090E] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#06080c] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                       />
                     </div>
                   </div>
@@ -293,7 +293,7 @@ export const QuoteBindPage: React.FC = () => {
                 <div className="flex justify-end pt-4">
                   <button
                     type="submit"
-                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white font-semibold text-xs shadow-[0_0_20px_-3px_rgba(2,132,199,0.5)] transition-all hover:scale-105 active:scale-95"
+                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-semibold text-xs shadow-[0_0_20px_-3px_rgba(251,101,4,0.5)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <span>Proceed to Operational Exposures</span>
                     <ArrowRight className="w-4 h-4" />
@@ -308,14 +308,14 @@ export const QuoteBindPage: React.FC = () => {
             {currentQuoteStage === 2 && (
               <form onSubmit={handleStage2Next} className="space-y-6">
                 <div className="border-b border-white/[0.08] pb-4">
-                  <span className="text-xs font-mono text-[#38bdf8] uppercase tracking-wider font-bold">
+                  <span className="text-xs font-mono text-[#fb6504] uppercase tracking-wider font-bold">
                     Stage 2 of 5 • Exposure Baselines
                   </span>
                   <h2 className="text-xl font-bold text-white tracking-tight mt-1">
                     Operational Scale & Exposure Telemetry
                   </h2>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Actuarial rating engines scale premiums dynamically against gross revenue, payroll, and physical facilities.
+                    Actuarial rating engines scale commercial premiums dynamically against gross revenue, payroll, and physical facilities.
                   </p>
                 </div>
 
@@ -332,7 +332,7 @@ export const QuoteBindPage: React.FC = () => {
                         min={100000}
                         value={quoteFormData.annualRevenue}
                         onChange={(e) => updateQuoteFormData({ annualRevenue: Number(e.target.value) })}
-                        className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#0284C7] tabular-nums"
+                        className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#fb6504] tabular-nums"
                       />
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export const QuoteBindPage: React.FC = () => {
                         min={50000}
                         value={quoteFormData.grossPayroll}
                         onChange={(e) => updateQuoteFormData({ grossPayroll: Number(e.target.value) })}
-                        className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#0284C7] tabular-nums"
+                        className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#fb6504] tabular-nums"
                       />
                     </div>
                   </div>
@@ -364,7 +364,7 @@ export const QuoteBindPage: React.FC = () => {
                       min={1}
                       value={quoteFormData.fullTimeEmployees}
                       onChange={(e) => updateQuoteFormData({ fullTimeEmployees: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#0284C7] tabular-nums"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#fb6504] tabular-nums"
                     />
                   </div>
 
@@ -378,7 +378,7 @@ export const QuoteBindPage: React.FC = () => {
                       min={500}
                       value={quoteFormData.premisesSquareFootage}
                       onChange={(e) => updateQuoteFormData({ premisesSquareFootage: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#0284C7] tabular-nums"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-sm text-white focus:outline-none focus:border-[#fb6504] tabular-nums"
                     />
                   </div>
                 </div>
@@ -397,7 +397,7 @@ export const QuoteBindPage: React.FC = () => {
                         onChange={(e) => updateQuoteFormData({ hasInternationalExposure: e.target.checked })}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0284C7]" />
+                      <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#fb6504]" />
                     </label>
                   </div>
 
@@ -407,8 +407,8 @@ export const QuoteBindPage: React.FC = () => {
                         type="text"
                         value={quoteFormData.internationalCountries || ''}
                         onChange={(e) => updateQuoteFormData({ internationalCountries: e.target.value })}
-                        placeholder="List countries (e.g. UK, Germany, Singapore, Australia)"
-                        className="w-full px-3 py-2 rounded-lg bg-[#07090E] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                        placeholder="List countries (e.g. UK, Germany, Rotterdam Port Hub, Singapore)"
+                        className="w-full px-3 py-2 rounded-lg bg-[#06080c] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                       />
                     </div>
                   )}
@@ -418,14 +418,14 @@ export const QuoteBindPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setQuoteStage(1)}
-                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back</span>
                   </button>
                   <button
                     type="submit"
-                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white font-semibold text-xs shadow-[0_0_20px_-3px_rgba(2,132,199,0.5)] transition-all hover:scale-105 active:scale-95"
+                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-semibold text-xs shadow-[0_0_20px_-3px_rgba(251,101,4,0.5)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <span>Proceed to Coverage Customizer</span>
                     <ArrowRight className="w-4 h-4" />
@@ -440,14 +440,14 @@ export const QuoteBindPage: React.FC = () => {
             {currentQuoteStage === 3 && (
               <div className="space-y-6">
                 <div className="border-b border-white/[0.08] pb-4">
-                  <span className="text-xs font-mono text-[#38bdf8] uppercase tracking-wider font-bold">
-                    Stage 3 of 5 • Liability Limit & Deductibles
+                  <span className="text-xs font-mono text-[#fb6504] uppercase tracking-wider font-bold">
+                    Stage 3 of 5 • Liability Limits & Retentions
                   </span>
                   <h2 className="text-xl font-bold text-white tracking-tight mt-1">
-                    Coverage Customizer & Optional Endorsements
+                    Coverage Customizer & Commercial Endorsements
                   </h2>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Tailor your limits, retention tranches, and add specialized underwriting riders.
+                    Tailor your occurrence/aggregate limits, retention tranches, and add specialized commercial underwriting riders.
                   </p>
                 </div>
 
@@ -458,7 +458,7 @@ export const QuoteBindPage: React.FC = () => {
                       <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
                         Aggregate Coverage Limit
                       </label>
-                      <span className="font-mono text-sm font-bold text-[#38bdf8]">
+                      <span className="font-mono text-sm font-bold text-[#fb6504]">
                         ${quoteFormData.aggregateLimit.toLocaleString('en-US')} USD
                       </span>
                     </div>
@@ -471,9 +471,9 @@ export const QuoteBindPage: React.FC = () => {
                             aggregateLimit: lim,
                             occurrenceLimit: lim === 1000000 ? 1000000 : Math.round(lim / 2)
                           })}
-                          className={`p-3 rounded-xl border text-center transition-all ${
+                          className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                             quoteFormData.aggregateLimit === lim
-                              ? 'bg-[#0284C7] text-white border-[#38bdf8] shadow-[0_0_20px_-3px_rgba(2,132,199,0.5)]'
+                              ? 'bg-[#fb6504] text-white border-[#ff7b1a] shadow-[0_0_20px_-3px_rgba(251,101,4,0.5)]'
                               : 'bg-white/[0.03] text-slate-300 border-white/[0.08] hover:border-white/20'
                           }`}
                         >
@@ -490,7 +490,7 @@ export const QuoteBindPage: React.FC = () => {
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
-                        Self-Insured Retention / Deductible
+                        Self-Insured Retention (SIR) / Deductible
                       </label>
                       <span className="font-mono text-sm font-bold text-white">
                         ${quoteFormData.deductible.toLocaleString('en-US')}
@@ -502,9 +502,9 @@ export const QuoteBindPage: React.FC = () => {
                           key={ded}
                           type="button"
                           onClick={() => updateQuoteFormData({ deductible: ded })}
-                          className={`py-2 px-1 rounded-xl text-xs font-bold border transition-all ${
+                          className={`py-2 px-1 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                             quoteFormData.deductible === ded
-                              ? 'bg-[#0284C7] text-white border-[#38bdf8] shadow-[0_0_15px_-3px_rgba(2,132,199,0.5)]'
+                              ? 'bg-[#fb6504] text-white border-[#ff7b1a] shadow-[0_0_15px_-3px_rgba(251,101,4,0.5)]'
                               : 'bg-white/[0.03] text-slate-300 border-white/[0.08] hover:border-white/20'
                           }`}
                         >
@@ -516,31 +516,31 @@ export const QuoteBindPage: React.FC = () => {
 
                   {/* Endorsements Toggles */}
                   <div className="space-y-3 pt-2">
-                    <div className="text-xs font-mono uppercase text-slate-400">Underwriting Endorsement Add-Ons</div>
+                    <div className="text-xs font-mono uppercase text-slate-400">Commercial Underwriting Endorsement Riders</div>
 
                     <label className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.08] hover:border-white/20 transition-all cursor-pointer">
                       <div className="pr-4">
-                        <div className="text-xs font-bold text-white">Full Cyber Extortion & Ransomware Rider</div>
-                        <div className="text-[11px] text-slate-400">Covers digital forensics, ransom negotiation, and business interruption.</div>
+                        <div className="text-xs font-bold text-white">Cyber Risk & Extortion Endorsement</div>
+                        <div className="text-[11px] text-slate-400">Covers digital forensics, ransom defense, cold-chain IoT disruptions, and business interruption.</div>
                       </div>
                       <input
                         type="checkbox"
                         checked={quoteFormData.includeCyberEndorsement}
                         onChange={(e) => updateQuoteFormData({ includeCyberEndorsement: e.target.checked })}
-                        className="w-4 h-4 rounded text-[#0284C7] focus:ring-[#0284C7] accent-[#0284C7]"
+                        className="w-4 h-4 rounded text-[#fb6504] focus:ring-[#fb6504] accent-[#fb6504]"
                       />
                     </label>
 
                     <label className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.08] hover:border-white/20 transition-all cursor-pointer">
                       <div className="pr-4">
                         <div className="text-xs font-bold text-white">Hired & Non-Owned Auto Liability</div>
-                        <div className="text-[11px] text-slate-400">Protects against third-party bodily injury from employee-driven rental or personal vehicles.</div>
+                        <div className="text-[11px] text-slate-400">Protects against third-party bodily injury from employee-driven rental or sub-contracted fleet vehicles.</div>
                       </div>
                       <input
                         type="checkbox"
                         checked={quoteFormData.includeHiredAuto}
                         onChange={(e) => updateQuoteFormData({ includeHiredAuto: e.target.checked })}
-                        className="w-4 h-4 rounded text-[#0284C7] focus:ring-[#0284C7] accent-[#0284C7]"
+                        className="w-4 h-4 rounded text-[#fb6504] focus:ring-[#fb6504] accent-[#fb6504]"
                       />
                     </label>
 
@@ -553,7 +553,7 @@ export const QuoteBindPage: React.FC = () => {
                         type="checkbox"
                         checked={quoteFormData.includeEpliRider}
                         onChange={(e) => updateQuoteFormData({ includeEpliRider: e.target.checked })}
-                        className="w-4 h-4 rounded text-[#0284C7] focus:ring-[#0284C7] accent-[#0284C7]"
+                        className="w-4 h-4 rounded text-[#fb6504] focus:ring-[#fb6504] accent-[#fb6504]"
                       />
                     </label>
                   </div>
@@ -563,7 +563,7 @@ export const QuoteBindPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setQuoteStage(2)}
-                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back</span>
@@ -573,7 +573,7 @@ export const QuoteBindPage: React.FC = () => {
                     type="button"
                     onClick={handleStage3Next}
                     disabled={isCalculatingQuotes}
-                    className="flex items-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white font-semibold text-xs shadow-[0_0_25px_-3px_rgba(2,132,199,0.6)] transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                    className="flex items-center gap-2 px-7 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-semibold text-xs shadow-[0_0_25px_-3px_rgba(251,101,4,0.6)] transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer"
                   >
                     {isCalculatingQuotes ? (
                       <>
@@ -597,11 +597,11 @@ export const QuoteBindPage: React.FC = () => {
             {currentQuoteStage === 4 && (
               <div className="space-y-6">
                 <div className="border-b border-white/[0.08] pb-4">
-                  <span className="text-xs font-mono text-[#38bdf8] uppercase tracking-wider font-bold">
+                  <span className="text-xs font-mono text-[#fb6504] uppercase tracking-wider font-bold">
                     Stage 4 of 5 • Multi-Carrier Syndicate Comparison
                   </span>
                   <h2 className="text-xl font-bold text-white tracking-tight mt-1">
-                    Comparative Carrier Matrix (3 Distinct Offers)
+                    Comparative Carrier Matrix (3 Distinct Institutional Offers)
                   </h2>
                   <p className="text-xs text-slate-400 mt-0.5">
                     Compare A.M. Best ratings, terms, and key policy exclusions before digital execution.
@@ -619,12 +619,12 @@ export const QuoteBindPage: React.FC = () => {
                         onClick={() => selectCarrier(q.carrierId)}
                         className={`rounded-2xl p-5 border transition-all cursor-pointer flex flex-col justify-between relative ${
                           isSelected
-                            ? 'bg-[#0E131F] border-[#0284C7] shadow-[0_0_30px_-5px_rgba(2,132,199,0.4)] ring-1 ring-[#0284C7]'
+                            ? 'bg-[#0a0d16] border-[#fb6504] shadow-[0_0_30px_-5px_rgba(251,101,4,0.3)] ring-1 ring-[#fb6504]'
                             : 'bg-white/[0.02] border-white/[0.08] hover:border-white/20 hover:bg-white/[0.04]'
                         }`}
                       >
                         {isSelected && (
-                          <div className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-[#0284C7] text-white text-[10px] font-mono font-bold flex items-center gap-1 shadow-md">
+                          <div className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-[#fb6504] text-white text-[10px] font-mono font-bold flex items-center gap-1 shadow-md">
                             <Check className="w-3 h-3" />
                             <span>SELECTED OFFER</span>
                           </div>
@@ -633,7 +633,7 @@ export const QuoteBindPage: React.FC = () => {
                         <div>
                           {/* Carrier Name & Ratings */}
                           <div className="space-y-1">
-                            <div className="text-xs font-mono text-[#38bdf8] uppercase font-bold">
+                            <div className="text-xs font-mono text-[#fb6504] uppercase font-bold">
                               {q.carrierName}
                             </div>
                             <div className="text-[11px] text-slate-400 truncate">{q.syndicateName}</div>
@@ -692,9 +692,9 @@ export const QuoteBindPage: React.FC = () => {
                               e.stopPropagation();
                               selectCarrier(q.carrierId);
                             }}
-                            className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all ${
+                            className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                               isSelected
-                                ? 'bg-[#0284C7] text-white shadow-md'
+                                ? 'bg-[#fb6504] text-white shadow-md'
                                 : 'bg-white/[0.05] text-slate-200 hover:bg-white/[0.1]'
                             }`}
                           >
@@ -710,7 +710,7 @@ export const QuoteBindPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setQuoteStage(3)}
-                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Adjust Coverage</span>
@@ -719,7 +719,7 @@ export const QuoteBindPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setQuoteStage(5)}
-                    className="flex items-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-[#0284C7] to-[#0369a1] text-white font-semibold text-xs shadow-[0_0_25px_-3px_rgba(2,132,199,0.6)] transition-all hover:scale-105 active:scale-95"
+                    className="flex items-center gap-2 px-7 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-semibold text-xs shadow-[0_0_25px_-3px_rgba(251,101,4,0.6)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <span>Proceed to Electronic Signature & Bind</span>
                     <ArrowRight className="w-4 h-4" />
@@ -734,14 +734,14 @@ export const QuoteBindPage: React.FC = () => {
             {currentQuoteStage === 5 && (
               <div className="space-y-6">
                 <div className="border-b border-white/[0.08] pb-4">
-                  <span className="text-xs font-mono text-[#38bdf8] uppercase tracking-wider font-bold">
+                  <span className="text-xs font-mono text-[#fb6504] uppercase tracking-wider font-bold">
                     Stage 5 of 5 • Digital Execution
                   </span>
                   <h2 className="text-xl font-bold text-white tracking-tight mt-1">
                     Electronic Binder Execution & Settlement
                   </h2>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Sign the binding agreement, configure settlement rails, and immediately download the executed binder.
+                    Sign the commercial binding agreement, configure settlement rails, and immediately download the executed binder.
                   </p>
                 </div>
 
@@ -753,14 +753,15 @@ export const QuoteBindPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <span className="vgr-pill bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
-                        POLICY BOUND & ACTIVE
+                      <span className="rr-pill rr-pill--orange inline-flex">
+                        <span className="rr-pill__dot bg-emerald-400" />
+                        POLICY BOUND & IN-FORCE
                       </span>
                       <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
                         Policy #{boundPolicyNumber} Successfully Executed
                       </h3>
                       <p className="text-xs font-mono text-slate-400">
-                        Binder Reference: <span className="text-[#38bdf8] font-bold">{binderRef}</span> • Underwritten by {selectedQuote?.carrierName}
+                        Binder Reference: <span className="text-[#fb6504] font-bold">{binderRef}</span> • Underwritten by {selectedQuote?.carrierName}
                       </p>
                     </div>
 
@@ -769,7 +770,7 @@ export const QuoteBindPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => generateBinderPdf(quoteFormData, selectedQuote, binderRef)}
-                          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold shadow-[0_0_25px_-5px_rgba(2,132,199,0.5)] transition-all"
+                          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white text-xs font-bold shadow-[0_0_25px_-5px_rgba(251,101,4,0.5)] transition-all cursor-pointer"
                         >
                           <Download className="w-4 h-4" />
                           <span>Download Executed Policy Binder (PDF)</span>
@@ -781,14 +782,14 @@ export const QuoteBindPage: React.FC = () => {
                         className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 text-xs font-bold border border-white/[0.1] transition-all"
                       >
                         <span>Issue Instant ACORD 25 for this Policy</span>
-                        <ArrowRight className="w-4 h-4 text-[#38bdf8]" />
+                        <ArrowRight className="w-4 h-4 text-[#fb6504]" />
                       </Link>
 
                       <Link
                         to="/portal"
                         className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 text-xs font-bold border border-white/[0.1] transition-all"
                       >
-                        <span>Go to Client Servicing Portal</span>
+                        <span>Go to Commercial Client Portal</span>
                       </Link>
                     </div>
                   </div>
@@ -800,12 +801,12 @@ export const QuoteBindPage: React.FC = () => {
                       <div>
                         <div className="text-xs font-mono text-slate-400 uppercase">Binding Syndicate</div>
                         <div className="text-sm font-bold text-white">{selectedQuote?.carrierName}</div>
-                        <div className="text-[11px] font-mono text-[#38bdf8]">
+                        <div className="text-[11px] font-mono text-[#fb6504]">
                           Limit: ${quoteFormData.aggregateLimit.toLocaleString('en-US')} • Retention: ${quoteFormData.deductible.toLocaleString('en-US')}
                         </div>
                       </div>
                       <div className="text-left sm:text-right font-mono">
-                        <div className="text-xs text-slate-400">Total Bound Premium</div>
+                        <div className="text-xs text-slate-400">Total Bound Annual Premium</div>
                         <div className="text-xl font-extrabold text-white">
                           ${selectedQuote?.annualPremium.toLocaleString('en-US')} USD
                         </div>
@@ -833,13 +834,13 @@ export const QuoteBindPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setPaymentType('ach')}
-                          className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${
+                          className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer ${
                             paymentType === 'ach'
-                              ? 'bg-[#0284C7]/20 border-[#0284C7] text-white shadow-sm'
+                              ? 'bg-[#fb6504]/10 border-[#fb6504] text-white shadow-sm'
                               : 'bg-white/[0.02] border-white/[0.08] text-slate-400 hover:text-white'
                           }`}
                         >
-                          <Building className="w-5 h-5 text-[#38bdf8]" />
+                          <Building className="w-5 h-5 text-[#fb6504]" />
                           <div className="text-left">
                             <div className="text-xs font-bold">Corporate ACH Debit</div>
                             <div className="text-[10px] text-slate-400">Direct federal reserve clearing</div>
@@ -849,13 +850,13 @@ export const QuoteBindPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setPaymentType('credit_card')}
-                          className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${
+                          className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer ${
                             paymentType === 'credit_card'
-                              ? 'bg-[#0284C7]/20 border-[#0284C7] text-white shadow-sm'
+                              ? 'bg-[#fb6504]/10 border-[#fb6504] text-white shadow-sm'
                               : 'bg-white/[0.02] border-white/[0.08] text-slate-400 hover:text-white'
                           }`}
                         >
-                          <CreditCard className="w-5 h-5 text-[#6366F1]" />
+                          <CreditCard className="w-5 h-5 text-[#a855f7]" />
                           <div className="text-left">
                             <div className="text-xs font-bold">Corporate Card</div>
                             <div className="text-[10px] text-slate-400">Visa / Mastercard / Amex</div>
@@ -870,14 +871,14 @@ export const QuoteBindPage: React.FC = () => {
                             required
                             placeholder="Bank Routing Transit Number (9 Digits)"
                             defaultValue="021000021"
-                            className="w-full px-3 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                            className="w-full px-3 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                           />
                           <input
                             type="text"
                             required
                             placeholder="Corporate Depository Account Number"
                             defaultValue="982341209144"
-                            className="w-full px-3 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                            className="w-full px-3 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                           />
                         </div>
                       ) : (
@@ -887,7 +888,7 @@ export const QuoteBindPage: React.FC = () => {
                             required
                             placeholder="Card Number (4000 1234 5678 9010)"
                             defaultValue="4111 2222 3333 4444"
-                            className="w-full px-3 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                            className="w-full px-3 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                           />
                           <div className="grid grid-cols-2 gap-3">
                             <input
@@ -895,14 +896,14 @@ export const QuoteBindPage: React.FC = () => {
                               required
                               placeholder="MM/YY"
                               defaultValue="12/28"
-                              className="w-full px-3 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                              className="w-full px-3 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                             />
                             <input
                               type="text"
                               required
                               placeholder="CVC (3 digits)"
                               defaultValue="882"
-                              className="w-full px-3 py-2.5 rounded-xl bg-[#07090E] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#0284C7]"
+                              className="w-full px-3 py-2.5 rounded-xl bg-[#06080c] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504]"
                             />
                           </div>
                         </div>
@@ -913,7 +914,7 @@ export const QuoteBindPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setQuoteStage(4)}
-                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                       >
                         <ArrowLeft className="w-4 h-4" />
                         <span>Carrier Matrix</span>
@@ -922,7 +923,7 @@ export const QuoteBindPage: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isBinding}
-                        className="flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-[#0284C7] text-white font-bold text-xs shadow-[0_0_30px_-5px_rgba(16,185,129,0.5)] transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                        className="flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-xs shadow-[0_0_30px_-5px_rgba(251,101,4,0.5)] transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer"
                       >
                         {isBinding ? (
                           <>

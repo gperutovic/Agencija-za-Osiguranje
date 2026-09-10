@@ -9,7 +9,7 @@ export function generateAcord25Pdf(coi: CoiCertificate, policy: Policy): void {
   });
 
   // Top ACORD Header
-  doc.setFillColor(14, 19, 31);
+  doc.setFillColor(6, 8, 12);
   doc.rect(0, 0, 210, 24, 'F');
 
   doc.setTextColor(255, 255, 255);
@@ -50,27 +50,27 @@ export function generateAcord25Pdf(coi: CoiCertificate, policy: Policy): void {
   doc.text('One World Trade Center, Suite 7800', 12, 59);
   doc.text('New York, NY 10007, United States', 12, 63);
   doc.text('Phone: +1 (800) 492-8812 | regulatory@valiantglobalrisk.com', 12, 67);
-  doc.text('License: Surplus Lines & Brokerage #NY-9921448', 12, 71);
+  doc.text('License: Surplus Lines & Commercial Brokerage #NY-9921448', 12, 71);
 
   doc.rect(10, 82, 92, 32);
   doc.setFont('helvetica', 'bold');
   doc.text('INSURED', 12, 86);
   doc.setFont('helvetica', 'normal');
-  doc.text(coi.insured_name || 'Nexus Quantum Dynamics Inc.', 12, 91);
-  doc.text('Corporation Trust Center, 1209 Orange St', 12, 95);
-  doc.text('Wilmington, DE 19801', 12, 99);
-  doc.text('EIN / Tax ID: 12-3456789', 12, 103);
+  doc.text(coi.insured_name || 'Vanguard Logistics & Cold-Chain Solutions LLC', 12, 91);
+  doc.text('1400 S. Desplaines St.', 12, 95);
+  doc.text('Chicago, IL 60607', 12, 99);
+  doc.text('EIN / Tax ID: 36-9812450', 12, 103);
 
   // Insurers Affording Coverage
   doc.rect(105, 46, 95, 68);
   doc.setFont('helvetica', 'bold');
   doc.text('INSURERS AFFORDING COVERAGE', 108, 50);
   doc.setFont('helvetica', 'normal');
-  doc.text(`INSURER A: ${policy.carrier_name} (NAIC #1882)`, 108, 56);
-  doc.text("INSURER B: Lloyd's of London Underwriting Syndicates (NAIC #2003)", 108, 62);
-  doc.text('INSURER C: AIG Commercial Insurance Solutions (NAIC #19445)', 108, 68);
+  doc.text(`INSURER A: ${policy.carrier_name} (NAIC #${policy.naic_number || '22667'})`, 108, 56);
+  doc.text("INSURER B: Lloyd's of London Underwriting Syndicates (NAIC #AA-1120000)", 108, 62);
+  doc.text('INSURER C: Travelers Property Casualty Company (NAIC #25674)', 108, 68);
   doc.text('INSURER D: Zurich American Insurance Company (NAIC #16535)', 108, 74);
-  doc.text('INSURER E: Travelers Property Casualty Corp (NAIC #25674)', 108, 80);
+  doc.text('INSURER E: National Union Fire Insurance Co. / AIG (NAIC #19445)', 108, 80);
 
   // Coverage Schedule Table Header
   doc.setFillColor(230, 235, 245);
@@ -94,8 +94,8 @@ export function generateAcord25Pdf(coi: CoiCertificate, policy: Policy): void {
   doc.text('COMMERCIAL GENERAL LIABILITY', 24, 131);
   doc.setFont('helvetica', 'normal');
   doc.text('[X] Claims-Made  [X] Occur', 24, 136);
-  doc.text(coi.additional_insured ? '[X] Addl Insured' : '[ ] Addl Insured', 24, 141);
-  doc.text(coi.waiver_subrogation ? '[X] Subr Waived' : '[ ] Subr Waived', 24, 146);
+  doc.text(coi.additional_insured ? '[X] Addl Insured (CG 20 10)' : '[ ] Addl Insured', 24, 141);
+  doc.text(coi.waiver_subrogation ? '[X] Subr Waived (CG 24 04)' : '[ ] Subr Waived', 24, 146);
 
   doc.setFont('helvetica', 'bold');
   doc.text(policy.policy_number, 75, 131);
@@ -103,29 +103,23 @@ export function generateAcord25Pdf(coi: CoiCertificate, policy: Policy): void {
   doc.text(policy.effective_date, 112, 131);
   doc.text(policy.expiration_date, 132, 131);
 
-  // Limits
-  doc.text('EACH OCCURRENCE', 152, 130);
-  doc.text('$' + policy.occurrence_limit.toLocaleString('en-US'), 182, 130);
-  doc.text('DAMAGE TO RENTED', 152, 134);
-  doc.text('$1,000,000', 182, 134);
-  doc.text('MED EXP (Any one person)', 152, 138);
-  doc.text('$15,000', 182, 138);
-  doc.text('PERSONAL & ADV INJURY', 152, 142);
-  doc.text('$' + policy.occurrence_limit.toLocaleString('en-US'), 182, 142);
-  doc.text('GENERAL AGGREGATE', 152, 146);
-  doc.text('$' + policy.aggregate_limit.toLocaleString('en-US'), 182, 146);
-  doc.text('PRODUCTS - COMP/OP AGG', 152, 150);
-  doc.text('$' + policy.aggregate_limit.toLocaleString('en-US'), 182, 150);
+  doc.text(`EACH OCCURRENCE: $${(policy.occurrence_limit).toLocaleString('en-US')}`, 155, 131);
+  doc.text('DAMAGE TO RENTED PREMISES: $1,000,000', 155, 136);
+  doc.text('MED EXP (Any one person): $10,000', 155, 141);
+  doc.text(`PERSONAL & ADV INJURY: $${(policy.occurrence_limit).toLocaleString('en-US')}`, 155, 146);
+  doc.text(`GENERAL AGGREGATE: $${(policy.aggregate_limit).toLocaleString('en-US')}`, 155, 151);
+  doc.text(`PRODUCTS - COMP/OP AGG: $${(policy.aggregate_limit).toLocaleString('en-US')}`, 155, 156);
 
-  // Description of Operations / Locations / Vehicles
+  // Description of Operations Box
   doc.rect(10, 160, 190, 42);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   doc.text('DESCRIPTION OF OPERATIONS / LOCATIONS / VEHICLES / SPECIAL CONDITIONS', 12, 165);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  const conditions = `${coi.special_conditions || 'Certificate Holder is granted Additional Insured status subject to terms, exclusions and limits of the specified policy.'}\nPrimary and Non-Contributory wording applies where required by written contract. 30-Day Notice of Cancellation endorsed in favor of Certificate Holder (10 days for non-payment of premium).`;
-  doc.text(doc.splitTextToSize(conditions, 186), 12, 171);
+  doc.setFontSize(6.5);
+  const opsDesc = coi.special_conditions || 
+    'Certificate Holder is included as Additional Insured on a primary and non-contributory basis in respects to commercial general operations per standard policy provisions. Waiver of Subrogation applies in favor of Certificate Holder where required by written contract.';
+  doc.text(doc.splitTextToSize(opsDesc, 186), 12, 171);
 
   // Certificate Holder & Cancellation Clause
   doc.rect(10, 204, 92, 44);
@@ -146,12 +140,12 @@ export function generateAcord25Pdf(coi: CoiCertificate, policy: Policy): void {
   const cancelText = 'SHOULD ANY OF THE ABOVE DESCRIBED POLICIES BE CANCELLED BEFORE THE EXPIRATION DATE THEREOF, NOTICE WILL BE DELIVERED IN ACCORDANCE WITH THE POLICY PROVISIONS.';
   doc.text(doc.splitTextToSize(cancelText, 90), 108, 214);
 
-  // Cryptographic Verification Stamp Box
-  doc.setFillColor(243, 246, 252);
+  // Cryptographic Verification Stamp Box (RankRush Orange Highlight)
+  doc.setFillColor(254, 243, 235);
   doc.rect(108, 225, 89, 20, 'FD');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(6.5);
-  doc.setTextColor(2, 132, 199);
+  doc.setTextColor(251, 101, 4);
   doc.text('VALIANT CRYPTOGRAPHIC VERIFICATION STAMP (SHA-256)', 110, 229);
   doc.setFont('courier', 'normal');
   doc.setFontSize(6);
@@ -166,7 +160,7 @@ export function generateAcord25Pdf(coi: CoiCertificate, policy: Policy): void {
   doc.setFontSize(6.5);
   doc.setTextColor(140, 150, 165);
   doc.text('ACORD 25 (2026/03) - The ACORD name and logo are registered marks of ACORD Corporation.', 12, 255);
-  doc.text('Generated via Valiant Global Risk Automated Underwriting Rail.', 12, 259);
+  doc.text('Issued under authority of Valiant Global Risk Brokerage Syndicate Desk.', 12, 259);
 
   doc.save(`ACORD_25_${coi.holder_name.replace(/[^a-zA-Z0-9]/g, '_')}_${coi.id}.pdf`);
 }
@@ -179,7 +173,7 @@ export function generateBinderPdf(quoteData: QuoteFormData, carrier: CarrierQuot
   });
 
   // Dark Header Bar
-  doc.setFillColor(7, 9, 14);
+  doc.setFillColor(6, 8, 12);
   doc.rect(0, 0, 210, 30, 'F');
 
   doc.setTextColor(255, 255, 255);
@@ -187,7 +181,7 @@ export function generateBinderPdf(quoteData: QuoteFormData, carrier: CarrierQuot
   doc.setFont('helvetica', 'bold');
   doc.text('VALIANT GLOBAL RISK', 15, 14);
   doc.setFontSize(9);
-  doc.setTextColor(2, 132, 199);
+  doc.setTextColor(251, 101, 4);
   doc.text('OFFICIAL COMMERCIAL INSURANCE BINDER', 15, 20);
 
   doc.setFontSize(8);
@@ -216,7 +210,7 @@ export function generateBinderPdf(quoteData: QuoteFormData, carrier: CarrierQuot
   doc.setFont('helvetica', 'bold');
   doc.text('UNDERWRITING CARRIER SYNDICATE', 20, 78);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Carrier: ${carrier.carrierName}`, 20, 84);
+  doc.text(`Carrier: ${carrier.carrierName} (NAIC #${carrier.naicNumber || '22667'})`, 20, 84);
   doc.text(`Syndicate / Authority: ${carrier.syndicateName}`, 20, 89);
   doc.text(`A.M. Best Rating: ${carrier.amBestRating} | S&P Financial Strength: ${carrier.spRating}`, 20, 94);
 
@@ -231,7 +225,7 @@ export function generateBinderPdf(quoteData: QuoteFormData, carrier: CarrierQuot
   doc.text(`Each Occurrence Limit: $${quoteData.occurrenceLimit.toLocaleString('en-US')}`, 20, 125);
   doc.text(`Retention / Deductible: $${quoteData.deductible.toLocaleString('en-US')}`, 20, 130);
   doc.text(`Annual Gross Premium: $${carrier.annualPremium.toLocaleString('en-US')}`, 20, 135);
-  doc.text(`Payment Structure: ${quoteData.paymentMethod === 'ach' ? 'Direct ACH Corporate Debit' : 'Credit Card Auto-Pay'}`, 20, 140);
+  doc.text(`Payment Structure: ${quoteData.paymentMethod === 'ach' ? 'Direct ACH Corporate Debit' : 'Credit Card Corporate Billing'}`, 20, 140);
   doc.text(`Policy Period: 12 Months from Effective Date`, 20, 145);
 
   // Electronic Signature Verification
@@ -257,4 +251,3 @@ export function generateBinderPdf(quoteData: QuoteFormData, carrier: CarrierQuot
 
   doc.save(`Valiant_Binder_${binderNumber}.pdf`);
 }
-

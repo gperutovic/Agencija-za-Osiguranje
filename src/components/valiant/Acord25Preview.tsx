@@ -38,15 +38,15 @@ export const Acord25Preview: React.FC<Acord25PreviewProps> = ({
     verification_hash: hash,
     policy_number: policy.policy_number,
     carrier_name: policy.carrier_name,
-    insured_name: 'Nexus Quantum Dynamics Inc.',
+    insured_name: policy.insured_name || 'Vanguard Logistics & Cold-Chain Solutions LLC',
   };
 
   return (
-    <div className="rounded-2xl border border-white/[0.12] bg-[#0A0D16] p-4 sm:p-6 shadow-2xl text-slate-800 font-sans relative overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#0a0d16] p-4 sm:p-6 shadow-2xl text-slate-200 font-sans relative overflow-hidden">
       {/* Top Action Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-white/[0.08] text-white">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#0284C7]/20 text-[#38bdf8] border border-[#0284C7]/30">
+          <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded bg-[#fb6504]/10 text-[#fb6504] border border-[#fb6504]/25">
             ACORD 25 PREVIEW PANE
           </span>
           <span className="text-xs text-slate-400 font-mono hidden sm:inline">
@@ -58,7 +58,7 @@ export const Acord25Preview: React.FC<Acord25PreviewProps> = ({
           <button
             type="button"
             onClick={() => generateAcord25Pdf(mockCoi, policy)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-semibold shadow-[0_0_15px_-3px_rgba(2,132,199,0.5)] transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#fb6504] hover:bg-[#ff7b1a] text-white text-xs font-semibold shadow-[0_0_15px_-3px_rgba(251,101,4,0.5)] transition-all active:scale-95 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download Official PDF</span>
@@ -102,9 +102,9 @@ export const Acord25Preview: React.FC<Acord25PreviewProps> = ({
 
             <div className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800">
               <div className="font-bold text-slate-400 uppercase text-[9px] font-mono">INSURED</div>
-              <div className="font-bold text-white">Nexus Quantum Dynamics Inc.</div>
-              <div className="text-slate-400">Corporation Trust Center, 1209 Orange St, Wilmington, DE 19801</div>
-              <div className="text-slate-500 font-mono text-[10px]">EIN: 12-3456789 • NAICS: 541512</div>
+              <div className="font-bold text-white">Vanguard Logistics & Cold-Chain Solutions LLC</div>
+              <div className="text-slate-400">4200 S Pulaski Rd, Chicago, IL 60632</div>
+              <div className="text-slate-500 font-mono text-[10px]">EIN: 36-9812450 • NAICS: 493120</div>
             </div>
           </div>
 
@@ -113,20 +113,20 @@ export const Acord25Preview: React.FC<Acord25PreviewProps> = ({
               INSURERS AFFORDING COVERAGE
             </div>
             <div className="text-slate-300 flex justify-between">
-              <span><strong className="text-[#38bdf8]">INSURER A:</strong> {policy.carrier_name}</span>
-              <span className="text-slate-500 font-mono">NAIC #1882</span>
+              <span><strong className="text-[#fb6504]">INSURER A:</strong> {policy.carrier_name}</span>
+              <span className="text-slate-500 font-mono">NAIC #22667</span>
             </div>
             <div className="text-slate-300 flex justify-between">
               <span><strong>INSURER B:</strong> Lloyd's Specialty Syndicate</span>
               <span className="text-slate-500 font-mono">NAIC #2003</span>
             </div>
             <div className="text-slate-300 flex justify-between">
-              <span><strong>INSURER C:</strong> AIG Commercial Insurance</span>
-              <span className="text-slate-500 font-mono">NAIC #19445</span>
+              <span><strong>INSURER C:</strong> Travelers Property Casualty</span>
+              <span className="text-slate-500 font-mono">NAIC #25674</span>
             </div>
             <div className="text-slate-300 flex justify-between">
-              <span><strong>INSURER D:</strong> Zurich American Insurance Co.</span>
-              <span className="text-slate-500 font-mono">NAIC #16535</span>
+              <span><strong>INSURER D:</strong> AIG Commercial Insurance</span>
+              <span className="text-slate-500 font-mono">NAIC #19445</span>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ export const Acord25Preview: React.FC<Acord25PreviewProps> = ({
             </thead>
             <tbody className="divide-y divide-slate-800/80">
               <tr className="bg-slate-950/40">
-                <td className="py-2 px-2 font-bold text-[#38bdf8]">A</td>
+                <td className="py-2 px-2 font-bold text-[#fb6504]">A</td>
                 <td className="py-2 px-2">
                   <div className="font-semibold text-white">COMMERCIAL GENERAL LIABILITY</div>
                   <div className="flex items-center gap-2 text-[10px] text-slate-400 mt-0.5">
@@ -196,8 +196,8 @@ export const Acord25Preview: React.FC<Acord25PreviewProps> = ({
             <div className="text-slate-400 mt-0.5 whitespace-pre-line">{holderAddress || 'Enter holder mailing address...'}</div>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-[#0284C7]/10 border border-[#0284C7]/30 space-y-1">
-            <div className="flex items-center gap-1.5 text-[#38bdf8] font-bold text-[10px] font-mono">
+          <div className="p-2.5 rounded-lg bg-[#fb6504]/10 border border-[#fb6504]/30 space-y-1">
+            <div className="flex items-center gap-1.5 text-[#fb6504] font-bold text-[10px] font-mono">
               <Lock className="w-3 h-3" />
               <span>CRYPTOGRAPHIC STAMP (SHA-256)</span>
             </div>
