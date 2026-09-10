@@ -50,59 +50,61 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-6">
+    <div className="min-h-[80vh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#fb6504]/10 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-md w-full space-y-6 relative z-10">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center mx-auto shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#fb6504] to-[#ff7b1a] text-white flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(251,101,4,0.4)]">
             <Lock className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             Prijava u Moj Život Portal
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400 font-light">
             Siguran pristup vašim policama, digitalnom trezoru i odštetnim spisima
           </p>
         </div>
 
         {/* 1-Click Fast Demo Personas */}
-        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-700 font-bold text-[11px] uppercase tracking-wider">
-            <UserCheck className="w-4 h-4 text-brand-600" />
+        <div className="bg-[#0a0d16]/90 p-4 rounded-3xl border border-white/[0.08] backdrop-blur-xl space-y-2 text-xs">
+          <div className="flex items-center gap-1.5 text-slate-300 font-mono font-bold text-[11px] uppercase tracking-wider">
+            <UserCheck className="w-4 h-4 text-[#ff7b1a]" />
             <span>1-Klik Brza Prijava (Test Personas):</span>
           </div>
           <div className="grid grid-cols-3 gap-2 pt-1">
             <button
               type="button"
               onClick={() => handleQuickPersona('policyholder')}
-              className="p-2 rounded-xl bg-white hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-800 text-center transition-colors"
+              className="p-2 rounded-2xl bg-white/[0.03] hover:bg-[#fb6504]/10 border border-white/[0.08] hover:border-[#fb6504]/40 text-white text-center transition-colors group"
             >
-              <span className="block font-bold text-[11px]">Ana Horvat</span>
-              <span className="text-[10px] text-teal-700 font-medium">Klijent</span>
+              <span className="block font-bold text-[11px] group-hover:text-[#ff7b1a]">Ana Horvat</span>
+              <span className="text-[10px] text-teal-400 font-mono">Klijent</span>
             </button>
             <button
               type="button"
               onClick={() => handleQuickPersona('broker')}
-              className="p-2 rounded-xl bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-800 text-center transition-colors"
+              className="p-2 rounded-2xl bg-white/[0.03] hover:bg-[#fb6504]/10 border border-white/[0.08] hover:border-[#fb6504]/40 text-white text-center transition-colors group"
             >
-              <span className="block font-bold text-[11px]">Marija Šarić</span>
-              <span className="text-[10px] text-blue-700 font-medium">Broker</span>
+              <span className="block font-bold text-[11px] group-hover:text-[#ff7b1a]">Marija Šarić</span>
+              <span className="text-[10px] text-cyan-400 font-mono">Broker</span>
             </button>
             <button
               type="button"
               onClick={() => handleQuickPersona('admin')}
-              className="p-2 rounded-xl bg-white hover:bg-purple-50 border border-slate-200 hover:border-purple-300 text-slate-800 text-center transition-colors"
+              className="p-2 rounded-2xl bg-white/[0.03] hover:bg-[#fb6504]/10 border border-white/[0.08] hover:border-[#fb6504]/40 text-white text-center transition-colors group"
             >
-              <span className="block font-bold text-[11px]">Ivan Radić</span>
-              <span className="text-[10px] text-purple-700 font-medium">Procjenitelj</span>
+              <span className="block font-bold text-[11px] group-hover:text-[#ff7b1a]">Ivan Radić</span>
+              <span className="text-[10px] text-amber-400 font-mono">Procjenitelj</span>
             </button>
           </div>
         </div>
 
         {/* Login Card */}
-        <Card className="p-6 sm:p-8 bg-white border-slate-200 shadow-md">
+        <div className="p-6 sm:p-8 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-2xl">
           {authError && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+            <div className="mb-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2 font-mono">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{authError}</span>
             </div>
@@ -110,7 +112,7 @@ export const LoginPage: React.FC = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                 Korisnički email
               </label>
               <Input
@@ -123,8 +125,8 @@ export const LoginPage: React.FC = () => {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-semibold text-slate-700">Lozinka</label>
-                <a href="#" className="text-[11px] text-brand-600 hover:underline">
+                <label className="block text-xs font-mono font-semibold text-slate-300">Lozinka</label>
+                <a href="#" className="text-[11px] font-mono text-[#ff7b1a] hover:underline">
                   Zaboravljena lozinka?
                 </a>
               </div>
@@ -140,19 +142,19 @@ export const LoginPage: React.FC = () => {
               type="submit"
               variant="primary"
               disabled={isSubmitting}
-              className="w-full font-bold mt-2"
+              className="w-full font-mono font-bold mt-2"
             >
               {isSubmitting ? 'Prijava u tijeku...' : 'Prijavi se u portal'}
             </Button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs text-slate-600">
+          <div className="mt-6 pt-6 border-t border-white/[0.06] text-center text-xs text-slate-400 font-mono">
             Nemate otvoren korisnički račun?{' '}
-            <Link to="/register" className="font-bold text-brand-600 hover:underline">
+            <Link to="/register" className="font-bold text-[#ff7b1a] hover:underline">
               Registrirajte se ovdje &rarr;
             </Link>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );

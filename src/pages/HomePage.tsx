@@ -33,8 +33,8 @@ export const HomePage: React.FC = () => {
       tag: '50% Bonus + Asistencija 24/7',
       desc: 'Obvezno osiguranje od automobilske odgovornosti i kasko pokriće bez franšize uz besplatnu vuču i zamjensko vozilo diljem Europe.',
       priceStarting: 'od 118 € / god.',
-      color: 'from-blue-600 to-indigo-700',
-      accentBg: 'bg-blue-50 text-blue-700 border-blue-200',
+      accent: 'text-[#ff7b1a]',
+      borderHover: 'hover:border-[#fb6504]/50',
     },
     {
       id: 'property',
@@ -43,8 +43,8 @@ export const HomePage: React.FC = () => {
       tag: 'Građevinski dio + Stvari kućanstva',
       desc: 'Sveobuhvatna zaštita od potresa, požara, izlijevanja vode iz vodovodnih cijevi, oluje, provalne krađe i odgovornosti prema trećima.',
       priceStarting: 'od 0,95 €/m² god.',
-      color: 'from-amber-600 to-orange-700',
-      accentBg: 'bg-amber-50 text-amber-800 border-amber-200',
+      accent: 'text-amber-400',
+      borderHover: 'hover:border-amber-500/50',
     },
     {
       id: 'life',
@@ -53,8 +53,8 @@ export const HomePage: React.FC = () => {
       tag: 'Zaštita obitelji + Sigurna štednja',
       desc: 'Financijska sigurnost vaših najmilijih, otplata stambenog kredita i pokriće za 20 teških bolesti uz zajamčeni povrat uplaćenih sredstava.',
       priceStarting: 'od 25 € / mjesečno',
-      color: 'from-rose-600 to-pink-700',
-      accentBg: 'bg-rose-50 text-rose-700 border-rose-200',
+      accent: 'text-rose-400',
+      borderHover: 'hover:border-rose-500/50',
     },
     {
       id: 'health',
@@ -63,8 +63,8 @@ export const HomePage: React.FC = () => {
       tag: 'Specijalisti bez čekanja + B-lista',
       desc: 'Pregledi u najboljim privatnim poliklinikama u roku 48h, magnetska rezonanca, laboratorijska dijagnostika i pokriće participacije za lijekove.',
       priceStarting: 'od 18 € / mjesečno',
-      color: 'from-emerald-600 to-teal-700',
-      accentBg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      accent: 'text-emerald-400',
+      borderHover: 'hover:border-emerald-500/50',
     },
   ];
 
@@ -103,34 +103,43 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-20 pb-20">
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-navy-900 to-slate-900 text-white pt-24 pb-28">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(20,184,166,0.15),transparent_50%)] pointer-events-none" />
+    <div className="space-y-24 pb-24 text-slate-100">
+      {/* HERO SECTION WITH RANKRUSH GLOW */}
+      <section className="relative overflow-hidden pt-16 pb-28">
+        {/* Ambient Glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#fb6504]/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-40 right-10 w-[400px] h-[400px] bg-[#22d3ee]/10 rounded-full blur-[120px] pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/20 border border-brand-400/30 text-teal-300 text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-teal-400" />
-                <span>Ovlašteni zastupnik Generali osiguranja d.d. &bull; HANFA Licenca</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-mono font-bold tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-[#fb6504] animate-pulse" />
+                <span className="text-white">Ovlašteni partner Generali osiguranja d.d.</span>
+                <span className="text-slate-500">&bull;</span>
+                <span className="text-[#ff7b1a]">HANFA Licenca</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
-                Pametno osiguranje za <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-emerald-400">stvaran život</span>.
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-white">
+                Pametno osiguranje za{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fb6504] via-[#ff7b1a] to-amber-400">
+                  stvaran život
+                </span>
+                .
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed">
-                Spoj digitalne brzine i stručnog savjetovanja. Izračunajte premiju za 60 sekundi, ugovorite policu online i prijavite štetu u realnom vremenu uz pravnu sigurnost vodećeg europskog osiguratelja.
+              <p className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed font-light">
+                Digitalna platforma Agencije Život spaja trenutačni izračun premija za 60 sekundi, online ugovaranje polica i 24/7 digitalnu prijavu šteta s pravnom snagom vodećeg europskog osiguratelja.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
                 <Link to="/calculator">
                   <Button
-                    variant="teal"
+                    variant="primary"
                     size="lg"
                     rightIcon={<ArrowRight className="w-5 h-5" />}
-                    className="w-full sm:w-auto text-base font-extrabold shadow-lg shadow-teal-900/30"
+                    className="w-full sm:w-auto text-base font-extrabold"
                   >
                     Izračunaj svoju premiju
                   </Button>
@@ -140,7 +149,7 @@ export const HomePage: React.FC = () => {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto text-base font-bold bg-white/10 hover:bg-white/20 text-white border-white/20"
+                    className="w-full sm:w-auto text-base font-bold"
                   >
                     Korisnički portal Moj Život
                   </Button>
@@ -148,53 +157,55 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* Trust Indicators */}
-              <div className="pt-6 border-t border-white/10 grid grid-cols-3 gap-4 text-xs text-slate-300">
+              <div className="pt-6 border-t border-white/[0.08] grid grid-cols-3 gap-4 text-xs font-mono text-slate-400">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#ff7b1a] shrink-0" />
                   <span>Bez skrivenih naknada</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-teal-400 shrink-0" />
+                  <Zap className="w-4 h-4 text-amber-400 shrink-0" />
                   <span>Trenutačna polica na email</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-teal-400 shrink-0" />
-                  <span>24/7 Digitalna prijava šteta</span>
+                  <Clock className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span>24/7 Prijava šteta</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Card / Interactive Teaser */}
+            {/* Right Card / Interactive RankRush Teaser */}
             <div className="lg:col-span-5">
-              <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/20 shadow-2xl space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-white/15">
+              <div className="bg-[#0a0d16]/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/[0.1] shadow-2xl space-y-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#fb6504]/10 rounded-full blur-2xl pointer-events-none" />
+
+                <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] relative z-10">
                   <div>
                     <h3 className="text-xl font-bold text-white">Ekspresni Izračun</h3>
-                    <p className="text-xs text-slate-300">Odaberite osiguranje i saznajte uštedu</p>
+                    <p className="text-xs text-slate-400 font-mono">Odaberite osiguranje i saznajte uštedu</p>
                   </div>
-                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-teal-500/30 text-teal-300 border border-teal-400/30">
+                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-[#fb6504]/15 text-[#ff7b1a] border border-[#fb6504]/30">
                     60 sec
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3 relative z-10">
                   {[
-                    { type: 'auto', label: 'Auto & Kasko', icon: Car },
-                    { type: 'property', label: 'Dom i Potres', icon: Home },
-                    { type: 'life', label: 'Životno', icon: Heart },
-                    { type: 'health', label: 'Zdravstveno', icon: Activity },
+                    { type: 'auto', label: 'Auto & Kasko', icon: Car, color: 'group-hover:text-[#ff7b1a]' },
+                    { type: 'property', label: 'Dom i Potres', icon: Home, color: 'group-hover:text-amber-400' },
+                    { type: 'life', label: 'Životno', icon: Heart, color: 'group-hover:text-rose-400' },
+                    { type: 'health', label: 'Zdravstveno', icon: Activity, color: 'group-hover:text-emerald-400' },
                   ].map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link
                         key={item.type}
                         to={`/calculator?type=${item.type}`}
-                        className="p-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex flex-col items-center text-center gap-2 group hover:scale-[1.02]"
+                        className="p-4 rounded-2xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.16] transition-all flex flex-col items-center text-center gap-2 group hover:scale-[1.02]"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] text-slate-300 flex items-center justify-center group-hover:bg-[#fb6504]/20 group-hover:text-[#ff7b1a] group-hover:border-[#fb6504]/30 transition-colors">
                           <Icon className="w-5 h-5" />
                         </div>
-                        <span className="text-xs font-bold text-white group-hover:text-teal-300">
+                        <span className={`text-xs font-bold text-white transition-colors ${item.color}`}>
                           {item.label}
                         </span>
                       </Link>
@@ -202,15 +213,15 @@ export const HomePage: React.FC = () => {
                   })}
                 </div>
 
-                <div className="p-4 rounded-2xl bg-navy-950/60 border border-white/10 text-xs text-slate-300 flex items-center gap-3">
-                  <UserCheck className="w-5 h-5 text-teal-400 shrink-0" />
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-400 flex items-center gap-3 relative z-10">
+                  <UserCheck className="w-5 h-5 text-[#ff7b1a] shrink-0" />
                   <span>
-                    Želite personalizirani savjet? Dogovorite besplatni termin s licenciranim brokerom.
+                    Želite personalizirani savjet? Dogovorite besplatni termin s licenciranim HANFA brokerom.
                   </span>
                 </div>
 
-                <Link to="/contact">
-                  <Button variant="outline" className="w-full text-xs font-bold bg-transparent border-white/30 text-white hover:bg-white/10">
+                <Link to="/contact" className="block relative z-10">
+                  <Button variant="outline" className="w-full text-xs font-mono font-bold">
                     Zakaži savjetovanje s agentom
                   </Button>
                 </Link>
@@ -225,16 +236,19 @@ export const HomePage: React.FC = () => {
         <TrustBadgeBanner />
       </div>
 
-      {/* PRODUCT PROGRAMS */}
+      {/* PRODUCT PROGRAMS - BENTO GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-600 bg-brand-50 px-3 py-1 rounded-full border border-brand-200">
-            Naši Programi Osiguranja
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#fb6504]" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#ff7b1a]">
+              Naši Programi Osiguranja
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
             Potpuna sigurnost za vas, vašu obitelj i imovinu
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base">
+          <p className="text-slate-400 text-sm sm:text-base">
             Izaberite provjerene police Generali osiguranja prilagođene vašim specifičnim potrebama uz konkurentne premije i podršku ovlaštenih agenata.
           </p>
         </div>
@@ -243,62 +257,62 @@ export const HomePage: React.FC = () => {
           {products.map((p) => {
             const Icon = p.icon;
             return (
-              <Card
+              <div
                 key={p.id}
-                className="p-6 flex flex-col justify-between hover:shadow-xl transition-all border-slate-200 group bg-white"
+                className={`p-6 flex flex-col justify-between bg-[#0a0d16]/90 border border-white/[0.08] ${p.borderHover} backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl transition-all group relative overflow-hidden`}
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-white flex items-center justify-center group-hover:scale-110 group-hover:border-[#fb6504]/40 group-hover:text-[#ff7b1a] transition-all">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-[11px] font-bold text-slate-500 font-mono">
+                    <span className="text-[11px] font-mono font-bold text-slate-400">
                       {p.priceStarting}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                    <h3 className="text-lg font-bold text-white group-hover:text-[#ff7b1a] transition-colors">
                       {p.title}
                     </h3>
-                    <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-1.5 border ${p.accentBg}`}>
+                    <span className="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full mt-2 bg-white/[0.04] border border-white/[0.08] text-slate-300">
                       {p.tag}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-slate-400 leading-relaxed">
                     {p.desc}
                   </p>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-slate-100 flex flex-col gap-2">
+                <div className="pt-6 mt-6 border-t border-white/[0.06] flex flex-col gap-2">
                   <Link to={`/calculator?type=${p.id}`}>
-                    <Button variant="primary" size="sm" className="w-full text-xs font-bold">
+                    <Button variant="primary" size="sm" className="w-full text-xs font-mono font-bold">
                       Izračunaj ponudu
                     </Button>
                   </Link>
                   <Link to={`/services/${p.id}`}>
-                    <Button variant="ghost" size="sm" className="w-full text-xs text-slate-600 hover:text-slate-900">
+                    <Button variant="ghost" size="sm" className="w-full text-xs font-mono text-slate-400 hover:text-white">
                       Saznaj više detalja &rarr;
                     </Button>
                   </Link>
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
       </section>
 
       {/* STATS SECTION */}
-      <section className="bg-slate-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#0a0d16]/90 border-y border-white/[0.08] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.map((s, idx) => (
               <div key={idx} className="space-y-2">
-                <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-emerald-400 font-mono">
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-[#ff7b1a] font-mono">
                   {s.value}
                 </p>
-                <p className="text-xs sm:text-sm text-slate-300 font-medium">
+                <p className="text-xs sm:text-sm text-slate-400 font-medium font-mono">
                   {s.label}
                 </p>
               </div>
@@ -309,83 +323,88 @@ export const HomePage: React.FC = () => {
 
       {/* DIGITAL CLAIMS HIGHLIGHT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-slate-50 to-brand-50/40 rounded-3xl p-8 sm:p-12 border border-slate-200">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="relative bg-[#0a0d16]/90 border border-white/[0.08] rounded-3xl p-8 sm:p-12 shadow-2xl overflow-hidden backdrop-blur-xl">
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#fb6504]/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             <div className="lg:col-span-7 space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-                Šteta se dogodila? Bez panike.
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-400">
+                  Šteta se dogodila? Bez panike.
+                </span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                 Digitalna prijava štete (FNOL) u 4 jednostavna koraka
               </h2>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-400 leading-relaxed">
                 Zaboravite papirnate formulare i čekanje na šalteru. Učitajte fotografije mobitelom, unesite lokaciju i IBAN. Naš tim odmah pokreće procjenu i isplatu.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center font-bold text-brand-600 shrink-0">
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                  <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center font-mono font-bold text-[#ff7b1a] shrink-0">
                     1
                   </div>
                   <div>
-                    <strong>Unos podataka o nezgodi:</strong> Odaberite svoju policu i lokaciju događaja.
+                    <strong className="text-white">Unos podataka:</strong> Odaberite svoju policu i lokaciju događaja.
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center font-bold text-brand-600 shrink-0">
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                  <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center font-mono font-bold text-[#ff7b1a] shrink-0">
                     2
                   </div>
                   <div>
-                    <strong>Fotografije oštećenja:</strong> Učitajte slike izravno s pametnog telefona do 15 MB.
+                    <strong className="text-white">Fotografije oštećenja:</strong> Učitajte slike izravno s telefona do 15 MB.
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center font-bold text-brand-600 shrink-0">
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                  <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center font-mono font-bold text-[#ff7b1a] shrink-0">
                     3
                   </div>
                   <div>
-                    <strong>Službeni broj spisa:</strong> Dobivate instant kod formata ST-2026-XXXX za praćenje.
+                    <strong className="text-white">Službeni broj spisa:</strong> Dobivate instant kod formata ST-2026-XXXX.
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center font-bold text-brand-600 shrink-0">
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                  <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center font-mono font-bold text-[#ff7b1a] shrink-0">
                     4
                   </div>
                   <div>
-                    <strong>Brza isplata na IBAN:</strong> Likvidacija po odobrenju procjenitelja.
+                    <strong className="text-white">Brza isplata na IBAN:</strong> Likvidacija po odobrenju procjenitelja.
                   </div>
                 </div>
               </div>
 
               <div className="pt-4">
                 <Link to="/claims">
-                  <Button variant="danger" size="lg" className="text-sm font-bold">
+                  <Button variant="danger" size="lg" className="text-sm font-mono font-bold">
                     Prijavi štetu odmah &rarr;
                   </Button>
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-md space-y-4">
-              <h4 className="font-bold text-slate-900 text-sm">Status Vašeg Odštetnog Spisa</h4>
-              <p className="text-xs text-slate-500">
+            <div className="lg:col-span-5 bg-white/[0.02] p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
+              <h4 className="font-bold text-white text-sm">Status Vašeg Odštetnog Spisa</h4>
+              <p className="text-xs text-slate-400 font-mono">
                 Već imate otvoren spis? Pratite status u realnom vremenu uz vaš broj štete (npr. ST-2026-4819).
               </p>
 
               <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-mono font-bold text-slate-800">ST-2026-4819</span>
-                  <span className="ml-auto text-emerald-700 font-semibold">Odobreno za isplatu</span>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="font-mono font-bold text-white">ST-2026-4819</span>
+                  <span className="ml-auto text-emerald-400 font-mono font-semibold">Odobreno za isplatu</span>
                 </div>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                  <span className="font-mono font-bold text-slate-800">ST-2026-9142</span>
-                  <span className="ml-auto text-amber-700 font-semibold">Uviđaj procjenitelja</span>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                  <span className="font-mono font-bold text-white">ST-2026-9142</span>
+                  <span className="ml-auto text-amber-400 font-mono font-semibold">Uviđaj procjenitelja</span>
                 </div>
               </div>
 
-              <Link to="/claims" className="block text-center text-xs font-bold text-brand-600 hover:text-brand-800 pt-2">
+              <Link to="/claims" className="block text-center text-xs font-mono font-bold text-[#ff7b1a] hover:underline pt-2">
                 Provjeri status postojećeg spisa &rarr;
               </Link>
             </div>
@@ -396,60 +415,65 @@ export const HomePage: React.FC = () => {
       {/* CLIENT TESTIMONIALS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-brand-600">
-            Iskustva Naših Osiguranika
-          </span>
-          <h2 className="text-3xl font-extrabold text-slate-900">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#fb6504]" />
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#ff7b1a]">
+              Iskustva Naših Osiguranika
+            </span>
+          </div>
+          <h2 className="text-3xl font-extrabold text-white">
             Povjerenje građana i poduzetnika diljem Hrvatske
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t, idx) => (
-            <Card key={idx} className="p-6 bg-white border-slate-200 flex flex-col justify-between">
+            <div key={idx} className="p-6 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl flex flex-col justify-between shadow-xl">
               <div className="space-y-3">
-                <div className="flex items-center gap-1 text-amber-400">
+                <div className="flex items-center gap-1 text-[#ff7b1a]">
                   {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400" />
+                    <Star key={i} className="w-4 h-4 fill-[#ff7b1a]" />
                   ))}
                 </div>
-                <p className="text-xs text-slate-600 italic leading-relaxed">
+                <p className="text-xs text-slate-300 italic leading-relaxed">
                   "{t.quote}"
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-100 text-xs">
-                <p className="font-bold text-slate-900">{t.author}</p>
-                <p className="text-slate-500">{t.location}</p>
-                <span className="inline-block text-[10px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded mt-1">
+              <div className="pt-4 mt-4 border-t border-white/[0.06] text-xs font-mono">
+                <p className="font-bold text-white">{t.author}</p>
+                <p className="text-slate-400">{t.location}</p>
+                <span className="inline-block text-[10px] font-semibold text-[#ff7b1a] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded mt-1">
                   {t.product}
                 </span>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </section>
 
       {/* FINAL CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-navy-950 via-brand-950 to-navy-900 rounded-3xl p-8 sm:p-14 text-white text-center space-y-6 shadow-2xl relative overflow-hidden">
-          <div className="max-w-2xl mx-auto space-y-3">
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+        <div className="relative bg-[#0a0d16]/90 border border-white/[0.08] rounded-3xl p-8 sm:p-14 text-white text-center space-y-6 shadow-2xl overflow-hidden backdrop-blur-xl">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/15 rounded-full blur-[120px] pointer-events-none" />
+
+          <div className="max-w-2xl mx-auto space-y-3 relative z-10">
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
               Osigurajte svoju budućnost već danas
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base">
+            <p className="text-slate-300 text-sm sm:text-base font-light">
               Pridružite se tisućama zadovoljnih klijenata koji su odabrali Agenciju Život i Generali osiguranje za pouzdanog partnera.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
             <Link to="/calculator">
-              <Button variant="teal" size="lg" className="font-extrabold px-8">
+              <Button variant="primary" size="lg" className="font-extrabold px-8 font-mono">
                 Izračunaj besplatnu ponudu
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="outline" size="lg" className="bg-white/10 text-white border-white/20 hover:bg-white/20 font-bold">
+              <Button variant="outline" size="lg" className="font-bold font-mono">
                 Kontaktirajte naše brokere
               </Button>
             </Link>

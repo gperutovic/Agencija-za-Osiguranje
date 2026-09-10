@@ -37,38 +37,43 @@ export const PortalDashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-20">
+    <div className="space-y-8 pb-24 text-slate-100">
       {/* Top Welcome Header */}
-      <section className="bg-gradient-to-r from-navy-950 via-slate-900 to-navy-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <section className="relative overflow-hidden pt-12 pb-14">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-teal-400 bg-teal-500/20 px-3 py-0.5 rounded-full border border-teal-400/30">
-                Korisnički Portal &bull; Moj Život
-              </span>
+              <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono font-bold tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-[#fb6504] animate-pulse" />
+                <span className="text-white">Korisnički Portal</span>
+                <span className="text-slate-500">&bull;</span>
+                <span className="text-[#ff7b1a]">Moj Život</span>
+              </div>
               {user?.oib && (
-                <span className="text-xs font-mono text-slate-300">
+                <span className="text-xs font-mono text-slate-400 bg-white/[0.02] px-2.5 py-0.5 rounded-full border border-white/[0.06]">
                   OIB: {user.oib}
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
               Dobrodošli, {user?.displayName || 'Korisnik'}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300">
+            <p className="text-xs sm:text-sm text-slate-400 font-light">
               Upravljajte svojim policama osiguranja, preuzimajte digitalne certifikate i pratite odštetne spise.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Link to="/calculator">
-              <Button variant="teal" size="sm" className="font-bold">
+              <Button variant="primary" size="sm" className="font-mono font-bold">
                 <Plus className="w-4 h-4 mr-1" />
                 Ugovori novu policu
               </Button>
             </Link>
             <Link to="/claims">
-              <Button variant="danger" size="sm" className="font-bold">
+              <Button variant="danger" size="sm" className="font-mono font-bold">
                 Prijavi štetu (FNOL)
               </Button>
             </Link>
@@ -82,7 +87,7 @@ export const PortalDashboardPage: React.FC = () => {
         <RenewalAlertBanner policies={policies} onRenewPolicy={handleRenew} />
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+        <div className="flex flex-wrap gap-2 border-b border-white/[0.08] pb-3">
           {[
             { id: 'policies', label: `Moje Police (${policies.length})`, icon: Shield },
             { id: 'claims', label: `Moji Odštetni Zahtjevi (${claims.length})`, icon: AlertTriangle },
@@ -95,10 +100,10 @@ export const PortalDashboardPage: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-mono font-bold transition-all ${
                   isSelected
-                    ? 'bg-brand-600 text-white shadow-sm'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_16px_rgba(251,101,4,0.35)]'
+                    : 'bg-[#0a0d16]/90 text-slate-400 hover:text-white border border-white/[0.08] hover:border-white/[0.16]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -112,21 +117,21 @@ export const PortalDashboardPage: React.FC = () => {
         {activeTab === 'policies' && (
           <div className="space-y-4">
             {policiesLoading ? (
-              <div className="text-center py-12 text-slate-400">
-                <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2" />
+              <div className="text-center py-12 text-slate-400 font-mono">
+                <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2 text-[#ff7b1a]" />
                 <p className="text-sm">Učitavanje polica osiguranja...</p>
               </div>
             ) : policies.length === 0 ? (
-              <Card className="p-12 text-center bg-white border-slate-200">
-                <Shield className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 text-lg">Nemate aktivnih polica osiguranja</h3>
-                <p className="text-xs text-slate-500 max-w-md mx-auto mt-1 mb-6">
+              <div className="p-12 text-center bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl">
+                <Shield className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+                <h3 className="font-bold text-white text-lg">Nemate aktivnih polica osiguranja</h3>
+                <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-6 font-mono">
                   Izračunajte ponudu u našem kalkulatoru i ugovorite optimalno pokriće za vozilo, nekretninu ili zdravlje.
                 </p>
                 <Link to="/calculator">
-                  <Button variant="primary">Pokreni kalkulator premije</Button>
+                  <Button variant="primary" className="font-mono font-bold">Pokreni kalkulator premije</Button>
                 </Link>
-              </Card>
+              </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {policies.map((p: Policy) => (
@@ -141,48 +146,48 @@ export const PortalDashboardPage: React.FC = () => {
         {activeTab === 'claims' && (
           <div className="space-y-6">
             {claims.length === 0 ? (
-              <Card className="p-12 text-center bg-white border-slate-200">
+              <div className="p-12 text-center bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl">
                 <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 text-lg">Nemate evidentiranih šteta</h3>
-                <p className="text-xs text-slate-500 max-w-md mx-auto mt-1 mb-6">
+                <h3 className="font-bold text-white text-lg">Nemate evidentiranih šteta</h3>
+                <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-6 font-mono">
                   Sve je sigurno! Ako vam se dogodi nezgoda ili šteta na imovini, možete je prijaviti online u samo nekoliko minuta.
                 </p>
                 <Link to="/claims">
-                  <Button variant="danger">Prijavi novu štetu (FNOL)</Button>
+                  <Button variant="danger" className="font-mono font-bold">Prijavi novu štetu (FNOL)</Button>
                 </Link>
-              </Card>
+              </div>
             ) : (
               <div className="space-y-6">
                 {claims.map((claim: Claim) => (
-                  <Card key={claim.id} className="p-6 bg-white border-slate-200 space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+                  <div key={claim.id} className="p-6 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.08] gap-2">
                       <div>
-                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                        <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
                           Broj spisa
                         </span>
-                        <h4 className="text-xl font-mono font-bold text-brand-900">
+                        <h4 className="text-xl font-mono font-bold text-[#ff7b1a]">
                           {claim.claimNumber}
                         </h4>
                       </div>
-                      <div className="text-xs text-slate-500">
-                        Polica: <strong className="font-mono text-slate-800">{claim.policyId}</strong>
+                      <div className="text-xs text-slate-400 font-mono">
+                        Polica: <strong className="font-mono text-white">{claim.policyId}</strong>
                       </div>
                     </div>
 
                     {/* Live Progress Timeline */}
                     <ClaimStatusTimeline claim={claim} />
 
-                    <div className="bg-slate-50 p-4 rounded-2xl text-xs space-y-1 text-slate-700">
+                    <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/[0.06] text-xs space-y-1 text-slate-300">
                       <p>
-                        <strong>Mjesto i opis:</strong> {claim.incidentLocation} &bull; {claim.description}
+                        <strong className="text-white">Mjesto i opis:</strong> {claim.incidentLocation} &bull; {claim.description}
                       </p>
                       {claim.brokerNotes && (
-                        <p className="text-brand-900 font-semibold pt-1 border-t border-slate-200 mt-2">
+                        <p className="text-[#ff7b1a] font-mono font-semibold pt-1 border-t border-white/[0.06] mt-2">
                           Status odjela likvidacije: {claim.brokerNotes}
                         </p>
                       )}
                     </div>
-                  </Card>
+                  </div>
                 ))}
               </div>
             )}

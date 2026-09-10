@@ -193,25 +193,27 @@ export const ServiceDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 pb-20">
+    <div className="space-y-16 pb-24 text-slate-100">
       {/* Header Banner */}
-      <section className="bg-gradient-to-b from-navy-950 via-slate-900 to-navy-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <section className="relative overflow-hidden pt-12 pb-14">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 relative z-10">
           <Link
             to="/services"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-300 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#ff7b1a] hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Svi programi osiguranja
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-teal-500/20 text-teal-300 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-[#ff7b1a] flex items-center justify-center shadow-lg">
               <Icon className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight">{service.title}</h1>
-              <p className="text-slate-300 text-sm mt-1">{service.subtitle}</p>
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">{service.title}</h1>
+              <p className="text-slate-400 text-sm mt-1 font-light">{service.subtitle}</p>
             </div>
           </div>
         </div>
@@ -222,52 +224,52 @@ export const ServiceDetailPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Scope, Riders, IPID */}
           <div className="lg:col-span-6 space-y-8">
-            <Card className="p-6 sm:p-8 bg-white border-slate-200 space-y-6">
+            <div className="p-6 sm:p-8 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl space-y-6 shadow-2xl">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Opis i svrha pokrića</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{service.description}</p>
+                <h3 className="text-lg font-bold text-white mb-2">Opis i svrha pokrića</h3>
+                <p className="text-sm text-slate-300 leading-relaxed font-light">{service.description}</p>
               </div>
 
               {/* Coverages */}
-              <div className="space-y-4 pt-4 border-t border-slate-100">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700">
+              <div className="space-y-4 pt-4 border-t border-white/[0.08]">
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#ff7b1a]">
                   Temeljna pokrića police
                 </h4>
                 <div className="space-y-3">
                   {service.coverages.map((cov, idx) => (
-                    <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                      <h5 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <div key={idx} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                      <h5 className="text-sm font-bold text-white flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                         {cov.name}
                       </h5>
-                      <p className="text-xs text-slate-600 mt-1 pl-6 leading-relaxed">{cov.desc}</p>
+                      <p className="text-xs text-slate-400 mt-1 pl-6 leading-relaxed">{cov.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Riders */}
-              <div className="space-y-4 pt-4 border-t border-slate-100">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700">
+              <div className="space-y-4 pt-4 border-t border-white/[0.08]">
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
                   Dopunska pokrića i opcije (Riders)
                 </h4>
                 <div className="space-y-3">
                   {service.riders.map((r, idx) => (
-                    <div key={idx} className="p-3.5 rounded-2xl bg-brand-50/40 border border-brand-100">
-                      <h5 className="text-sm font-bold text-brand-950 flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-brand-600" />
+                    <div key={idx} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                      <h5 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-[#ff7b1a]" />
                         {r.name}
                       </h5>
-                      <p className="text-xs text-slate-600 mt-1 pl-6 leading-relaxed">{r.desc}</p>
+                      <p className="text-xs text-slate-400 mt-1 pl-6 leading-relaxed">{r.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* IPID Notice */}
-              <div className="p-4 rounded-2xl bg-slate-100/70 border border-slate-200 text-xs text-slate-600 space-y-1.5">
-                <div className="flex items-center gap-2 font-bold text-slate-800">
-                  <FileText className="w-4 h-4 text-slate-600" />
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-400 space-y-1.5 font-mono">
+                <div className="flex items-center gap-2 font-bold text-slate-300">
+                  <FileText className="w-4 h-4 text-[#ff7b1a]" />
                   <span>Regulatorne informacije (HANFA & IPID)</span>
                 </div>
                 {service.ipidNotes.map((note, idx) => (
@@ -276,18 +278,18 @@ export const ServiceDetailPage: React.FC = () => {
                   </p>
                 ))}
               </div>
-            </Card>
+            </div>
 
             {/* Advisor Callout */}
-            <div className="p-6 rounded-3xl bg-slate-900 text-white flex items-center justify-between gap-4">
+            <div className="p-6 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl text-white flex items-center justify-between gap-4 shadow-xl">
               <div>
-                <h4 className="font-bold text-base">Trebate pomoć ili ponudu za pravne osobe?</h4>
-                <p className="text-xs text-slate-400 mt-1">
+                <h4 className="font-bold text-base text-white">Trebate pomoć ili ponudu za pravne osobe?</h4>
+                <p className="text-xs text-slate-400 mt-1 font-light">
                   Naši licencirani agenti pripremit će individualni paket po mjeri.
                 </p>
               </div>
               <Link to="/contact">
-                <Button variant="teal" size="sm" className="whitespace-nowrap font-bold">
+                <Button variant="primary" size="sm" className="whitespace-nowrap font-mono font-bold">
                   Kontaktiraj brokera
                 </Button>
               </Link>
@@ -298,10 +300,10 @@ export const ServiceDetailPage: React.FC = () => {
           <div className="lg:col-span-6 sticky top-24">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-lg font-bold text-white">
                   Izračunajte vašu premiju uživo
                 </h3>
-                <span className="text-xs text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full font-bold border border-teal-200">
+                <span className="text-xs font-mono text-[#ff7b1a] bg-[#fb6504]/10 px-2.5 py-1 rounded-full font-bold border border-[#fb6504]/20">
                   Aktuarski izračun
                 </span>
               </div>

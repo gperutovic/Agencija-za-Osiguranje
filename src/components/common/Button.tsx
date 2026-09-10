@@ -22,28 +22,29 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-hidden focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100';
+    'inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#06080c] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
 
   const variants = {
     primary:
-      'bg-brand-600 hover:bg-brand-700 text-white shadow-xs focus:ring-brand-500 border border-brand-700/20',
+      'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-glow-orange hover:shadow-glow-orange-lg hover:scale-[1.02] border border-orange-400/30 focus:ring-[#fb6504]',
     secondary:
-      'bg-navy-900 hover:bg-navy-800 text-white shadow-xs focus:ring-navy-700 border border-navy-700/30',
-    teal: 'bg-teal-600 hover:bg-teal-700 text-white shadow-xs focus:ring-teal-500 border border-teal-700/20',
+      'bg-[#0f1422] hover:bg-[#151c30] text-white border border-white/10 hover:border-white/20 shadow-md focus:ring-slate-500',
+    teal:
+      'bg-gradient-to-r from-teal-500 to-emerald-600 text-white shadow-glow-teal hover:scale-[1.02] border border-teal-400/30 focus:ring-teal-400',
     outline:
-      'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 focus:ring-slate-400 shadow-2xs',
+      'bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 hover:text-white border border-white/[0.12] hover:border-white/[0.25] backdrop-blur-md focus:ring-white/20',
     destructive:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-500',
+      'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md hover:scale-[1.02] border border-rose-500/30 focus:ring-rose-500',
     danger:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-500',
+      'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md hover:scale-[1.02] border border-rose-500/30 focus:ring-rose-500',
     ghost:
-      'bg-transparent hover:bg-slate-100 text-slate-700 focus:ring-slate-300',
+      'bg-transparent hover:bg-white/[0.06] text-slate-300 hover:text-white focus:ring-white/20',
   };
 
   const sizes = {
-    sm: 'text-xs px-3 py-1.5 gap-1.5',
-    md: 'text-sm px-4 py-2.5 gap-2',
-    lg: 'text-base px-6 py-3 gap-2.5 font-semibold',
+    sm: 'text-xs px-3.5 py-1.5 gap-1.5 rounded-lg',
+    md: 'text-sm px-4.5 py-2.5 gap-2 rounded-xl',
+    lg: 'text-base px-6 py-3.5 gap-2.5 font-extrabold rounded-2xl',
   };
 
   return (
@@ -73,7 +74,7 @@ export const Button: React.FC<ButtonProps> = ({
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             />
           </svg>
-          <span>Učitavanje...</span>
+          Učitavanje...
         </>
       ) : (
         <>

@@ -46,18 +46,22 @@ export const ClaimsReportPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-12 pb-24 text-slate-100">
       {/* Header Banner */}
-      <section className="bg-gradient-to-b from-navy-950 via-slate-900 to-navy-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold uppercase tracking-wider">
-            <ShieldAlert className="w-4 h-4 text-rose-400" />
-            <span>Digitalna Prijava i Likvidacija Šteta &bull; 24/7 Dostupno</span>
+      <section className="relative overflow-hidden pt-12 pb-14 text-center space-y-4">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono font-bold tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+            <span className="text-white">Digitalna Prijava i Likvidacija Šteta</span>
+            <span className="text-slate-500">&bull;</span>
+            <span className="text-rose-400">24/7 Dostupno</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto">
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto text-white">
             Prijavite štetu ili provjerite status spisa
           </h1>
-          <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-light">
             Jednostavan postupak prijave uz prijenos fotografija. Pratite tijek obrade u realnom vremenu od uviđaja do konačne isplate.
           </p>
 
@@ -65,20 +69,20 @@ export const ClaimsReportPage: React.FC = () => {
           <div className="flex justify-center gap-3 pt-4">
             <button
               onClick={() => setActiveTab('report')}
-              className={`px-5 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+              className={`px-5 py-2.5 rounded-2xl text-xs font-mono font-bold transition-all ${
                 activeTab === 'report'
-                  ? 'bg-rose-600 text-white shadow-lg shadow-rose-900/40'
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_20px_rgba(251,101,4,0.35)]'
+                  : 'bg-white/[0.04] text-slate-300 border border-white/[0.08] hover:bg-white/[0.08]'
               }`}
             >
               Nova prijava štete (FNOL)
             </button>
             <button
               onClick={() => setActiveTab('track')}
-              className={`px-5 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+              className={`px-5 py-2.5 rounded-2xl text-xs font-mono font-bold transition-all ${
                 activeTab === 'track'
-                  ? 'bg-rose-600 text-white shadow-lg shadow-rose-900/40'
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_20px_rgba(251,101,4,0.35)]'
+                  : 'bg-white/[0.04] text-slate-300 border border-white/[0.08] hover:bg-white/[0.08]'
               }`}
             >
               Praćenje postojećeg spisa (ST-2026-XXXX)
@@ -96,12 +100,12 @@ export const ClaimsReportPage: React.FC = () => {
         ) : (
           <div className="space-y-8 max-w-2xl mx-auto">
             {/* Lookup Input */}
-            <Card className="p-6 sm:p-8 bg-white border-slate-200 shadow-md">
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <div className="p-6 sm:p-8 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-2xl space-y-4">
+              <h3 className="text-lg font-bold text-white mb-1">
                 Unesite službeni broj odštetnog spisa
               </h3>
-              <p className="text-xs text-slate-500 mb-6">
-                Broj spisa započinje s <strong>ST-2026-</strong> (npr. ST-2026-4819). Pronaći ćete ga u potvrdnom emailu ili SMS obavijesti.
+              <p className="text-xs text-slate-400 font-mono mb-4">
+                Broj spisa započinje s <strong className="text-white">ST-2026-</strong> (npr. ST-2026-4819). Pronaći ćete ga u potvrdnom emailu ili SMS obavijesti.
               </p>
 
               <form onSubmit={handleTrackSubmit} className="flex gap-3">
@@ -113,30 +117,30 @@ export const ClaimsReportPage: React.FC = () => {
                     className="font-mono uppercase font-bold"
                   />
                 </div>
-                <Button type="submit" variant="primary" className="px-6">
+                <Button type="submit" variant="primary" className="px-6 font-mono font-bold">
                   <Search className="w-4 h-4 mr-1.5" />
                   Pronađi spis
                 </Button>
               </form>
-            </Card>
+            </div>
 
             {/* Results */}
             {searchedClaimNumber && (
               <div>
                 {foundClaim ? (
-                  <Card className="p-6 sm:p-8 bg-white border-slate-200 shadow-md space-y-6">
-                    <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div className="p-6 sm:p-8 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-2xl space-y-6">
+                    <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">
                           Odštetni spis
                         </span>
-                        <h4 className="text-2xl font-mono font-black text-brand-900">
+                        <h4 className="text-2xl font-mono font-black text-[#ff7b1a]">
                           {foundClaim.claimNumber}
                         </h4>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs text-slate-500 block">Broj police:</span>
-                        <span className="text-xs font-mono font-bold text-slate-800">
+                        <span className="text-xs font-mono text-slate-400 block">Broj police:</span>
+                        <span className="text-xs font-mono font-bold text-white">
                           {foundClaim.policyId}
                         </span>
                       </div>
@@ -146,22 +150,22 @@ export const ClaimsReportPage: React.FC = () => {
                     <ClaimStatusTimeline claim={foundClaim} />
 
                     {foundClaim.brokerNotes && (
-                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
-                        <strong className="block mb-1 text-slate-900">Bilješka likvidatora:</strong>
+                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-xs text-slate-300">
+                        <strong className="block mb-1 text-white font-mono">Bilješka likvidatora:</strong>
                         <p>{foundClaim.brokerNotes}</p>
                       </div>
                     )}
-                  </Card>
+                  </div>
                 ) : (
-                  <Card className="p-8 text-center bg-slate-50 border-slate-200">
-                    <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-                    <h4 className="font-bold text-slate-900 text-base">
+                  <div className="p-8 text-center bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl">
+                    <AlertTriangle className="w-12 h-12 text-amber-400 mx-auto mb-3" />
+                    <h4 className="font-bold text-white text-base">
                       Spis pod brojem "{searchedClaimNumber}" nije pronađen
                     </h4>
-                    <p className="text-xs text-slate-500 max-w-md mx-auto mt-1">
+                    <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 font-mono">
                       Provjerite jeste li točno prepisali format (npr. ST-2026-4819). Za provjeru kontaktirajte naš odjel likvidacije šteta.
                     </p>
-                  </Card>
+                  </div>
                 )}
               </div>
             )}
@@ -169,13 +173,13 @@ export const ClaimsReportPage: React.FC = () => {
         )}
 
         {/* Emergency Hotline Box */}
-        <div className="mt-12 bg-slate-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500 text-white flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0">
               <PhoneCall className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="font-bold text-base">Hitna Asistencija i Prijava Telefonom 24/7</h4>
+              <h4 className="font-bold text-base text-white">Hitna Asistencija i Prijava Telefonom 24/7</h4>
               <p className="text-xs text-slate-400">
                 U slučaju prometne nezgode ili hitne vuče vozila nazovite besplatni Generali centar:
               </p>
@@ -184,11 +188,11 @@ export const ClaimsReportPage: React.FC = () => {
           <div className="text-right">
             <a
               href="tel:0800242424"
-              className="text-xl sm:text-2xl font-mono font-black text-rose-400 hover:text-rose-300"
+              className="text-xl sm:text-2xl font-mono font-black text-[#ff7b1a] hover:text-white transition-colors"
             >
               0800 24 24 24
             </a>
-            <span className="block text-[11px] text-slate-400">Besplatan poziv unutar RH</span>
+            <span className="block text-[11px] font-mono text-slate-500">Besplatan poziv unutar RH</span>
           </div>
         </div>
       </section>

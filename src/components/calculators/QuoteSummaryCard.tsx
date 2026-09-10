@@ -89,21 +89,22 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
 
   return (
     <>
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-elevated p-6 sm:p-8 space-y-6 sticky top-28">
+      <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl shadow-2xl p-6 sm:p-8 space-y-6 sticky top-28 text-white">
         {/* Card Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200/60">
+            <span className="rr-pill">
+              <span className="rr-pill__dot bg-[#fb6504]" />
               Generali osiguranje d.d.
             </span>
-            <h3 className="text-base font-black text-slate-900 mt-2">
+            <h3 className="text-base font-black text-white mt-2">
               Informativni izračun premije
             </h3>
           </div>
           <button
             type="button"
             onClick={handleShare}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.05] transition-colors"
             title="Podijeli izračun"
           >
             <Share2 className="w-4 h-4" />
@@ -112,33 +113,34 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
 
         {/* Pricing tiers */}
         <div className="space-y-3">
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-navy-950 to-navy-900 text-white space-y-1 shadow-md">
-            <span className="text-[11px] font-bold text-teal-300 uppercase tracking-wider">
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-[#06080c] to-[#0d121f] border border-white/[0.08] text-white space-y-1 shadow-inner relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-[#fb6504]/10 rounded-full blur-xl pointer-events-none" />
+            <span className="text-[10px] font-mono font-bold text-[#fb6504] uppercase tracking-wider block">
               {t('calculators.summary.monthly')}
             </span>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl sm:text-4xl font-black tracking-tight font-mono">
+              <span className="text-3xl sm:text-4xl font-black tracking-tight font-mono text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#ff7b1a]">
                 {formatCurrency(estimate.monthlyPremium)}
               </span>
-              <span className="text-xs text-slate-400">/ mj.</span>
+              <span className="text-xs font-mono text-slate-400">/ mj.</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="p-3 rounded-xl border border-slate-200 bg-slate-50/70">
-              <span className="text-[10px] text-slate-500 font-medium block">
+          <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div className="p-3 rounded-xl border border-white/[0.08] bg-white/[0.02]">
+              <span className="text-[10px] text-slate-400 uppercase font-semibold block">
                 {t('calculators.summary.quarterly')}
               </span>
-              <span className="font-bold text-slate-800 font-mono">
+              <span className="font-bold text-slate-200">
                 {formatCurrency(estimate.quarterlyPremium)}
               </span>
             </div>
 
-            <div className="p-3 rounded-xl border border-teal-200 bg-teal-50/50">
-              <span className="text-[10px] text-teal-700 font-bold block">
+            <div className="p-3 rounded-xl border border-[#fb6504]/20 bg-[#fb6504]/5">
+              <span className="text-[10px] text-[#fb6504] uppercase font-bold block">
                 {t('calculators.summary.annual')}
               </span>
-              <span className="font-bold text-teal-900 font-mono">
+              <span className="font-bold text-[#ff7b1a]">
                 {formatCurrency(estimate.annualPremium)}
               </span>
             </div>
@@ -146,13 +148,13 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
         </div>
 
         {/* Itemized breakdown */}
-        <div className="space-y-2 pt-2 border-t border-slate-100">
-          <span className="text-xs font-bold text-slate-700 block">Stavke obračuna:</span>
-          <div className="space-y-1.5 text-xs text-slate-600">
+        <div className="space-y-2 pt-2 border-t border-white/[0.08]">
+          <span className="text-xs font-bold text-slate-300 block">Stavke obračuna:</span>
+          <div className="space-y-1.5 text-xs text-slate-400">
             {estimate.itemizedBreakdown.map((item, i) => (
               <div key={i} className="flex items-center justify-between text-[11px]">
-                <span className="text-slate-600">{item.title}</span>
-                <span className="font-mono font-bold text-slate-800">
+                <span className="text-slate-400">{item.title}</span>
+                <span className="font-mono font-bold text-white">
                   {formatCurrency(item.amount)}
                 </span>
               </div>
@@ -162,9 +164,9 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
 
         {/* Coverage Limit indicator */}
         {estimate.coverageLimit && (
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
-            <span className="text-slate-500 text-[11px]">Maksimalno pokriće:</span>
-            <span className="font-mono font-bold text-navy-900">
+          <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs flex items-center justify-between">
+            <span className="text-slate-400 text-[11px] font-mono">Maksimalno pokriće:</span>
+            <span className="font-mono font-bold text-[#2dd4bf]">
               {formatCurrency(estimate.coverageLimit)}
             </span>
           </div>
@@ -173,11 +175,11 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
         {/* Action buttons */}
         <div className="space-y-2.5 pt-2">
           <Button
-            variant="teal"
+            variant="primary"
             size="md"
             onClick={() => setLeadModalOpen(true)}
             leftIcon={<Send className="w-4 h-4" />}
-            className="w-full font-bold shadow-md"
+            className="w-full font-bold shadow-[0_0_20px_-3px_rgba(251,101,4,0.4)]"
           >
             {isSubmitted ? 'Pošalji novi upit' : t('calculators.summary.requestQuote')}
           </Button>
@@ -187,8 +189,8 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
               variant="outline"
               size="md"
               onClick={onBookAppointment}
-              leftIcon={<Calendar className="w-4 h-4 text-teal-600" />}
-              className="w-full font-bold"
+              leftIcon={<Calendar className="w-4 h-4 text-[#fb6504]" />}
+              className="w-full font-bold text-slate-300 hover:text-white"
             >
               {t('calculators.summary.bookAdvisor')}
             </Button>
@@ -196,7 +198,7 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
         </div>
 
         {/* Legal disclaimer */}
-        <p className="text-[10px] text-slate-400 leading-relaxed text-center">
+        <p className="text-[10px] text-slate-500 leading-relaxed text-center font-mono">
           {t('calculators.summary.disclaimer')}
         </p>
       </div>
@@ -208,66 +210,66 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
         title="Zatražite službenu ponudu osiguranja"
         description="Unesite vaše kontakt podatke. Licencirani agent pripremit će personaliziranu policu Generali osiguranja."
       >
-        <form onSubmit={handleLeadSubmit} className="space-y-4">
+        <form onSubmit={handleLeadSubmit} className="space-y-4 text-white">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700">Ime i prezime *</label>
+            <label className="text-xs font-semibold text-slate-300">Ime i prezime *</label>
             <input
               type="text"
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="npr. Ana Horvat"
-              className="w-full rounded-xl border border-slate-200 p-2.5 text-sm"
+              className="w-full rounded-xl bg-[#0d121f] border border-white/[0.1] p-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700">Email adresa *</label>
+              <label className="text-xs font-semibold text-slate-300">Email adresa *</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ana.horvat@email.hr"
-                className="w-full rounded-xl border border-slate-200 p-2.5 text-sm"
+                className="w-full rounded-xl bg-[#0d121f] border border-white/[0.1] p-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700">Kontakt telefon *</label>
+              <label className="text-xs font-semibold text-slate-300">Kontakt telefon *</label>
               <input
                 type="tel"
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+385 91 234 5678"
-                className="w-full rounded-xl border border-slate-200 p-2.5 text-sm"
+                className="w-full rounded-xl bg-[#0d121f] border border-white/[0.1] p-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504]"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700">OIB (opcionalno)</label>
+            <label className="text-xs font-semibold text-slate-300">OIB (opcionalno)</label>
             <input
               type="text"
               maxLength={11}
               value={oib}
               onChange={(e) => setOib(e.target.value)}
               placeholder="11 znamenki"
-              className="w-full rounded-xl border border-slate-200 p-2.5 text-sm"
+              className="w-full rounded-xl bg-[#0d121f] border border-white/[0.1] p-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504]"
             />
           </div>
 
-          <div className="p-3 bg-slate-50 rounded-xl text-[11px] text-slate-500 leading-relaxed border border-slate-200">
+          <div className="p-3 bg-white/[0.03] rounded-xl text-[11px] text-slate-400 leading-relaxed border border-white/[0.08]">
             Slanjem upita dajete privolu Agenciji Život d.o.o. za obradu podataka u svrhu izrade ponude sukladno IDD direktivi i GDPR pravilima.
           </div>
 
           <Button
             type="submit"
-            variant="teal"
+            variant="primary"
             isLoading={createQuoteMutation.isPending}
-            className="w-full font-bold py-3"
+            className="w-full font-bold py-3 shadow-[0_0_20px_-3px_rgba(251,101,4,0.4)]"
           >
             Pošalji zahtjev za ponudu
           </Button>

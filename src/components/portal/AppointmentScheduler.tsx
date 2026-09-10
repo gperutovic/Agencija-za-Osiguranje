@@ -107,28 +107,28 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
 
   if (confirmedAppt) {
     return (
-      <Card className="p-8 sm:p-10 text-center bg-white border-emerald-100 shadow-xl max-w-xl mx-auto">
-        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-4">
+      <Card className="p-8 sm:p-10 text-center bg-[#0a0d16]/90 border-white/[0.08] backdrop-blur-xl shadow-2xl max-w-xl mx-auto text-white">
+        <div className="w-16 h-16 bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#fb6504] rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(251,101,4,0.3)]">
           <CheckCircle2 className="w-8 h-8" />
         </div>
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Termin je potvrđen!</h3>
-        <p className="text-sm text-slate-600 mb-6">
+        <h3 className="text-2xl font-bold text-white mb-2">Termin je potvrđen!</h3>
+        <p className="text-sm text-slate-400 mb-6">
           Vaš sastanak s ovlaštenim brokerom Agencije Život uspješno je zabilježen. Poslali smo detalje na{' '}
-          <strong>{confirmedAppt.customerEmail}</strong>.
+          <strong className="text-[#ff7b1a]">{confirmedAppt.customerEmail}</strong>.
         </p>
 
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-left mb-6 space-y-2 text-xs text-slate-700">
+        <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-5 text-left mb-6 space-y-2 text-xs text-slate-300 font-mono">
           <div className="flex justify-between">
             <span className="text-slate-500">Klijent:</span>
-            <span className="font-semibold">{confirmedAppt.customerName}</span>
+            <span className="font-semibold text-white">{confirmedAppt.customerName}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Datum i vrijeme:</span>
-            <span className="font-bold text-brand-900">{formatDateTime(confirmedAppt.dateTime)}</span>
+            <span className="font-bold text-[#ff7b1a]">{formatDateTime(confirmedAppt.dateTime)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Vrsta sastanka:</span>
-            <span className="font-semibold capitalize">
+            <span className="font-semibold text-[#2dd4bf] capitalize">
               {confirmedAppt.type === 'phone'
                 ? 'Telefonski poziv'
                 : confirmedAppt.type === 'video'
@@ -138,7 +138,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Tema:</span>
-            <span className="font-semibold">{confirmedAppt.topic}</span>
+            <span className="font-semibold text-white">{confirmedAppt.topic}</span>
           </div>
         </div>
 
@@ -146,7 +146,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           <Button
             variant="primary"
             onClick={() => downloadAppointmentIcs(confirmedAppt)}
-            className="flex items-center justify-center gap-2"
+            className="flex items-center justify-center gap-2 shadow-[0_0_20px_-3px_rgba(251,101,4,0.4)]"
           >
             <Download className="w-4 h-4" />
             Dodaj u kalendar (.ics)
@@ -154,6 +154,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           <Button
             variant="outline"
             onClick={() => setConfirmedAppt(null)}
+            className="text-slate-300 hover:text-white"
           >
             Rezerviraj novi termin
           </Button>
@@ -163,12 +164,12 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
   }
 
   return (
-    <Card className="p-6 sm:p-8 bg-white border-slate-200">
+    <Card className="p-6 sm:p-8 bg-[#0a0d16]/90 border-white/[0.08] backdrop-blur-xl text-white shadow-2xl">
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-slate-900">
+        <h3 className="text-xl font-bold text-white">
           Dogovorite termin savjetovanja s brokerom
         </h3>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="text-sm text-slate-400 mt-1">
           Izaberite način komunikacije, željeni datum i vrijeme. Naš licencirani HANFA zastupnik pripremit će optimalnu ponudu za vas.
         </p>
       </div>
@@ -176,7 +177,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Channel Selection */}
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          <label className="block text-xs font-mono font-bold text-[#fb6504] uppercase tracking-wider mb-2">
             1. Odaberite način sastanka
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -194,20 +195,20 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
                   onClick={() => setValue('type', ch.id as any)}
                   className={`p-4 rounded-2xl border text-left transition-all flex flex-col items-start gap-2 ${
                     isSelected
-                      ? 'border-brand-500 bg-brand-50/50 ring-2 ring-brand-500/20'
-                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                      ? 'border-[#fb6504] bg-[#fb6504]/10 shadow-[0_0_15px_rgba(251,101,4,0.25)]'
+                      : 'border-white/[0.08] hover:border-white/[0.15] bg-white/[0.02]'
                   }`}
                 >
                   <div
                     className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                      isSelected ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-600'
+                      isSelected ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-sm' : 'bg-white/[0.05] text-slate-400'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-900">{ch.label}</p>
-                    <p className="text-[11px] text-slate-500">{ch.sub}</p>
+                    <p className="text-xs font-bold text-white">{ch.label}</p>
+                    <p className="text-[11px] text-slate-400">{ch.sub}</p>
                   </div>
                 </button>
               );
@@ -217,7 +218,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
 
         {/* Date Selector */}
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          <label className="block text-xs font-mono font-bold text-[#fb6504] uppercase tracking-wider mb-2">
             2. Odaberite datum (Radni dani)
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -228,8 +229,8 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
                 onClick={() => updateDateTime(d.value, selectedTime)}
                 className={`py-2 px-3 rounded-xl text-xs font-medium border text-center transition-all ${
                   selectedDay === d.value
-                    ? 'bg-brand-600 text-white border-brand-600 font-semibold shadow-sm'
-                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                    ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white border-transparent font-semibold shadow-[0_0_12px_rgba(251,101,4,0.35)]'
+                    : 'bg-white/[0.02] hover:bg-white/[0.06] text-slate-300 border-white/[0.08]'
                 }`}
               >
                 {d.label}
@@ -240,7 +241,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
 
         {/* Time Selector */}
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+          <label className="block text-xs font-mono font-bold text-[#fb6504] uppercase tracking-wider mb-2">
             3. Odaberite vrijeme (Trajanje 30 min)
           </label>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -251,8 +252,8 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
                 onClick={() => updateDateTime(selectedDay, time)}
                 className={`py-2 px-2 rounded-xl text-xs font-mono border text-center transition-all ${
                   selectedTime === time
-                    ? 'bg-brand-900 text-white border-brand-900 font-bold shadow'
-                    : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                    ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white border-transparent font-bold shadow-[0_0_12px_rgba(251,101,4,0.35)]'
+                    : 'bg-white/[0.02] hover:bg-white/[0.06] text-slate-300 border-white/[0.08]'
                 }`}
               >
                 {time}
@@ -264,7 +265,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
         {/* Customer Information & Topic */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Vaše ime i prezime
             </label>
             <Input
@@ -275,7 +276,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Broj telefona
             </label>
             <Input
@@ -286,7 +287,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Email adresa
             </label>
             <Input
@@ -298,7 +299,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Područje interesa / Tema
             </label>
             <Select
@@ -315,12 +316,12 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
           </div>
         </div>
 
-        <div className="pt-4 border-t border-slate-100 flex justify-end">
+        <div className="pt-4 border-t border-white/[0.08] flex justify-end">
           <Button
             type="submit"
             variant="primary"
             disabled={isBooking}
-            className="w-full sm:w-auto px-8"
+            className="w-full sm:w-auto px-8 shadow-[0_0_20px_-3px_rgba(251,101,4,0.4)]"
           >
             {isBooking ? 'Rezervacija u tijeku...' : 'Potvrdi rezervaciju termina'}
           </Button>

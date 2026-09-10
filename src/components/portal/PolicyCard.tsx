@@ -73,16 +73,16 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onRenew }) => {
   };
 
   return (
-    <Card className="p-6 transition-all hover:shadow-lg border-slate-200 bg-white">
+    <Card className="p-6 transition-all hover:border-white/[0.2] border-white/[0.08] bg-[#0a0d16]/90 backdrop-blur-xl text-white shadow-2xl">
       {/* Top Bar: Icon, Policy Type, Number, Status */}
-      <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
+      <div className="flex items-start justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
             {getTypeIcon(policy.type)}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-bold text-slate-900 text-base capitalize">
+              <h4 className="font-bold text-white text-base capitalize">
                 {policy.type === 'auto'
                   ? 'Kasko & AO Osiguranje'
                   : policy.type === 'property'
@@ -92,7 +92,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onRenew }) => {
                   : 'Dodatno Zdravstveno Osiguranje'}
               </h4>
             </div>
-            <p className="font-mono text-xs text-slate-500 font-semibold tracking-wider">
+            <p className="font-mono text-xs text-[#ff7b1a] font-semibold tracking-wider">
               {policy.policyNumber}
             </p>
           </div>
@@ -111,9 +111,9 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onRenew }) => {
 
       {/* Expiry Warning Callout */}
       {isExpiringSoon && (
-        <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs text-amber-900">
+        <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between text-xs text-amber-300 font-mono">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
             <span>
               Polica ističe za <strong>{daysRemaining} dana</strong> ({formatDate(policy.endDate)}).
             </span>
@@ -121,7 +121,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onRenew }) => {
           {onRenew && (
             <button
               onClick={() => onRenew(policy.id)}
-              className="text-xs font-bold text-amber-800 hover:text-amber-950 underline ml-2 whitespace-nowrap"
+              className="text-xs font-bold text-[#ff7b1a] hover:underline ml-2 whitespace-nowrap"
             >
               Obnovi odmah
             </button>
@@ -132,45 +132,45 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onRenew }) => {
       {/* Grid of details */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 text-xs">
         <div>
-          <span className="text-slate-500 block mb-0.5">Ugovaratelj / Osiguranik</span>
-          <span className="font-semibold text-slate-800 line-clamp-1">{policy.insuredName}</span>
+          <span className="text-slate-400 block mb-0.5">Ugovaratelj / Osiguranik</span>
+          <span className="font-semibold text-white line-clamp-1">{policy.insuredName}</span>
         </div>
         <div>
-          <span className="text-slate-500 block mb-0.5">Osiguratelj</span>
-          <span className="font-semibold text-slate-800">{policy.insurer}</span>
+          <span className="text-slate-400 block mb-0.5">Osiguratelj</span>
+          <span className="font-semibold text-white">{policy.insurer}</span>
         </div>
         <div>
-          <span className="text-slate-500 block mb-0.5">Trajanje pokrića</span>
-          <span className="font-semibold text-slate-800">
+          <span className="text-slate-400 block mb-0.5">Trajanje pokrića</span>
+          <span className="font-semibold text-slate-300 font-mono">
             do {formatDate(policy.endDate)}
           </span>
         </div>
         <div>
-          <span className="text-slate-500 block mb-0.5">Premija ({getFrequencyLabel(policy.paymentFrequency)})</span>
-          <span className="font-bold text-slate-900 text-sm">
+          <span className="text-slate-400 block mb-0.5">Premija ({getFrequencyLabel(policy.paymentFrequency)})</span>
+          <span className="font-bold text-[#ff7b1a] text-sm font-mono">
             {formatCurrency(policy.premiumAmount)}
           </span>
         </div>
       </div>
 
       {/* Actions Footer */}
-      <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={handleDownloadPdf}
-            className="flex items-center gap-1.5 text-xs text-slate-700"
+            className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-[#fb6504]" />
             Certifikat (PDF)
           </Button>
 
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate(`/stete?policyId=${policy.id}`)}
-            className="flex items-center gap-1.5 text-xs text-rose-700 border-rose-200 hover:bg-rose-50"
+            onClick={() => navigate(`/claims?policyId=${policy.id}`)}
+            className="flex items-center gap-1.5 text-xs text-rose-400 border-rose-500/20 hover:bg-rose-500/10"
           >
             <AlertCircle className="w-3.5 h-3.5" />
             Prijavi štetu
@@ -182,7 +182,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onRenew }) => {
             variant="primary"
             size="sm"
             onClick={() => onRenew(policy.id)}
-            className="text-xs"
+            className="text-xs shadow-[0_0_15px_#fb6504]"
           >
             Obnovi policu
           </Button>

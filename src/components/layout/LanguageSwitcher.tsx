@@ -2,9 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
-export const LanguageSwitcher: React.FC<{ variant?: 'light' | 'dark' }> = ({
-  variant = 'light',
-}) => {
+export const LanguageSwitcher: React.FC<{ variant?: 'light' | 'dark' }> = () => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language.startsWith('hr') ? 'hr' : 'en';
 
@@ -13,46 +11,34 @@ export const LanguageSwitcher: React.FC<{ variant?: 'light' | 'dark' }> = ({
     localStorage.setItem('i18nextLng', lang);
   };
 
-  const isLight = variant === 'light';
-
   return (
-    <div
-      className={`inline-flex items-center p-0.5 rounded-xl border text-xs font-bold transition-colors ${
-        isLight
-          ? 'bg-slate-100/90 border-slate-200 text-slate-700'
-          : 'bg-navy-950/70 border-navy-700/60 text-slate-300'
-      }`}
-    >
-      <div className="px-2 py-1 flex items-center gap-1 text-[11px] opacity-60">
-        <Globe className="w-3.5 h-3.5" />
+    <div className="inline-flex items-center p-1 rounded-xl bg-white/[0.04] border border-white/[0.08] text-xs font-mono transition-colors">
+      <div className="px-2 py-0.5 flex items-center gap-1 text-[11px] text-slate-400">
+        <Globe className="w-3.5 h-3.5 text-[#fb6504]" />
       </div>
 
       <button
         type="button"
         onClick={() => toggleLanguage('hr')}
-        className={`px-2.5 py-1 rounded-lg transition-all text-xs font-bold ${
+        className={`px-2.5 py-1 rounded-lg transition-all text-[11px] font-bold ${
           currentLang === 'hr'
-            ? isLight
-              ? 'bg-white text-brand-900 shadow-2xs'
-              : 'bg-brand-600 text-white shadow-2xs'
-            : 'hover:text-brand-600'
+            ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_12px_rgba(251,101,4,0.35)]'
+            : 'text-slate-400 hover:text-white'
         }`}
       >
-        HR 🇭🇷
+        HR
       </button>
 
       <button
         type="button"
         onClick={() => toggleLanguage('en')}
-        className={`px-2.5 py-1 rounded-lg transition-all text-xs font-bold ${
+        className={`px-2.5 py-1 rounded-lg transition-all text-[11px] font-bold ${
           currentLang === 'en'
-            ? isLight
-              ? 'bg-white text-brand-900 shadow-2xs'
-              : 'bg-brand-600 text-white shadow-2xs'
-            : 'hover:text-brand-600'
+            ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_12px_rgba(251,101,4,0.35)]'
+            : 'text-slate-400 hover:text-white'
         }`}
       >
-        EN 🇬🇧
+        EN
       </button>
     </div>
   );

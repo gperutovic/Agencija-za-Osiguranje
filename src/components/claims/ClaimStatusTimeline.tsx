@@ -45,21 +45,22 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
   else if (status === 'paid' || status === 'rejected') activeIndex = 3;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-card space-y-6">
+    <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-6 text-white">
       {/* Header Info */}
       {claim && (
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
+            <span className="rr-pill">
+              <span className="rr-pill__dot bg-[#fb6504]" />
               Odštetni zahtjev
             </span>
-            <h4 className="text-lg font-black text-slate-900 mt-1 font-mono">
+            <h4 className="text-lg font-black text-white mt-1.5 font-mono">
               {claim.claimNumber}
             </h4>
           </div>
-          <div className="text-right text-xs text-slate-500">
+          <div className="text-right text-xs text-slate-400 font-mono">
             <div>Prijavljeno: {formatDate(claim.createdAt)}</div>
-            <div className="text-[11px] text-slate-400">
+            <div className="text-[11px] text-slate-500">
               Zadnja izmjena: {formatDate(claim.updatedAt)}
             </div>
           </div>
@@ -68,9 +69,9 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
 
       {/* Timeline Steps Bar */}
       <div className="relative pt-2">
-        <div className="hidden sm:block absolute top-1/2 left-6 right-6 -translate-y-1/2 h-1 bg-slate-200 -z-0" />
+        <div className="hidden sm:block absolute top-1/2 left-6 right-6 -translate-y-1/2 h-1 bg-white/[0.08] -z-0" />
         <div
-          className="hidden sm:block absolute top-1/2 left-6 -translate-y-1/2 h-1 bg-gradient-to-r from-brand-600 to-teal-500 -z-0 transition-all duration-500"
+          className="hidden sm:block absolute top-1/2 left-6 -translate-y-1/2 h-1 bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] -z-0 transition-all duration-500 shadow-[0_0_10px_#fb6504]"
           style={{ width: `${(activeIndex / (stages.length - 1)) * 90}%` }}
         />
 
@@ -82,17 +83,17 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
             return (
               <div
                 key={st.key}
-                className="flex sm:flex-col items-center sm:text-center gap-3 sm:gap-2 p-2 rounded-2xl bg-white sm:bg-transparent"
+                className="flex sm:flex-col items-center sm:text-center gap-3 sm:gap-2 p-2 rounded-2xl bg-[#0a0d16] sm:bg-transparent"
               >
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-md ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-md font-mono ${
                     isDone
-                      ? 'bg-teal-600 text-white'
+                      ? 'bg-[#2dd4bf] text-[#06080c] shadow-[0_0_12px_rgba(45,212,191,0.4)]'
                       : isCurrent
                       ? status === 'rejected'
-                        ? 'bg-rose-600 text-white ring-4 ring-rose-100'
-                        : 'bg-brand-600 text-white ring-4 ring-brand-100 animate-pulse'
-                      : 'bg-slate-100 text-slate-400 border border-slate-200'
+                        ? 'bg-rose-600 text-white ring-4 ring-rose-500/20'
+                        : 'bg-gradient-to-br from-[#fb6504] to-[#ff7b1a] text-white ring-4 ring-[#fb6504]/20 shadow-[0_0_15px_#fb6504] animate-pulse'
+                      : 'bg-white/[0.04] text-slate-500 border border-white/[0.08]'
                   }`}
                 >
                   {isDone ? '✓' : idx + 1}
@@ -102,15 +103,15 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
                   <div
                     className={`text-xs font-bold ${
                       isCurrent
-                        ? 'text-brand-900 font-black'
+                        ? 'text-[#ff7b1a] font-black'
                         : isDone
-                        ? 'text-slate-800'
-                        : 'text-slate-400'
+                        ? 'text-white'
+                        : 'text-slate-500'
                     }`}
                   >
                     {st.label}
                   </div>
-                  <div className="text-[10px] text-slate-500 leading-tight hidden sm:block">
+                  <div className="text-[10px] text-slate-400 leading-tight hidden sm:block">
                     {st.desc}
                   </div>
                 </div>
@@ -122,20 +123,20 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
 
       {/* Status Details & Investigator Note if full claim object present */}
       {claim && (
-        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-slate-700">Okolnosti: {claim.incidentLocation}</span>
+            <span className="font-bold text-slate-300">Okolnosti: {claim.incidentLocation}</span>
             {claim.estimatedDamage && (
-              <span className="font-mono font-bold text-slate-900">
+              <span className="font-mono font-bold text-[#ff7b1a]">
                 Procjena: {claim.estimatedDamage.toLocaleString('hr-HR')} €
               </span>
             )}
           </div>
-          <p className="text-slate-600 leading-relaxed">{claim.description}</p>
+          <p className="text-slate-400 leading-relaxed">{claim.description}</p>
 
           {claim.brokerNotes && (
-            <div className="pt-2 border-t border-slate-200/80 mt-2 text-teal-900 bg-teal-50/50 p-2.5 rounded-xl">
-              <strong>Službena bilješka likvidatora šteta:</strong> {claim.brokerNotes}
+            <div className="pt-2 border-t border-white/[0.08] mt-2 text-[#2dd4bf] bg-white/[0.02] p-2.5 rounded-xl font-mono text-[11px]">
+              <strong>Službena bilješka likvidatora:</strong> {claim.brokerNotes}
             </div>
           )}
         </div>

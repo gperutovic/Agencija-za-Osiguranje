@@ -15,11 +15,14 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variants = {
-    default: 'bg-white border border-slate-200/80 shadow-subtle rounded-2xl p-6',
-    elevated: 'bg-white border border-slate-100 shadow-elevated rounded-3xl p-6 sm:p-8',
-    glass: 'bg-white/80 backdrop-blur-md border border-white/60 shadow-card rounded-2xl p-6',
+    default:
+      'bg-[#0a0d16]/90 border border-white/[0.08] shadow-card rounded-3xl backdrop-blur-xl text-slate-100',
+    elevated:
+      'bg-[#0c101c]/95 border border-white/[0.12] shadow-elevated rounded-3xl backdrop-blur-2xl text-slate-100',
+    glass:
+      'bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] shadow-card rounded-3xl text-slate-100',
     interactive:
-      'bg-white border border-slate-200 hover:border-brand-500/50 hover:shadow-elevated transition-all duration-200 cursor-pointer rounded-2xl p-6',
+      'bg-[#0a0d16]/90 border border-white/[0.08] hover:border-orange-500/40 hover:shadow-glow-orange transition-all duration-300 cursor-pointer rounded-3xl backdrop-blur-xl text-slate-100',
   };
 
   return (
@@ -27,7 +30,7 @@ export const Card: React.FC<CardProps> = ({
       className={twMerge(
         clsx(
           variants[variant],
-          hoverEffect && 'hover:scale-[1.01] transition-transform duration-200',
+          hoverEffect && 'hover:scale-[1.01] hover:border-white/[0.18] transition-all duration-200',
           className
         )
       )}

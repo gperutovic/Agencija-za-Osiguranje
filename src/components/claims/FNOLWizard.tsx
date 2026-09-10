@@ -120,40 +120,41 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
   // Success Screen
   if (submittedClaimNumber) {
     return (
-      <Card className="max-w-2xl mx-auto p-8 sm:p-12 text-center shadow-xl border-emerald-100 bg-white">
-        <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+      <Card className="max-w-2xl mx-auto p-8 sm:p-12 text-center shadow-2xl border-white/[0.08] bg-[#0a0d16]/90 backdrop-blur-xl text-white">
+        <div className="w-20 h-20 bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#fb6504] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_25px_rgba(251,101,4,0.3)]">
           <CheckCircle2 className="w-10 h-10" />
         </div>
-        <span className="inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-2">
+        <span className="rr-pill mb-3">
+          <span className="rr-pill__dot bg-[#fb6504]" />
           Prijava uspješno zaprimljena
         </span>
-        <h2 className="text-3xl font-extrabold text-slate-900 mb-3">
+        <h2 className="text-3xl font-extrabold text-white mb-3">
           Odštetni zahtjev je registriran
         </h2>
-        <p className="text-slate-600 text-sm max-w-md mx-auto mb-8">
+        <p className="text-slate-400 text-sm max-w-md mx-auto mb-8">
           Vaša prijava štete zaprimljena je pod službenim brojem spisa. Naš procjenitelj i likvidator šteta kontaktirat će vas u roku od 24 radna sata.
         </p>
 
         {/* Claim Reference Box */}
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 max-w-md mx-auto mb-8 text-left">
+        <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-6 max-w-md mx-auto mb-8 text-left">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <p className="text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
                 Broj odštetnog spisa
               </p>
-              <p className="text-2xl font-mono font-bold text-brand-900 tracking-wider">
+              <p className="text-2xl font-mono font-bold text-[#ff7b1a] tracking-wider mt-0.5">
                 {submittedClaimNumber}
               </p>
             </div>
             <button
               onClick={() => copyToClipboard(submittedClaimNumber)}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 rounded-xl transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-white/[0.06] hover:bg-white/[0.1] rounded-xl border border-white/[0.08] transition-colors"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-[#2dd4bf]" /> : <Copy className="w-4 h-4" />}
               {copied ? 'Kopirano' : 'Kopiraj'}
             </button>
           </div>
-          <div className="mt-4 pt-4 border-t border-slate-200/80 text-xs text-slate-500 space-y-1">
+          <div className="mt-4 pt-4 border-t border-white/[0.08] text-xs text-slate-400 space-y-1 font-mono text-[11px]">
             <p><strong>Ovlašteni osiguratelj:</strong> Generali osiguranje d.d.</p>
             <p><strong>Zastupnik:</strong> Agencija Život d.o.o. Zagreb</p>
             <p><strong>Evidencija:</strong> HANFA Registar posrednika u osiguranju</p>
@@ -173,6 +174,7 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
           <Button
             variant="outline"
             onClick={() => window.location.assign('/portal')}
+            className="text-slate-300 hover:text-white"
           >
             Pregled u korisničkom portalu
           </Button>
@@ -205,19 +207,19 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                 key={s.num}
                 className={`flex flex-col items-center text-center p-2 rounded-2xl transition-all ${
                   isActive
-                    ? 'bg-brand-50 text-brand-900 border border-brand-200 shadow-sm'
+                    ? 'bg-[#fb6504]/10 text-white border border-[#fb6504]/30 shadow-[0_0_15px_rgba(251,101,4,0.15)]'
                     : isCompleted
-                    ? 'text-emerald-700'
-                    : 'text-slate-400'
+                    ? 'text-[#2dd4bf]'
+                    : 'text-slate-500'
                 }`}
               >
                 <div
                   className={`w-9 h-9 rounded-xl flex items-center justify-center mb-1.5 text-sm font-bold transition-all ${
                     isCompleted
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-[#2dd4bf] text-[#06080c] shadow-[0_0_10px_rgba(45,212,191,0.3)]'
                       : isActive
-                      ? 'bg-brand-600 text-white shadow'
-                      : 'bg-slate-100 text-slate-500'
+                      ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_15px_#fb6504]'
+                      : 'bg-white/[0.04] text-slate-500 border border-white/[0.08]'
                   }`}
                 >
                   {isCompleted ? <Check className="w-5 h-5" /> : <Icon className="w-4 h-4" />}
@@ -232,22 +234,22 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
       </div>
 
       {/* Wizard Form */}
-      <Card className="p-6 sm:p-10 shadow-lg border-slate-200">
+      <Card className="p-6 sm:p-10 shadow-2xl border-white/[0.08] bg-[#0a0d16]/90 backdrop-blur-xl text-white">
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* STEP 1: Policy and Incident Basics */}
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-bold text-white">
                   Korak 1: Polica osiguranja i osnovni podaci
                 </h3>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   Odaberite aktivnu policu na temelju koje podnosite odštetni zahtjev i unesite lokaciju nezgode.
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-semibold text-slate-300 mb-2">
                   Polica osiguranja
                 </label>
                 {policies.length > 0 ? (
@@ -267,13 +269,13 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                   />
                 )}
                 {errors.policyId && (
-                  <p className="text-xs text-rose-600 mt-1">{errors.policyId.message}</p>
+                  <p className="text-xs text-rose-400 mt-1">{errors.policyId.message}</p>
                 )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-300 mb-2">
                     Datum nastanka štete
                   </label>
                   <Input
@@ -285,7 +287,7 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-300 mb-2">
                     Mjesto nezgode (Grad, adresa)
                   </label>
                   <Input
@@ -297,7 +299,7 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-semibold text-slate-300 mb-2">
                   IBAN tekućeg računa za isplatu naknade štete
                 </label>
                 <Input
@@ -305,7 +307,7 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                   {...register('iban')}
                   error={errors.iban?.message}
                 />
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 mt-1 font-mono text-[11px]">
                   U slučaju priznanja i likvidacije štete, naknada se isplaćuje izravno na navedeni račun u banci.
                 </p>
               </div>
@@ -316,33 +318,33 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
           {step === 2 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-bold text-white">
                   Korak 2: Okolnosti i opis nastanka štete
                 </h3>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   Opišite detaljno kako je došlo do štetnog događaja, oštećene dijelove i procijenjeni iznos ako je poznat.
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-semibold text-slate-300 mb-2">
                   Detaljan opis događaja (minimalno 20 znakova)
                 </label>
                 <textarea
                   rows={5}
                   placeholder="Opišite tijek događaja: vremenske uvjete, brzinu, kretanje drugih sudionika ili točan uzrok puknuća cijevi / požara / nezgode..."
-                  className={`w-full px-4 py-3 rounded-2xl border text-sm text-slate-900 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 ${
-                    errors.description ? 'border-rose-400' : 'border-slate-300'
+                  className={`w-full px-4 py-3 rounded-2xl border text-sm text-white bg-[#0d121f] placeholder-slate-500 shadow-sm focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504] ${
+                    errors.description ? 'border-rose-500/50' : 'border-white/[0.1]'
                   }`}
                   {...register('description')}
                 />
                 {errors.description && (
-                  <p className="text-xs text-rose-600 mt-1">{errors.description.message}</p>
+                  <p className="text-xs text-rose-400 mt-1">{errors.description.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-semibold text-slate-300 mb-2">
                   Okvirni procijenjeni iznos štete u EUR (opcionalno)
                 </label>
                 <Input
@@ -353,18 +355,18 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500"
+                    className="mt-1 w-4 h-4 accent-[#fb6504] rounded cursor-pointer"
                     {...register('policeInvolved')}
                   />
                   <div>
-                    <span className="text-sm font-semibold text-slate-800">
+                    <span className="text-sm font-semibold text-white">
                       Na mjestu događaja izvršen je policijski očevid
                     </span>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <p className="text-xs text-slate-400 mt-0.5">
                       Označite ako je nadležna Policijska postaja sastavila policijski zapisnik ili je ispunjeno Europsko izvješće o nezgodi.
                     </p>
                   </div>
@@ -377,10 +379,10 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
           {step === 3 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-bold text-white">
                   Korak 3: Fotografije oštećenja i prateća dokumentacija
                 </h3>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   Priložite jasne fotografije oštećenja iz više kutova, prometnu dozvolu, europsko izvješće ili račune popravka (do 15 MB po datoteci).
                 </p>
               </div>
@@ -390,10 +392,10 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                 maxFiles={10}
               />
 
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3 text-amber-800 text-xs">
-                <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+              <div className="bg-[#fb6504]/10 border border-[#fb6504]/20 rounded-2xl p-4 flex gap-3 text-slate-200 text-xs">
+                <AlertTriangle className="w-5 h-5 text-[#fb6504] shrink-0" />
                 <div>
-                  <strong>Savjet za bržu isplatu:</strong> Fotografirajte cjelokupno vozilo ili nekretninu s registarskim brojem ili kućnim brojem u kadru, zatim detaljne krupne planove oštećenih elemenata.
+                  <strong className="text-[#ff7b1a]">Savjet za bržu isplatu:</strong> Fotografirajte cjelokupno vozilo ili nekretninu s registarskim brojem ili kućnim brojem u kadru, zatim detaljne krupne planove oštećenih elemenata.
                 </div>
               </div>
             </div>
@@ -403,60 +405,60 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
           {step === 4 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-bold text-white">
                   Korak 4: Pregled i službena verifikacija
                 </h3>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   Provjerite točnost svih unesenih podataka prije slanja zahtjeva odjelu šteta.
                 </p>
               </div>
 
-              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3 text-sm">
-                <div className="flex justify-between py-1 border-b border-slate-200">
-                  <span className="text-slate-500">Broj police:</span>
-                  <span className="font-semibold text-slate-900">
+              <div className="bg-white/[0.03] rounded-2xl p-5 border border-white/[0.08] space-y-3 text-sm">
+                <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                  <span className="text-slate-400">Broj police:</span>
+                  <span className="font-semibold text-white font-mono">
                     {selectedPolicy?.policyNumber || formValues.policyId}
                   </span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-200">
-                  <span className="text-slate-500">Datum i mjesto:</span>
-                  <span className="font-semibold text-slate-900">
+                <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                  <span className="text-slate-400">Datum i mjesto:</span>
+                  <span className="font-semibold text-white">
                     {formatDate(formValues.incidentDate)} ({formValues.incidentLocation})
                   </span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-200">
-                  <span className="text-slate-500">IBAN za isplatu:</span>
-                  <span className="font-mono font-medium text-slate-900">{formValues.iban}</span>
+                <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                  <span className="text-slate-400">IBAN za isplatu:</span>
+                  <span className="font-mono font-medium text-[#2dd4bf]">{formValues.iban}</span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-200">
-                  <span className="text-slate-500">Procjena štete:</span>
-                  <span className="font-semibold text-slate-900">
+                <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                  <span className="text-slate-400">Procjena štete:</span>
+                  <span className="font-semibold text-[#ff7b1a] font-mono">
                     {formValues.estimatedDamage ? formatCurrency(formValues.estimatedDamage) : 'Na uviđaju procjenitelja'}
                   </span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-200">
-                  <span className="text-slate-500">Broj priloženih dokaza:</span>
-                  <span className="font-semibold text-slate-900">
+                <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                  <span className="text-slate-400">Broj priloženih dokaza:</span>
+                  <span className="font-semibold text-white font-mono">
                     {evidenceFiles.length} datoteka
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-500 block mb-1">Opis događaja:</span>
-                  <p className="text-xs text-slate-700 bg-white p-3 rounded-xl border border-slate-200 font-sans whitespace-pre-line">
+                  <span className="text-slate-400 block mb-1">Opis događaja:</span>
+                  <p className="text-xs text-slate-300 bg-white/[0.02] p-3 rounded-xl border border-white/[0.08] font-sans whitespace-pre-line">
                     {formValues.description}
                   </p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-brand-50/60 border border-brand-100">
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={legalAccepted}
                     onChange={(e) => setLegalAccepted(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500"
+                    className="mt-1 w-4 h-4 accent-[#fb6504] rounded cursor-pointer"
                   />
-                  <div className="text-xs text-slate-700 leading-relaxed">
+                  <div className="text-xs text-slate-300 leading-relaxed">
                     Potvrđujem da su navedeni podaci istiniti, točni i potpuni pod materijalnom i kaznenom odgovornošću.
                     Upoznat/a sam s pravima iz Zakona o osiguranju (NN 30/15, 112/18) i ovlašćujem Agenciju Život d.o.o.
                     i Generali osiguranje d.d. za obradu podataka i uvid u evidencije radi likvidacije štete.
@@ -467,13 +469,13 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
           )}
 
           {/* Navigation Controls */}
-          <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
+          <div className="mt-8 pt-6 border-t border-white/[0.08] flex items-center justify-between">
             {step > 1 ? (
               <Button
                 type="button"
                 variant="outline"
                 onClick={handlePrevStep}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-slate-300 hover:text-white"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Natrag
@@ -487,7 +489,7 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                 type="button"
                 variant="primary"
                 onClick={handleNextStep}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 shadow-[0_0_20px_-3px_rgba(251,101,4,0.4)]"
               >
                 Dalje
                 <ArrowRight className="w-4 h-4" />
@@ -497,7 +499,7 @@ export const FNOLWizard: React.FC<FNOLWizardProps> = ({ onSuccess, initialPolicy
                 type="submit"
                 variant="primary"
                 disabled={!legalAccepted || isSubmitting}
-                className="flex items-center gap-2 px-8"
+                className="flex items-center gap-2 px-8 shadow-[0_0_20px_-3px_rgba(251,101,4,0.4)]"
               >
                 {isSubmitting ? 'Slanje prijave...' : 'Pošalji odštetni zahtjev'}
                 <ShieldCheck className="w-5 h-5" />

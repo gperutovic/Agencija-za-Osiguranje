@@ -52,23 +52,23 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
         return (
           <div
             key={p.id}
-            className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+            className={`p-4 sm:p-5 rounded-2xl border transition-all backdrop-blur-xl ${
               isSuccess
-                ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
                 : isExpired
-                ? 'bg-rose-50 border-rose-200 text-rose-900'
-                : 'bg-amber-50 border-amber-200 text-amber-900'
+                ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-start gap-3.5">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                     isSuccess
-                      ? 'bg-emerald-100 text-emerald-600'
+                      ? 'bg-emerald-500/20 border-emerald-500/40 text-[#2dd4bf]'
                       : isExpired
-                      ? 'bg-rose-100 text-rose-600'
-                      : 'bg-amber-100 text-amber-700'
+                      ? 'bg-rose-500/20 border-rose-500/40 text-rose-400'
+                      : 'bg-amber-500/20 border-amber-500/40 text-[#fb6504]'
                   }`}
                 >
                   {isSuccess ? (
@@ -79,14 +79,14 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-sm sm:text-base">
+                  <h4 className="font-bold text-sm sm:text-base text-white">
                     {isSuccess
                       ? `Uspješno zatražena obnova police ${p.policyNumber}`
                       : isExpired
                       ? `Polica osiguranja ${p.policyNumber} je istekla!`
                       : `Upozorenje o isteku: Polica ${p.policyNumber} ističe za ${diffDays} dana`}
                   </h4>
-                  <p className="text-xs opacity-80 mt-0.5">
+                  <p className="text-xs text-slate-300 mt-0.5">
                     {isSuccess
                       ? 'Vaš zahtjev za obnovom je proslijeđen agentu. Potvrda i nova polica stići će na vaš email.'
                       : `Polica za ${p.type.toUpperCase()} (${p.insurer}) završava ${formatDate(
@@ -103,7 +103,7 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                     size="sm"
                     disabled={renewingId === p.id}
                     onClick={() => handleRenew(p.id)}
-                    className="flex items-center gap-2 whitespace-nowrap shadow"
+                    className="flex items-center gap-2 whitespace-nowrap shadow-[0_0_15px_rgba(251,101,4,0.3)]"
                   >
                     {renewingId === p.id ? (
                       <>

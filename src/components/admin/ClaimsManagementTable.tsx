@@ -87,9 +87,9 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] shadow-2xl backdrop-blur-xl overflow-hidden">
       {/* Top Filter Bar */}
-      <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div className="p-5 border-b border-white/[0.08] bg-white/[0.01] flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="w-full sm:w-80">
           <Input
             placeholder="Pretraži broj spisa (ST-2026-XXXX) ili lokaciju..."
@@ -119,7 +119,7 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <tr className="bg-white/[0.02] border-b border-white/[0.08] text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
               <th className="py-3.5 px-6">Broj spisa</th>
               <th className="py-3.5 px-6">Broj police</th>
               <th className="py-3.5 px-6">Datum i mjesto</th>
@@ -128,33 +128,33 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
               <th className="py-3.5 px-6 text-right">Radnja</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-white/[0.05]">
             {filteredClaims.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-400">
+                <td colSpan={6} className="text-center py-12 text-slate-500 font-mono">
                   Nema odštetnih zahtjeva za prikaz.
                 </td>
               </tr>
             ) : (
               filteredClaims.map((claim) => (
-                <tr key={claim.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="py-4 px-6 font-mono font-bold text-brand-900">
+                <tr key={claim.id} className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-mono font-bold text-[#ff7b1a]">
                     {claim.claimNumber}
                   </td>
-                  <td className="py-4 px-6 font-mono text-xs text-slate-600">
+                  <td className="py-4 px-6 font-mono text-xs text-slate-300">
                     {claim.policyId}
                   </td>
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-semibold text-slate-900 block">
+                      <span className="font-semibold text-white block">
                         {formatDate(claim.incidentDate)}
                       </span>
-                      <span className="text-xs text-slate-500 line-clamp-1">
+                      <span className="text-xs text-slate-400 line-clamp-1">
                         {claim.incidentLocation}
                       </span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 font-semibold text-slate-900">
+                  <td className="py-4 px-6 font-mono font-semibold text-white">
                     {claim.estimatedDamage ? formatCurrency(claim.estimatedDamage) : 'Procjena u tijeku'}
                   </td>
                   <td className="py-4 px-6">
@@ -188,22 +188,22 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
         >
           <div className="space-y-6">
             {/* Incident Summary */}
-            <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl text-xs">
+            <div className="grid grid-cols-2 gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/[0.08] text-xs">
               <div>
-                <span className="text-slate-500 block">Polica:</span>
-                <span className="font-mono font-bold text-slate-800">{selectedClaim.policyId}</span>
+                <span className="text-slate-400 block font-mono">Polica:</span>
+                <span className="font-mono font-bold text-white">{selectedClaim.policyId}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Datum nezgode:</span>
-                <span className="font-semibold text-slate-800">{formatDate(selectedClaim.incidentDate)}</span>
+                <span className="text-slate-400 block font-mono">Datum nezgode:</span>
+                <span className="font-semibold text-white">{formatDate(selectedClaim.incidentDate)}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Mjesto:</span>
-                <span className="font-semibold text-slate-800">{selectedClaim.incidentLocation}</span>
+                <span className="text-slate-400 block font-mono">Mjesto:</span>
+                <span className="font-semibold text-white">{selectedClaim.incidentLocation}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Zahtijevani iznos:</span>
-                <span className="font-bold text-brand-900">
+                <span className="text-slate-400 block font-mono">Zahtijevani iznos:</span>
+                <span className="font-mono font-bold text-[#ff7b1a]">
                   {selectedClaim.estimatedDamage ? formatCurrency(selectedClaim.estimatedDamage) : 'Nije specificirano'}
                 </span>
               </div>
@@ -211,10 +211,10 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
 
             {/* Description */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
                 Opis događaja (Izjava osiguranika)
               </label>
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 text-sm text-slate-700 whitespace-pre-line leading-relaxed">
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-sm text-slate-200 whitespace-pre-line leading-relaxed">
                 {selectedClaim.description}
               </div>
             </div>
@@ -222,7 +222,7 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
             {/* Evidence files preview if any */}
             {selectedClaim.evidenceUrls && selectedClaim.evidenceUrls.length > 0 && (
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
                   Priloženi dokazi i fotografije ({selectedClaim.evidenceUrls.length})
                 </label>
                 <div className="grid grid-cols-3 gap-3">
@@ -232,9 +232,9 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 border border-slate-200 rounded-xl hover:border-brand-500 flex items-center gap-2 text-xs font-medium text-brand-700 transition-colors"
+                      className="p-3 border border-white/[0.08] bg-white/[0.02] rounded-xl hover:border-[#fb6504] flex items-center gap-2 text-xs font-mono font-medium text-[#ff7b1a] transition-colors"
                     >
-                      <ImageIcon className="w-4 h-4 text-brand-600 shrink-0" />
+                      <ImageIcon className="w-4 h-4 text-[#fb6504] shrink-0" />
                       <span className="truncate">Dokaz #{idx + 1}</span>
                       <ExternalLink className="w-3 h-3 ml-auto" />
                     </a>
@@ -244,9 +244,9 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
             )}
 
             {/* Status Change Selector */}
-            <div className="pt-4 border-t border-slate-200 space-y-4">
+            <div className="pt-4 border-t border-white/[0.08] space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
                   Ažuriraj status odštetnog zahtjeva
                 </label>
                 <Select
@@ -264,7 +264,7 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Interna bilješka likvidatora / obrazloženje
                 </label>
                 <textarea
@@ -272,13 +272,13 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
                   value={brokerNotes}
                   onChange={(e) => setBrokerNotes(e.target.value)}
                   placeholder="Unesite zabilješke s uviđaja, broj zapisnika policije ili upute za računovodstvo..."
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-sm text-slate-900 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-4 py-3 rounded-2xl border border-white/[0.1] text-sm text-white bg-[#06080c] placeholder:text-slate-600 shadow-inner focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504]"
                 />
               </div>
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
               <Button
                 variant="outline"
                 onClick={() => setSelectedClaim(null)}

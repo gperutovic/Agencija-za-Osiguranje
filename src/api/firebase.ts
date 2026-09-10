@@ -5,12 +5,12 @@ import { getStorage } from 'firebase/storage';
 import { UserProfile, Policy, Claim, QuoteRequest, Appointment } from '../types/database';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyDemoDummyApiKeyForAgencijaZivot2026',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBM2g2zVhRbEkxTsFnKL-NpgT4XBDsDBks',
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'agencija-za-osiguranje.firebaseapp.com',
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'agencija-za-osiguranje',
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'agencija-za-osiguranje.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '616864182416',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:616864182416:web:8a7c2b6f1e3d5a9b0c2e4f',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '175340495427',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:175340495427:web:dcaeb89300970b547b2af6',
 };
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -382,3 +382,58 @@ class DualModeInsuranceStore {
 }
 
 export const dualStore = new DualModeInsuranceStore();
+
+/**
+ * Automatically seeds live Cloud Firestore collections on project launch if empty
+ */
+export async function seedCloudFirestoreDatabaseIfEmpty(): Promise<void> {
+  try {
+    const { getDocs, setDoc, doc, collection } = await import('firebase/firestore');
+
+    // Check policies collection
+    const policiesSnap = await getDocs(collection(db, 'policies'));
+    if (policiesSnap.empty) {
+      for (const policy of INITIAL_POLICIES) {
+        await setDoc(doc(db, 'policies', policy.id), policy);
+      }
+    }
+
+    // Check quotes collection
+    const quotesSnap = await getDocs(collection(db, 'quotes'));
+    if (quotesSnap.empty) {
+      for (const quote of INITIAL_QUOTES) {
+        await setDoc(doc(db, 'quotes', quote.id), quote);
+      }
+    }
+
+    // Check claims collection
+    const claimsSnap = await getDocs(collection(db, 'claims'));
+    if (claimsSnap.empty) {
+      for (const claim of INITIAL_CLAIMS) {
+        await setDoc(doc(db, 'claims', claim.id), claim);
+      }
+    }
+
+    // Check users collection
+    const usersSnap = await getDocs(collection(db, 'users'));
+    if (usersSnap.empty) {
+      for (const user of INITIAL_USERS) {
+        await setDoc(doc(db, 'users', user.uid), user);
+      }
+    }
+
+    // Check appointments collection
+    const apptsSnap = await getDocs(collection(db, 'appointments'));
+    if (apptsSnap.empty) {
+      for (const appt of INITIAL_APPOINTMENTS) {
+        await setDoc(doc(db, 'appointments', appt.id), appt);
+      }
+    }
+  } catch (error) {
+    console.info('Cloud Firestore seeding fallback active:', error);
+  }
+}
+
+// Automatically trigger seeding in background
+seedCloudFirestoreDatabaseIfEmpty().catch(() => {});
+

@@ -80,8 +80,8 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
         onClick={() => fileInputRef.current?.click()}
         className={`border-2 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all ${
           dragOver
-            ? 'border-brand-500 bg-brand-50/50 scale-[0.99]'
-            : 'border-slate-300 hover:border-brand-400 bg-slate-50/50 hover:bg-slate-50'
+            ? 'border-[#fb6504] bg-[#fb6504]/10 scale-[0.99]'
+            : 'border-white/[0.15] hover:border-[#fb6504] bg-white/[0.02] hover:bg-white/[0.04]'
         }`}
       >
         <input
@@ -94,15 +94,15 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
         />
 
         <div className="flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-white text-brand-600 shadow-sm border border-slate-200 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-white/[0.05] text-[#fb6504] shadow-sm border border-white/[0.1] flex items-center justify-center">
             <UploadCloud className="w-6 h-6" />
           </div>
 
           <div>
-            <p className="text-sm font-bold text-slate-800">
+            <p className="text-sm font-bold text-white">
               Povucite dokaze ovdje ili kliknite za odabir
             </p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-400 mt-1 font-mono">
               Podržani formati: JPG, PNG, HEIC, MP4, PDF (do 15 MB po datoteci)
             </p>
           </div>
@@ -110,7 +110,7 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
       </div>
 
       {error && (
-        <div className="p-3 bg-rose-50 rounded-xl border border-rose-200 text-xs text-rose-700 flex items-center gap-2">
+        <div className="p-3 bg-rose-500/10 rounded-xl border border-rose-500/20 text-xs text-rose-400 flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -122,7 +122,7 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
           {items.map((item) => (
             <div
               key={item.id}
-              className="relative group rounded-2xl border border-slate-200 bg-white p-2.5 shadow-2xs flex flex-col items-center text-center overflow-hidden"
+              className="relative group rounded-2xl border border-white/[0.08] bg-white/[0.03] p-2.5 flex flex-col items-center text-center overflow-hidden"
             >
               {item.type === 'image' ? (
                 <img
@@ -131,19 +131,19 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
                   className="w-full h-24 object-cover rounded-xl mb-2"
                 />
               ) : (
-                <div className="w-full h-24 bg-slate-100 rounded-xl flex items-center justify-center mb-2 text-slate-400">
+                <div className="w-full h-24 bg-white/[0.04] rounded-xl flex items-center justify-center mb-2 text-slate-400">
                   {item.type === 'pdf' ? (
-                    <FileText className="w-8 h-8 text-rose-500" />
+                    <FileText className="w-8 h-8 text-rose-400" />
                   ) : (
-                    <ImageIcon className="w-8 h-8 text-teal-600" />
+                    <ImageIcon className="w-8 h-8 text-[#fb6504]" />
                   )}
                 </div>
               )}
 
-              <span className="text-[11px] font-medium text-slate-700 truncate w-full px-1">
+              <span className="text-[11px] font-medium text-slate-200 truncate w-full px-1">
                 {item.file.name}
               </span>
-              <span className="text-[10px] text-slate-400 font-mono">
+              <span className="text-[10px] text-slate-500 font-mono">
                 {(item.file.size / 1024 / 1024).toFixed(1)} MB
               </span>
 
@@ -153,7 +153,7 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
                   e.stopPropagation();
                   removeItem(item.id);
                 }}
-                className="absolute top-2 right-2 p-1 rounded-full bg-slate-900/70 text-white hover:bg-rose-600 transition-colors"
+                className="absolute top-2 right-2 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
                 title="Ukloni datoteku"
               >
                 <X className="w-3.5 h-3.5" />

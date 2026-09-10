@@ -66,9 +66,9 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl shadow-2xl overflow-hidden text-white">
       {/* Search and Filters Bar */}
-      <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div className="p-5 border-b border-white/[0.08] flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="w-full sm:w-80">
           <Input
             placeholder="Pretraži klijente, telefon, email..."
@@ -109,7 +109,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <tr className="bg-white/[0.02] border-b border-white/[0.08] text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
               <th className="py-3.5 px-6">Klijent</th>
               <th className="py-3.5 px-6">Vrsta osiguranja</th>
               <th className="py-3.5 px-6">Godišnja premija</th>
@@ -118,35 +118,35 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
               <th className="py-3.5 px-6 text-right">Upravljanje statusom</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-white/[0.06]">
             {filteredQuotes.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-400">
+                <td colSpan={6} className="text-center py-12 text-slate-500 font-mono">
                   Nema pronađenih upita za odabrane kriterije.
                 </td>
               </tr>
             ) : (
               filteredQuotes.map((q) => (
-                <tr key={q.id} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={q.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-semibold text-slate-900 block">
+                      <span className="font-semibold text-white block">
                         {q.customer.fullName}
                       </span>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
+                      <div className="flex items-center gap-3 mt-1 text-xs text-slate-400 font-mono">
                         <a
                           href={`tel:${q.customer.phone}`}
-                          className="hover:text-brand-600 flex items-center gap-1"
+                          className="hover:text-[#fb6504] flex items-center gap-1 transition-colors"
                         >
-                          <Phone className="w-3 h-3" />
+                          <Phone className="w-3 h-3 text-[#fb6504]" />
                           {q.customer.phone}
                         </a>
                         <span>•</span>
                         <a
                           href={`mailto:${q.customer.email}`}
-                          className="hover:text-brand-600 flex items-center gap-1"
+                          className="hover:text-[#fb6504] flex items-center gap-1 transition-colors"
                         >
-                          <Mail className="w-3 h-3" />
+                          <Mail className="w-3 h-3 text-[#fb6504]" />
                           {q.customer.email}
                         </a>
                       </div>
@@ -154,7 +154,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                   </td>
 
                   <td className="py-4 px-6">
-                    <span className="capitalize font-medium text-slate-700">
+                    <span className="capitalize font-medium text-slate-300">
                       {q.type === 'auto'
                         ? 'Auto osiguranje'
                         : q.type === 'property'
@@ -167,16 +167,16 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
 
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-bold text-slate-900">
+                      <span className="font-bold text-[#ff7b1a] font-mono">
                         {formatCurrency(q.calculatedEstimate.annualPremium)}
                       </span>
-                      <span className="block text-xs text-slate-400">
+                      <span className="block text-xs text-slate-500 font-mono">
                         {formatCurrency(q.calculatedEstimate.monthlyPremium)} / mj.
                       </span>
                     </div>
                   </td>
 
-                  <td className="py-4 px-6 text-xs text-slate-500">
+                  <td className="py-4 px-6 text-xs text-slate-400 font-mono">
                     {formatDateTime(q.createdAt)}
                   </td>
 
@@ -185,12 +185,12 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                   </td>
 
                   <td className="py-4 px-6 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
+                    <div className="flex items-center justify-end gap-1.5 font-mono text-xs">
                       {q.status === 'new' && (
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'contacted')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/20 transition-colors"
                         >
                           Kontaktiraj
                         </button>
@@ -199,7 +199,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'quoted')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 text-blue-800 hover:bg-blue-100 border border-blue-200"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 border border-blue-500/20 transition-colors"
                         >
                           Pošalji ponudu
                         </button>
@@ -208,7 +208,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'bound')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-500/10 text-[#2dd4bf] hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
                         >
                           Sklopi policu
                         </button>
@@ -217,7 +217,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'lost')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-500 hover:text-rose-700 hover:bg-rose-50"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                         >
                           Arhiviraj
                         </button>

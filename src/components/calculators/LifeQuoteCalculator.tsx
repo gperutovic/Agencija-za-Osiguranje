@@ -4,7 +4,7 @@ import { LifeQuoteParams } from '../../types/insurance';
 import { calculateLifePremium } from '../../utils/ratingEngine';
 import { Slider } from '../common/Slider';
 import { QuoteSummaryCard } from './QuoteSummaryCard';
-import { HeartPulse, Shield, AlertCircle, Sparkles } from 'lucide-react';
+import { Heart, HeartPulse, Shield, AlertCircle, Sparkles } from 'lucide-react';
 
 export interface LifeQuoteCalculatorProps {
   initialAge?: number;
@@ -41,16 +41,16 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       {/* Configuration Controls (2 Cols) */}
-      <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-card space-y-8">
-        <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
-          <div className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center font-black shadow-2xs">
-            <HeartPulse className="w-5 h-5" />
+      <div className="lg:col-span-2 bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-8 text-white">
+        <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
+          <div className="w-10 h-10 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#fb6504] flex items-center justify-center font-black shadow-[0_0_15px_rgba(251,101,4,0.2)]">
+            <Heart className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-slate-900">
+            <h3 className="text-base sm:text-lg font-black text-white">
               {t('calculators.life.title')}
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400">
               Životno osiguranje ŽIVOT+: Financijska zaštita obitelji i kapitalizirana štednja
             </p>
           </div>
@@ -95,8 +95,8 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
         </div>
 
         {/* Smoker and Critical Illness Grid */}
-        <div className="space-y-3 pt-2 border-t border-slate-100">
-          <label className="text-xs font-semibold text-slate-700 block">
+        <div className="space-y-3 pt-2 border-t border-white/[0.08]">
+          <label className="text-xs font-semibold text-slate-300 block">
             Zdravstveni status i dopunska pokrića
           </label>
 
@@ -106,16 +106,16 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
               onClick={() => setIsSmoker(!isSmoker)}
               className={`p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 ${
                 isSmoker
-                  ? 'border-amber-500 bg-amber-50/70 text-amber-950 font-bold shadow-2xs'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
+                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
-              <div className="w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 bg-white">
-                {isSmoker && <span className="text-xs font-bold text-amber-600">✓</span>}
+              <div className="w-5 h-5 rounded-md border border-white/[0.2] flex items-center justify-center shrink-0 mt-0.5 bg-[#0d121f]">
+                {isSmoker && <span className="text-xs font-bold text-[#fb6504]">✓</span>}
               </div>
               <div className="space-y-0.5">
-                <div className="text-xs font-bold">Pušač (cigarete / duhan)</div>
-                <div className="text-[10px] text-slate-500">+40% doplata za povišeni rizik</div>
+                <div className="text-xs font-bold text-white">Pušač (cigarete / duhan)</div>
+                <div className="text-[10px] text-slate-400">+40% doplata za povišeni rizik</div>
               </div>
             </button>
 
@@ -124,18 +124,18 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
               onClick={() => setIncludeCriticalIllness(!includeCriticalIllness)}
               className={`p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 ${
                 includeCriticalIllness
-                  ? 'border-rose-500 bg-rose-50/70 text-rose-950 font-bold shadow-2xs'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
+                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
-              <div className="w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 bg-white">
+              <div className="w-5 h-5 rounded-md border border-white/[0.2] flex items-center justify-center shrink-0 mt-0.5 bg-[#0d121f]">
                 {includeCriticalIllness && (
-                  <span className="text-xs font-bold text-rose-600">✓</span>
+                  <span className="text-xs font-bold text-[#fb6504]">✓</span>
                 )}
               </div>
               <div className="space-y-0.5">
-                <div className="text-xs font-bold">Pokriće 25 teških bolesti</div>
-                <div className="text-[10px] text-slate-500">Maligne bolesti, infarkt, moždani udar</div>
+                <div className="text-xs font-bold text-white">Pokriće 25 teških bolesti</div>
+                <div className="text-[10px] text-slate-400">Maligne bolesti, infarkt, moždani udar</div>
               </div>
             </button>
           </div>

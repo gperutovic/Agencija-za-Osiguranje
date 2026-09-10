@@ -53,16 +53,16 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       {/* Configuration Controls (2 Cols) */}
-      <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-card space-y-8">
-        <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
-          <div className="w-10 h-10 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-black shadow-2xs">
+      <div className="lg:col-span-2 bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-8 text-white">
+        <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
+          <div className="w-10 h-10 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#fb6504] flex items-center justify-center font-black shadow-[0_0_15px_rgba(251,101,4,0.2)]">
             <Home className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-slate-900">
+            <h3 className="text-base sm:text-lg font-black text-white">
               {t('calculators.property.title')}
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400">
               Generali Dom Sigurnost: Zaštita kuće, stana i stvari od požara, oluje i potresa
             </p>
           </div>
@@ -70,7 +70,7 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
 
         {/* Property Type Radio Cards */}
         <div className="space-y-2">
-          <label className="text-xs font-semibold text-slate-700">
+          <label className="text-xs font-semibold text-slate-300">
             {t('calculators.property.type')}
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -79,11 +79,11 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
               onClick={() => setPropertyType('apartment')}
               className={`p-3.5 rounded-2xl border text-left transition-all ${
                 propertyType === 'apartment'
-                  ? 'border-teal-600 bg-teal-50/70 text-teal-950 font-bold shadow-2xs'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
+                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
-              <Building className="w-4 h-4 text-teal-600 mb-1.5" />
+              <Building className="w-4 h-4 text-[#fb6504] mb-1.5" />
               <div className="text-xs font-bold">{t('calculators.property.apartment')}</div>
               <div className="text-[10px] text-slate-400">Etažno vlasništvo</div>
             </button>
@@ -93,11 +93,11 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
               onClick={() => setPropertyType('house')}
               className={`p-3.5 rounded-2xl border text-left transition-all ${
                 propertyType === 'house'
-                  ? 'border-teal-600 bg-teal-50/70 text-teal-950 font-bold shadow-2xs'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
+                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
-              <Home className="w-4 h-4 text-teal-600 mb-1.5" />
+              <Home className="w-4 h-4 text-[#fb6504] mb-1.5" />
               <div className="text-xs font-bold">{t('calculators.property.house')}</div>
               <div className="text-[10px] text-slate-400">Samostojeći objekt (+20%)</div>
             </button>
@@ -107,11 +107,11 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
               onClick={() => setPropertyType('holiday')}
               className={`p-3.5 rounded-2xl border text-left transition-all ${
                 propertyType === 'holiday'
-                  ? 'border-teal-600 bg-teal-50/70 text-teal-950 font-bold shadow-2xs'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
+                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
               }`}
             >
-              <Shield className="w-4 h-4 text-teal-600 mb-1.5" />
+              <Shield className="w-4 h-4 text-[#fb6504] mb-1.5" />
               <div className="text-xs font-bold">{t('calculators.property.holiday')}</div>
               <div className="text-[10px] text-slate-400">Povremeni boravak (+35%)</div>
             </button>
@@ -151,62 +151,62 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
         </div>
 
         {/* Riders and Deductibles */}
-        <div className="space-y-3 pt-2 border-t border-slate-100">
-          <label className="text-xs font-semibold text-slate-700 block">
+        <div className="space-y-3 pt-2 border-t border-white/[0.08]">
+          <label className="text-xs font-semibold text-slate-300 block">
             Dopunska pokrića i zaštita od rizika
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <label className="flex items-start gap-2.5 p-3.5 rounded-2xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+            <label className="flex items-start gap-2.5 p-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={includeContents}
                 onChange={(e) => setIncludeContents(e.target.checked)}
-                className="mt-0.5 rounded text-teal-600 focus:ring-teal-500 w-4 h-4"
+                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-slate-900 block">Stvari kućanstva</span>
-                <span className="text-[10px] text-slate-500">Namještaj i tehnika</span>
+                <span className="text-xs font-bold text-white block">Stvari kućanstva</span>
+                <span className="text-[10px] text-slate-400">Namještaj i tehnika</span>
               </div>
             </label>
 
-            <label className="flex items-start gap-2.5 p-3.5 rounded-2xl border border-teal-200 bg-teal-50/40 hover:bg-teal-50 cursor-pointer transition-colors">
+            <label className="flex items-start gap-2.5 p-3.5 rounded-2xl border border-[#fb6504]/30 bg-[#fb6504]/10 hover:bg-[#fb6504]/15 cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={includeEarthquake}
                 onChange={(e) => setIncludeEarthquake(e.target.checked)}
-                className="mt-0.5 rounded text-teal-600 focus:ring-teal-500 w-4 h-4"
+                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-teal-950 flex items-center gap-1">
-                  <Activity className="w-3.5 h-3.5 text-teal-600" />
+                <span className="text-xs font-bold text-[#ff7b1a] flex items-center gap-1">
+                  <Activity className="w-3.5 h-3.5 text-[#fb6504]" />
                   <span>Rizik potresa</span>
                 </span>
-                <span className="text-[10px] text-teal-800">Seizmički rider</span>
+                <span className="text-[10px] text-slate-300">Seizmički rider</span>
               </div>
             </label>
 
-            <label className="flex items-start gap-2.5 p-3.5 rounded-2xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+            <label className="flex items-start gap-2.5 p-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={includeFlood}
                 onChange={(e) => setIncludeFlood(e.target.checked)}
-                className="mt-0.5 rounded text-teal-600 focus:ring-teal-500 w-4 h-4"
+                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-slate-900 flex items-center gap-1">
-                  <Waves className="w-3.5 h-3.5 text-teal-600" />
+                <span className="text-xs font-bold text-white flex items-center gap-1">
+                  <Waves className="w-3.5 h-3.5 text-[#2dd4bf]" />
                   <span>Poplava i bujice</span>
                 </span>
-                <span className="text-[10px] text-slate-500">Izljev vode</span>
+                <span className="text-[10px] text-slate-400">Izljev vode</span>
               </div>
             </label>
           </div>
         </div>
 
         {/* Deductible Tier */}
-        <div className="space-y-2 pt-2 border-t border-slate-100">
-          <label className="text-xs font-semibold text-slate-700 block">
+        <div className="space-y-2 pt-2 border-t border-white/[0.08]">
+          <label className="text-xs font-semibold text-slate-300 block">
             Ugovorna franšiza (vlastiti udio u šteti za nižu premiju)
           </label>
           <div className="grid grid-cols-3 gap-3">
@@ -215,10 +215,10 @@ export const PropertyQuoteCalculator: React.FC<PropertyQuoteCalculatorProps> = (
                 key={tier}
                 type="button"
                 onClick={() => setDeductibleTier(tier)}
-                className={`p-2.5 rounded-xl border text-xs font-bold transition-colors ${
+                className={`p-2.5 rounded-xl border text-xs font-bold transition-colors font-mono ${
                   deductibleTier === tier
-                    ? 'border-teal-600 bg-teal-50 text-teal-900 shadow-2xs'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'border-[#fb6504] bg-[#fb6504]/15 text-[#ff7b1a] shadow-[0_0_15px_rgba(251,101,4,0.2)]'
+                    : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
                 }`}
               >
                 {tier === 0 ? 'Bez franšize (0 €)' : `${tier} € franšiza`}

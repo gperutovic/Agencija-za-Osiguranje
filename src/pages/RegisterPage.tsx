@@ -74,23 +74,25 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-xl w-full space-y-6">
+    <div className="min-h-[80vh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#fb6504]/10 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-xl w-full space-y-6 relative z-10">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center mx-auto shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#fb6504] to-[#ff7b1a] text-white flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(251,101,4,0.4)]">
             <UserPlus className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             Registracija Korisničkog Računa
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400 font-light">
             Otvorite svoj digitalni profil za ugovaranje polica i prijavu šteta
           </p>
         </div>
 
-        <Card className="p-6 sm:p-8 bg-white border-slate-200 shadow-md">
+        <div className="p-6 sm:p-8 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-2xl">
           {authError && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+            <div className="mb-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2 font-mono">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{authError}</span>
             </div>
@@ -99,17 +101,17 @@ export const RegisterPage: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Role Selection */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                 Vrsta korisničkog računa
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => setValue('role', 'policyholder')}
-                  className={`p-3 rounded-xl border text-xs font-bold transition-all text-center ${
+                  className={`p-3 rounded-2xl border text-xs font-mono font-bold transition-all text-center ${
                     selectedRole === 'policyholder'
-                      ? 'bg-brand-50 border-brand-500 text-brand-900 ring-2 ring-brand-500/20'
-                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                      ? 'bg-[#fb6504]/10 border-[#fb6504] text-[#ff7b1a] shadow-[0_0_12px_rgba(251,101,4,0.25)]'
+                      : 'bg-white/[0.02] border-white/[0.08] text-slate-400 hover:border-white/[0.16] hover:text-white'
                   }`}
                 >
                   Ugovaratelj (Klijent)
@@ -117,10 +119,10 @@ export const RegisterPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setValue('role', 'broker')}
-                  className={`p-3 rounded-xl border text-xs font-bold transition-all text-center ${
+                  className={`p-3 rounded-2xl border text-xs font-mono font-bold transition-all text-center ${
                     selectedRole === 'broker'
-                      ? 'bg-brand-50 border-brand-500 text-brand-900 ring-2 ring-brand-500/20'
-                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                      ? 'bg-[#fb6504]/10 border-[#fb6504] text-[#ff7b1a] shadow-[0_0_12px_rgba(251,101,4,0.25)]'
+                      : 'bg-white/[0.02] border-white/[0.08] text-slate-400 hover:border-white/[0.16] hover:text-white'
                   }`}
                 >
                   Ovlašteni Zastupnik (Broker)
@@ -129,8 +131,8 @@ export const RegisterPage: React.FC = () => {
             </div>
 
             {selectedRole === 'broker' && (
-              <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
-                <label className="block text-xs font-semibold text-blue-950 mb-1">
+              <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20">
+                <label className="block text-xs font-mono font-semibold text-cyan-300 mb-1">
                   Broj HANFA licence zastupnika *
                 </label>
                 <Input
@@ -143,7 +145,7 @@ export const RegisterPage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                   Ime i prezime / Naziv obrta *
                 </label>
                 <Input
@@ -154,7 +156,7 @@ export const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                   OIB (11 znamenaka) *
                 </label>
                 <Input
@@ -168,7 +170,7 @@ export const RegisterPage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                   Email adresa *
                 </label>
                 <Input
@@ -180,7 +182,7 @@ export const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                   Kontakt telefon *
                 </label>
                 <Input
@@ -192,7 +194,7 @@ export const RegisterPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                 Lozinka (min. 6 znakova) *
               </label>
               <Input
@@ -205,7 +207,7 @@ export const RegisterPage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                   Ulica i kućni broj
                 </label>
                 <Input
@@ -214,7 +216,7 @@ export const RegisterPage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-mono font-semibold text-slate-300 mb-1">
                   Grad
                 </label>
                 <Input
@@ -228,23 +230,23 @@ export const RegisterPage: React.FC = () => {
               <label className="flex items-start gap-2.5 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="mt-0.5 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500"
+                  className="mt-0.5 w-4 h-4 rounded border-white/[0.2] bg-[#06080c] text-[#fb6504] focus:ring-[#fb6504]"
                   {...register('acceptTerms')}
                 />
-                <span className="text-xs text-slate-600">
+                <span className="text-xs text-slate-400">
                   Prihvaćam{' '}
-                  <Link to="/legal" className="text-brand-600 underline">
+                  <Link to="/legal" className="text-[#ff7b1a] underline">
                     Opće uvjete poslovanja
                   </Link>{' '}
                   i potvrđujem da sam upoznat/a s{' '}
-                  <Link to="/privacy" className="text-brand-600 underline">
+                  <Link to="/privacy" className="text-[#ff7b1a] underline">
                     Politikom privatnosti (GDPR)
                   </Link>
                   .
                 </span>
               </label>
               {errors.acceptTerms && (
-                <p className="text-xs text-rose-600 mt-1">{errors.acceptTerms.message}</p>
+                <p className="text-xs font-mono text-rose-400 mt-1">{errors.acceptTerms.message}</p>
               )}
             </div>
 
@@ -252,19 +254,19 @@ export const RegisterPage: React.FC = () => {
               type="submit"
               variant="primary"
               disabled={isSubmitting}
-              className="w-full font-bold mt-3"
+              className="w-full font-mono font-bold mt-3"
             >
               {isSubmitting ? 'Stvaranje računa...' : 'Dovrši registraciju'}
             </Button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-100 text-center text-xs text-slate-600">
+          <div className="mt-6 pt-6 border-t border-white/[0.06] text-center text-xs text-slate-400 font-mono">
             Već imate račun?{' '}
-            <Link to="/login" className="font-bold text-brand-600 hover:underline">
+            <Link to="/login" className="font-bold text-[#ff7b1a] hover:underline">
               Prijavite se ovdje &rarr;
             </Link>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
