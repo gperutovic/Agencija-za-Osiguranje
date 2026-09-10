@@ -1,0 +1,178 @@
+{
+  "brand": {
+    "name": "Agencija Život",
+    "legalName": "ŽIVOT d.o.o. za poslove zastupanja u osiguranju",
+    "tagline": "Vodeća digitalna agencija za osiguranje i financijsku sigurnost",
+    "description": "Ovlašteni i licencirani partner Generali osiguranja d.d. pod nadzorom HANFA-e. Pružamo vrhunska rješenja životnog, imovinskog, auto i zdravstvenog osiguranja.",
+    "address": "Junija Palmotića 76, 10000 Zagreb",
+    "oib": "14329077049",
+    "mbs": "080514170",
+    "phone": "+385 1 4800 120",
+    "email": "osiguranje@agencija-zivot.hr",
+    "hanfaLicense": "Klasa: UP/I-983-02/24-01/12"
+  },
+  "nav": {
+    "home": "Naslovna",
+    "services": "Usluge osiguranja",
+    "calculator": "Izračun premije",
+    "claims": "Prijava štete (FNOL)",
+    "about": "O nama",
+    "contact": "Kontakt",
+    "portal": "Klijentski portal",
+    "admin": "Broker CRM",
+    "login": "Prijava",
+    "register": "Registracija",
+    "logout": "Odjava"
+  },
+  "hero": {
+    "badge": "Ovlašteni Generali partner &bull; HANFA Licenca",
+    "title": "Pametno osiguranje za stvaran život.",
+    "subtitle": "Kombiniramo najvišu razinu insurtech inovacija i tradiciju Generali osiguranja. Trenutni izračun premije, digitalna prijava šteta i osobni savjetnik u Zagrebu.",
+    "ctaQuote": "Izračunaj premiju online",
+    "ctaClaims": "Prijavi štetu (FNOL)",
+    "ctaPortal": "Moj Život Portal",
+    "stats": {
+      "activePolicies": "12.400+",
+      "activePoliciesLabel": "Aktivnih polica",
+      "payoutRatio": "99,4%",
+      "payoutRatioLabel": "Uspješnost isplate šteta",
+      "speed": "24 sata",
+      "speedLabel": "Prosječna prva obrada",
+      "satisfaction": "4,9 / 5",
+      "satisfactionLabel": "Ocjena klijenata"
+    }
+  },
+  "services": {
+    "title": "Cjeloviti osigurateljni programi",
+    "subtitle": "Prilagođena rješenja osiguranja razvijena u partnerstvu s Generali osiguranjem d.d.",
+    "auto": {
+      "title": "Auto osiguranje & Puni Kasko",
+      "description": "Zakonito obvezno auto osiguranje (AO) uz prijenos do 50% bonusa, zaštitu bonusa, besplatnu 24/7 asistenciju i kasko pokriće.",
+      "rate": "već od 12,50 € / mj."
+    },
+    "property": {
+      "title": "Osiguranje doma i potresa",
+      "description": "Zaštita građevinskog objekta i stvari kućanstva od požara, oluje, izljeva vode i razornih posljedica potresa bez amortizacije.",
+      "rate": "već od 16,80 € / mj."
+    },
+    "life": {
+      "title": "Životno osiguranje ŽIVOT+",
+      "description": "Financijska sigurnost za obitelj uz kapitaliziranu štednju, pokriće 25 teških bolesti i dvostruku isplatu u slučaju nezgode.",
+      "rate": "već od 25,00 € / mj."
+    },
+    "health": {
+      "title": "Dopunsko i dodatno zdravstvo",
+      "description": "Bez čekanja na preglede u vrhunskim privatnim poliklinikama i bez ikakvih participacija u HZZO sustavu i bolnicama.",
+      "rate": "već od 14,00 € / mj."
+    }
+  },
+  "calculators": {
+    "title": "Interaktivni izračun premije",
+    "subtitle": "Prilagodite parametre u stvarnom vremenu i primite službenu ponudu s Generali jamstvom.",
+    "auto": {
+      "title": "Kalkulator auto osiguranja",
+      "power": "Snaga motora vozila (kW)",
+      "vehicleAge": "Starost vozila (godine)",
+      "bonus": "Stečeni bonus-malus razred (%)",
+      "usage": "Vrsta korištenja",
+      "private": "Privatno",
+      "commercial": "Poslovno / Komercijalno",
+      "addons": "Dopunska pokrića i zaštita",
+      "kasko": "Puni Kasko (štete, krađa, tuča)",
+      "assistance": "Pomoć na cesti 24/7 (RH i Europa)",
+      "glass": "Lom stakla bez franšize",
+      "bonusProtection": "Zaštita bonusa (prva šteta bez pada)"
+    },
+    "property": {
+      "title": "Kalkulator osiguranja imovine i doma",
+      "area": "Površina nekretnine (m²)",
+      "type": "Vrsta nekretnine",
+      "apartment": "Stan u stambenoj zgradi",
+      "house": "Obiteljska kuća",
+      "holiday": "Vikendica / Kuća za odmor",
+      "constructionYear": "Godina izgradnje",
+      "contents": "Osiguranje stvari kućanstva",
+      "earthquake": "Pokriće od rizika potresa (seizmički rider)",
+      "flood": "Pokriće od poplave i bujica"
+    },
+    "life": {
+      "title": "Kalkulator životnog osiguranja",
+      "age": "Dob ugovaratelja (godine)",
+      "duration": "Trajanje ugovora (godine)",
+      "sum": "Ugovorena osigurana svota (€)",
+      "smoker": "Status pušača (cigarete/duhan)",
+      "criticalIllness": "Uključi pokriće teških bolesti (25 dijagnoza)"
+    },
+    "health": {
+      "title": "Kalkulator dopunskog i dodatnog zdravstva",
+      "package": "Paket zdravstvenog osiguranja",
+      "basic": "Osnovno dopunsko (participacije i B-lista lijekova)",
+      "plus": "Plus paket (dopunsko + specijalistički pregledi + sistematski)"
+    },
+    "summary": {
+      "monthly": "Mjesečna premija",
+      "quarterly": "Kvartalna premija",
+      "annual": "Godišnja premija (uz popust)",
+      "requestQuote": "Zatraži službenu ponudu",
+      "bookAdvisor": "Dogovori razgovor sa savjetnikom",
+      "disclaimer": "Izračun je informativnog karaktera prema cjeniku Generali osiguranja d.d."
+    }
+  },
+  "claims": {
+    "title": "Digitalna prijava štete (FNOL)",
+    "subtitle": "Brza predaja odštetnog zahtjeva s učitavanjem foto i video dokaza uz praćenje u realnom vremenu.",
+    "step1": "1. Podaci o polici i osiguraniku",
+    "step2": "2. Okolnosti i opis štetnog događaja",
+    "step3": "3. Prilaganje foto i dokumentacijskih dokaza",
+    "step4": "4. Pregled i slanje zahtjeva",
+    "policyNumber": "Broj Generali police",
+    "incidentDate": "Datum i vrijeme nastanka štete",
+    "incidentLocation": "Mjesto štetnog događaja (adresa / grad)",
+    "policeInvolved": "Je li bila uključena policija?",
+    "description": "Detaljan opis nastanka i opsega štete",
+    "estimatedDamage": "Procjena iznosa štete (€)",
+    "submit": "Podnesi službeni zahtjev za odštetu",
+    "timeline": {
+      "submitted": "Zaprimljeno",
+      "assessing": "U procjeni",
+      "review": "Rješavanje",
+      "closed": "Zatvoreno"
+    }
+  },
+  "portal": {
+    "title": "Klijentski portal &bdquo;Moj Život&ldquo;",
+    "welcome": "Dobrodošli natrag,",
+    "activePolicies": "Moje aktivne Generali police",
+    "renewButton": "Zatraži produženje police",
+    "documentVault": "Sigurni repozitorij dokumenata",
+    "claimsHistory": "Povijest prijavljenih šteta",
+    "scheduleMeeting": "Dogovori sastanak s agentom",
+    "appointmentModal": "Rezervacija termina (Palmotićeva 76 / Video / Tel)"
+  },
+  "admin": {
+    "title": "Agency Back-Office & Broker CRM",
+    "leads": "Pristigli upiti i potencijalni klijenti",
+    "kanban": "Prodajni prodajni lijevak (Kanban)",
+    "claimsDesk": "Odjel za obradu i procjenu šteta",
+    "audit": "Regulatorni HANFA & IDD nadzor"
+  },
+  "auth": {
+    "login": "Prijava u sustav",
+    "register": "Registracija računa",
+    "email": "Email adresa",
+    "password": "Lozinka",
+    "fullName": "Ime i prezime",
+    "phone": "Kontakt telefon",
+    "oib": "Osobni identifikacijski broj (OIB)",
+    "role": "Korisnička uloga"
+  },
+  "common": {
+    "save": "Spremi",
+    "cancel": "Odustani",
+    "submit": "Pošalji",
+    "download": "Preuzmi",
+    "loading": "Učitavanje...",
+    "success": "Radnja je uspješno provedena!",
+    "error": "Došlo je do pogreške. Molimo pokušajte ponovno."
+  }
+}

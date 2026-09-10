@@ -1,0 +1,178 @@
+{
+  "brand": {
+    "name": "Agencija Život",
+    "legalName": "ŽIVOT Ltd. for Insurance Agency Services",
+    "tagline": "Leading Digital Insurance Agency & Financial Protection",
+    "description": "Authorized insurance agency partner of Generali osiguranje d.d. under HANFA regulatory supervision. Providing life, property, auto, and private health insurance.",
+    "address": "Junija Palmotića 76, 10000 Zagreb, Croatia",
+    "oib": "14329077049",
+    "mbs": "080514170",
+    "phone": "+385 1 4800 120",
+    "email": "osiguranje@agencija-zivot.hr",
+    "hanfaLicense": "Class: UP/I-983-02/24-01/12"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Insurance Programs",
+    "calculator": "Premium Calculator",
+    "claims": "File a Claim (FNOL)",
+    "about": "About Us",
+    "contact": "Contact",
+    "portal": "Client Portal",
+    "admin": "Broker CRM",
+    "login": "Sign In",
+    "register": "Register",
+    "logout": "Sign Out"
+  },
+  "hero": {
+    "badge": "Official Generali Partner &bull; HANFA License",
+    "title": "Smart insurance built for real life.",
+    "subtitle": "Combining world-class insurtech innovation with the heritage of Generali. Instant actuarial calculations, digital claims filing, and dedicated personal advisory in Zagreb.",
+    "ctaQuote": "Calculate Premium Online",
+    "ctaClaims": "File a Claim (FNOL)",
+    "ctaPortal": "Moj Život Portal",
+    "stats": {
+      "activePolicies": "12,400+",
+      "activePoliciesLabel": "Active Policies",
+      "payoutRatio": "99.4%",
+      "payoutRatioLabel": "Claims Settlement Rate",
+      "speed": "24 Hours",
+      "speedLabel": "Average First Review",
+      "satisfaction": "4.9 / 5",
+      "satisfactionLabel": "Customer Satisfaction"
+    }
+  },
+  "services": {
+    "title": "Comprehensive Insurance Solutions",
+    "subtitle": "Tailored coverage packages developed in partnership with Generali osiguranje d.d.",
+    "auto": {
+      "title": "Motor Insurance & Comprehensive Kasko",
+      "description": "Mandatory auto liability (AO) with bonus transfer up to 50%, bonus protection, free 24/7 roadside assistance, and full accidental collision cover.",
+      "rate": "from €12.50 / mo."
+    },
+    "property": {
+      "title": "Home & Earthquake Protection",
+      "description": "Total coverage for residential buildings and household goods against fire, storm, water leak, and devastating earthquake consequences.",
+      "rate": "from €16.80 / mo."
+    },
+    "life": {
+      "title": "ŽIVOT+ Capitalized Life Insurance",
+      "description": "Family financial security and capital endowment covering natural mortality, 25 critical illness conditions, and double traffic accident indemnity.",
+      "rate": "from €25.00 / mo."
+    },
+    "health": {
+      "title": "Supplemental & Private Health",
+      "description": "Skip hospital queues at top private specialist clinics with complete copay coverage for state healthcare and B-list prescription drugs.",
+      "rate": "from €14.00 / mo."
+    }
+  },
+  "calculators": {
+    "title": "Interactive Premium Calculator",
+    "subtitle": "Adjust parameters in real-time and request an official quote backed by Generali guarantee.",
+    "auto": {
+      "title": "Auto Insurance Calculator",
+      "power": "Engine Power (kW)",
+      "vehicleAge": "Vehicle Age (years)",
+      "bonus": "Acquired Bonus-Malus Class (%)",
+      "usage": "Vehicle Usage",
+      "private": "Private / Personal",
+      "commercial": "Business / Commercial",
+      "addons": "Riders and Optional Coverages",
+      "kasko": "Full Comprehensive Kasko",
+      "assistance": "24/7 Roadside Assistance (EU)",
+      "glass": "Zero-deductible Glass Breakage",
+      "bonusProtection": "Bonus Protection Guarantee"
+    },
+    "property": {
+      "title": "Property & Home Calculator",
+      "area": "Floor Area (m²)",
+      "type": "Property Category",
+      "apartment": "Apartment / Condominium",
+      "house": "Family Detached House",
+      "holiday": "Holiday Home / Villa",
+      "constructionYear": "Construction Year",
+      "contents": "Household Contents Cover",
+      "earthquake": "Earthquake Peril Rider",
+      "flood": "Torrential Flood & Water Rider"
+    },
+    "life": {
+      "title": "Life & Endowment Calculator",
+      "age": "Policyholder Age (years)",
+      "duration": "Contract Duration (years)",
+      "sum": "Agreed Sum Insured (€)",
+      "smoker": "Tobacco / Smoking Status",
+      "criticalIllness": "Include Critical Illness Cover (25 Conditions)"
+    },
+    "health": {
+      "title": "Supplemental & Private Health Calculator",
+      "package": "Health Care Tier",
+      "basic": "Basic Supplemental (Copays & B-list prescription drugs)",
+      "plus": "Plus Package (Supplemental + Specialist visits + Checkup)"
+    },
+    "summary": {
+      "monthly": "Monthly Premium",
+      "quarterly": "Quarterly Premium",
+      "annual": "Annual Premium (with discount)",
+      "requestQuote": "Request Official Binding Quote",
+      "bookAdvisor": "Book an Advisory Session",
+      "disclaimer": "Calculation is informative based on Generali osiguranje d.d. underwriting tariffs."
+    }
+  },
+  "claims": {
+    "title": "First Notice of Loss (FNOL)",
+    "subtitle": "Rapid digital claim reporting with evidentiary media upload and live real-time status tracking.",
+    "step1": "1. Policy & Insured Information",
+    "step2": "2. Incident Circumstances & Details",
+    "step3": "3. Evidentiary Photo & Document Upload",
+    "step4": "4. Review & Electronic Submission",
+    "policyNumber": "Generali Policy Number",
+    "incidentDate": "Incident Date and Time",
+    "incidentLocation": "Incident Location (Address / City)",
+    "policeInvolved": "Were police notified on scene?",
+    "description": "Detailed incident description & damage notes",
+    "estimatedDamage": "Estimated Damage Amount (€)",
+    "submit": "Submit Official Insurance Claim",
+    "timeline": {
+      "submitted": "Submitted",
+      "assessing": "In Assessment",
+      "review": "Settlement Review",
+      "closed": "Settled & Closed"
+    }
+  },
+  "portal": {
+    "title": "Moj Život Policyholder Portal",
+    "welcome": "Welcome back,",
+    "activePolicies": "My Active Generali Policies",
+    "renewButton": "Request Policy Renewal",
+    "documentVault": "Secure Document Vault",
+    "claimsHistory": "Claims History & Status",
+    "scheduleMeeting": "Schedule Meeting with Advisor",
+    "appointmentModal": "Appointment Booking (Zagreb Office / Video / Phone)"
+  },
+  "admin": {
+    "title": "Agency Back-Office & Broker CRM",
+    "leads": "Incoming Prospect Leads & Inquiries",
+    "kanban": "Sales Pipeline (Kanban)",
+    "claimsDesk": "Claims Inspection & Investigator Desk",
+    "audit": "Regulatory HANFA & IDD Audit Log"
+  },
+  "auth": {
+    "login": "Sign In to Portal",
+    "register": "Register Account",
+    "email": "Email Address",
+    "password": "Password",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "oib": "Tax Identification Number (OIB)",
+    "role": "User Role"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "download": "Download",
+    "loading": "Loading...",
+    "success": "Action completed successfully!",
+    "error": "An unexpected error occurred. Please try again."
+  }
+}
