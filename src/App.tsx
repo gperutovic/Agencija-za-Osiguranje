@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { ValiantHomePage } from './pages/valiant/ValiantHomePage';
-import { QuoteBindPage } from './pages/valiant/QuoteBindPage';
-import { CoiEnginePage } from './pages/valiant/CoiEnginePage';
-import { FnolClaimsPage } from './pages/valiant/FnolClaimsPage';
-import { EnterprisePortalPage } from './pages/valiant/EnterprisePortalPage';
-import { AppetitePage } from './pages/valiant/AppetitePage';
-import { ValiantLoginPage } from './pages/valiant/LoginPage';
+import { JobNavbar } from './components/layout/JobNavbar';
+import { JobFooter } from './components/layout/JobFooter';
+import { JobsListPage } from './pages/job/JobsListPage';
+import { JobDetailPage } from './pages/job/JobDetailPage';
+import { CompaniesListPage } from './pages/job/CompaniesListPage';
+import { CompanyDetailPage } from './pages/job/CompanyDetailPage';
+import { SalariesExplorerPage } from './pages/job/SalariesExplorerPage';
+import { InterviewsDatabasePage } from './pages/job/InterviewsDatabasePage';
+import { CommunityTalkPage } from './pages/job/CommunityTalkPage';
+import { PostJobPage } from './pages/job/PostJobPage';
+import { CandidateProfilePage } from './pages/job/CandidateProfilePage';
+import { EmployerAtsPage } from './pages/job/EmployerAtsPage';
 
-// Scroll to top on every route change
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -21,30 +25,43 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
-        {/* Module A: Interactive Bento-Grid Operational Homepage */}
-        <Route path="/" element={<ValiantHomePage />} />
+      <div className="min-h-screen bg-[#06080c] text-slate-100 flex flex-col font-sans selection:bg-[#fb6504] selection:text-white">
+        <JobNavbar />
+        <main className="flex-1">
+          <Routes>
+            {/* Core Job Advertising & Search Engine */}
+            <Route path="/" element={<JobsListPage />} />
+            <Route path="/jobs" element={<JobsListPage />} />
+            <Route path="/jobs/:id" element={<JobDetailPage />} />
 
-        {/* Module B: Intelligent 5-Stage Multi-Step Quote & Bind Funnel */}
-        <Route path="/quote" element={<QuoteBindPage />} />
+            {/* Glassdoor Company Hub & Reviews */}
+            <Route path="/companies" element={<CompaniesListPage />} />
+            <Route path="/companies/:id" element={<CompanyDetailPage />} />
 
-        {/* Module C: Instant ACORD 25 COI Generator */}
-        <Route path="/portal/coi" element={<CoiEnginePage />} />
+            {/* Levels.fyi & Glassdoor Salaries & Compensation Explorer */}
+            <Route path="/salaries" element={<SalariesExplorerPage />} />
 
-        {/* Module D: Autonomous FNOL Claims Triage with 911 Life-Safety Intercept */}
-        <Route path="/claims/file" element={<FnolClaimsPage />} />
-        <Route path="/claims" element={<FnolClaimsPage />} />
+            {/* Glassdoor Interview Questions & Prep Database */}
+            <Route path="/interviews" element={<InterviewsDatabasePage />} />
 
-        {/* Module E: Authenticated Enterprise Client Portal */}
-        <Route path="/portal" element={<EnterprisePortalPage />} />
+            {/* Fishbowl & Blind Workplace Community Talk */}
+            <Route path="/community" element={<CommunityTalkPage />} />
 
-        {/* Supporting Transactional Views */}
-        <Route path="/appetite" element={<AppetitePage />} />
-        <Route path="/login" element={<ValiantLoginPage />} />
+            {/* B2B Employer Portal & Job Wizard */}
+            <Route path="/post-a-job" element={<PostJobPage />} />
 
-        {/* Wildcard Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+            {/* Candidate Dashboard & Match Tracker */}
+            <Route path="/profile" element={<CandidateProfilePage />} />
+
+            {/* Employer ATS Pipeline & Candidate Screener */}
+            <Route path="/employer/dashboard" element={<EmployerAtsPage />} />
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/jobs" replace />} />
+          </Routes>
+        </main>
+        <JobFooter />
+      </div>
     </BrowserRouter>
   );
 };
