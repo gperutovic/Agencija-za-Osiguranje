@@ -25,16 +25,52 @@ export const INITIAL_ACCOUNT: CommercialAccount = {
   created_at: '2025-01-10T08:30:00Z',
 };
 
-// Institutional Commercial Policies In-Force
+// Institutional Policies In-Force (Croatian & European Admitted Paper)
 export const INITIAL_POLICIES: Policy[] = [
+  {
+    id: 'pol-ao-01',
+    account_id: 'acc-vanguard-01',
+    policy_number: 'HR-AO-2026-88192',
+    carrier_name: 'Croatia Osiguranje d.d.',
+    naic_number: 'HR-CO-1884',
+    iso_form_code: 'AO-KASKO-2026',
+    line_of_business: 'Auto Odgovornost (AO) & Puni Kasko',
+    aggregate_limit: 6450000,
+    occurrence_limit: 6450000,
+    deductible: 150,
+    effective_date: '2026-01-01',
+    expiration_date: '2027-01-01',
+    status: 'active',
+    annual_premium: 480,
+    insured_name: 'Ana Horvat (Vanguard Adria d.o.o.)',
+    created_at: '2026-01-01T00:00:00Z',
+  },
+  {
+    id: 'pol-dom-02',
+    account_id: 'acc-vanguard-01',
+    policy_number: 'HR-DOM-2025-4421',
+    carrier_name: 'Generali Osiguranje d.d.',
+    naic_number: 'HR-GEN-01',
+    iso_form_code: 'DOM-POTRES-2025',
+    line_of_business: 'Osiguranje Doma & Stvari od Potresa',
+    aggregate_limit: 250000,
+    occurrence_limit: 250000,
+    deductible: 0,
+    effective_date: '2025-10-15',
+    expiration_date: '2026-10-15',
+    status: 'pending_renewal',
+    annual_premium: 236,
+    insured_name: 'Ana Horvat (Vlaška 42, Zagreb)',
+    created_at: '2025-10-15T00:00:00Z',
+  },
   {
     id: 'pol-cgl-01',
     account_id: 'acc-vanguard-01',
     policy_number: 'VGR-CGL-2026-8801',
-    carrier_name: 'Chubb Federal Insurance Company',
+    carrier_name: 'Allianz Hrvatska d.d. / Chubb',
     naic_number: '22667',
     iso_form_code: 'CG 00 01 04 13',
-    line_of_business: 'Commercial General Liability',
+    line_of_business: 'Commercial General Liability & Odgovornost',
     aggregate_limit: 2000000,
     occurrence_limit: 1000000,
     deductible: 5000,
@@ -42,16 +78,17 @@ export const INITIAL_POLICIES: Policy[] = [
     expiration_date: '2027-01-01',
     status: 'active',
     annual_premium: 18650,
+    insured_name: 'Vanguard Adria & Cold-Chain Logistics d.o.o.',
     created_at: '2026-01-01T00:00:00Z',
   },
   {
     id: 'pol-cpp-02',
     account_id: 'acc-vanguard-01',
     policy_number: 'VGR-CPP-2025-4421',
-    carrier_name: 'Travelers Property Casualty Co. of America',
-    naic_number: '25674',
+    carrier_name: 'Wiener Städtische VIG',
+    naic_number: 'HR-WIG-02',
     iso_form_code: 'CP 00 10 10 12',
-    line_of_business: 'Commercial Property & Business Interruption',
+    line_of_business: 'Commercial Property & Skladišni Rizici',
     aggregate_limit: 12000000,
     occurrence_limit: 12000000,
     deductible: 25000,
@@ -59,6 +96,7 @@ export const INITIAL_POLICIES: Policy[] = [
     expiration_date: '2026-10-15',
     status: 'pending_renewal',
     annual_premium: 44200,
+    insured_name: 'Vanguard Adria d.o.o.',
     created_at: '2025-10-15T00:00:00Z',
   },
   {
@@ -76,6 +114,7 @@ export const INITIAL_POLICIES: Policy[] = [
     expiration_date: '2027-03-01',
     status: 'active',
     annual_premium: 26800,
+    insured_name: 'Vanguard Adria d.o.o.',
     created_at: '2026-03-01T00:00:00Z',
   },
 ];
@@ -368,6 +407,13 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
       },
     }));
 
+    // Async sync to Cloud Firestore
+    import('firebase/firestore').then(({ doc, setDoc }) => {
+      import('../api/firebase').then(({ db }) => {
+        setDoc(doc(db, 'policies', newPolicy.id), newPolicy).catch(() => {});
+      });
+    }).catch(() => {});
+
     return newPolicy;
   },
 
@@ -399,6 +445,14 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
     };
 
     set({ cois: [newCoi, ...cois] });
+
+    // Async sync to Cloud Firestore digital_cards collection
+    import('firebase/firestore').then(({ doc, setDoc }) => {
+      import('../api/firebase').then(({ db }) => {
+        setDoc(doc(db, 'digital_cards', newCoi.id), newCoi).catch(() => {});
+      });
+    }).catch(() => {});
+
     return newCoi;
   },
 
@@ -418,6 +472,14 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
     };
 
     set({ claims: [newClaim, ...claims] });
+
+    // Async sync to Cloud Firestore claims collection
+    import('firebase/firestore').then(({ doc, setDoc }) => {
+      import('../api/firebase').then(({ db }) => {
+        setDoc(doc(db, 'claims', newClaim.id), newClaim).catch(() => {});
+      });
+    }).catch(() => {});
+
     return newClaim;
   },
 
@@ -431,6 +493,14 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
     };
 
     set({ endorsements: [newReq, ...endorsements] });
+
+    // Async sync to Cloud Firestore endorsements
+    import('firebase/firestore').then(({ doc, setDoc }) => {
+      import('../api/firebase').then(({ db }) => {
+        setDoc(doc(db, 'endorsements', newReq.id), newReq).catch(() => {});
+      });
+    }).catch(() => {});
+
     return newReq;
   },
 }));
