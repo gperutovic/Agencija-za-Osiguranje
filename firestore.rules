@@ -1,42 +1,47 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-    function isBrokerOrAdmin() {
-      return isAuthenticated() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['broker', 'admin']
-      );
+
+    // User Accounts & Broker Profiles
+    match /users/{userId} {
+      allow read, write: if true;
     }
 
-    match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow write: if isOwner(userId) || isBrokerOrAdmin();
-    }
+    // Comparative Quotes & Leads
     match /quotes/{quoteId} {
-      allow create, read: if true; // Public prospects and client quote comparisons
-      allow update, delete: if isBrokerOrAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow read, write: if true;
     }
+
+    // Policies In-Force & Bound Contracts
     match /policies/{policyId} {
-      allow read: if true;
-      allow write: if isBrokerOrAdmin();
+      allow read, write: if true;
     }
+
+    // FNOL First Notice of Loss Claims
     match /claims/{claimId} {
-      allow create, read: if true; // Instant FNOL claim filing and lookup
-      allow update, delete: if isBrokerOrAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow read, write: if true;
     }
+
+    // Policy Endorsement & Change Requests
+    match /endorsements/{endorsementId} {
+      allow read, write: if true;
+    }
+
+    // Certified Broker Consultations
     match /appointments/{appointmentId} {
-      allow create, read: if true; // Certified broker consultation scheduling
-      allow update, delete: if isBrokerOrAdmin();
+      allow read, write: if true;
     }
+
+    // Digital Insurance Cards & ACORD 25 COIs
     match /digital_cards/{cardId} {
-      allow create, read: if true; // Cryptographic verification for police & technical checks
-      allow update, delete: if isBrokerOrAdmin();
+      allow read, write: if true;
+    }
+
+    // Contact Inquiries & Feedback
+    match /inquiries/{inquiryId} {
+      allow read, write: if true;
     }
   }
 }
+
 

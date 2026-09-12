@@ -16,6 +16,7 @@ import {
 import { useValiantStore } from '../../services/valiantStore';
 import { ValiantNavbar } from '../../components/valiant/Navbar';
 import { ValiantFooter } from '../../components/valiant/Footer';
+import { firestoreService } from '../../api/firestoreService';
 
 export const ValiantLoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -25,31 +26,60 @@ export const ValiantLoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activePersona, setActivePersona] = useState<string>('marcus');
 
-  const handleManualLogin = (e: React.FormEvent) => {
+  const handleManualLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate('/portal');
-    }, 800);
+    await firestoreService.saveUserProfile({
+      uid: `user-${Date.now()}`,
+      email,
+      displayName: email.split('@')[0],
+      role: 'policyholder',
+      phone: '+385 91 234 5678',
+      createdAt: new Date().toISOString(),
+    });
+    setIsLoading(false);
+    navigate('/portal');
   };
 
-  const handlePersonaLogin = (personaKey: 'marcus' | 'sarah' | 'david') => {
+  const handlePersonaLogin = async (personaKey: 'marcus' | 'sarah' | 'david') => {
     setActivePersona(personaKey);
     setIsLoading(true);
 
+    let selectedEmail = 'm.vance@vanguardlogistics.com';
+    let displayName = 'Robert Vance (Policyholder)';
+    let role: 'policyholder' | 'broker' | 'admin' = 'policyholder';
+    let uid = 'user-policyholder-1';
+
     if (personaKey === 'marcus') {
-      setEmail('m.vance@vanguardlogistics.com');
+      selectedEmail = 'm.vance@vanguardlogistics.com';
+      displayName = 'Robert Vance (VP of Risk)';
+      role = 'policyholder';
+      uid = 'user-policyholder-1';
     } else if (personaKey === 'sarah') {
-      setEmail('s.lin@chubb-commercial.com');
+      selectedEmail = 's.lin@chubb-commercial.com';
+      displayName = 'Sarah Lin, CPCU (Lead Underwriter)';
+      role = 'broker';
+      uid = 'user-broker-1';
     } else {
-      setEmail('d.sterling@lloyds-syndicate2003.com');
+      selectedEmail = 'd.sterling@lloyds-syndicate2003.com';
+      displayName = 'David Sterling (Senior Adjuster)';
+      role = 'broker';
+      uid = 'user-adjuster-1';
     }
 
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate('/portal');
-    }, 600);
+    setEmail(selectedEmail);
+
+    await firestoreService.saveUserProfile({
+      uid,
+      email: selectedEmail,
+      displayName,
+      role,
+      phone: '+385 1 4800 120',
+      createdAt: new Date().toISOString(),
+    });
+
+    setIsLoading(false);
+    navigate('/portal');
   };
 
   return (

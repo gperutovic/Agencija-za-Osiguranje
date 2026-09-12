@@ -8,13 +8,35 @@ import {
   query,
   where,
   orderBy,
+  onSnapshot,
   serverTimestamp,
+  Unsubscribe,
 } from 'firebase/firestore';
 import { db, dualStore } from './firebase';
-import { UserProfile, Policy, Claim, QuoteRequest, Appointment } from '../types/database';
+import { UserProfile, Policy as ConsumerPolicy, Claim as ConsumerClaim, QuoteRequest, Appointment } from '../types/database';
+import { 
+  Policy as CommercialPolicy, 
+  ClaimFnol, 
+  CoiCertificate, 
+  EndorsementRequest, 
+  CommercialAccount 
+} from '../types/valiant';
+
+export interface InquiryRecord {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  status: 'new' | 'contacted' | 'resolved';
+  createdAt: string;
+}
 
 export const firestoreService = {
-  // Quotes
+  // ==========================================
+  // 1. QUOTES & COMPARATIVE ENGINES
+  // ==========================================
   async getQuotes(): Promise<QuoteRequest[]> {
     try {
       const q = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
@@ -28,22 +50,22 @@ export const firestoreService = {
     return dualStore.getQuotes();
   },
 
-  async createQuote(quote: Omit<QuoteRequest, 'id' | 'createdAt'>): Promise<QuoteRequest> {
-    const id = `quote-${Date.now()}`;
+  async createQuote(quote: Omit<QuoteRequest, 'id' | 'createdAt'> | any): Promise<QuoteRequest> {
+    const id = quote.id || `quote-${Date.now()}`;
     const newQuote: QuoteRequest = {
       ...quote,
       id,
-      createdAt: new Date().toISOString(),
+      createdAt: quote.createdAt || new Date().toISOString(),
     };
     dualStore.saveQuote(newQuote);
 
     try {
       await setDoc(doc(db, 'quotes', id), {
         ...newQuote,
-        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
-    } catch {
-      // Local fallback saved
+    } catch (e) {
+      console.warn('Firestore createQuote offline fallback:', e);
     }
     return newQuote;
   },
@@ -56,20 +78,41 @@ export const firestoreService = {
       dualStore.saveQuote(existing);
     }
     try {
-      await updateDoc(doc(db, 'quotes', id), { status });
+      await updateDoc(doc(db, 'quotes', id), { 
+        status,
+        updatedAt: serverTimestamp() 
+      });
     } catch {
       // Fallback
     }
   },
 
-  // Policies
-  async getPolicies(userId?: string): Promise<Policy[]> {
+  subscribeQuotes(callback: (quotes: QuoteRequest[]) => void): Unsubscribe {
+    const q = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as QuoteRequest));
+          callback(data);
+        }
+      },
+      (err) => {
+        console.warn('Firestore subscribeQuotes error:', err);
+      }
+    );
+  },
+
+  // ==========================================
+  // 2. POLICIES IN-FORCE & COMMERCIAL CONTRACTS
+  // ==========================================
+  async getPolicies(userId?: string): Promise<any[]> {
     try {
       const colRef = collection(db, 'policies');
       const q = userId ? query(colRef, where('userId', '==', userId)) : colRef;
       const snap = await getDocs(q);
       if (!snap.empty) {
-        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Policy));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       }
     } catch {
       // Fallback
@@ -77,11 +120,38 @@ export const firestoreService = {
     return dualStore.getPolicies(userId);
   },
 
+  async createPolicy(policyData: any): Promise<any> {
+    const id = policyData.id || `pol-${Date.now()}`;
+    const newPolicy = {
+      ...policyData,
+      id,
+      created_at: policyData.created_at || new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    try {
+      await setDoc(doc(db, 'policies', id), newPolicy);
+    } catch (e) {
+      console.warn('Firestore createPolicy fallback:', e);
+    }
+    return newPolicy;
+  },
+
+  async updatePolicy(id: string, updates: Record<string, any>): Promise<void> {
+    try {
+      await updateDoc(doc(db, 'policies', id), {
+        ...updates,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Firestore updatePolicy fallback:', e);
+    }
+  },
+
   async renewPolicyRequest(policyId: string): Promise<void> {
     const policies = dualStore.getPolicies();
     const target = policies.find((p) => p.id === policyId);
     if (target) {
-      // Extend end date by 1 year and mark active
       const curEnd = new Date(target.endDate);
       curEnd.setFullYear(curEnd.getFullYear() + 1);
       target.endDate = curEnd.toISOString();
@@ -91,20 +161,40 @@ export const firestoreService = {
     try {
       await updateDoc(doc(db, 'policies', policyId), {
         status: 'active',
+        updated_at: new Date().toISOString(),
       });
     } catch {
       // Fallback
     }
   },
 
-  // Claims
-  async getClaims(userId?: string): Promise<Claim[]> {
+  subscribePolicies(callback: (policies: any[]) => void, userId?: string): Unsubscribe {
+    const colRef = collection(db, 'policies');
+    const q = userId ? query(colRef, where('userId', '==', userId)) : colRef;
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          callback(data);
+        }
+      },
+      (err) => {
+        console.warn('Firestore subscribePolicies error:', err);
+      }
+    );
+  },
+
+  // ==========================================
+  // 3. CLAIMS & AUTONOMOUS FNOL TRIAGE
+  // ==========================================
+  async getClaims(userId?: string): Promise<any[]> {
     try {
       const colRef = collection(db, 'claims');
       const q = userId ? query(colRef, where('userId', '==', userId)) : colRef;
       const snap = await getDocs(q);
       if (!snap.empty) {
-        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Claim));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       }
     } catch {
       // Fallback
@@ -112,54 +202,166 @@ export const firestoreService = {
     return dualStore.getClaims(userId);
   },
 
-  async createClaim(claimData: Omit<Claim, 'id' | 'createdAt' | 'updatedAt'>): Promise<Claim> {
-    const id = `claim-${Date.now()}`;
+  async createClaim(claimData: any): Promise<any> {
+    const id = claimData.id || `clm-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const now = new Date().toISOString();
-    const newClaim: Claim = {
+    const newClaim = {
       ...claimData,
       id,
-      createdAt: now,
+      createdAt: claimData.createdAt || now,
+      reported_date: claimData.reported_date || now,
       updatedAt: now,
     };
-    dualStore.saveClaim(newClaim);
 
     try {
       await setDoc(doc(db, 'claims', id), {
         ...newClaim,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
+        serverTimestamp: serverTimestamp(),
       });
-    } catch {
-      // Fallback
+    } catch (e) {
+      console.warn('Firestore createClaim fallback:', e);
     }
     return newClaim;
   },
 
   async updateClaimStatus(
     id: string,
-    status: Claim['status'],
+    status: string,
     brokerNotes?: string
   ): Promise<void> {
-    const claims = dualStore.getClaims();
-    const existing = claims.find((c) => c.id === id);
-    if (existing) {
-      existing.status = status;
-      if (brokerNotes !== undefined) existing.brokerNotes = brokerNotes;
-      existing.updatedAt = new Date().toISOString();
-      dualStore.saveClaim(existing);
-    }
     try {
       await updateDoc(doc(db, 'claims', id), {
         status,
         ...(brokerNotes !== undefined ? { brokerNotes } : {}),
-        updatedAt: serverTimestamp(),
+        updatedAt: new Date().toISOString(),
       });
     } catch {
       // Fallback
     }
   },
 
-  // Appointments
+  subscribeClaims(callback: (claims: any[]) => void, userId?: string): Unsubscribe {
+    const colRef = collection(db, 'claims');
+    const q = userId ? query(colRef, where('userId', '==', userId)) : colRef;
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          callback(data);
+        }
+      },
+      (err) => {
+        console.warn('Firestore subscribeClaims error:', err);
+      }
+    );
+  },
+
+  // ==========================================
+  // 4. CERTIFICATES & DIGITAL CARDS (ACORD 25)
+  // ==========================================
+  async getDigitalCards(): Promise<CoiCertificate[]> {
+    try {
+      const snap = await getDocs(collection(db, 'digital_cards'));
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as CoiCertificate));
+      }
+    } catch {
+      // Fallback
+    }
+    return [];
+  },
+
+  async createDigitalCard(cardData: CoiCertificate): Promise<CoiCertificate> {
+    const id = cardData.id || `coi-${Math.floor(10000 + Math.random() * 90000)}`;
+    const newCard: CoiCertificate = {
+      ...cardData,
+      id,
+      issued_at: cardData.issued_at || new Date().toISOString(),
+    };
+    try {
+      await setDoc(doc(db, 'digital_cards', id), newCard);
+    } catch (e) {
+      console.warn('Firestore createDigitalCard fallback:', e);
+    }
+    return newCard;
+  },
+
+  subscribeDigitalCards(callback: (cards: CoiCertificate[]) => void): Unsubscribe {
+    return onSnapshot(
+      collection(db, 'digital_cards'),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as CoiCertificate));
+          callback(data);
+        }
+      },
+      (err) => {
+        console.warn('Firestore subscribeDigitalCards error:', err);
+      }
+    );
+  },
+
+  // ==========================================
+  // 5. POLICY ENDORSEMENT REQUESTS
+  // ==========================================
+  async getEndorsements(): Promise<EndorsementRequest[]> {
+    try {
+      const snap = await getDocs(collection(db, 'endorsements'));
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as EndorsementRequest));
+      }
+    } catch {
+      // Fallback
+    }
+    return [];
+  },
+
+  async createEndorsement(req: Omit<EndorsementRequest, 'id' | 'requestedAt' | 'status'> | EndorsementRequest): Promise<EndorsementRequest> {
+    const id = (req as EndorsementRequest).id || `end-2026-${Math.floor(100 + Math.random() * 900)}`;
+    const newEndorsement: EndorsementRequest = {
+      ...req,
+      id,
+      requestedAt: (req as EndorsementRequest).requestedAt || new Date().toISOString(),
+      status: (req as EndorsementRequest).status || 'pending_review',
+    };
+    try {
+      await setDoc(doc(db, 'endorsements', id), newEndorsement);
+    } catch (e) {
+      console.warn('Firestore createEndorsement fallback:', e);
+    }
+    return newEndorsement;
+  },
+
+  async updateEndorsementStatus(id: string, status: EndorsementRequest['status']): Promise<void> {
+    try {
+      await updateDoc(doc(db, 'endorsements', id), {
+        status,
+        updatedAt: new Date().toISOString(),
+      });
+    } catch {
+      // Fallback
+    }
+  },
+
+  subscribeEndorsements(callback: (endorsements: EndorsementRequest[]) => void): Unsubscribe {
+    return onSnapshot(
+      collection(db, 'endorsements'),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as EndorsementRequest));
+          callback(data);
+        }
+      },
+      (err) => {
+        console.warn('Firestore subscribeEndorsements error:', err);
+      }
+    );
+  },
+
+  // ==========================================
+  // 6. CERTIFIED BROKER APPOINTMENTS
+  // ==========================================
   async getAppointments(): Promise<Appointment[]> {
     try {
       const snap = await getDocs(collection(db, 'appointments'));
@@ -172,9 +374,7 @@ export const firestoreService = {
     return dualStore.getAppointments();
   },
 
-  async createAppointment(
-    apt: Omit<Appointment, 'id' | 'createdAt'>
-  ): Promise<Appointment> {
+  async createAppointment(apt: Omit<Appointment, 'id' | 'createdAt'>): Promise<Appointment> {
     const id = `apt-${Date.now()}`;
     const newApt: Appointment = {
       ...apt,
@@ -194,10 +394,25 @@ export const firestoreService = {
     return newApt;
   },
 
-  // Users
+  subscribeAppointments(callback: (apts: Appointment[]) => void): Unsubscribe {
+    return onSnapshot(
+      collection(db, 'appointments'),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Appointment));
+          callback(data);
+        }
+      },
+      (err) => {
+        console.warn('Firestore subscribeAppointments error:', err);
+      }
+    );
+  },
+
+  // ==========================================
+  // 7. USER PROFILES & INSTITUTIONAL ACCOUNTS
+  // ==========================================
   async getUserProfile(uid: string): Promise<UserProfile | null> {
-    const user = dualStore.getUsers().find((u) => u.uid === uid);
-    if (user) return user;
     try {
       const snap = await getDoc(doc(db, 'users', uid));
       if (snap.exists()) {
@@ -206,7 +421,7 @@ export const firestoreService = {
     } catch {
       // Fallback
     }
-    return null;
+    return dualStore.getUsers().find((u) => u.uid === uid) || null;
   },
 
   async saveUserProfile(user: UserProfile): Promise<void> {
@@ -217,4 +432,80 @@ export const firestoreService = {
       // Fallback
     }
   },
+
+  // ==========================================
+  // 8. CONTACT INQUIRIES & LEAD CAPTURE
+  // ==========================================
+  async submitInquiry(inquiry: Omit<InquiryRecord, 'id' | 'status' | 'createdAt'>): Promise<InquiryRecord> {
+    const id = `inq-${Date.now()}`;
+    const record: InquiryRecord = {
+      ...inquiry,
+      id,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      await setDoc(doc(db, 'inquiries', id), record);
+    } catch (e) {
+      console.warn('Firestore submitInquiry fallback:', e);
+    }
+    return record;
+  },
+
+  async getInquiries(): Promise<InquiryRecord[]> {
+    try {
+      const snap = await getDocs(collection(db, 'inquiries'));
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as InquiryRecord));
+      }
+    } catch {
+      // Fallback
+    }
+    return [];
+  },
+
+  // ==========================================
+  // 9. AUTOMATIC CLOUD DATABASE SEEDER
+  // ==========================================
+  async seedFirestoreIfEmpty(seedData: {
+    policies: CommercialPolicy[];
+    claims: ClaimFnol[];
+    cois: CoiCertificate[];
+    endorsements: EndorsementRequest[];
+    account: CommercialAccount;
+    users: UserProfile[];
+  }): Promise<void> {
+    try {
+      const snap = await getDocs(collection(db, 'policies'));
+      if (snap.empty) {
+        console.log('Seeding Cloud Firestore with institutional insurance records...');
+        // Seed Policies
+        for (const policy of seedData.policies) {
+          await setDoc(doc(db, 'policies', policy.id), policy);
+        }
+        // Seed Claims
+        for (const claim of seedData.claims) {
+          await setDoc(doc(db, 'claims', claim.id), claim);
+        }
+        // Seed Certificates (COIs)
+        for (const coi of seedData.cois) {
+          await setDoc(doc(db, 'digital_cards', coi.id), coi);
+        }
+        // Seed Endorsements
+        for (const endorsement of seedData.endorsements) {
+          await setDoc(doc(db, 'endorsements', endorsement.id), endorsement);
+        }
+        // Seed Account
+        await setDoc(doc(db, 'users', seedData.account.id), seedData.account);
+        // Seed Users
+        for (const user of seedData.users) {
+          await setDoc(doc(db, 'users', user.uid), user);
+        }
+        console.log('Cloud Firestore successfully seeded!');
+      }
+    } catch (err) {
+      console.warn('Firestore seeding check skipped or offline:', err);
+    }
+  },
 };
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   AlertTriangle, 
@@ -23,7 +23,14 @@ import { useValiantStore } from '../../services/valiantStore';
 import { IncidentType, ClaimFnol, Policy } from '../../types/valiant';
 
 export const FnolClaimsPage: React.FC = () => {
-  const { policies, submitClaimFnol } = useValiantStore();
+  const { policies, submitClaimFnol, initFirestoreSync } = useValiantStore();
+
+  useEffect(() => {
+    const unsub = initFirestoreSync();
+    return () => {
+      unsub();
+    };
+  }, [initFirestoreSync]);
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 

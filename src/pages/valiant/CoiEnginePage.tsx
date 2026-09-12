@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
-  FileText, 
+  FileCheck2, 
   ShieldCheck, 
   Download, 
-  Lock, 
-  CheckCircle2, 
-  Plus, 
-  Search, 
   Copy, 
   Check, 
-  ExternalLink 
+  Search, 
+  FileText, 
+  CheckCircle2, 
+  Lock,
+  ArrowRight,
+  Sparkles,
+  Plus
 } from 'lucide-react';
 import { ValiantNavbar } from '../../components/valiant/Navbar';
 import { ValiantFooter } from '../../components/valiant/Footer';
@@ -19,7 +22,14 @@ import { generateAcord25Pdf } from '../../services/pdfGenerator';
 import { CoiCertificate } from '../../types/valiant';
 
 export const CoiEnginePage: React.FC = () => {
-  const { policies, cois, issueCoi } = useValiantStore();
+  const { policies, cois, issueCoi, initFirestoreSync } = useValiantStore();
+
+  useEffect(() => {
+    const unsub = initFirestoreSync();
+    return () => {
+      unsub();
+    };
+  }, [initFirestoreSync]);
 
   const [selectedPolicyId, setSelectedPolicyId] = useState(policies[0]?.id || 'pol-cgl-01');
   const [holderName, setHolderName] = useState('Prologis Americas Logistics Hub LLC');

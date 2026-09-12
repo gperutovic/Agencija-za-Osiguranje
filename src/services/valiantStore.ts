@@ -9,8 +9,11 @@ import {
   EndorsementRequest 
 } from '../types/valiant';
 import { getNaicsByCode } from './naicsData';
+import { firestoreService } from '../api/firestoreService';
+import { INITIAL_USERS } from '../api/firebase';
 
 // Realistic Institutional Commercial Account
+
 export const INITIAL_ACCOUNT: CommercialAccount = {
   id: 'acc-vanguard-01',
   company_name: 'Vanguard Logistics & Cold-Chain Solutions LLC',
@@ -231,6 +234,9 @@ interface ValiantState {
   claims: ClaimFnol[];
   endorsements: EndorsementRequest[];
 
+  isFirestoreConnected: boolean;
+  initFirestoreSync: () => () => void;
+
   setQuoteStage: (stage: number) => void;
   updateQuoteFormData: (data: Partial<QuoteFormData>) => void;
   generateCarrierQuotes: () => void;
@@ -252,6 +258,54 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
   cois: INITIAL_COIS,
   claims: INITIAL_CLAIMS,
   endorsements: INITIAL_ENDORSEMENTS,
+
+  isFirestoreConnected: false,
+
+  initFirestoreSync: () => {
+    // 1. Seed Cloud Firestore with initial institutional records if empty
+    firestoreService.seedFirestoreIfEmpty({
+      policies: INITIAL_POLICIES,
+      claims: INITIAL_CLAIMS,
+      cois: INITIAL_COIS,
+      endorsements: INITIAL_ENDORSEMENTS,
+      account: INITIAL_ACCOUNT,
+      users: INITIAL_USERS,
+    });
+
+    // 2. Attach real-time Firestore onSnapshot listeners
+    const unsubPolicies = firestoreService.subscribePolicies((remotePolicies) => {
+      if (remotePolicies && remotePolicies.length > 0) {
+        set({ policies: remotePolicies as Policy[] });
+      }
+    });
+
+    const unsubClaims = firestoreService.subscribeClaims((remoteClaims) => {
+      if (remoteClaims && remoteClaims.length > 0) {
+        set({ claims: remoteClaims as ClaimFnol[] });
+      }
+    });
+
+    const unsubCards = firestoreService.subscribeDigitalCards((remoteCards) => {
+      if (remoteCards && remoteCards.length > 0) {
+        set({ cois: remoteCards });
+      }
+    });
+
+    const unsubEndorsements = firestoreService.subscribeEndorsements((remoteEndorsements) => {
+      if (remoteEndorsements && remoteEndorsements.length > 0) {
+        set({ endorsements: remoteEndorsements });
+      }
+    });
+
+    set({ isFirestoreConnected: true });
+
+    return () => {
+      unsubPolicies();
+      unsubClaims();
+      unsubCards();
+      unsubEndorsements();
+    };
+  },
 
   setQuoteStage: (stage: number) => set({ currentQuoteStage: stage }),
 
@@ -353,6 +407,27 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
         },
       ];
 
+      // Save calculated quote to Cloud Firestore quotes collection
+      firestoreService.createQuote({
+        id: quotes[0]?.quoteId || `quote-${Date.now()}`,
+        customer: {
+          fullName: quoteFormData.contactName || 'Corporate Risk Manager',
+          email: quoteFormData.contactEmail || 'risk@enterprise.com',
+          phone: quoteFormData.contactPhone || '+385 1 4800 120',
+        },
+        type: 'property',
+        inputs: quoteFormData,
+        calculatedEstimate: {
+          annualPremium: quotes[0]?.annualPremium || 18000,
+          monthlyPremium: quotes[0]?.monthlyPremium || 1500,
+          currency: 'EUR',
+          deductible: quoteFormData.deductible,
+          coverageLimit: quoteFormData.aggregateLimit,
+        },
+        status: 'quoted',
+        createdAt: new Date().toISOString(),
+      });
+
       set({
         carrierQuotes: quotes,
         isCalculatingQuotes: false,
@@ -394,6 +469,7 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
       expiration_date: nextYear.toISOString().split('T')[0],
       status: 'active',
       annual_premium: selectedQuote ? selectedQuote.annualPremium : 18650,
+      insured_name: quoteFormData.companyName || 'Vanguard Adria d.o.o.',
       created_at: now.toISOString(),
     };
 
@@ -407,12 +483,8 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
       },
     }));
 
-    // Async sync to Cloud Firestore
-    import('firebase/firestore').then(({ doc, setDoc }) => {
-      import('../api/firebase').then(({ db }) => {
-        setDoc(doc(db, 'policies', newPolicy.id), newPolicy).catch(() => {});
-      });
-    }).catch(() => {});
+    // Directly create policy in Cloud Firestore
+    firestoreService.createPolicy(newPolicy);
 
     return newPolicy;
   },
@@ -446,12 +518,8 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
 
     set({ cois: [newCoi, ...cois] });
 
-    // Async sync to Cloud Firestore digital_cards collection
-    import('firebase/firestore').then(({ doc, setDoc }) => {
-      import('../api/firebase').then(({ db }) => {
-        setDoc(doc(db, 'digital_cards', newCoi.id), newCoi).catch(() => {});
-      });
-    }).catch(() => {});
+    // Directly create digital card / certificate in Cloud Firestore
+    firestoreService.createDigitalCard(newCoi);
 
     return newCoi;
   },
@@ -473,12 +541,8 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
 
     set({ claims: [newClaim, ...claims] });
 
-    // Async sync to Cloud Firestore claims collection
-    import('firebase/firestore').then(({ doc, setDoc }) => {
-      import('../api/firebase').then(({ db }) => {
-        setDoc(doc(db, 'claims', newClaim.id), newClaim).catch(() => {});
-      });
-    }).catch(() => {});
+    // Directly create claim in Cloud Firestore
+    firestoreService.createClaim(newClaim);
 
     return newClaim;
   },
@@ -494,12 +558,8 @@ export const useValiantStore = create<ValiantState>((set, get) => ({
 
     set({ endorsements: [newReq, ...endorsements] });
 
-    // Async sync to Cloud Firestore endorsements
-    import('firebase/firestore').then(({ doc, setDoc }) => {
-      import('../api/firebase').then(({ db }) => {
-        setDoc(doc(db, 'endorsements', newReq.id), newReq).catch(() => {});
-      });
-    }).catch(() => {});
+    // Directly create endorsement in Cloud Firestore
+    firestoreService.createEndorsement(newReq);
 
     return newReq;
   },

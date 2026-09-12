@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Building2, 
@@ -40,7 +40,15 @@ export const QuoteBindPage: React.FC = () => {
     generateCarrierQuotes,
     selectCarrier,
     bindPolicyAndExecute,
+    initFirestoreSync,
   } = useValiantStore();
+
+  useEffect(() => {
+    const unsub = initFirestoreSync();
+    return () => {
+      unsub();
+    };
+  }, [initFirestoreSync]);
 
   const [signatureName, setSignatureName] = useState(quoteFormData.contactName || '');
   const [signatureData, setSignatureData] = useState('');

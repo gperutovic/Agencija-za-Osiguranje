@@ -14,6 +14,7 @@ import { AppointmentScheduler } from '../components/portal/AppointmentScheduler'
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
+import { firestoreService } from '../api/firestoreService';
 
 export const ContactPage: React.FC = () => {
   const [activeMode, setActiveMode] = useState<'scheduler' | 'message'>('scheduler');
@@ -26,9 +27,10 @@ export const ContactPage: React.FC = () => {
     message: '',
   });
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     setSentMessage(true);
+    await firestoreService.submitInquiry(formData);
     setTimeout(() => {
       setSentMessage(false);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });

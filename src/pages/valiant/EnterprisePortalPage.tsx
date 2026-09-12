@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, 
@@ -40,8 +40,17 @@ export const EnterprisePortalPage: React.FC = () => {
     cois, 
     claims, 
     endorsements, 
-    submitEndorsement 
+    submitEndorsement,
+    initFirestoreSync,
+    isFirestoreConnected
   } = useValiantStore();
+
+  useEffect(() => {
+    const unsub = initFirestoreSync();
+    return () => {
+      unsub();
+    };
+  }, [initFirestoreSync]);
 
   const [activeTab, setActiveTab] = useState<'policies' | 'cois' | 'claims' | 'endorsements' | 'documents'>('policies');
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
@@ -122,11 +131,16 @@ export const EnterprisePortalPage: React.FC = () => {
         {/* Top Header & Account Information */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/[0.08]">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#fb6504]">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#fb6504]">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Commercial Policyholder Operations</span>
               <span className="text-slate-600">•</span>
               <span className="text-slate-400">EIN: {account.tax_id_ein}</span>
+              <span className="text-slate-600">•</span>
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                Cloud Firestore: Live Real-Time Sync
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               {account.company_name}
