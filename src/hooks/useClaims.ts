@@ -51,13 +51,17 @@ export function useClaims(userId?: string) {
     submitClaim: async ({
       claimData,
       files,
+      evidenceFiles,
     }: {
       claimData: Omit<Claim, 'id' | 'createdAt' | 'updatedAt'>;
       files?: File[];
+      evidenceFiles?: File[];
     }) => {
       let evidenceUrls: string[] = claimData.evidenceUrls || [];
-      if (files && files.length > 0) {
-        const uploaded = await storageService.uploadMultipleEvidence(claimData.claimNumber, files);
+      const filesToUpload = files || evidenceFiles || [];
+      if (filesToUpload.length > 0) {
+        const claimNum = claimData.claimNumber || `claim-${Date.now()}`;
+        const uploaded = await storageService.uploadMultipleEvidence(claimNum, filesToUpload);
         evidenceUrls = [...evidenceUrls, ...uploaded];
       }
       return createMutation.mutateAsync({

@@ -41,9 +41,9 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
 
   const filteredClaims = claims.filter((c) => {
     const matchesSearch =
-      c.claimNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.incidentLocation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.policyId.toLowerCase().includes(searchTerm.toLowerCase());
+      (c.claimNumber || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.incidentLocation || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.policyId || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
     return matchesSearch && matchesStatus;
   });

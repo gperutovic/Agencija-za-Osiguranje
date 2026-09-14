@@ -15,7 +15,8 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { usePolicies } from '../hooks/usePolicies';
 import { useClaims } from '../hooks/useClaims';
-import { PolicyCard } from '../components/portal/PolicyCard';
+import { PolicyVault } from '../components/portal/PolicyVault';
+import { DigitalClaimsFNOL } from '../components/portal/DigitalClaimsFNOL';
 import { RenewalAlertBanner } from '../components/portal/RenewalAlertBanner';
 import { DocumentVault } from '../components/portal/DocumentVault';
 import { AppointmentScheduler } from '../components/portal/AppointmentScheduler';
@@ -30,7 +31,7 @@ export const PortalDashboardPage: React.FC = () => {
   const { policies, renewPolicy, isLoading: policiesLoading } = usePolicies(user?.uid);
   const { claims, isLoading: claimsLoading } = useClaims(user?.uid);
 
-  const [activeTab, setActiveTab] = useState<'policies' | 'claims' | 'vault' | 'appointments'>('policies');
+  const [activeTab, setActiveTab] = useState<'policies' | 'fnol' | 'claims' | 'vault' | 'appointments'>('policies');
 
   const handleRenew = async (policyId: string) => {
     await renewPolicy(policyId);
@@ -89,9 +90,10 @@ export const PortalDashboardPage: React.FC = () => {
         {/* Tab Navigation */}
         <div className="flex flex-wrap gap-2 border-b border-white/[0.08] pb-3">
           {[
-            { id: 'policies', label: `Moje Police (${policies.length})`, icon: Shield },
-            { id: 'claims', label: `Moji Odštetni Zahtjevi (${claims.length})`, icon: AlertTriangle },
-            { id: 'vault', label: 'Trezor Dokumenata', icon: FileText },
+            { id: 'policies', label: `Trezor Polica (${policies.length})`, icon: Shield },
+            { id: 'fnol', label: 'Prijavi Štetu (Digitalni FNOL)', icon: AlertTriangle },
+            { id: 'claims', label: `Status Odštetnih Spisa (${claims.length})`, icon: Clock },
+            { id: 'vault', label: 'Pravni Dokumenti & IPID', icon: FileText },
             { id: 'appointments', label: 'Termin Savjetovanja', icon: Calendar },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -113,7 +115,7 @@ export const PortalDashboardPage: React.FC = () => {
           })}
         </div>
 
-        {/* TAB 1: POLICIES */}
+        {/* TAB 1: POLICIES VAULT */}
         {activeTab === 'policies' && (
           <div className="space-y-4">
             {policiesLoading ? (
@@ -121,28 +123,20 @@ export const PortalDashboardPage: React.FC = () => {
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2 text-[#ff7b1a]" />
                 <p className="text-sm">Učitavanje polica osiguranja...</p>
               </div>
-            ) : policies.length === 0 ? (
-              <div className="p-12 text-center bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl">
-                <Shield className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                <h3 className="font-bold text-white text-lg">Nemate aktivnih polica osiguranja</h3>
-                <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-6 font-mono">
-                  Izračunajte ponudu u našem kalkulatoru i ugovorite optimalno pokriće za vozilo, nekretninu ili zdravlje.
-                </p>
-                <Link to="/calculator">
-                  <Button variant="primary" className="font-mono font-bold">Pokreni kalkulator premije</Button>
-                </Link>
-              </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {policies.map((p: Policy) => (
-                  <PolicyCard key={p.id} policy={p} onRenew={handleRenew} />
-                ))}
-              </div>
+              <PolicyVault policies={policies} onRenewPolicy={handleRenew} />
             )}
           </div>
         )}
 
-        {/* TAB 2: CLAIMS */}
+        {/* TAB 2: DIGITAL FNOL CLAIMS */}
+        {activeTab === 'fnol' && (
+          <div className="space-y-4">
+            <DigitalClaimsFNOL />
+          </div>
+        )}
+
+        {/* TAB 3: CLAIMS TRACKING */}
         {activeTab === 'claims' && (
           <div className="space-y-6">
             {claims.length === 0 ? (
@@ -152,9 +146,13 @@ export const PortalDashboardPage: React.FC = () => {
                 <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-6 font-mono">
                   Sve je sigurno! Ako vam se dogodi nezgoda ili šteta na imovini, možete je prijaviti online u samo nekoliko minuta.
                 </p>
-                <Link to="/claims">
-                  <Button variant="danger" className="font-mono font-bold">Prijavi novu štetu (FNOL)</Button>
-                </Link>
+                <Button
+                  variant="danger"
+                  onClick={() => setActiveTab('fnol')}
+                  className="font-mono font-bold"
+                >
+                  Prijavi novu štetu (FNOL)
+                </Button>
               </div>
             ) : (
               <div className="space-y-6">

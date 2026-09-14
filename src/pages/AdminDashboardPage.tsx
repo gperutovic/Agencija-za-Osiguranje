@@ -10,10 +10,14 @@ import {
   FileText,
   DollarSign,
   Plus,
+  Bell,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useQuotes } from '../hooks/useQuotes';
 import { useClaims } from '../hooks/useClaims';
+import { usePolicies } from '../hooks/usePolicies';
+import { LeadPipelineKanban } from '../components/admin/LeadPipelineKanban';
+import { RenewalAlertEngine } from '../components/admin/RenewalAlertEngine';
 import { LeadsTable } from '../components/admin/LeadsTable';
 import { QuotePipelineBoard } from '../components/admin/QuotePipelineBoard';
 import { ClaimsManagementTable } from '../components/admin/ClaimsManagementTable';
@@ -27,8 +31,9 @@ export const AdminDashboardPage: React.FC = () => {
   const { user } = useAuth();
   const { quotes, updateQuoteStatus, isLoading: quotesLoading } = useQuotes();
   const { claims, updateClaimStatus, isLoading: claimsLoading } = useClaims();
+  const { policies } = usePolicies();
 
-  const [activeTab, setActiveTab] = useState<'leads' | 'pipeline' | 'claims' | 'audit'>('leads');
+  const [activeTab, setActiveTab] = useState<'kanban' | 'renewals' | 'leads' | 'claims' | 'audit'>('kanban');
 
   // Aggregated KPIs
   const newLeadsCount = quotes.filter((q: QuoteRequest) => q.status === 'new').length;
@@ -122,8 +127,9 @@ export const AdminDashboardPage: React.FC = () => {
         {/* Tab Controls */}
         <div className="flex flex-wrap gap-2 border-b border-white/[0.08] pb-3">
           {[
-            { id: 'leads', label: `Upiti i Klijenti (${quotes.length})`, icon: Users },
-            { id: 'pipeline', label: 'Kanban Prodajni Lijevak', icon: Kanban },
+            { id: 'kanban', label: 'Kanban Prodajni Lijevak (Live CRM)', icon: Kanban },
+            { id: 'renewals', label: 'Automatizacija Obnova Polica', icon: Bell },
+            { id: 'leads', label: `Svi Upiti & Klijenti (${quotes.length})`, icon: Users },
             { id: 'claims', label: `Likvidacija Šteta (${claims.length})`, icon: FileCheck },
             { id: 'audit', label: 'HANFA & IDD Usklađenost', icon: ShieldCheck },
           ].map((tab) => {
@@ -146,22 +152,27 @@ export const AdminDashboardPage: React.FC = () => {
           })}
         </div>
 
-        {/* TAB 1: LEADS TABLE */}
+        {/* TAB 1: LIVE KANBAN PIPELINE */}
+        {activeTab === 'kanban' && (
+          <LeadPipelineKanban />
+        )}
+
+        {/* TAB 2: RENEWAL ALERT ENGINE */}
+        {activeTab === 'renewals' && (
+          <RenewalAlertEngine policies={policies} />
+        )}
+
+        {/* TAB 3: LEADS TABLE */}
         {activeTab === 'leads' && (
           <LeadsTable quotes={quotes} onStatusChange={updateQuoteStatus} />
         )}
 
-        {/* TAB 2: PIPELINE BOARD */}
-        {activeTab === 'pipeline' && (
-          <QuotePipelineBoard quotes={quotes} onStatusChange={updateQuoteStatus} />
-        )}
-
-        {/* TAB 3: CLAIMS MANAGEMENT */}
+        {/* TAB 4: CLAIMS MANAGEMENT */}
         {activeTab === 'claims' && (
           <ClaimsManagementTable claims={claims} onUpdateStatus={updateClaimStatus} />
         )}
 
-        {/* TAB 4: REGULATORY AUDIT */}
+        {/* TAB 5: REGULATORY AUDIT */}
         {activeTab === 'audit' && (
           <RegulatoryAuditView />
         )}

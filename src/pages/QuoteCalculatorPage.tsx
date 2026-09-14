@@ -10,11 +10,13 @@ import {
   Zap,
   Clock,
   Sparkles,
+  HelpCircle,
 } from 'lucide-react';
-import { AutoQuoteCalculator } from '../components/calculators/AutoQuoteCalculator';
-import { PropertyQuoteCalculator } from '../components/calculators/PropertyQuoteCalculator';
+import { AutoQuoteWizard } from '../components/quotes/AutoQuoteWizard';
+import { PropertyQuoteWizard } from '../components/quotes/PropertyQuoteWizard';
+import { HealthQuoteWizard } from '../components/quotes/HealthQuoteWizard';
+import { NeedsAssessmentQuiz } from '../components/quotes/NeedsAssessmentQuiz';
 import { LifeQuoteCalculator } from '../components/calculators/LifeQuoteCalculator';
-import { HealthQuoteCalculator } from '../components/calculators/HealthQuoteCalculator';
 
 export const QuoteCalculatorPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,9 +28,10 @@ export const QuoteCalculatorPage: React.FC = () => {
 
   const tabs = [
     { id: 'auto', label: 'Auto & Kasko', icon: Car, desc: 'AO + Kasko + Asistencija' },
-    { id: 'property', label: 'Imovina & Potres', icon: Home, desc: 'Građevina + Stvari' },
-    { id: 'life', label: 'Životno ŽIVOT+', icon: Heart, desc: 'Zaštita + Štednja' },
-    { id: 'health', label: 'Zdravstveno', icon: Activity, desc: 'Specijalisti + Lijekovi' },
+    { id: 'property', label: 'Imovina & Dom', icon: Home, desc: 'Građevina + Stvari + Potres' },
+    { id: 'health', label: 'Zdravstveno', icon: Activity, desc: 'Dopunsko + Dodatno' },
+    { id: 'needs', label: 'Pametni Savjetnik', icon: HelpCircle, desc: 'Analiza potreba (IDD)' },
+    { id: 'life', label: 'Životno Osiguranje', icon: Heart, desc: 'Zaštita obitelji + Štednja' },
   ];
 
   return (
@@ -57,8 +60,8 @@ export const QuoteCalculatorPage: React.FC = () => {
       </section>
 
       {/* Interactive Tabs Bar */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeType === tab.id;
@@ -96,12 +99,13 @@ export const QuoteCalculatorPage: React.FC = () => {
       </section>
 
       {/* Active Calculator Container */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="transition-all duration-300">
-          {activeType === 'auto' && <AutoQuoteCalculator />}
-          {activeType === 'property' && <PropertyQuoteCalculator />}
+          {activeType === 'auto' && <AutoQuoteWizard />}
+          {activeType === 'property' && <PropertyQuoteWizard />}
+          {activeType === 'health' && <HealthQuoteWizard />}
+          {activeType === 'needs' && <NeedsAssessmentQuiz />}
           {activeType === 'life' && <LifeQuoteCalculator />}
-          {activeType === 'health' && <HealthQuoteCalculator />}
         </div>
 
         {/* Reassurance Features */}

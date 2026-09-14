@@ -34,7 +34,7 @@ export const ClaimsReportPage: React.FC = () => {
   const foundClaim = searchedClaimNumber
     ? claims.find(
         (c: Claim) =>
-          c.claimNumber.trim().toLowerCase() === searchedClaimNumber.trim().toLowerCase()
+          Boolean(c.claimNumber && c.claimNumber.trim().toLowerCase() === searchedClaimNumber.trim().toLowerCase())
       )
     : null;
 

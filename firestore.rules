@@ -41,6 +41,16 @@ service cloud.firestore {
     match /inquiries/{inquiryId} {
       allow read, write: if true;
     }
+
+    // High-Converting Online Leads from Wizards
+    match /leads/{leadId} {
+      allow read, write: if true;
+    }
+
+    // IDD Demands and Needs Assessments
+    match /needs_assessments/{assessmentId} {
+      allow read, write: if true;
+    }
   }
 }
 
