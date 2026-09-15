@@ -47,12 +47,12 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-slate-900 text-slate-100 selection:bg-blue-600 selection:text-white">
+      <div className="flex flex-col min-h-screen bg-[#06080c] text-slate-100 selection:bg-[#fb6504] selection:text-white">
         {/* Global Navigation Header with HANFA license & direct quoting triggers */}
         <Header onOpenQuote={handleOpenQuote} />
 
         {/* Dynamic Route Viewport */}
-        <main className="flex-1 bg-slate-50 text-slate-900">
+        <main className="flex-1 bg-[#06080c] text-slate-100">
           <Routes>
             {/* 1. Početna stranica - Vodeći InsurTech portal za usporedbu i ugovaranje */}
             <Route path="/" element={<HomePage />} />

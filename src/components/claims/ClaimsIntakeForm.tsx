@@ -5,11 +5,8 @@ import {
   Home,
   HeartPulse,
   Plane,
-  Camera,
   Upload,
   CheckCircle2,
-  AlertCircle,
-  FileText,
   Clock,
   ArrowRight,
   ArrowLeft,
@@ -17,6 +14,7 @@ import {
   Check,
   Search,
   PhoneCall,
+  FileCheck,
 } from 'lucide-react';
 import { isValidOIB } from '../../lib/validation';
 import { CARRIER_PARTNERS } from '../../data/mockData';
@@ -38,8 +36,8 @@ export const ClaimsIntakeForm: React.FC = () => {
   );
   const [incidentLocation, setIncidentLocation] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  
-  const [carrierName, setCarrierName] = useState<string>('Croatia osiguranje');
+
+  const [carrierName, setCarrierName] = useState<string>('Generali osiguranje d.d.');
   const [policyNumber, setPolicyNumber] = useState<string>('');
   const [policeReportFiled, setPoliceReportFiled] = useState<boolean>(false);
   const [policeStation, setPoliceStation] = useState<string>('');
@@ -62,13 +60,13 @@ export const ClaimsIntakeForm: React.FC = () => {
   const categories = [
     {
       id: 'collision' as ClaimCategory,
-      title: 'Prometna nezgoda (Auto / Kasko)',
+      title: 'Prometna nezgoda (Auto / Toyota VIP)',
       desc: 'Sudar, oštećenje na parkingu, lom stakla, tuča',
       icon: Car,
     },
     {
       id: 'property' as ClaimCategory,
-      title: 'Šteta na imovini',
+      title: 'Šteta na imovini (ŽIVOT Dom)',
       desc: 'Izljev vode, požar, potres, provala u stan ili kuću',
       icon: Home,
     },
@@ -147,62 +145,64 @@ export const ClaimsIntakeForm: React.FC = () => {
     // Simulate lookup
     setSearchResult({
       code: cleaned.startsWith('ST-') ? cleaned : 'ST-2026-481920',
-      carrier: 'Croatia osiguranje',
-      category: 'Prometna nezgoda (AO)',
-      status: 'Procjena štete u tijeku',
-      date: '14.09.2026',
-      assignedAdjuster: 'M. Horvat, dipl. ing. (procjenitelj)',
-      estimatedResolution: '2 do 4 radna dana',
+      carrier: 'Generali osiguranje d.d. (Agencija Život)',
+      category: 'Prometna nezgoda (Toyota VIP Kasko)',
+      status: 'Procjena štete u tijeku (Ovlašteni servis)',
+      date: '15.09.2026',
+      assignedAdjuster: 'M. Horvat, dipl. ing. (procjenitelj Generali)',
+      estimatedResolution: '2 radna dana',
       steps: [
-        { title: 'Prijava zaprimljena', done: true, date: '14.09.2026 09:15' },
-        { title: 'Verifikacija pokrića police', done: true, date: '14.09.2026 11:30' },
-        { title: 'Procjena štete i izvid', done: true, active: true, date: '15.09.2026' },
-        { title: 'Likvidacija i obračun', done: false, date: 'Očekivano 18.09.' },
-        { title: 'Isplata na IBAN', done: false, date: 'Završni korak' },
+        { title: 'Prijava zaprimljena u digitalni sustav', done: true, date: '15.09.2026 09:15' },
+        { title: 'Verifikacija pokrića i franšize', done: true, date: '15.09.2026 11:30' },
+        { title: 'Procjena štete i odobrenje popravka', done: true, active: true, date: '15.09.2026' },
+        { title: 'Likvidacija i naručivanje dijelova', done: false, date: 'Očekivano 17.09.' },
+        { title: 'Završna isplata na IBAN', done: false, date: 'Završni korak' },
       ],
     });
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
-      {/* Tab Switcher */}
+    <div className="w-full max-w-5xl mx-auto text-left">
+      {/* Tab Switcher (RankRush Dark Style) */}
       <div className="flex justify-center mb-8">
-        <div className="inline-flex p-1.5 bg-slate-100 rounded-xl border border-slate-200">
+        <div className="inline-flex p-1.5 bg-[#0a0d16] rounded-2xl border border-white/[0.08] shadow-lg">
           <button
             onClick={() => setActiveTab('new_claim')}
-            className={`flex items-center space-x-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl text-xs font-mono font-bold transition-all ${
               activeTab === 'new_claim'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#fb6504] text-white shadow-md shadow-[#fb6504]/20'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
-            <ShieldAlert className="w-4 h-4 text-emerald-600" />
-            <span>Nova prijava štete (FNOL)</span>
+            <ShieldAlert className="w-4 h-4" />
+            <span>01 &bull; NOVA PRIJAVA ŠTETE (FNOL)</span>
           </button>
           <button
             onClick={() => setActiveTab('track_status')}
-            className={`flex items-center space-x-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl text-xs font-mono font-bold transition-all ${
               activeTab === 'track_status'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Search className="w-4 h-4 text-blue-600" />
-            <span>Provjera statusa prijavljene štete</span>
+            <Search className="w-4 h-4 text-emerald-400" />
+            <span>02 &bull; PROVJERA STATUSA SPISA</span>
           </button>
         </div>
       </div>
 
       {activeTab === 'track_status' ? (
-        /* Status Tracker Tab */
-        <div className="bg-white rounded-2xl p-6 sm:p-10 border border-slate-200 shadow-sm">
-          <div className="max-w-xl mx-auto text-center">
-            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-100">
+        /* Status Tracker Tab (Dark Obsidian) */
+        <div className="bg-[#0a0d16] rounded-3xl p-6 sm:p-10 border border-white/[0.08] shadow-2xl">
+          <div className="max-w-xl mx-auto text-center space-y-4">
+            <div className="w-12 h-12 bg-white/[0.04] text-[#fb6504] rounded-2xl flex items-center justify-center mx-auto border border-white/10">
               <Search className="w-6 h-6" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-900">Praćenje statusa odštetnog zahtjeva</h2>
-            <p className="text-sm text-slate-600 mt-2">
-              Unesite jedinstveni broj prijave (npr. ST-2026-XXXXXX) ili OIB ugovaratelja za trenutni uvid u fazu obrade kod osiguratelja.
+            <h2 className="text-2xl sm:text-3xl font-black text-white">
+              Praćenje statusa odštetnog zahtjeva
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Unesite referentni broj predmeta (npr. ST-2026-XXXXXX) ili OIB ugovaratelja za trenutačan uvid u fazu obrade kod procjenitelja.
             </p>
 
             <form onSubmit={handleSearchClaim} className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -211,77 +211,80 @@ export const ClaimsIntakeForm: React.FC = () => {
                 placeholder="Npr. ST-2026-784192 ili OIB"
                 value={searchCode}
                 onChange={(e) => setSearchCode(e.target.value)}
-                className="flex-1 px-4 py-3 border border-slate-300 rounded-xl text-slate-900 font-medium text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase placeholder:normal-case"
+                className="flex-1 px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl text-white font-mono text-sm focus:border-[#fb6504] focus:outline-none uppercase placeholder:normal-case placeholder:text-slate-500"
               />
-              <Button variant="primary" type="submit" size="md">
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-sm shadow-md transition-all whitespace-nowrap"
+              >
                 Provjeri status
-              </Button>
+              </button>
             </form>
             {searchError && (
-              <p className="text-xs text-red-600 mt-2 text-left">{searchError}</p>
+              <p className="text-xs text-rose-400 text-left font-mono">{searchError}</p>
             )}
           </div>
 
           {searchResult && (
-            <div className="mt-10 pt-8 border-t border-slate-100 max-w-2xl mx-auto">
-              <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 mb-6 flex flex-wrap justify-between items-center gap-4">
+            <div className="mt-10 pt-8 border-t border-white/[0.08] max-w-2xl mx-auto space-y-6">
+              <div className="bg-white/[0.03] rounded-2xl p-5 border border-white/[0.08] flex flex-wrap justify-between items-center gap-4">
                 <div>
-                  <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+                  <span className="text-[10px] font-mono text-[#fb6504] uppercase tracking-wider block">
                     Broj predmeta
                   </span>
-                  <p className="text-lg font-extrabold text-slate-900">{searchResult.code}</p>
-                  <p className="text-xs text-slate-500">{searchResult.carrier} • {searchResult.category}</p>
+                  <p className="text-xl font-black text-white font-mono">{searchResult.code}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{searchResult.carrier}</p>
                 </div>
                 <div className="text-right">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                     <Clock className="w-3.5 h-3.5 mr-1" />
                     {searchResult.status}
                   </span>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-[11px] text-slate-400 mt-1 font-mono">
                     Procjenitelj: {searchResult.assignedAdjuster}
                   </p>
                 </div>
               </div>
 
               {/* Steps Progress */}
-              <div className="space-y-4">
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Kronologija rješavanja
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
+                  Kronologija rješavanja odštetnog spisa
                 </h4>
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {searchResult.steps.map((st: any, idx: number) => (
                     <div
                       key={idx}
-                      className={`flex items-center justify-between p-3.5 rounded-xl border ${
+                      className={`flex items-center justify-between p-3.5 rounded-xl border transition-all ${
                         st.active
-                          ? 'bg-blue-50/70 border-blue-200 text-blue-950 font-semibold'
+                          ? 'bg-[#fb6504]/10 border-[#fb6504]/30 text-white font-semibold'
                           : st.done
-                          ? 'bg-emerald-50/40 border-emerald-100 text-slate-700'
-                          : 'bg-slate-50 border-slate-100 text-slate-400'
+                          ? 'bg-white/[0.03] border-white/[0.08] text-slate-300'
+                          : 'bg-white/[0.01] border-white/[0.04] text-slate-400'
                       }`}
                     >
                       <div className="flex items-center space-x-3">
                         {st.done ? (
-                          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                         ) : st.active ? (
-                          <Clock className="w-5 h-5 text-blue-600 animate-spin shrink-0" />
+                          <Clock className="w-5 h-5 text-[#fb6504] animate-spin shrink-0" />
                         ) : (
-                          <div className="w-5 h-5 rounded-full border-2 border-slate-300 shrink-0" />
+                          <div className="w-5 h-5 rounded-full border border-white/20 shrink-0" />
                         )}
-                        <span className="text-sm">{st.title}</span>
+                        <span className="text-xs sm:text-sm">{st.title}</span>
                       </div>
-                      <span className="text-xs font-medium text-slate-500">{st.date}</span>
+                      <span className="text-[11px] font-mono text-slate-400">{st.date}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-6 p-4 rounded-xl bg-blue-50/60 border border-blue-100 flex items-start space-x-3 text-xs text-blue-900">
-                <PhoneCall className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-start space-x-3 text-xs text-slate-300">
+                <PhoneCall className="w-4 h-4 text-[#fb6504] shrink-0 mt-0.5" />
                 <p>
-                  Imate dodatnih pitanja ili novih računa? Javite se našem dežurnom agentu na{' '}
-                  <a href="tel:015550666" className="font-bold underline">
-                    01 555 0666
+                  Imate dodatnih računa ili pitanja? Dežurni savjetnik Agencije Život dostupan je na{' '}
+                  <a href="tel:014800120" className="text-emerald-400 font-bold underline font-mono">
+                    01 4800 120
                   </a>{' '}
                   uz poziv na broj predmeta {searchResult.code}.
                 </p>
@@ -291,80 +294,86 @@ export const ClaimsIntakeForm: React.FC = () => {
         </div>
       ) : submitSuccess ? (
         /* Confirmation Screen */
-        <div className="bg-white rounded-2xl p-8 sm:p-12 border border-slate-200 shadow-sm text-center max-w-2xl mx-auto">
-          <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md shadow-emerald-500/10">
+        <div className="bg-[#0a0d16] rounded-3xl p-8 sm:p-12 border border-white/[0.08] shadow-2xl text-center max-w-2xl mx-auto space-y-6">
+          <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/20 shadow-lg">
             <CheckCircle2 className="w-10 h-10" />
           </div>
 
-          <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-            Prijava uspješno zaprimljena u sustav
+          <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            Prijava uspješno zaprimljena u odjel likvidacije
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-4">
+          <h2 className="text-2xl sm:text-4xl font-black text-white">
             Vaš odštetni zahtjev je registriran
           </h2>
-          <p className="text-slate-600 text-sm mt-2 max-w-md mx-auto">
-            Zahtjev je proslijeđen odjelu likvidacije šteta u društvu{' '}
-            <span className="font-semibold text-slate-900">{carrierName}</span>.
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
+            Zahtjev je dodijeljen ovlaštenom procjenitelju osiguravajućeg društva{' '}
+            <strong className="text-white">{carrierName}</strong>.
           </p>
 
-          <div className="my-8 p-5 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+          <div className="p-5 bg-white/[0.03] rounded-2xl border border-white/[0.08] flex items-center justify-between">
             <div className="text-left">
-              <span className="text-xs text-slate-500 block">Referentni broj prijave:</span>
-              <span className="text-xl font-mono font-bold text-blue-700">{trackingCode}</span>
+              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
+                Službeni broj predmeta:
+              </span>
+              <span className="text-xl sm:text-2xl font-mono font-black text-[#fb6504]">
+                {trackingCode}
+              </span>
             </div>
             <button
               onClick={handleCopyCode}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50"
+              className="flex items-center space-x-1.5 px-3 py-2 bg-white/[0.05] border border-white/10 rounded-xl text-xs font-mono text-slate-200 hover:bg-white/[0.08]"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Kopirano!' : 'Kopiraj'}</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? 'Kopirano' : 'Kopiraj'}</span>
             </button>
           </div>
 
-          <div className="text-left bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2 text-xs text-slate-700 mb-8">
-            <p className="font-semibold text-blue-900">Sljedeći koraci:</p>
-            <p>1. U roku od 24 radna sata kontaktirat će vas ovlašteni procjenitelj radi dogovora izvida.</p>
-            <p>2. Potvrda prijave s uputama poslana je na vašu e-mail adresu: <span className="font-semibold">{claimantEmail || 'uneseni e-mail'}</span>.</p>
-            <p>3. Za dodatna pitanja naš tim za pomoć pri štetama dostupan je na 01 555 0666.</p>
+          <div className="text-left bg-white/[0.02] p-4 rounded-2xl border border-white/[0.06] space-y-2 text-xs text-slate-300">
+            <p className="font-mono font-bold text-white text-xs uppercase tracking-wider">
+              Upute za daljnji postupak:
+            </p>
+            <p>1. Procjenitelj će vas kontaktirati unutar 24 radna sata radi termina izvida.</p>
+            <p>2. Potvrda prijave poslana je na: <span className="font-mono text-white font-bold">{claimantEmail || 'uneseni e-mail'}</span>.</p>
+            <p>3. Za hitne vuče ili zamjensko Toyota vozilo nazovite 24/7 dežurni broj 01 555 0666.</p>
           </div>
 
-          <Button
-            variant="primary"
+          <button
             onClick={() => {
               setSubmitSuccess(false);
               setStep(1);
             }}
+            className="px-6 py-3 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-sm shadow-md transition-all"
           >
             Nova prijava štete
-          </Button>
+          </button>
         </div>
       ) : (
-        /* Multi-Step Intake Form */
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        /* Multi-Step Intake Form (RankRush Dark Style) */
+        <div className="bg-[#0a0d16] rounded-3xl border border-white/[0.08] shadow-2xl overflow-hidden">
           {/* Progress Header */}
-          <div className="bg-slate-50 border-b border-slate-200 p-6">
+          <div className="bg-[#080c14] border-b border-white/[0.07] p-6">
             <div className="flex justify-between items-center max-w-3xl mx-auto">
               {[
                 { s: 1, label: 'Vrsta štete' },
-                { s: 2, label: 'Podaci o polici' },
+                { s: 2, label: 'Polica & Ugovor' },
                 { s: 3, label: 'Podnositelj & IBAN' },
                 { s: 4, label: 'Dokazi & Slanje' },
               ].map((item) => (
                 <div key={item.s} className="flex flex-col items-center flex-1">
                   <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center font-mono font-bold text-xs transition-all ${
                       step === item.s
-                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20 ring-4 ring-blue-100'
+                        ? 'bg-[#fb6504] text-white shadow-lg shadow-[#fb6504]/25 ring-2 ring-white/20'
                         : step > item.s
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-slate-200 text-slate-500'
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-white/[0.05] text-slate-400 border border-white/10'
                     }`}
                   >
-                    {step > item.s ? <CheckCircle2 className="w-5 h-5" /> : item.s}
+                    {step > item.s ? <CheckCircle2 className="w-5 h-5" /> : `0${item.s}`}
                   </div>
                   <span
-                    className={`text-xs mt-2 hidden sm:block ${
-                      step === item.s ? 'font-bold text-blue-900' : 'text-slate-500'
+                    className={`text-[11px] font-mono mt-2 hidden sm:block ${
+                      step === item.s ? 'font-bold text-white' : 'text-slate-400'
                     }`}
                   >
                     {item.label}
@@ -374,13 +383,13 @@ export const ClaimsIntakeForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-6 sm:p-10">
+          <div className="p-6 sm:p-10 space-y-6">
             {/* Step 1: Category & Details */}
             {step === 1 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">1. O kakvoj se vrsti štete radi?</h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <h3 className="text-xl font-bold text-white">1. O kakvoj se vrsti štete radi?</h3>
+                  <p className="text-xs text-slate-400 mt-1 font-mono">
                     Odaberite kategoriju osiguranja pod kojom prijavljujete štetni događaj.
                   </p>
                 </div>
@@ -394,29 +403,29 @@ export const ClaimsIntakeForm: React.FC = () => {
                         key={cat.id}
                         type="button"
                         onClick={() => setCategory(cat.id)}
-                        className={`p-4 rounded-xl text-left border-2 transition-all flex items-start space-x-3.5 ${
+                        className={`p-4 rounded-2xl text-left border transition-all flex items-start space-x-3.5 ${
                           isSelected
-                            ? 'border-blue-600 bg-blue-50/50 shadow-sm'
-                            : 'border-slate-200 hover:border-slate-300 bg-white'
+                            ? 'border-[#fb6504] bg-[#fb6504]/10 shadow-md'
+                            : 'border-white/[0.08] hover:border-white/20 bg-white/[0.02]'
                         }`}
                       >
                         <div
-                          className={`p-2.5 rounded-lg shrink-0 ${
-                            isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
+                          className={`p-2.5 rounded-xl shrink-0 ${
+                            isSelected ? 'bg-[#fb6504] text-white' : 'bg-white/[0.05] text-slate-400'
                           }`}
                         >
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900">{cat.title}</p>
-                          <p className="text-xs text-slate-500 mt-1">{cat.desc}</p>
+                          <p className="text-sm font-bold text-white">{cat.title}</p>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">{cat.desc}</p>
                         </div>
                       </button>
                     );
                   })}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-white/[0.08]">
                   <Input
                     label="Datum nastanka štete"
                     type="date"
@@ -434,7 +443,7 @@ export const ClaimsIntakeForm: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-800 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
                     Kratak opis štetnog događaja
                   </label>
                   <textarea
@@ -442,7 +451,7 @@ export const ClaimsIntakeForm: React.FC = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Opišite što se točno dogodilo, oštećenja na vozilu/objektu, te eventualne druge sudionike..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#fb6504]"
                     required
                   />
                 </div>
@@ -453,24 +462,26 @@ export const ClaimsIntakeForm: React.FC = () => {
             {step === 2 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">2. Podaci o osiguranju</h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <h3 className="text-xl font-bold text-white">2. Podaci o osiguranju</h3>
+                  <p className="text-xs text-slate-400 mt-1 font-mono">
                     Navedite osiguratelja kod kojeg imate ugovorenu policu.
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-800 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
                     Odaberite osiguravajuće društvo
                   </label>
                   <select
                     value={carrierName}
                     onChange={(e) => setCarrierName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#080c14] border border-white/10 text-sm font-medium text-white focus:outline-none focus:border-[#fb6504]"
                   >
+                    <option value="Generali osiguranje d.d.">Generali osiguranje d.d. (Strateški partner)</option>
+                    <option value="Toyota VIP Kasko (Generali)">Toyota VIP Kasko (Toyota Centar Zagreb)</option>
                     {CARRIER_PARTNERS.map((carrier) => (
                       <option key={carrier.id} value={carrier.name}>
-                        {carrier.name} ({carrier.marketShare} udjela)
+                        {carrier.name}
                       </option>
                     ))}
                   </select>
@@ -482,26 +493,26 @@ export const ClaimsIntakeForm: React.FC = () => {
                     placeholder="npr. 010-94827104"
                     value={policyNumber}
                     onChange={(e) => setPolicyNumber(e.target.value)}
-                    helperText="Možete pronaći na vrhu police ili u digitalnom novčaniku"
+                    helperText="Možete pronaći na polici ili u portalu Moj Život"
                   />
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <span className="text-xs font-semibold text-slate-500 block mb-1">
+                  <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/[0.06]">
+                    <span className="text-[11px] font-mono text-[#fb6504] font-bold block mb-1">
                       Nemate broj police kod sebe?
                     </span>
-                    <p className="text-xs text-slate-600">
+                    <p className="text-xs text-slate-400 leading-relaxed">
                       Bez brige, naši agenti će po vašem OIB-u automatski pronaći aktivnu policu u registru osiguratelja.
                     </p>
                   </div>
                 </div>
 
                 {/* Police Report */}
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                <div className="p-4 bg-white/[0.02] rounded-2xl border border-white/[0.06] space-y-3">
                   <label className="flex items-center justify-between cursor-pointer">
                     <div>
-                      <span className="text-sm font-semibold text-slate-900 block">
+                      <span className="text-xs font-bold text-white block">
                         Je li policija obavila očevid na mjestu događaja?
                       </span>
-                      <span className="text-xs text-slate-500">
+                      <span className="text-[11px] text-slate-400">
                         Za veće štete ili ozlijeđene osobe obavezan je policijski zapisnik.
                       </span>
                     </div>
@@ -509,12 +520,12 @@ export const ClaimsIntakeForm: React.FC = () => {
                       type="checkbox"
                       checked={policeReportFiled}
                       onChange={(e) => setPoliceReportFiled(e.target.checked)}
-                      className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer"
+                      className="w-5 h-5 text-[#fb6504] rounded border-white/20 bg-white/5 focus:ring-[#fb6504] cursor-pointer"
                     />
                   </label>
 
                   {policeReportFiled && (
-                    <div className="pt-3 border-t border-slate-200">
+                    <div className="pt-3 border-t border-white/[0.06]">
                       <Input
                         label="Nadležna policijska postaja (PP)"
                         placeholder="npr. I. Prometna policijska postaja Zagreb (Heinzelova)"
@@ -531,8 +542,8 @@ export const ClaimsIntakeForm: React.FC = () => {
             {step === 3 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">3. Podaci za isplatu i kontakt</h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <h3 className="text-xl font-bold text-white">3. Podaci za isplatu i kontakt</h3>
+                  <p className="text-xs text-slate-400 mt-1 font-mono">
                     Unesite podatke oštećenika ili ugovaratelja za isplatu odštete.
                   </p>
                 </div>
@@ -583,7 +594,7 @@ export const ClaimsIntakeForm: React.FC = () => {
                     placeholder="HR12 3456 7890 1234 5678 9"
                     value={iban}
                     onChange={(e) => setIban(e.target.value.toUpperCase())}
-                    helperText="Odšteta se isplaćuje izravno na vaš tekući ili žiro račun nakon odobrenja"
+                    helperText="Odšteta se isplaćuje izravno na vaš račun nakon odobrenja"
                     required
                   />
                 </div>
@@ -594,14 +605,14 @@ export const ClaimsIntakeForm: React.FC = () => {
             {step === 4 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">4. Prilaganje dokaza i potvrda</h3>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Priložite fotografije oštećenja, europsko izvješće ili račune kako biste ubrzali obradu.
+                  <h3 className="text-xl font-bold text-white">4. Prilaganje dokaza i potvrda</h3>
+                  <p className="text-xs text-slate-400 mt-1 font-mono">
+                    Priložite fotografije oštećenja, europsko izvješće ili račune.
                   </p>
                 </div>
 
                 {/* Upload Zone */}
-                <div className="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl p-6 sm:p-8 text-center bg-slate-50/50 cursor-pointer transition-colors relative">
+                <div className="border-2 border-dashed border-white/20 hover:border-[#fb6504] rounded-3xl p-6 sm:p-8 text-center bg-white/[0.02] cursor-pointer transition-colors relative">
                   <input
                     type="file"
                     multiple
@@ -609,25 +620,27 @@ export const ClaimsIntakeForm: React.FC = () => {
                     onChange={handleFileUploadMock}
                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                   />
-                  <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 bg-white/[0.05] text-[#fb6504] rounded-2xl flex items-center justify-center mx-auto mb-3 border border-white/10">
                     <Upload className="w-6 h-6" />
                   </div>
-                  <p className="text-sm font-bold text-slate-800">
+                  <p className="text-sm font-bold text-white">
                     Kliknite ovdje ili odvucite datoteke za prijenos
                   </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    JPG, PNG, PDF do 15 MB po datoteci (fotografije oštećenja, europsko izvješće)
+                  <p className="text-xs text-slate-400 mt-1 font-mono">
+                    JPG, PNG, PDF do 15 MB po datoteci
                   </p>
                 </div>
 
                 {/* File list */}
                 {files.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-xs font-bold text-slate-600 uppercase">Priloženi dokumenti ({files.length}):</p>
+                    <p className="text-xs font-mono font-bold text-slate-300 uppercase">
+                      Priloženi dokumenti ({files.length}):
+                    </p>
                     <div className="space-y-1.5">
                       {files.map((name, i) => (
-                        <div key={i} className="flex items-center space-x-2 text-xs text-slate-700 bg-slate-100 p-2 rounded-lg">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <div key={i} className="flex items-center space-x-2 text-xs text-slate-200 bg-white/[0.04] p-2.5 rounded-xl border border-white/10 font-mono">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                           <span>{name}</span>
                         </div>
                       ))}
@@ -636,26 +649,26 @@ export const ClaimsIntakeForm: React.FC = () => {
                 )}
 
                 {/* Summary Box */}
-                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-2">
-                  <p className="font-bold text-slate-900 text-sm mb-2">Sažetak prijave:</p>
+                <div className="bg-white/[0.03] p-5 rounded-2xl border border-white/[0.08] text-xs text-slate-300 space-y-2 font-mono">
+                  <p className="font-bold text-white text-sm mb-2">Sažetak prijave:</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div><span className="text-slate-500">Kategorija:</span> {category}</div>
-                    <div><span className="text-slate-500">Osiguratelj:</span> {carrierName}</div>
-                    <div><span className="text-slate-500">Podnositelj:</span> {claimantName || 'Nije navedeno'}</div>
-                    <div><span className="text-slate-500">OIB:</span> {claimantOib || 'Nije navedeno'}</div>
-                    <div><span className="text-slate-500">Telefon:</span> {claimantPhone || 'Nije navedeno'}</div>
-                    <div><span className="text-slate-500">IBAN:</span> {iban || 'Nije navedeno'}</div>
+                    <div><span className="text-slate-400">Kategorija:</span> {category}</div>
+                    <div><span className="text-slate-400">Osiguratelj:</span> {carrierName}</div>
+                    <div><span className="text-slate-400">Podnositelj:</span> {claimantName || 'Nije navedeno'}</div>
+                    <div><span className="text-slate-400">OIB:</span> {claimantOib || 'Nije navedeno'}</div>
+                    <div><span className="text-slate-400">Telefon:</span> {claimantPhone || 'Nije navedeno'}</div>
+                    <div><span className="text-slate-400">IBAN:</span> {iban || 'Nije navedeno'}</div>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-3 text-xs text-slate-500">
+                <div className="flex items-start space-x-3 text-xs text-slate-400">
                   <input
                     type="checkbox"
                     required
                     id="consent"
-                    className="w-4 h-4 mt-0.5 text-blue-600 rounded border-slate-300 cursor-pointer"
+                    className="w-4 h-4 mt-0.5 text-[#fb6504] rounded border-white/20 bg-white/5 cursor-pointer"
                   />
-                  <label htmlFor="consent" className="cursor-pointer">
+                  <label htmlFor="consent" className="cursor-pointer leading-relaxed">
                     Potvrđujem točnost navedenih podataka i suglasan sam s obradom osobnih podataka u svrhu rješavanja odštetnog zahtjeva sukladno Zakonu o osiguranju i GDPR propisima.
                   </label>
                 </div>
@@ -663,31 +676,39 @@ export const ClaimsIntakeForm: React.FC = () => {
             )}
 
             {/* Navigation buttons */}
-            <div className="flex justify-between items-center pt-8 mt-8 border-t border-slate-100">
+            <div className="flex justify-between items-center pt-8 mt-8 border-t border-white/[0.08]">
               {step > 1 ? (
-                <Button variant="ghost" size="md" onClick={handleStepBack}>
-                  <ArrowLeft className="w-4 h-4 mr-1.5" />
+                <button
+                  type="button"
+                  onClick={handleStepBack}
+                  className="px-5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/10 text-white font-bold text-xs flex items-center gap-1.5 transition-all"
+                >
+                  <ArrowLeft className="w-4 h-4" />
                   <span>Natrag</span>
-                </Button>
+                </button>
               ) : (
                 <div />
               )}
 
               {step < 4 ? (
-                <Button variant="primary" size="md" onClick={handleStepNext}>
+                <button
+                  type="button"
+                  onClick={handleStepNext}
+                  className="px-6 py-2.5 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-xs shadow-md flex items-center gap-1.5 transition-all"
+                >
                   <span>Nastavi</span>
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
-                </Button>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               ) : (
-                <Button
-                  variant="emerald"
-                  size="md"
+                <button
+                  type="button"
                   onClick={handleSubmitClaim}
                   disabled={!claimantName || !claimantOib || !claimantPhone}
+                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md flex items-center gap-1.5 transition-all disabled:opacity-50"
                 >
                   <span>Pošalji prijavu štete</span>
-                  <CheckCircle2 className="w-4 h-4 ml-1.5" />
-                </Button>
+                  <CheckCircle2 className="w-4 h-4" />
+                </button>
               )}
             </div>
           </div>

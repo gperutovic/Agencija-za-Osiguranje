@@ -7,38 +7,37 @@ import { QuoteModal } from '../components/quotes/QuoteModal';
 import { InsuranceCategory } from '../lib/types';
 
 export const metadata = {
-  title: 'Agencija za osiguranje d.o.o. | Usporedba i ugovaranje polica u Hrvatskoj',
+  title: 'Agencija Život | Generali Partner & Toyota Osiguranja Zagreb (HANFA ZO-88912)',
   description:
-    'Službeni registrirani distributer osiguranja pri HANFA (ZO-88912). Usporedite ponude 10 vodećih osiguravajućih kuća za auto, imovinu, zdravlje i putovanja.',
+    'Vodeća digitalna agencija za osiguranje u Zagrebu. Ekskluzivni Generali partner i Toyota VIP Kasko program. Izračunajte premiju, preuzmite zelenu kartu i prijavite štetu u 60 sekundi.',
   keywords: [
-    'osiguranje',
-    'auto osiguranje',
-    'kasko kalkulator',
-    'prijepis vozila kalkulator',
-    'osiguranje imovine',
+    'agencija život',
+    'generali osiguranje zagreb',
+    'toyota kasko osiguranje',
+    'toyota centar zagreb osiguranje',
+    'auto osiguranje izračun',
+    'kalkulator prijepisa vozila',
+    'osiguranje od potresa zagreb',
     'dopunsko zdravstveno',
-    'prijava štete',
-    'kompare',
-    'laqo',
-    'croatia osiguranje',
-    'allianz',
+    'prijava štete fnol',
+    'hanfa zo-88912',
   ],
 };
 
 const jsonLdData = {
   '@context': 'https://schema.org',
   '@type': 'InsuranceAgency',
-  name: 'Agencija za osiguranje d.o.o.',
-  alternateName: 'Insurtech Hrvatska',
+  name: 'Agencija Život - ŽIVOT d.o.o.',
+  alternateName: 'Agencija Život za poslove zastupanja u osiguranju',
   url: 'https://agencija-za-osiguranje.web.app',
-  logo: 'https://agencija-za-osiguranje.web.app/logo.png',
+  logo: 'https://agencija-za-osiguranje.web.app/logo.svg',
   description:
-    'Vodeći hrvatski digitalni portal za usporedbu i ugovaranje polica osiguranja. Licencirano od strane HANFA (Registar ZO-88912).',
-  telephone: '+38515550666',
-  email: 'podrska@agencija-za-osiguranje.hr',
+    'Ovlašteni i licencirani partner Generali osiguranja d.d. i Toyota Centra Zagreb pod nadzorom HANFA-e (Registar ZO-88912). Vrhunska rješenja za auto, kasko, dom i životno osiguranje.',
+  telephone: '+38514800120',
+  email: 'osiguranje@agencija-zivot.hr',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Radnička cesta 80',
+    streetAddress: 'Junija Palmotića 76',
     addressLocality: 'Zagreb',
     postalCode: '10000',
     addressCountry: 'HR',
@@ -58,20 +57,27 @@ const jsonLdData = {
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Police osiguranja',
+    name: 'Programi osiguranja',
     itemListElement: [
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Obvezno auto osiguranje (AO) i Kasko',
+          name: 'Toyota VIP Kasko & Obvezno Auto Osiguranje',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Osiguranje imovine i doma',
+          name: 'ŽIVOT Dom & Zaštita od potresa',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'ŽIVOT+ Mješovito životno osiguranje',
         },
       },
       {
@@ -79,13 +85,6 @@ const jsonLdData = {
         itemOffered: {
           '@type': 'Service',
           name: 'Dopunsko i dodatno zdravstveno osiguranje',
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Putno zdravstveno osiguranje',
         },
       },
     ],
@@ -106,7 +105,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-600 selection:text-white antialiased font-sans">
+    <div className="min-h-screen flex flex-col bg-[#06080c] text-slate-100 selection:bg-[#fb6504] selection:text-white antialiased font-sans">
       {/* Structured Schema.org Data */}
       <script
         type="application/ld+json"
@@ -117,7 +116,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <Header onOpenQuote={handleOpenQuote} />
 
       {/* Page Content Body */}
-      <main className="flex-1 w-full">{children}</main>
+      <main className="flex-1 w-full bg-[#06080c]">{children}</main>
 
       {/* Global Footer with HANFA & IDD disclosures */}
       <Footer />
