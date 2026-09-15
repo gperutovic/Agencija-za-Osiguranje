@@ -13,14 +13,15 @@ import {
   Unsubscribe,
 } from 'firebase/firestore';
 import { db, dualStore } from './firebase';
-import { UserProfile, Policy as ConsumerPolicy, Claim as ConsumerClaim, QuoteRequest, Appointment } from '../types/database';
 import { 
-  Policy as CommercialPolicy, 
-  ClaimFnol, 
-  CoiCertificate, 
-  EndorsementRequest, 
-  CommercialAccount 
-} from '../types/valiant';
+  UserProfile, 
+  Policy as ConsumerPolicy, 
+  Claim as ConsumerClaim, 
+  QuoteRequest, 
+  Appointment,
+  CoiCertificate,
+  EndorsementRequest
+} from '../types/database';
 
 export interface InquiryRecord {
   id: string;
@@ -468,12 +469,12 @@ export const firestoreService = {
   // 9. AUTOMATIC CLOUD DATABASE SEEDER
   // ==========================================
   async seedFirestoreIfEmpty(seedData: {
-    policies: CommercialPolicy[];
-    claims: ClaimFnol[];
-    cois: CoiCertificate[];
-    endorsements: EndorsementRequest[];
-    account: CommercialAccount;
-    users: UserProfile[];
+    policies: ConsumerPolicy[];
+    claims: ConsumerClaim[];
+    cois?: CoiCertificate[];
+    endorsements?: EndorsementRequest[];
+    account?: any;
+    users?: UserProfile[];
   }): Promise<void> {
     try {
       const snap = await getDocs(collection(db, 'policies'));
@@ -484,22 +485,32 @@ export const firestoreService = {
           await setDoc(doc(db, 'policies', policy.id), policy);
         }
         // Seed Claims
-        for (const claim of seedData.claims) {
-          await setDoc(doc(db, 'claims', claim.id), claim);
+        if (seedData.claims) {
+          for (const claim of seedData.claims) {
+            await setDoc(doc(db, 'claims', claim.id), claim);
+          }
         }
         // Seed Certificates (COIs)
-        for (const coi of seedData.cois) {
-          await setDoc(doc(db, 'digital_cards', coi.id), coi);
+        if (seedData.cois) {
+          for (const coi of seedData.cois) {
+            await setDoc(doc(db, 'digital_cards', coi.id), coi);
+          }
         }
         // Seed Endorsements
-        for (const endorsement of seedData.endorsements) {
-          await setDoc(doc(db, 'endorsements', endorsement.id), endorsement);
+        if (seedData.endorsements) {
+          for (const endorsement of seedData.endorsements) {
+            await setDoc(doc(db, 'endorsements', endorsement.id), endorsement);
+          }
         }
         // Seed Account
-        await setDoc(doc(db, 'users', seedData.account.id), seedData.account);
+        if (seedData.account) {
+          await setDoc(doc(db, 'users', seedData.account.id), seedData.account);
+        }
         // Seed Users
-        for (const user of seedData.users) {
-          await setDoc(doc(db, 'users', user.uid), user);
+        if (seedData.users) {
+          for (const user of seedData.users) {
+            await setDoc(doc(db, 'users', user.uid), user);
+          }
         }
         console.log('Cloud Firestore successfully seeded!');
       }

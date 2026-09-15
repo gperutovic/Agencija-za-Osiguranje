@@ -133,3 +133,31 @@ export interface Appointment {
   status: 'scheduled' | 'completed' | 'cancelled';
   createdAt: string;
 }
+
+export type EndorsementType = 
+  | 'add_vehicle' 
+  | 'add_location' 
+  | 'equipment_schedule' 
+  | 'change_limits' 
+  | 'change_entity' 
+  | 'limit_increase';
+
+export interface EndorsementRequest {
+  id: string;
+  policyId: string;
+  requestType: EndorsementType;
+  details: string;
+  effectiveDate: string;
+  status: 'pending_review' | 'approved' | 'bound';
+  requestedAt: string;
+}
+
+export interface CoiCertificate {
+  id: string;
+  policy_id: string;
+  holder_name: string;
+  holder_address: string;
+  special_provisions?: string;
+  issued_at: string;
+  certificate_number: string;
+}
