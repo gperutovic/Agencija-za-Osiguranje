@@ -1,100 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
   <defs>
-    <!-- Premium Gradients -->
-    <linearGradient id="shieldGradient" x1="20" y1="10" x2="100" y2="110" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0F172A"/>
-      <stop offset="100%" stop-color="#1E293B"/>
+    <!-- Teal Primary Gradient -->
+    <linearGradient id="shieldTealGrad" x1="15" y1="10" x2="105" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#0D9488" />
+      <stop offset="60%" stopColor="#0F766E" />
+      <stop offset="100%" stopColor="#115E59" />
     </linearGradient>
-    <linearGradient id="goldGradient" x1="30" y1="20" x2="90" y2="100" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#F59E0B"/>
-      <stop offset="50%" stop-color="#D97706"/>
-      <stop offset="100%" stop-color="#B45309"/>
+
+    <!-- Azure Innovation Accent Gradient -->
+    <linearGradient id="azureGlowGrad" x1="30" y1="15" x2="90" y2="85" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="100%" stopColor="#0EA5E9" />
     </linearGradient>
-    <linearGradient id="accentGradient" x1="40" y1="30" x2="80" y2="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#10B981"/>
-      <stop offset="100%" stop-color="#059669"/>
+
+    <!-- Warm Gold Key & Security Accent -->
+    <linearGradient id="goldKeyGrad" x1="45" y1="35" x2="75" y2="85" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#FBBF24" />
+      <stop offset="100%" stopColor="#F59E0B" />
     </linearGradient>
-    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.15"/>
+
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F766E" flood-opacity="0.25" />
     </filter>
   </defs>
 
-  <!-- EMBLEM ICON (Left) -->
-  <g transform="translate(10, 8)" filter="url(#subtleShadow)">
-    <!-- Outer Shield Border -->
-    <path d="M52 6 L92 22 C92 60 72 88 52 98 C32 88 12 60 12 22 Z" 
-          fill="url(#shieldGradient)" 
-          stroke="url(#goldGradient)" 
-          stroke-width="2.5" 
-          stroke-linejoin="round"/>
+  <!-- Outer Protective Shield Silhouette -->
+  <path
+    d="M60 8 C88 8 108 24 108 52 C108 82 82 104 60 114 C38 104 12 82 12 52 C12 24 32 8 60 8 Z"
+    fill="url(#shieldTealGrad)"
+    filter="url(#softGlow)"
+  />
 
-    <!-- Inner Protective Inset Line -->
-    <path d="M52 13 L85 26 C85 58 68 81 52 90 C36 81 19 58 19 26 Z" 
-          fill="none" 
-          stroke="#FFFFFF" 
-          stroke-width="1" 
-          stroke-opacity="0.2"/>
+  <!-- Subtle Inner Shield Trim Line -->
+  <path
+    d="M60 16 C82 16 98 29 98 52 C98 76 76 95 60 103 C44 95 22 76 22 52 C22 29 38 16 60 16 Z"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="1.5"
+    stroke-opacity="0.2"
+  />
 
-    <!-- Stylized Monogram "Ž" (Život) with Architectural Precision -->
-    <!-- Top Horizontal Bar of Ž -->
-    <path d="M34 33 H70 L63 41 H34 Z" fill="url(#goldGradient)"/>
-    
-    <!-- Central Dynamic Diagonal -->
-    <path d="M63 41 L40 67 H51 L70 45 L63 41 Z" fill="#FFFFFF"/>
-    
-    <!-- Bottom Base Bar of Ž -->
-    <path d="M34 67 H68 L61 74 H34 Z" fill="url(#goldGradient)"/>
+  <!-- Stylized Geometric "A" Architecture (The Shield Crossbeams) -->
+  <!-- Left Pillar of 'A' -->
+  <path
+    d="M60 22 L36 78 H48 L56 58 H64 L72 78 H84 L60 22 Z"
+    fill="url(#azureGlowGrad)"
+    opacity="0.95"
+  />
 
-    <!-- Diacritic Caron (Kvačica) - Heraldički znak sigurnosti i rasta (List/Kruna) -->
-    <path d="M52 20 L58 26 L52 28 L46 26 Z" fill="url(#accentGradient)"/>
-    
-    <!-- Central Trust Node -->
-    <circle cx="52" cy="54" r="3.5" fill="url(#accentGradient)"/>
-  </g>
+  <!-- Apex Keyhole Opening (Negative Space & Key Bow) -->
+  <path
+    d="M60 36 L54 52 H66 L60 36 Z"
+    fill="#0F766E"
+  />
 
-  <!-- TYPOGRAPHIC WORDMARK (Right) -->
-  <g transform="translate(130, 24)">
-    <!-- Primary Brand Name -->
-    <text x="0" y="32" 
-          font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
-          font-size="30" 
-          font-weight="900" 
-          letter-spacing="0.5" 
-          fill="#0F172A">
-      AGENCIJA ŽIVOT
-    </text>
+  <!-- Integrated Subtle Key Mechanism (Unlocking Protection) -->
+  <!-- Circular Key Bow Head -->
+  <circle cx="60" cy="56" r="6.5" fill="url(#goldKeyGrad)" />
+  <circle cx="60" cy="56" r="3" fill="#0F766E" />
 
-    <!-- Subtitle: Corporate Activity -->
-    <text x="2" y="52" 
-          font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
-          font-size="11" 
-          font-weight="700" 
-          letter-spacing="3" 
-          fill="#475569">
-      ZASTUPANJE U OSIGURANJU
-    </text>
+  <!-- Key Shaft Downward through the Base of 'A' -->
+  <rect x="58.5" y="62" width="3" height="22" rx="1.5" fill="url(#goldKeyGrad)" />
 
-    <!-- Accreditation & Partner Tagline -->
-    <g transform="translate(2, 68)">
-      <!-- HANFA Badge -->
-      <rect x="0" y="0" width="112" height="18" rx="4" fill="#0F172A" />
-      <text x="8" y="12" 
-            font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" 
-            font-size="9" 
-            font-weight="700" 
-            fill="#10B981">
-        HANFA ZO-88912
-      </text>
-
-      <!-- Generali Partner Indicator -->
-      <text x="122" y="13" 
-            font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
-            font-size="10" 
-            font-weight="700" 
-            letter-spacing="0.5" 
-            fill="#B91C1C">
-        GENERALI PARTNER &bull; TOYOTA VIP
-      </text>
-    </g>
-  </g>
+  <!-- Key Bits / Teeth (Unlocking safety notch) -->
+  <rect x="61.5" y="74" width="5.5" height="3" rx="1" fill="url(#goldKeyGrad)" />
+  <rect x="61.5" y="80" width="4" height="2.5" rx="0.8" fill="url(#goldKeyGrad)" />
 </svg>

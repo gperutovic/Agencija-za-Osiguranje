@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
 
             {/* Official HANFA Badge Callout */}
             <div className="p-4 bg-slate-900/90 rounded-2xl border border-slate-800 text-xs space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-[11px] font-mono">
+              <div className="flex items-center gap-2 text-teal-400 font-bold text-[11px] font-mono">
                 <Award className="w-4 h-4 shrink-0" />
                 <span>HANFA REGISTAR DISTRIBUTERA OSIGURANJA: {AGENCY_DETAILS.hanfaRegisterNumber}</span>
               </div>
@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/portal" className="hover:text-white transition-colors">
-                  Klijentski portal "Moj Život"
+                  Klijentski portal "Moj Portal"
                 </Link>
               </li>
               <li>
