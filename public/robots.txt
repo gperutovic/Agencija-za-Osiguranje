@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /portal/settings
+Disallow: /api/
+
+# AI Search & Answer Engine Crawlers
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /portal
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /portal
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /portal
+
+Sitemap: https://agencija-za-osiguranje.web.app/sitemap.xml

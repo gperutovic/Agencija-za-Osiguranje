@@ -3,44 +3,52 @@ import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { CookieConsent } from '../components/layout/CookieConsent';
 import { StickyMobileFAB } from '../components/ui/StickyMobileFAB';
+import { ConversationalWizard } from '../components/conversational/ConversationalWizard';
 import { QuoteModal } from '../components/quotes/QuoteModal';
 import { InsuranceCategory } from '../lib/types';
+import { AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
-  title: 'Agencija Život | Generali Partner & Toyota Osiguranja Zagreb (HANFA ZO-88912)',
+  title: 'Agencija Život | Ovlašteni partner za osiguranje u Hrvatskoj (HANFA ZO-88912)',
   description:
-    'Vodeća digitalna agencija za osiguranje u Zagrebu. Ekskluzivni Generali partner i Toyota VIP Kasko program. Izračunajte premiju, preuzmite zelenu kartu i prijavite štetu u 60 sekundi.',
+    'Vodeći hrvatski digitalni portal za usporedbu i ugovaranje osiguranja. Uštedite na dopunskom zdravstvenom nakon poskupljenja HZZO-a, osigurajte vozilo uz 50% bonusa i zaštitite dom u 60 sekundi.',
   keywords: [
-    'agencija život',
-    'generali osiguranje zagreb',
-    'toyota kasko osiguranje',
-    'toyota centar zagreb osiguranje',
-    'auto osiguranje izračun',
-    'kalkulator prijepisa vozila',
-    'osiguranje od potresa zagreb',
-    'dopunsko zdravstveno',
-    'prijava štete fnol',
+    'dopunsko zdravstveno osiguranje 2026',
+    'hzzo poskupljenje dopunskog 15 eura',
+    'auto osiguranje kalkulator zagreb',
+    'kasko osiguranje usporedba',
+    'toyota kasko zagreb',
+    'osiguranje imovine i potres',
     'hanfa zo-88912',
+    'agencija život',
+    'generali osiguranje partner',
   ],
 };
 
-const jsonLdData = {
+const rootInsuranceAgencySchema = {
   '@context': 'https://schema.org',
   '@type': 'InsuranceAgency',
-  name: 'Agencija Život - ŽIVOT d.o.o.',
-  alternateName: 'Agencija Život za poslove zastupanja u osiguranju',
-  url: 'https://agencija-za-osiguranje.web.app',
+  '@id': 'https://agencija-za-osiguranje.web.app/#agency',
+  name: AGENCY_DETAILS.brandName,
+  legalName: AGENCY_DETAILS.legalName,
+  url: AGENCY_DETAILS.websiteUrl,
   logo: 'https://agencija-za-osiguranje.web.app/logo.svg',
+  image: 'https://agencija-za-osiguranje.web.app/og-image.jpg',
   description:
-    'Ovlašteni i licencirani partner Generali osiguranja d.d. i Toyota Centra Zagreb pod nadzorom HANFA-e (Registar ZO-88912). Vrhunska rješenja za auto, kasko, dom i životno osiguranje.',
+    'Ovlašteni distributer osiguranja upisan u registar HANFA-e pod brojem ZO-88912. Specijalizirani za aktuarsku usporedbu polica Generali, Croatia i Allianz osiguranja uz 0 € naknade za klijenta.',
   telephone: '+38514800120',
-  email: 'osiguranje@agencija-zivot.hr',
+  email: AGENCY_DETAILS.email,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Junija Palmotića 76',
-    addressLocality: 'Zagreb',
-    postalCode: '10000',
+    streetAddress: AGENCY_DETAILS.address,
+    addressLocality: AGENCY_DETAILS.city,
+    postalCode: AGENCY_DETAILS.postalCode,
     addressCountry: 'HR',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: AGENCY_DETAILS.geoCoordinates.latitude,
+    longitude: AGENCY_DETAILS.geoCoordinates.longitude,
   },
   openingHoursSpecification: [
     {
@@ -50,41 +58,37 @@ const jsonLdData = {
       closes: '18:00',
     },
   ],
-  priceRange: '€€',
+  priceRange: '€',
   areaServed: {
     '@type': 'Country',
     name: 'Croatia',
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Programi osiguranja',
+    name: 'Katalog osigurateljnih usluga',
     itemListElement: [
       {
         '@type': 'Offer',
         itemOffered: {
-          '@type': 'Service',
-          name: 'Toyota VIP Kasko & Obvezno Auto Osiguranje',
+          '@type': 'FinancialProduct',
+          name: 'Dopunsko zdravstveno osiguranje 2026',
+          description: 'Privatna alternativa HZZO polici od 6,50 € mjesečno s pokrićem B-liste lijekova.',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
-          '@type': 'Service',
-          name: 'ŽIVOT Dom & Zaštita od potresa',
+          '@type': 'FinancialProduct',
+          name: 'Obvezno i Kasko auto osiguranje',
+          description: 'Usporedba ponuda vodećih osiguratelja uz trenutni prijenos 50% bonusa i Toyota VIP program.',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
-          '@type': 'Service',
-          name: 'ŽIVOT+ Mješovito životno osiguranje',
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Dopunsko i dodatno zdravstveno osiguranje',
+          '@type': 'FinancialProduct',
+          name: 'Osiguranje doma i potresa',
+          description: 'Zaštita stana i obiteljske kuće na novu građevinsku vrijednost bez franšize.',
         },
       },
     ],
@@ -96,7 +100,8 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState<boolean>(false);
+  const [isSavjetnikOpen, setIsSavjetnikOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<InsuranceCategory>('auto');
 
   const handleOpenQuote = (cat?: InsuranceCategory) => {
@@ -104,30 +109,47 @@ export default function RootLayout({ children }: RootLayoutProps) {
     setIsQuoteModalOpen(true);
   };
 
+  const handleOpenSavjetnik = (cat?: 'auto' | 'dopunsko' | 'imovina') => {
+    if (cat === 'auto' || cat === 'dopunsko' || cat === 'imovina') {
+      setSelectedCategory(cat as InsuranceCategory);
+    }
+    setIsSavjetnikOpen(true);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#06080c] text-slate-100 selection:bg-[#fb6504] selection:text-white antialiased font-sans">
-      {/* Structured Schema.org Data */}
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-[#FF0055] selection:text-white antialiased font-sans">
+      {/* Root Type-safe Schema.org Graph */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(rootInsuranceAgencySchema) }}
       />
 
       {/* Main Global Header */}
-      <Header onOpenQuote={handleOpenQuote} />
+      <Header
+        onOpenQuote={handleOpenQuote}
+        onOpenSavjetnik={() => setIsSavjetnikOpen(true)}
+      />
 
-      {/* Page Content Body */}
-      <main className="flex-1 w-full bg-[#06080c]">{children}</main>
+      {/* Dynamic Page Viewport */}
+      <main className="flex-1 w-full">{children}</main>
 
-      {/* Global Footer with HANFA & IDD disclosures */}
+      {/* Global Footer with Regulatory Compliance Badges */}
       <Footer />
 
-      {/* Mobile Sticky Quick Action Bar */}
-      <StickyMobileFAB />
+      {/* Floating Action Button for Emergency Contact & Broker Call */}
+      <StickyMobileFAB onOpenQuote={handleOpenQuote} />
 
-      {/* AZOP / GDPR Consent Banner */}
+      {/* GDPR / AZOP Cookie Notice */}
       <CookieConsent />
 
-      {/* Universal Instant Quote Wizard Modal */}
+      {/* Conversational "Agent Savjetnik" Intake Wizard (Lemonade Maya engine) */}
+      <ConversationalWizard
+        isOpen={isSavjetnikOpen}
+        onClose={() => setIsSavjetnikOpen(false)}
+        initialTopic={selectedCategory === 'property' ? 'imovina' : selectedCategory === 'health' ? 'dopunsko' : 'auto'}
+      />
+
+      {/* Fast Quote Category Modal */}
       <QuoteModal
         isOpen={isQuoteModalOpen}
         onClose={() => setIsQuoteModalOpen(false)}

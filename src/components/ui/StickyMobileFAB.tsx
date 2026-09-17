@@ -1,8 +1,12 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Phone, MessageCircle, Clock, X, CheckCircle2, Send, ShieldCheck } from 'lucide-react';
 import { firestoreService } from '../../api/firestoreService';
 
-export const StickyMobileFAB: React.FC = () => {
+export interface StickyMobileFABProps {
+  onOpenQuote?: (category?: any) => void;
+}
+
+export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
   const [callbackName, setCallbackName] = useState('');
