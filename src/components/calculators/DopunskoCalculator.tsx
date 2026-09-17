@@ -86,7 +86,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                 <span className="text-xs font-normal text-slate-500">(18 – 80 god.)</span>
               </label>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-black text-[#FF0055] tracking-tight">{age}</span>
+                <span className="text-3xl font-black text-rose-600 tracking-tight">{age}</span>
                 <span className="text-sm font-semibold text-slate-600">godina</span>
               </div>
             </div>
@@ -98,7 +98,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
               max={80}
               value={age}
               onChange={(e) => setAge(parseInt(e.target.value, 10))}
-              className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#FF0055] focus:outline-none focus:ring-2 focus:ring-[#FF0055]/30"
+              className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-600/30"
               aria-label="Odaberite vašu dob"
             />
 
@@ -121,12 +121,12 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                 type="checkbox"
                 checked={includeBList}
                 onChange={(e) => setIncludeBList(e.target.checked)}
-                className="mt-1 w-4 h-4 rounded text-[#FF0055] focus:ring-[#FF0055] border-slate-300"
+                className="mt-1 w-4 h-4 rounded text-rose-600 focus:ring-rose-600 border-slate-300"
               />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <Pill className="w-4 h-4 text-emerald-600" />
-                  <span className="text-sm font-semibold text-slate-900 group-hover:text-[#FF0055] transition-colors">
+                  <span className="text-sm font-semibold text-slate-900 group-hover:text-rose-600 transition-colors">
                     Pokriće dopunske B-liste lijekova (do 200 € / god.)
                   </span>
                 </div>
@@ -250,7 +250,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                 {result.carrierOptions.map((opt) => (
                   <div
                     key={opt.carrierName}
-                    className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-[#FF0055] transition-all flex items-center justify-between text-sm"
+                    className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-rose-600 transition-all flex items-center justify-between text-sm"
                   >
                     <div>
                       <span className="font-bold text-slate-900 block">{opt.carrierName}</span>
@@ -267,7 +267,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                       </div>
                       <button
                         onClick={() => handleOpenBind(opt.carrierName)}
-                        className="px-3.5 py-1.5 rounded-lg bg-[#FF0055] hover:bg-[#d90048] text-white text-xs font-bold transition-transform hover:scale-105"
+                        className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-sm"
                       >
                         Odaberi
                       </button>
@@ -282,13 +282,13 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
           <div className="pt-4 border-t border-slate-200">
             <button
               onClick={() => handleOpenBind(selectedCarrier)}
-              className="w-full py-4 rounded-xl bg-[#FF0055] hover:bg-[#d90048] text-white font-bold text-base shadow-lg shadow-[#FF0055]/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99]"
+              className="w-full py-4 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-base shadow-md shadow-slate-900/10 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              <span>Ugovori online u 60 sekundi</span>
-              <ArrowRight className="w-5 h-5" />
+              <span>Ugovori policu online u 60 sekundi</span>
+              <ArrowRight className="w-5 h-5 text-slate-400" />
             </button>
             <p className="text-center text-[11px] text-slate-500 mt-2">
-              Instant digitalna polica u vašem e-mail pretincu • 0 € agencijske provizije
+              Službena digitalna polica u vašem e-mail pretincu • 0 € agencijske provizije
             </p>
           </div>
         </div>
@@ -337,7 +337,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                   <input
                     type="tel"
                     placeholder="091 234 5678"
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-[#FF0055]"
+                    className="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-rose-600"
                   />
                 </div>
                 <div>
@@ -347,7 +347,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                   <input
                     type="email"
                     placeholder="ivan.horvat@email.hr"
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-[#FF0055]"
+                    className="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-rose-600"
                   />
                 </div>
               </div>

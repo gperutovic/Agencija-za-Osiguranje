@@ -182,7 +182,7 @@ export default function PrijavaStetePage() {
           <div className="flex flex-col gap-2 shrink-0 w-full sm:w-auto">
             <a
               href="tel:014800120"
-              className="px-6 py-3.5 rounded-xl bg-[#FF0055] hover:bg-[#d90048] text-white font-bold text-sm shadow flex items-center justify-center gap-2"
+              className="px-6 py-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4" />
               <span>01 4800 120 (Centrala)</span>

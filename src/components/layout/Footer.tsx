@@ -12,39 +12,26 @@ import {
   Scale,
   CreditCard,
 } from 'lucide-react';
+import { BrandLogo } from '../common/BrandLogo';
 import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-950 text-slate-300 border-t border-slate-800 text-left relative overflow-hidden">
+    <footer className="bg-[#0B1528] text-slate-300 border-t border-slate-800 text-left relative overflow-hidden">
       {/* Decorative subtle ambient highlight */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#FF0055]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 space-y-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Col 1 & 2: Entity & Regulatory Credentials */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#FF0055] to-rose-600 flex items-center justify-center text-white font-black text-xl shadow-md">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-xl font-black text-white tracking-tight block">
-                  AGENCIJA ŽIVOT
-                </span>
-                <span className="text-[10px] font-mono text-slate-400 tracking-wider">
-                  {AGENCY_DETAILS.legalName}
-                </span>
-              </div>
-            </div>
+            <BrandLogo variant="full" theme="dark" showBadge={false} />
 
-            <p className="text-xs text-slate-300 leading-relaxed pr-4">
-              Vodeća hrvatska digitalna agencija za posredovanje i zastupanje u osiguranju. Ovlašteni
-              partner Generali osiguranja d.d. i Toyota Centra Zagreb za Toyota VIP Kasko programe.
-              Pružamo besprijekornu uslugu izračuna, online ugovaranja i 24/7 obrade šteta.
+            <p className="text-xs text-slate-300 leading-relaxed pr-4 pt-1">
+              Ovlašteni distributer osiguranja upisan u sudski registar Trgovačkog suda u Zagrebu i registar Hrvatske agencije za nadzor financijskih usluga (HANFA). Ekskluzivni partner Generali osiguranja d.d. i Toyota Centra Zagreb za posebne kasko pogodnosti.
             </p>
 
             {/* Official HANFA Badge Callout */}
@@ -54,8 +41,7 @@ export const Footer: React.FC = () => {
                 <span>HANFA REGISTAR DISTRIBUTERA OSIGURANJA: {AGENCY_DETAILS.hanfaRegisterNumber}</span>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed font-mono">
-                Licenca: <strong>{AGENCY_DETAILS.hanfaLicense}</strong> pod nadzorom Hrvatske agencije
-                za nadzor financijskih usluga (HANFA). Poslovanje u cijelosti usklađeno sa Zakonom o osiguranju (NN 30/15, 112/18, 63/20, 133/20, 151/22).
+                Rješenje: <strong>{AGENCY_DETAILS.hanfaLicense}</strong>. Poslovanje u cijelosti usklađeno sa Zakonom o osiguranju (NN 30/15, 112/18, 63/20, 133/20, 151/22) i EU Direktivom o distribuciji osiguranja (IDD).
               </p>
             </div>
           </div>
@@ -63,7 +49,7 @@ export const Footer: React.FC = () => {
           {/* Col 3: Osigurateljni Programi */}
           <div className="space-y-3.5 text-xs">
             <h4 className="font-mono font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF0055]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
               Programi osiguranja
             </h4>
             <ul className="space-y-2.5">
@@ -79,17 +65,17 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/auto-osiguranje" className="hover:text-white transition-colors text-blue-300 font-semibold">
-                  Toyota VIP Kasko Program
+                  Toyota Centar Zagreb VIP Kasko
                 </Link>
               </li>
               <li>
                 <Link to="/imovina" className="hover:text-white transition-colors">
-                  Osiguranje imovine &amp; Potres
+                  Osiguranje doma &amp; Zaštita od potresa
                 </Link>
               </li>
               <li>
                 <Link to="/kalkulator-prijepisa" className="hover:text-white transition-colors">
-                  Prijepis vozila (NN 92/21)
+                  Kalkulator prijepisa vozila (NN 92/21)
                 </Link>
               </li>
             </ul>
@@ -114,7 +100,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/o-nama" className="hover:text-white transition-colors">
-                  O nama i HANFA akreditacija
+                  O nama &amp; Registracija društva
                 </Link>
               </li>
               <li>
@@ -153,7 +139,7 @@ export const Footer: React.FC = () => {
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#FF0055] shrink-0" />
+                <Phone className="w-4 h-4 text-rose-400 shrink-0" />
                 <a href={`tel:${AGENCY_DETAILS.secondaryPhone.replace(/\s+/g, '')}`} className="hover:text-white font-mono font-semibold">
                   {AGENCY_DETAILS.secondaryPhone} (Dežurni 24/7)
                 </a>
@@ -175,7 +161,7 @@ export const Footer: React.FC = () => {
         <div className="pt-8 border-t border-slate-800 flex flex-wrap items-center justify-between gap-6 text-xs text-slate-400">
           <div className="flex items-center gap-3">
             <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
-              Podržana plaćanja:
+              Sigurni kanali naplate:
             </span>
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">

@@ -13,10 +13,12 @@ import {
   Mail,
   User,
   X,
+  Award,
 } from 'lucide-react';
 import { calculateDopunskoHealth } from '../../lib/calculations/dopunsko-health';
 import { calculateAutoInsurance } from '../../lib/calculations/auto-insurance';
 import { formatEuro } from '../../lib/calculations';
+import { BrandLogo } from '../common/BrandLogo';
 
 interface ConversationalWizardProps {
   isOpen: boolean;
@@ -87,25 +89,23 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
       <motion.div
-        initial={{ opacity: 0, scale: 0.96, y: 15 }}
+        initial={{ opacity: 0, scale: 0.97, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96 }}
+        exit={{ opacity: 0, scale: 0.97 }}
         className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Top Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF0055] to-rose-600 flex items-center justify-center text-white shadow-sm font-black">
-              <Sparkles className="w-5 h-5" />
-            </div>
+            <BrandLogo variant="mark-only" theme="light" />
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-slate-900">Agent Savjetnik</h3>
-                <span className="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                  ONLINE
+                <h3 className="text-base font-bold text-slate-900">Digitalni savjetnik Agencije Život</h3>
+                <span className="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
+                  HANFA ZO-88912
                 </span>
               </div>
-              <p className="text-xs text-slate-500">Agencija Život • Licencirani HANFA savjetnik</p>
+              <p className="text-xs text-slate-500">Ovlašteni aktuarski izračun polica osiguranja</p>
             </div>
           </div>
           <button
@@ -130,54 +130,54 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 className="space-y-6"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-500">
-                    Korak 1 od 3
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                    Faza 1 od 3 &bull; Odabir programa
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">
-                    Dobar dan! Koje osiguranje danas uspoređujemo?
+                  <h2 className="text-2xl font-black text-slate-950 mt-1">
+                    Odaberite vrstu osiguranja za izračun ponude
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    Pronaći ćemo za Vas najpovoljniju tarifu među 10 hrvatskih osiguratelja.
+                    Aktuarski modul uspoređuje službene tarife vodećih hrvatskih osiguratelja.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <button
-                    onClick={() => handleTopicSelect('auto')}
-                    className="p-5 rounded-2xl border-2 border-slate-200 hover:border-[#FF0055] hover:bg-rose-50/20 text-left transition-all group flex flex-col justify-between min-h-[140px]"
-                  >
-                    <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Car className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 group-hover:text-[#FF0055]">Auto & Kasko</h4>
-                      <p className="text-xs text-slate-500 mt-0.5">50% bonusa & Toyota VIP</p>
-                    </div>
-                  </button>
-
-                  <button
                     onClick={() => handleTopicSelect('dopunsko')}
-                    className="p-5 rounded-2xl border-2 border-slate-200 hover:border-[#FF0055] hover:bg-rose-50/20 text-left transition-all group flex flex-col justify-between min-h-[140px]"
+                    className="p-5 rounded-2xl border-2 border-slate-200 hover:border-rose-500 hover:bg-rose-50/20 text-left transition-all group flex flex-col justify-between min-h-[140px]"
                   >
-                    <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-11 h-11 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                       <HeartPulse className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900 group-hover:text-[#FF0055]">Dopunsko 2026</h4>
+                      <h4 className="font-bold text-slate-900 group-hover:text-rose-700">Dopunsko 2026</h4>
                       <p className="text-xs text-slate-500 mt-0.5">HZZO 15 € vs Privatno od 6,50 €</p>
                     </div>
                   </button>
 
                   <button
-                    onClick={() => handleTopicSelect('imovina')}
-                    className="p-5 rounded-2xl border-2 border-slate-200 hover:border-[#FF0055] hover:bg-rose-50/20 text-left transition-all group flex flex-col justify-between min-h-[140px]"
+                    onClick={() => handleTopicSelect('auto')}
+                    className="p-5 rounded-2xl border-2 border-slate-200 hover:border-blue-600 hover:bg-blue-50/20 text-left transition-all group flex flex-col justify-between min-h-[140px]"
                   >
-                    <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Car className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 group-hover:text-blue-700">Auto &amp; Kasko</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">50% bonusa &amp; Toyota VIP</p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => handleTopicSelect('imovina')}
+                    className="p-5 rounded-2xl border-2 border-slate-200 hover:border-amber-600 hover:bg-amber-50/20 text-left transition-all group flex flex-col justify-between min-h-[140px]"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                       <Home className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900 group-hover:text-[#FF0055]">Imovina & Dom</h4>
-                      <p className="text-xs text-slate-500 mt-0.5">Stan, kuća i zaštita od potresa</p>
+                      <h4 className="font-bold text-slate-900 group-hover:text-amber-700">Imovina i dom</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">Nova vrijednost i potres</p>
                     </div>
                   </button>
                 </div>
@@ -194,21 +194,21 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 className="space-y-6"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-500">
-                    Auto Osiguranje • Korak 2 od 3
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-700">
+                    Auto Osiguranje &bull; Faza 2 od 3
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">
-                    Kolika je snaga motora vašeg vozila?
+                  <h2 className="text-2xl font-black text-slate-950 mt-1">
+                    Snaga motora vozila (kW)
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    Snagu u kW možete pronaći u prometnoj dozvoli pod rubrikom P.2.
+                    Podatak o snazi nalazi se u prometnoj dozvoli pod rubrikom P.2.
                   </p>
                 </div>
 
                 <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center space-y-4">
                   <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-5xl font-black text-blue-600">{kw}</span>
-                    <span className="text-lg font-bold text-slate-600">kW</span>
+                    <span className="text-5xl font-black text-slate-950 font-mono">{kw}</span>
+                    <span className="text-lg font-bold text-slate-700">kW</span>
                     <span className="text-sm text-slate-400 font-mono">({Math.round(kw * 1.36)} KS)</span>
                   </div>
 
@@ -223,7 +223,7 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
 
                   <div className="flex justify-between text-xs text-slate-500 font-mono">
                     <span>45 kW (Gradski)</span>
-                    <span>85 kW (Obiteljski)</span>
+                    <span>85 kW (Kompakt / Obiteljski)</span>
                     <span>150+ kW (Premium)</span>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                   </button>
                   <button
                     onClick={() => setStep('auto_bonus')}
-                    className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md flex items-center gap-2"
+                    className="px-6 py-3 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow flex items-center gap-2"
                   >
                     Nastavi <ArrowRight className="w-4 h-4" />
                   </button>
@@ -255,14 +255,14 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 className="space-y-6"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-500">
-                    Auto Osiguranje • Korak 3 od 3
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-700">
+                    Auto Osiguranje &bull; Faza 3 od 3
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">
-                    Imate li stečeni bonus na polici?
+                  <h2 className="text-2xl font-black text-slate-950 mt-1">
+                    Bonus razred i kasko opcije
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    Ako niste imali šteta, prenosimo vaš maksimalni bonus od 50%.
+                    Sukladno bazi HUO-a, omogućujemo trenutačni prijenos 50% stečenog bonusa.
                   </p>
                 </div>
 
@@ -273,12 +273,12 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                       setStep('contact');
                     }}
                     className={`p-4 rounded-xl border-2 text-left transition-all min-h-[56px] flex items-center justify-between ${
-                      bonus === 'B10' ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:bg-slate-50'
+                      bonus === 'B10' ? 'border-emerald-600 bg-emerald-50/50' : 'border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <div>
-                      <strong className="block text-slate-900 text-sm">Da, imam 50% bonusa (B10)</strong>
-                      <span className="text-xs text-slate-500">Maksimalni zakonski popust</span>
+                      <strong className="block text-slate-900 text-sm">Maksimalni bonus 50% (B10)</strong>
+                      <span className="text-xs text-slate-500">Najčešća opcija za iskusne vozače</span>
                     </div>
                     <Check className="w-5 h-5 text-emerald-600" />
                   </button>
@@ -291,22 +291,22 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                     className="p-4 rounded-xl border-2 border-slate-200 hover:bg-slate-50 text-left transition-all min-h-[56px] flex items-center justify-between"
                   >
                     <div>
-                      <strong className="block text-slate-900 text-sm">Prvo vozilo / Početnik (B0)</strong>
-                      <span className="text-xs text-slate-500">Dodjeljujemo početničke pogodnosti</span>
+                      <strong className="block text-slate-900 text-sm">Prvo vozilo / Bez bonusa (B0)</strong>
+                      <span className="text-xs text-slate-500">Dodjela agencijskih pogodnosti</span>
                     </div>
                   </button>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl flex items-center gap-3">
+                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
                   <input
                     type="checkbox"
-                    id="has-kasko-check"
+                    id="wizard-kasko-check"
                     checked={hasKasko}
                     onChange={(e) => setHasKasko(e.target.checked)}
                     className="w-4 h-4 rounded text-blue-600"
                   />
-                  <label htmlFor="has-kasko-check" className="text-xs font-semibold text-slate-800 cursor-pointer">
-                    Želim u ponudu uključiti i ponudu za kasko (ili kasko stakla)
+                  <label htmlFor="wizard-kasko-check" className="text-xs font-semibold text-slate-800 cursor-pointer">
+                    U ponudu uključi i puno Kasko pokriće (ili kasko stakla)
                   </label>
                 </div>
 
@@ -319,7 +319,7 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                   </button>
                   <button
                     onClick={() => setStep('contact')}
-                    className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md flex items-center gap-2"
+                    className="px-6 py-3 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow flex items-center gap-2"
                   >
                     Nastavi na kontakt <ArrowRight className="w-4 h-4" />
                   </button>
@@ -337,21 +337,21 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 className="space-y-6"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600">
-                    Dopunsko 2026 • Korak 2 od 3
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-700">
+                    Dopunsko 2026 &bull; Faza 2 od 3
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">
-                    Koliko imate godina?
+                  <h2 className="text-2xl font-black text-slate-950 mt-1">
+                    Dob osiguranika
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    HZZO polica je poskupjela na 15,00 €/mj. za sve, a privatne police ovise o dobi.
+                    HZZO polica od 1.2.2026. iznosi 15,00 €/mj., dok privatne police ovise o dobi.
                   </p>
                 </div>
 
                 <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center space-y-4">
                   <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-5xl font-black text-emerald-600">{age}</span>
-                    <span className="text-lg font-bold text-slate-600">godina</span>
+                    <span className="text-5xl font-black text-slate-950 font-mono">{age}</span>
+                    <span className="text-lg font-bold text-slate-700">godina</span>
                   </div>
 
                   <input
@@ -360,17 +360,17 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                     max={80}
                     value={age}
                     onChange={(e) => setAge(parseInt(e.target.value, 10))}
-                    className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                    className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-600"
                   />
 
                   <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-700">
                     {age <= 50 ? (
                       <span className="text-emerald-700 font-bold">
-                        🎉 U vašoj dobi privatna polica kreće od samo{' '}
-                        {age <= 30 ? '6,50 €/mj.' : age <= 40 ? '7,50 €/mj.' : '9,50 €/mj.'} (ušteda do 102 €/god.)!
+                        U vašoj dobi privatna polica kreće od samo{' '}
+                        {age <= 30 ? '6,50 €/mj.' : age <= 40 ? '7,50 €/mj.' : '9,50 €/mj.'} (ušteda do 102 € godišnje)!
                       </span>
                     ) : (
-                      <span>HZZO solidarna polica nudi fiksnu cijenu, a privatna pruža pokriće B-liste lijekova.</span>
+                      <span>HZZO polica (15 €) je financijski optimalna, a privatna pruža B-listu lijekova.</span>
                     )}
                   </div>
                 </div>
@@ -384,7 +384,7 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                   </button>
                   <button
                     onClick={() => setStep('contact')}
-                    className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md flex items-center gap-2"
+                    className="px-6 py-3 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow flex items-center gap-2"
                   >
                     Nastavi na kontakt <ArrowRight className="w-4 h-4" />
                   </button>
@@ -402,11 +402,11 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 className="space-y-6"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-600">
-                    Imovina & Dom • Korak 2 od 3
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-700">
+                    Imovina &amp; Dom &bull; Faza 2 od 3
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">
-                    Kakvu nekretninu osiguravate?
+                  <h2 className="text-2xl font-black text-slate-950 mt-1">
+                    Vrsta stambene nekretnine
                   </h2>
                 </div>
 
@@ -415,24 +415,24 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                     onClick={() => setPropertyType('stan')}
                     className={`p-4 rounded-xl border-2 text-left min-h-[56px] transition-all ${
                       propertyType === 'stan'
-                        ? 'border-amber-500 bg-amber-50/50'
+                        ? 'border-amber-600 bg-amber-50/50'
                         : 'border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <strong className="block text-slate-900 text-sm">Stan u zgradi</strong>
-                    <span className="text-xs text-slate-500">Zidovi, stvari kućanstva, izljev vode</span>
+                    <span className="text-xs text-slate-500">Građevinski dio, stvari, izljev vode</span>
                   </button>
 
                   <button
                     onClick={() => setPropertyType('kuca')}
                     className={`p-4 rounded-xl border-2 text-left min-h-[56px] transition-all ${
                       propertyType === 'kuca'
-                        ? 'border-amber-500 bg-amber-50/50'
+                        ? 'border-amber-600 bg-amber-50/50'
                         : 'border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <strong className="block text-slate-900 text-sm">Obiteljska kuća</strong>
-                    <span className="text-xs text-slate-500">Krov, fasada, instalacije, okućnica</span>
+                    <span className="text-xs text-slate-500">Krov, instalacije, okućnica</span>
                   </button>
                 </div>
 
@@ -444,8 +444,8 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                     className="w-4 h-4 rounded text-amber-600"
                   />
                   <div>
-                    <strong className="text-xs text-slate-900 block">Uključi rizik od potresa</strong>
-                    <span className="text-[11px] text-slate-500">Građevinska vrijednost na novi standard</span>
+                    <strong className="text-xs text-slate-900 block">Uključi pokriće od potresa</strong>
+                    <span className="text-[11px] text-slate-500">Nova građevinska vrijednost bez franšize</span>
                   </div>
                 </label>
 
@@ -458,7 +458,7 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                   </button>
                   <button
                     onClick={() => setStep('contact')}
-                    className="px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm shadow-md flex items-center gap-2"
+                    className="px-6 py-3 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow flex items-center gap-2"
                   >
                     Nastavi na kontakt <ArrowRight className="w-4 h-4" />
                   </button>
@@ -477,65 +477,65 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 className="space-y-5"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF0055]">
-                    Završni korak
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                    Završna faza &bull; Dostava ponude
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">
-                    Kome šaljemo ponudu s obračunatim popustom?
+                  <h2 className="text-2xl font-black text-slate-950 mt-1">
+                    Kome dostavljamo službenu ponudu?
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    Vaša ponuda je pripremljena i čeka autorizaciju našeg brokera bez ikakve obveze.
+                    Ponuda je neobvezujuća i sadrži sve obračunate popuste i 0 € provizije.
                   </p>
                 </div>
 
                 <div className="space-y-3">
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Ime i prezime
+                      Ime i prezime osiguranika
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
+                      <User className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
                       <input
                         type="text"
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Ivan Horvat"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#FF0055]"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-slate-900"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Broj mobitela (WhatsApp / Poziv)
+                      Broj telefona (za verifikaciju police)
                     </label>
                     <div className="relative">
-                      <Phone className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
+                      <Phone className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="091 234 5678"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#FF0055]"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-slate-900"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      E-mail adresa za dostavu police
+                      E-mail adresa za dostavu ponude
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
+                      <Mail className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="ivan.horvat@email.hr"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#FF0055]"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-slate-900"
                       />
                     </div>
                   </div>
@@ -551,9 +551,9 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                   </button>
                   <button
                     type="submit"
-                    className="px-7 py-3.5 rounded-xl bg-[#FF0055] hover:bg-[#d90048] text-white font-bold text-sm shadow-lg shadow-[#FF0055]/30 flex items-center gap-2 transition-transform hover:scale-105"
+                    className="px-7 py-3.5 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow flex items-center gap-2 transition-transform hover:scale-[1.01]"
                   >
-                    Pošalji besplatnu ponudu <ArrowRight className="w-4 h-4" />
+                    Zatraži službeni izračun <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.form>
@@ -567,23 +567,21 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8 space-y-4"
               >
-                <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
                   <ShieldCheck className="w-9 h-9" />
                 </div>
                 <h2 className="text-2xl font-black text-slate-900">
-                  Hvala Vam, {name || 'poštovani klijentu'}!
+                  Zahtjev je uspješno zaprimljen
                 </h2>
-                <p className="text-sm text-slate-600 max-w-md mx-auto">
-                  Vaš zahtjev je zaprimljen u sustavu Agencije Život. Licencirani zastupnik priprema
-                  usporednu tablicu Generali, Allianz i Croatia osiguranja i poslat će je na{' '}
-                  <strong>{email || 'vaš e-mail'}</strong> u roku od 15 minuta.
+                <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+                  Zahvaljujemo, {name || 'poštovani klijentu'}. Vaš zahtjev za izračunom evidentiran je pod nadzorom licenciranog brokera Agencije Život. Službenu ponudu s Generali / Allianz / Croatia policama dostavljamo na <strong>{email || 'Vaš e-mail'}</strong> u roku od 15 minuta.
                 </p>
                 <div className="pt-4">
                   <button
                     onClick={onClose}
-                    className="px-8 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow"
+                    className="px-8 py-3 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow"
                   >
-                    Završi i zatvori
+                    Završi pregled
                   </button>
                 </div>
               </motion.div>

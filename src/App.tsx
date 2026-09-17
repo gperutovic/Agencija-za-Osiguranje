@@ -58,7 +58,7 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-[#FF0055] selection:text-white">
+      <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-[#0F172A] selection:text-white">
         {/* Global Navigation Header with HANFA license & direct quoting triggers */}
         <Header
           onOpenQuote={handleOpenQuote}

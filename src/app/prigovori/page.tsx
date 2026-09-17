@@ -193,7 +193,7 @@ export default function PrigovoriPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#FF0055] hover:bg-[#d90048] text-white font-bold text-sm shadow flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-sm shadow flex items-center justify-center gap-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>{isSubmitting ? 'Slanje prigovora...' : 'Podnesi službeni prigovor'}</span>

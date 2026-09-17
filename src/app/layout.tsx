@@ -117,7 +117,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-[#FF0055] selection:text-white antialiased font-sans">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-[#0F172A] selection:text-white antialiased font-sans">
       {/* Root Type-safe Schema.org Graph */}
       <script
         type="application/ld+json"

@@ -1,41 +1,100 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" fill="none">
   <defs>
-    <linearGradient id="shieldBg" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#141923"/>
-      <stop offset="100%" stop-color="#06080c"/>
+    <!-- Premium Gradients -->
+    <linearGradient id="shieldGradient" x1="20" y1="10" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
     </linearGradient>
-    <linearGradient id="orangeGlow" x1="16" y1="12" x2="48" y2="52" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#ff7b1a"/>
-      <stop offset="50%" stop-color="#fb6504"/>
-      <stop offset="100%" stop-color="#d44800"/>
+    <linearGradient id="goldGradient" x1="30" y1="20" x2="90" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="50%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
     </linearGradient>
-    <linearGradient id="accentGlow" x1="20" y1="20" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+    <linearGradient id="accentGradient" x1="40" y1="30" x2="80" y2="90" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#10B981"/>
       <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
-    <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%" filterUnits="userSpaceOnUse">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.15"/>
     </filter>
   </defs>
 
-  <!-- Outer Protective Hexagon Shield with Hairline Border -->
-  <polygon points="32,4 56,16 56,44 32,58 8,44 8,16" fill="url(#shieldBg)" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1.5"/>
-  <polygon points="32,7 53,18 53,42 32,55 11,42 11,18" fill="none" stroke="#fb6504" stroke-width="0.75" stroke-opacity="0.35"/>
+  <!-- EMBLEM ICON (Left) -->
+  <g transform="translate(10, 8)" filter="url(#subtleShadow)">
+    <!-- Outer Shield Border -->
+    <path d="M52 6 L92 22 C92 60 72 88 52 98 C32 88 12 60 12 22 Z" 
+          fill="url(#shieldGradient)" 
+          stroke="url(#goldGradient)" 
+          stroke-width="2.5" 
+          stroke-linejoin="round"/>
 
-  <!-- Stylized Monogram Ž & Life-Leaf Crest in Electric Orange -->
-  <!-- Upper Chevron of Ž -->
-  <path d="M22 20H42L36 26H22Z" fill="url(#orangeGlow)"/>
-  
-  <!-- Central Dynamic Diagonal Slash / Sprout -->
-  <path d="M37 26L23 42H31L43 28L37 26Z" fill="url(#orangeGlow)"/>
-  
-  <!-- Lower Base of Ž -->
-  <path d="M21 42H41L37 46H21V42Z" fill="url(#orangeGlow)"/>
+    <!-- Inner Protective Inset Line -->
+    <path d="M52 13 L85 26 C85 58 68 81 52 90 C36 81 19 58 19 26 Z" 
+          fill="none" 
+          stroke="#FFFFFF" 
+          stroke-width="1" 
+          stroke-opacity="0.2"/>
 
-  <!-- Organic Diacritic Caron (Kvačica na Ž) styled as Life Sprout Leaf -->
-  <path d="M32 12C33.5 14 36 15 38 15C36 17 33.5 17 32 15.5C30.5 17 28 17 26 15C28 15 30.5 14 32 12Z" fill="#ff9142"/>
-  
-  <!-- Safety Core Dot -->
-  <circle cx="32" cy="33" r="2.5" fill="#10B981" filter="url(#glowFilter)"/>
+    <!-- Stylized Monogram "Ž" (Život) with Architectural Precision -->
+    <!-- Top Horizontal Bar of Ž -->
+    <path d="M34 33 H70 L63 41 H34 Z" fill="url(#goldGradient)"/>
+    
+    <!-- Central Dynamic Diagonal -->
+    <path d="M63 41 L40 67 H51 L70 45 L63 41 Z" fill="#FFFFFF"/>
+    
+    <!-- Bottom Base Bar of Ž -->
+    <path d="M34 67 H68 L61 74 H34 Z" fill="url(#goldGradient)"/>
+
+    <!-- Diacritic Caron (Kvačica) - Heraldički znak sigurnosti i rasta (List/Kruna) -->
+    <path d="M52 20 L58 26 L52 28 L46 26 Z" fill="url(#accentGradient)"/>
+    
+    <!-- Central Trust Node -->
+    <circle cx="52" cy="54" r="3.5" fill="url(#accentGradient)"/>
+  </g>
+
+  <!-- TYPOGRAPHIC WORDMARK (Right) -->
+  <g transform="translate(130, 24)">
+    <!-- Primary Brand Name -->
+    <text x="0" y="32" 
+          font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+          font-size="30" 
+          font-weight="900" 
+          letter-spacing="0.5" 
+          fill="#0F172A">
+      AGENCIJA ŽIVOT
+    </text>
+
+    <!-- Subtitle: Corporate Activity -->
+    <text x="2" y="52" 
+          font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+          font-size="11" 
+          font-weight="700" 
+          letter-spacing="3" 
+          fill="#475569">
+      ZASTUPANJE U OSIGURANJU
+    </text>
+
+    <!-- Accreditation & Partner Tagline -->
+    <g transform="translate(2, 68)">
+      <!-- HANFA Badge -->
+      <rect x="0" y="0" width="112" height="18" rx="4" fill="#0F172A" />
+      <text x="8" y="12" 
+            font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" 
+            font-size="9" 
+            font-weight="700" 
+            fill="#10B981">
+        HANFA ZO-88912
+      </text>
+
+      <!-- Generali Partner Indicator -->
+      <text x="122" y="13" 
+            font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
+            font-size="10" 
+            font-weight="700" 
+            letter-spacing="0.5" 
+            fill="#B91C1C">
+        GENERALI PARTNER &bull; TOYOTA VIP
+      </text>
+    </g>
+  </g>
 </svg>

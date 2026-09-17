@@ -296,9 +296,9 @@ export const PropertyCalculator: React.FC<PropertyCalculatorProps> = ({
                 />
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-base shadow-lg shadow-amber-600/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+                  className="w-full py-4 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-base shadow-md shadow-slate-900/10 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 text-amber-400" />
                   <span>Zatraži službenu ponudu za dom</span>
                 </button>
               </form>
