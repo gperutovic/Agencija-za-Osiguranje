@@ -65,7 +65,7 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           phone,
           oib: oib || undefined,
         },
-        type: productType,
+        type: productType as any,
         inputs,
         calculatedEstimate: {
           annualPremium: estimate.annualPremium,

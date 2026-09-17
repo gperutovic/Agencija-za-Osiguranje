@@ -25,12 +25,13 @@ import {
 } from 'lucide-react';
 import { DopunskoCalculator } from '../components/calculators/DopunskoCalculator';
 import { AutoInsuranceCalculator } from '../components/calculators/AutoInsuranceCalculator';
+import { MayaQuoteEngine } from '../components/quote-funnel/MayaQuoteEngine';
 import { ConversationalWizard } from '../components/conversational/ConversationalWizard';
 import { CARRIER_PARTNERS, FAQ_DOPUNSKO, FAQ_AUTO, AGENCY_DETAILS } from '../lib/content/insurance-data';
 import { JsonLd } from '../components/seo/JsonLd';
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<'dopunsko' | 'auto'>('dopunsko');
+  const [activeTab, setActiveTab] = useState<'maya' | 'dopunsko' | 'auto'>('maya');
   const [isSavjetnikOpen, setIsSavjetnikOpen] = useState<boolean>(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
@@ -152,7 +153,19 @@ export default function HomePage() {
           </p>
 
           {/* Module Selector */}
-          <div className="inline-flex p-1.5 rounded-2xl bg-slate-200/80 mt-4 border border-slate-300/60">
+          <div className="inline-flex flex-wrap p-1.5 rounded-2xl bg-slate-200/80 mt-4 border border-slate-300/60 gap-1">
+            <button
+              onClick={() => setActiveTab('maya')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
+                activeTab === 'maya'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Sparkles className="w-4 h-4 text-emerald-300" />
+              <span>Maya Engine &bull; OCR Prometna & Lijevak</span>
+            </button>
+
             <button
               onClick={() => setActiveTab('dopunsko')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
@@ -162,7 +175,7 @@ export default function HomePage() {
               }`}
             >
               <HeartPulse className="w-4 h-4 text-rose-600" />
-              <span>Dopunsko 2026 (HZZO 15 € vs Privatno)</span>
+              <span>Dopunsko 2026 (HZZO 15 €)</span>
             </button>
 
             <button
@@ -174,14 +187,16 @@ export default function HomePage() {
               }`}
             >
               <Car className="w-4 h-4 text-blue-600" />
-              <span>Auto osiguranje (50% bonusa &amp; Toyota Kasko)</span>
+              <span>Auto kalkulator (50% bonusa)</span>
             </button>
           </div>
         </div>
 
         {/* Render Tab Component */}
         <div className="max-w-5xl mx-auto">
-          {activeTab === 'dopunsko' ? (
+          {activeTab === 'maya' ? (
+            <MayaQuoteEngine />
+          ) : activeTab === 'dopunsko' ? (
             <DopunskoCalculator />
           ) : (
             <AutoInsuranceCalculator />

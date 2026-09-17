@@ -14,6 +14,7 @@ import {
   Info,
   Scale,
   ShieldCheck,
+  Shield,
   ExternalLink,
   ChevronRight,
 } from 'lucide-react';
@@ -160,6 +161,19 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
               <span>Centar za štete</span>
             </Link>
 
+            {/* Korisnički portal / Digitalni novčanik polica */}
+            <Link
+              to="/portal"
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                isActive('/portal')
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-slate-50'
+              }`}
+            >
+              <Shield className="w-4 h-4 text-emerald-600" />
+              <span>Moj Portal</span>
+            </Link>
+
             {/* O Agenciji */}
             <Link
               to="/o-nama"
@@ -268,6 +282,18 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
                 <span>24/7 Digitalni centar za štete (FNOL)</span>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
+            </Link>
+
+            <Link
+              to="/portal"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl text-emerald-800 bg-emerald-50/60 font-bold hover:bg-emerald-100/60"
+            >
+              <div className="flex items-center gap-3">
+                <Shield className="w-4 h-4 text-emerald-600" />
+                <span>Moj Portal &bull; Digitalni novčanik polica</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-emerald-600" />
             </Link>
 
             <Link
