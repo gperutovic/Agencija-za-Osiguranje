@@ -41,16 +41,16 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       {/* Configuration Controls (2 Cols) */}
-      <div className="lg:col-span-2 bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-8 text-white">
-        <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
-          <div className="w-10 h-10 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#fb6504] flex items-center justify-center font-black shadow-[0_0_15px_rgba(251,101,4,0.2)]">
+      <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-bento p-6 sm:p-8 space-y-8 text-slate-900 dark:text-white">
+        <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400 flex items-center justify-center font-black shadow-sm">
             <Heart className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-white">
+            <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
               {t('calculators.life.title')}
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Životno osiguranje ŽIVOT+: Financijska zaštita obitelji i kapitalizirana štednja
             </p>
           </div>
@@ -95,8 +95,8 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
         </div>
 
         {/* Smoker and Critical Illness Grid */}
-        <div className="space-y-3 pt-2 border-t border-white/[0.08]">
-          <label className="text-xs font-semibold text-slate-300 block">
+        <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">
             Zdravstveni status i dopunska pokrića
           </label>
 
@@ -106,16 +106,20 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
               onClick={() => setIsSmoker(!isSmoker)}
               className={`p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 ${
                 isSmoker
-                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
-                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
+                  ? 'border-amber-500 bg-amber-50/80 dark:bg-amber-950/30 text-slate-900 dark:text-white font-bold shadow-sm'
+                  : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <div className="w-5 h-5 rounded-md border border-white/[0.2] flex items-center justify-center shrink-0 mt-0.5 bg-[#0d121f]">
-                {isSmoker && <span className="text-xs font-bold text-[#fb6504]">✓</span>}
+              <div className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 ${
+                isSmoker 
+                  ? 'border-amber-500 bg-amber-500 text-white' 
+                  : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800'
+              }`}>
+                {isSmoker && <span className="text-xs font-bold text-white">✓</span>}
               </div>
               <div className="space-y-0.5">
-                <div className="text-xs font-bold text-white">Pušač (cigarete / duhan)</div>
-                <div className="text-[10px] text-slate-400">+40% doplata za povišeni rizik</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Pušač (cigarete / duhan)</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">+40% doplata za povišeni rizik</div>
               </div>
             </button>
 
@@ -124,18 +128,22 @@ export const LifeQuoteCalculator: React.FC<LifeQuoteCalculatorProps> = ({
               onClick={() => setIncludeCriticalIllness(!includeCriticalIllness)}
               className={`p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 ${
                 includeCriticalIllness
-                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
-                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
+                  ? 'border-teal-600 bg-teal-50/80 dark:bg-teal-950/30 text-slate-900 dark:text-white font-bold shadow-sm'
+                  : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <div className="w-5 h-5 rounded-md border border-white/[0.2] flex items-center justify-center shrink-0 mt-0.5 bg-[#0d121f]">
+              <div className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 ${
+                includeCriticalIllness 
+                  ? 'border-teal-600 bg-teal-600 text-white' 
+                  : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800'
+              }`}>
                 {includeCriticalIllness && (
-                  <span className="text-xs font-bold text-[#fb6504]">✓</span>
+                  <span className="text-xs font-bold text-white">✓</span>
                 )}
               </div>
               <div className="space-y-0.5">
-                <div className="text-xs font-bold text-white">Pokriće 25 teških bolesti</div>
-                <div className="text-[10px] text-slate-400">Maligne bolesti, infarkt, moždani udar</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Pokriće 25 teških bolesti</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Maligne bolesti, infarkt, moždani udar</div>
               </div>
             </button>
           </div>

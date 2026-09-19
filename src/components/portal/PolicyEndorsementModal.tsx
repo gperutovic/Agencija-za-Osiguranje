@@ -118,25 +118,25 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-[#0a0d16] border border-white/[0.12] rounded-3xl shadow-2xl overflow-hidden text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+      <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl shadow-floating overflow-hidden text-slate-900 dark:text-white">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/[0.08] bg-white/[0.02]">
+        <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/30 flex items-center justify-center text-[#ff7b1a]">
+            <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 flex items-center justify-center text-teal-600 dark:text-teal-400 shadow-sm">
               <FileEdit className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Zahtjev za izmjenom police (Aneks)</h3>
-              <p className="text-xs text-slate-400 font-mono">
-                Polica: <span className="text-[#ff7b1a]">{policy.policyNumber}</span> &bull;{' '}
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Zahtjev za izmjenom police (Aneks)</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                Polica: <span className="text-teal-700 dark:text-teal-400 font-semibold">{policy.policyNumber}</span> &bull;{' '}
                 {policy.insurer}
               </p>
             </div>
           </div>
           <button
             onClick={handleResetAndClose}
-            className="w-8 h-8 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -146,28 +146,28 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
         <div className="p-6">
           {submittedCode ? (
             <div className="text-center py-6 space-y-4">
-              <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-sm">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h4 className="text-xl font-bold text-white">Zahtjev za aneksom je zaprimljen!</h4>
-              <p className="text-xs text-slate-300 max-w-md mx-auto">
+              <h4 className="text-xl font-bold text-slate-900 dark:text-white">Zahtjev za aneksom je zaprimljen!</h4>
+              <p className="text-xs text-slate-600 dark:text-slate-300 max-w-md mx-auto">
                 Vaš zahtjev za izmjenom na polici{' '}
-                <strong className="text-white">{policy.policyNumber}</strong> je uspješno
+                <strong className="text-slate-900 dark:text-white">{policy.policyNumber}</strong> je uspješno
                 evidentiran. Ovlašteni referent će pregledati podatke i poslati potvrdu aneksa na
                 vaš email.
               </p>
 
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] inline-block">
-                <span className="text-[11px] font-mono text-slate-400 block uppercase">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 inline-block">
+                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block uppercase">
                   Broj zahtjeva (Aneks ID)
                 </span>
-                <span className="text-lg font-mono font-bold text-[#ff7b1a]">
+                <span className="text-lg font-mono font-bold text-teal-700 dark:text-teal-400">
                   {submittedCode}
                 </span>
               </div>
 
               <div className="pt-4">
-                <Button variant="primary" onClick={handleResetAndClose} className="font-mono">
+                <Button variant="primary" onClick={handleResetAndClose} className="font-mono shadow-sm">
                   U redu, zatvori
                 </Button>
               </div>
@@ -175,15 +175,15 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {formError && (
-                <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2.5">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 text-xs flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
                   <span>{formError}</span>
                 </div>
               )}
 
               {/* Endorsement Type Selector */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Vrsta promjene na polici:
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -203,11 +203,11 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
                         onClick={() => setEndorsementType(tab.id as EndorsementType)}
                         className={`p-2.5 rounded-2xl text-left border text-xs flex items-center gap-2 transition-all ${
                           isSel
-                            ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-semibold shadow-[0_0_12px_rgba(251,101,4,0.2)]'
-                            : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:text-white hover:border-white/[0.15]'
+                            ? 'border-teal-600 bg-teal-50/80 dark:bg-teal-950/40 text-teal-950 dark:text-teal-200 font-semibold shadow-sm'
+                            : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700'
                         }`}
                       >
-                        <Icon className={`w-4 h-4 ${isSel ? 'text-[#ff7b1a]' : 'text-slate-500'}`} />
+                        <Icon className={`w-4 h-4 ${isSel ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'}`} />
                         <span className="truncate">{tab.label}</span>
                       </button>
                     );
@@ -217,12 +217,12 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
 
               {/* Dynamic Fields Based on Selection */}
               {endorsementType === 'address_change' && (
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
-                  <div className="text-xs font-semibold text-[#ff7b1a] flex items-center gap-1.5">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="text-xs font-semibold text-teal-700 dark:text-teal-400 flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5" /> Nova adresa prebivališta / sjedišta
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Ulica i kućni broj</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Ulica i kućni broj</label>
                     <Input
                       placeholder="npr. Ilica 142"
                       value={newStreet}
@@ -232,7 +232,7 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] text-slate-400 mb-1">Poštanski broj</label>
+                      <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Poštanski broj</label>
                       <Input
                         placeholder="npr. 10000"
                         value={newPostalCode}
@@ -241,7 +241,7 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] text-slate-400 mb-1">Grad / Mjesto</label>
+                      <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Grad / Mjesto</label>
                       <Input
                         placeholder="npr. Zagreb"
                         value={newCity}
@@ -254,12 +254,12 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
               )}
 
               {endorsementType === 'driver_addition' && (
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
-                  <div className="text-xs font-semibold text-[#ff7b1a] flex items-center gap-1.5">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="text-xs font-semibold text-teal-700 dark:text-teal-400 flex items-center gap-1.5">
                     <UserPlus className="w-3.5 h-3.5" /> Podaci o dodatnom ovlaštenom vozaču
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Ime i prezime vozača</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Ime i prezime vozača</label>
                     <Input
                       placeholder="npr. Ivan Horvat"
                       value={driverName}
@@ -276,7 +276,7 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Godina položenog vozačkog ispita</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Godina položenog vozačkog ispita</label>
                     <Input
                       type="number"
                       min="1950"
@@ -289,15 +289,15 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
               )}
 
               {endorsementType === 'property_renovation' && (
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
-                  <div className="text-xs font-semibold text-[#ff7b1a] flex items-center gap-1.5">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="text-xs font-semibold text-teal-700 dark:text-teal-400 flex items-center gap-1.5">
                     <Home className="w-3.5 h-3.5" /> Prijava adaptacije / ulaganja u nekretninu
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Opis izvedenih radova</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Opis izvedenih radova</label>
                     <textarea
                       rows={2}
-                      className="w-full px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-2xl text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#fb6504]"
+                      className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
                       placeholder="npr. Zamjena instalacija vode, nova PVC stolarija, dogradnja terase..."
                       value={renovationDetails}
                       onChange={(e) => setRenovationDetails(e.target.value)}
@@ -305,7 +305,7 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Procijenjena vrijednost radova (€)</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Procijenjena vrijednost radova (€)</label>
                     <Input
                       type="number"
                       value={renovationValue}
@@ -316,12 +316,12 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
               )}
 
               {endorsementType === 'iban_update' && (
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
-                  <div className="text-xs font-semibold text-[#ff7b1a] flex items-center gap-1.5">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="text-xs font-semibold text-teal-700 dark:text-teal-400 flex items-center gap-1.5">
                     <CreditCard className="w-3.5 h-3.5" /> Novi IBAN za povrate i naplatu
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Hrvatski IBAN račun</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Hrvatski IBAN račun</label>
                     <Input
                       placeholder="HR1234567890123456789"
                       value={newIban}
@@ -337,15 +337,15 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
               )}
 
               {endorsementType === 'coverage_upgrade' && (
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
-                  <div className="text-xs font-semibold text-[#ff7b1a] flex items-center gap-1.5">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="text-xs font-semibold text-teal-700 dark:text-teal-400 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5" /> Zahtjev za proširenjem rizika
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Dodatna pokrića koja želite uključiti</label>
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Dodatna pokrića koja želite uključiti</label>
                     <textarea
                       rows={2}
-                      className="w-full px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-2xl text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#fb6504]"
+                      className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
                       placeholder="npr. Želim dodati pokriće potresa i lom stakla na moju policu imovine..."
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
@@ -357,7 +357,7 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
 
               {/* Effective date */}
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">Željeni datum primjene izmjene</label>
+                <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">Željeni datum primjene izmjene</label>
                 <Input
                   type="date"
                   value={effectiveDate}
@@ -377,7 +377,7 @@ export const PolicyEndorsementModal: React.FC<PolicyEndorsementModalProps> = ({
                   type="submit"
                   size="sm"
                   disabled={isSubmitting}
-                  className="font-mono flex items-center gap-1.5 shadow-[0_0_15px_rgba(251,101,4,0.3)]"
+                  className="font-mono flex items-center gap-1.5 shadow-md shadow-teal-600/20"
                 >
                   <Send className="w-3.5 h-3.5" />
                   {isSubmitting ? 'Slanje zahtjeva...' : 'Podnesi zahtjev za aneks'}

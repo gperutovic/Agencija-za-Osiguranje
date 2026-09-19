@@ -143,13 +143,13 @@ Zagreb, Junija Palmotića 76
   return (
     <div className="space-y-6">
       {/* Top Banner with Stats & Controls */}
-      <div className="p-6 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 backdrop-blur-xl shadow-bento flex flex-col md:flex-row md:items-center justify-between gap-6 text-slate-900 dark:text-white">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-            <h3 className="text-xl font-bold text-white">Sustav automatiziranih obnova polica</h3>
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Sustav automatiziranih obnova polica</h3>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Automatsko praćenje isteka polica (30, 15 i 7 dana) i višekanalno slanje podsjetnika klijentima.
           </p>
         </div>
@@ -160,7 +160,7 @@ Zagreb, Junija Palmotića 76
             size="sm"
             onClick={handleBatchDispatch}
             disabled={batchDispatching || filteredList.length === 0}
-            className="font-mono text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(251,101,4,0.3)]"
+            className="font-mono text-xs flex items-center gap-2 shadow-md shadow-teal-600/20"
           >
             {batchDispatching ? (
               <>
@@ -178,7 +178,7 @@ Zagreb, Junija Palmotića 76
       </div>
 
       {/* Filter Toolbar */}
-      <div className="p-5 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 backdrop-blur-xl shadow-bento flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="w-full sm:w-80">
           <Input
             placeholder="Pretraži police koje ističu, klijente..."
@@ -187,7 +187,7 @@ Zagreb, Junija Palmotića 76
           />
         </div>
 
-        <div className="flex items-center bg-white/[0.03] p-1 rounded-2xl border border-white/[0.06] text-xs">
+        <div className="flex items-center bg-slate-100 dark:bg-slate-800/60 p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700 text-xs">
           {[
             { id: 'all', label: `Sve ističuće (${expiringPolicies.length})` },
             { id: '7days', label: 'Hitno (≤ 7 dana)' },
@@ -199,8 +199,8 @@ Zagreb, Junija Palmotića 76
               onClick={() => setFilterWindow(tab.id as any)}
               className={`px-3 py-1.5 rounded-xl font-medium transition-colors ${
                 filterWindow === tab.id
-                  ? 'bg-[#fb6504] text-white font-semibold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-teal-600 text-white font-semibold shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {tab.label}
@@ -214,10 +214,10 @@ Zagreb, Junija Palmotića 76
         {/* Main List */}
         <div className="lg:col-span-2 space-y-3">
           {filteredList.length === 0 ? (
-            <div className="p-12 text-center bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl text-slate-400 font-mono">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
-              <p className="text-sm text-white font-semibold">Nema polica u ovom vremenskom prozoru</p>
-              <p className="text-xs text-slate-500 mt-1">Sve klijentske police su uredno obnovljene i važeće.</p>
+            <div className="p-12 text-center bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl text-slate-500 font-mono shadow-bento">
+              <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
+              <p className="text-sm text-slate-900 dark:text-white font-semibold">Nema polica u ovom vremenskom prozoru</p>
+              <p className="text-xs text-slate-400 mt-1">Sve klijentske police su uredno obnovljene i važeće.</p>
             </div>
           ) : (
             filteredList.map((p) => {
@@ -227,24 +227,24 @@ Zagreb, Junija Palmotića 76
               return (
                 <div
                   key={p.id}
-                  className="p-5 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] hover:border-white/[0.18] transition-all backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-white"
+                  className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500/50 dark:hover:border-teal-500/50 transition-all shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-slate-900 dark:text-white"
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm font-bold text-[#ff7b1a]">
+                      <span className="font-mono text-sm font-bold text-teal-700 dark:text-teal-400">
                         {p.policyNumber}
                       </span>
                       {getSeverityBadge(p.daysRemaining)}
-                      <span className="text-xs text-slate-400 font-medium capitalize">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium capitalize">
                         &bull; {p.type} &bull; {p.insurer}
                       </span>
                     </div>
 
-                    <h4 className="font-bold text-base text-white">{p.insuredName}</h4>
+                    <h4 className="font-bold text-base text-slate-900 dark:text-white">{p.insuredName}</h4>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-400 font-mono">
-                      <span>Istek: <strong className="text-slate-200">{formatDate(p.endDate)}</strong></span>
-                      <span>Premija: <strong className="text-[#ff7b1a]">{formatCurrency(p.premiumAmount)}</strong></span>
+                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 font-mono">
+                      <span>Istek: <strong className="text-slate-700 dark:text-slate-200">{formatDate(p.endDate)}</strong></span>
+                      <span>Premija: <strong className="text-teal-700 dark:text-teal-400">{formatCurrency(p.premiumAmount)}</strong></span>
                     </div>
                   </div>
 
@@ -259,7 +259,7 @@ Zagreb, Junija Palmotića 76
                       }}
                       disabled={dispatchingId === `${p.id}-sms`}
                       className={`flex items-center gap-1.5 text-xs font-mono ${
-                        smsSent ? 'text-emerald-400 border-emerald-500/30' : 'text-slate-300'
+                        smsSent ? 'text-emerald-600 dark:text-emerald-400 border-emerald-500/30' : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
@@ -275,7 +275,7 @@ Zagreb, Junija Palmotića 76
                       }}
                       disabled={dispatchingId === `${p.id}-email`}
                       className={`flex items-center gap-1.5 text-xs font-mono ${
-                        emailSent ? 'text-emerald-400 border-emerald-500/30' : 'text-slate-300'
+                        emailSent ? 'text-emerald-600 dark:text-emerald-400 border-emerald-500/30' : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -287,7 +287,7 @@ Zagreb, Junija Palmotića 76
                       size="sm"
                       onClick={() => handleSendSingle(p, 'email')}
                       disabled={dispatchingId !== null}
-                      className="font-mono text-xs shadow-[0_0_12px_rgba(251,101,4,0.3)]"
+                      className="font-mono text-xs shadow-md shadow-teal-600/20"
                     >
                       Pošalji odmah
                     </Button>
@@ -299,25 +299,25 @@ Zagreb, Junija Palmotića 76
         </div>
 
         {/* Preview Panel */}
-        <div className="p-6 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl text-white h-fit space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-            <h4 className="font-bold text-sm text-white flex items-center gap-2">
-              <Bell className="w-4 h-4 text-[#ff7b1a]" />
+        <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-bento text-slate-900 dark:text-white h-fit space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+              <Bell className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               Pregled obavijesti za klijenta
             </h4>
-            <div className="flex items-center bg-white/[0.04] p-1 rounded-xl border border-white/[0.08] text-[11px] font-mono">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-mono">
               <button
                 onClick={() => setPreviewChannel('sms')}
-                className={`px-2 py-0.5 rounded-lg ${
-                  previewChannel === 'sms' ? 'bg-[#fb6504] text-white' : 'text-slate-400'
+                className={`px-2 py-0.5 rounded-lg transition-colors ${
+                  previewChannel === 'sms' ? 'bg-teal-600 text-white font-semibold' : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
                 SMS
               </button>
               <button
                 onClick={() => setPreviewChannel('email')}
-                className={`px-2 py-0.5 rounded-lg ${
-                  previewChannel === 'email' ? 'bg-[#fb6504] text-white' : 'text-slate-400'
+                className={`px-2 py-0.5 rounded-lg transition-colors ${
+                  previewChannel === 'email' ? 'bg-teal-600 text-white font-semibold' : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
                 Email
@@ -328,21 +328,21 @@ Zagreb, Junija Palmotića 76
           {previewPolicy ? (
             <div className="space-y-4">
               <div>
-                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Primatelj
                 </span>
-                <span className="font-bold text-sm text-white">{previewPolicy.insuredName}</span>
-                <span className="text-xs text-[#ff7b1a] block font-mono">
+                <span className="font-bold text-sm text-slate-900 dark:text-white">{previewPolicy.insuredName}</span>
+                <span className="text-xs text-teal-700 dark:text-teal-400 block font-mono font-semibold">
                   {previewPolicy.policyNumber} &bull; {previewPolicy.insurer}
                 </span>
               </div>
 
               {previewChannel === 'sms' ? (
-                <div className="p-4 rounded-2xl bg-[#121624] border border-white/[0.08] text-xs font-mono text-slate-200 leading-relaxed shadow-inner">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-800 dark:text-slate-200 leading-relaxed shadow-inner">
                   {generateSmsText(previewPolicy)}
                 </div>
               ) : (
-                <div className="p-4 rounded-2xl bg-[#121624] border border-white/[0.08] text-xs font-mono text-slate-200 whitespace-pre-line leading-relaxed max-h-72 overflow-y-auto shadow-inner">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-800 dark:text-slate-200 whitespace-pre-line leading-relaxed max-h-72 overflow-y-auto shadow-inner">
                   {generateEmailBody(previewPolicy)}
                 </div>
               )}
@@ -351,33 +351,33 @@ Zagreb, Junija Palmotića 76
                 variant="primary"
                 size="sm"
                 onClick={() => handleSendSingle(previewPolicy, previewChannel)}
-                className="w-full font-mono text-xs shadow-[0_0_15px_rgba(251,101,4,0.3)]"
+                className="w-full font-mono text-xs shadow-md shadow-teal-600/20"
               >
                 Pošalji {previewChannel === 'sms' ? 'SMS podsjetnik' : 'E-mail podsjetnik'}
               </Button>
             </div>
           ) : (
-            <div className="py-12 text-center text-xs text-slate-500 font-mono">
+            <div className="py-12 text-center text-xs text-slate-400 font-mono">
               Odaberite policu s popisa za pregled personaliziranog predloška poruke.
             </div>
           )}
 
           {/* Activity Log */}
           {sentAlerts.length > 0 && (
-            <div className="pt-4 border-t border-white/[0.08] space-y-2">
-              <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+              <span className="text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Zadnje poslane obavijesti ({sentAlerts.length})
               </span>
               <div className="space-y-1.5 max-h-40 overflow-y-auto">
                 {sentAlerts.slice(-5).map((log, i) => (
                   <div
                     key={i}
-                    className="p-2 rounded-xl bg-white/[0.02] border border-white/[0.04] text-[11px] flex items-center justify-between text-slate-300"
+                    className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60 text-[11px] flex items-center justify-between text-slate-600 dark:text-slate-300"
                   >
                     <span>
-                      <strong className="text-white">{log.recipient}</strong> ({log.type.toUpperCase()})
+                      <strong className="text-slate-900 dark:text-white">{log.recipient}</strong> ({log.type.toUpperCase()})
                     </span>
-                    <span className="font-mono text-slate-500 text-[10px]">{log.sentAt}</span>
+                    <span className="font-mono text-slate-400 dark:text-slate-500 text-[10px]">{log.sentAt}</span>
                   </div>
                 ))}
               </div>

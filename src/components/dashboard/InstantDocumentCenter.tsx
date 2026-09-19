@@ -169,7 +169,7 @@ Datum generiranja: ${new Date().toLocaleDateString('hr-HR')}
                     <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-2 font-mono">
                       <span>Službeni format</span>
                       <span>&bull;</span>
-                      <span>Verificirao: HANFA ZO-88912</span>
+                      <span>Verificirani dokument</span>
                       {doc.fileSizeBytes && (
                         <>
                           <span>&bull;</span>

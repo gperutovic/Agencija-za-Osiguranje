@@ -101,8 +101,8 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-slate-900">Digitalni savjetnik Agencije Život</h3>
-                <span className="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
-                  HANFA ZO-88912
+                <span className="text-[10px] font-mono font-bold bg-teal-100 text-teal-800 px-2 py-0.5 rounded">
+                  Ovlašteni savjetnik
                 </span>
               </div>
               <p className="text-xs text-slate-500">Ovlašteni aktuarski izračun polica osiguranja</p>

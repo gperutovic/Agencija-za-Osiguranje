@@ -9,7 +9,7 @@ import { InsuranceCategory } from '../lib/types';
 import { AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
-  title: 'Agencija Život | Ovlašteni partner za osiguranje u Hrvatskoj (HANFA ZO-88912)',
+  title: 'Agencija za osiguranje | Ovlašteni partner za osiguranje u Hrvatskoj',
   description:
     'Vodeći hrvatski digitalni portal za usporedbu i ugovaranje osiguranja. Uštedite na dopunskom zdravstvenom nakon poskupljenja HZZO-a, osigurajte vozilo uz 50% bonusa i zaštitite dom u 60 sekundi.',
   keywords: [
@@ -19,8 +19,7 @@ export const metadata = {
     'kasko osiguranje usporedba',
     'toyota kasko zagreb',
     'osiguranje imovine i potres',
-    'hanfa zo-88912',
-    'agencija život',
+    'agencija za osiguranje',
     'generali osiguranje partner',
   ],
 };

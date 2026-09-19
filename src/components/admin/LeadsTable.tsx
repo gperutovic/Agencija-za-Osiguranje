@@ -66,9 +66,9 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
   };
 
   return (
-    <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl shadow-2xl overflow-hidden text-white">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 backdrop-blur-xl shadow-bento overflow-hidden text-slate-900 dark:text-white">
       {/* Search and Filters Bar */}
-      <div className="p-5 border-b border-white/[0.08] flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="w-full sm:w-80">
           <Input
             placeholder="Pretraži klijente, telefon, email..."
@@ -109,7 +109,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="bg-white/[0.02] border-b border-white/[0.08] text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
+            <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               <th className="py-3.5 px-6">Klijent</th>
               <th className="py-3.5 px-6">Vrsta osiguranja</th>
               <th className="py-3.5 px-6">Godišnja premija</th>
@@ -118,7 +118,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
               <th className="py-3.5 px-6 text-right">Upravljanje statusom</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.06]">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {filteredQuotes.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-12 text-slate-500 font-mono">
@@ -127,26 +127,26 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
               </tr>
             ) : (
               filteredQuotes.map((q) => (
-                <tr key={q.id} className="hover:bg-white/[0.02] transition-colors">
+                <tr key={q.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-semibold text-white block">
+                      <span className="font-semibold text-slate-900 dark:text-white block">
                         {q.customer.fullName}
                       </span>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-slate-400 font-mono">
+                      <div className="flex items-center gap-3 mt-1 text-xs text-slate-500 dark:text-slate-400 font-mono">
                         <a
                           href={`tel:${q.customer.phone}`}
-                          className="hover:text-[#fb6504] flex items-center gap-1 transition-colors"
+                          className="hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-1 transition-colors"
                         >
-                          <Phone className="w-3 h-3 text-[#fb6504]" />
+                          <Phone className="w-3 h-3 text-teal-600 dark:text-teal-400" />
                           {q.customer.phone}
                         </a>
                         <span>•</span>
                         <a
                           href={`mailto:${q.customer.email}`}
-                          className="hover:text-[#fb6504] flex items-center gap-1 transition-colors"
+                          className="hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-1 transition-colors"
                         >
-                          <Mail className="w-3 h-3 text-[#fb6504]" />
+                          <Mail className="w-3 h-3 text-teal-600 dark:text-teal-400" />
                           {q.customer.email}
                         </a>
                       </div>
@@ -154,7 +154,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                   </td>
 
                   <td className="py-4 px-6">
-                    <span className="capitalize font-medium text-slate-300">
+                    <span className="capitalize font-medium text-slate-700 dark:text-slate-300">
                       {q.type === 'auto'
                         ? 'Auto osiguranje'
                         : q.type === 'property'
@@ -167,16 +167,16 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
 
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-bold text-[#ff7b1a] font-mono">
+                      <span className="font-bold text-teal-700 dark:text-teal-400 font-mono">
                         {formatCurrency(q.calculatedEstimate.annualPremium)}
                       </span>
-                      <span className="block text-xs text-slate-500 font-mono">
+                      <span className="block text-xs text-slate-400 dark:text-slate-500 font-mono">
                         {formatCurrency(q.calculatedEstimate.monthlyPremium)} / mj.
                       </span>
                     </div>
                   </td>
 
-                  <td className="py-4 px-6 text-xs text-slate-400 font-mono">
+                  <td className="py-4 px-6 text-xs text-slate-500 dark:text-slate-400 font-mono">
                     {formatDateTime(q.createdAt)}
                   </td>
 
@@ -190,7 +190,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'contacted')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/20 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 hover:bg-amber-100 border border-amber-200 dark:border-amber-800 transition-colors"
                         >
                           Kontaktiraj
                         </button>
@@ -199,7 +199,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'quoted')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 border border-blue-500/20 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 hover:bg-teal-100 border border-teal-200 dark:border-teal-800 transition-colors"
                         >
                           Pošalji ponudu
                         </button>
@@ -208,7 +208,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'bound')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-500/10 text-[#2dd4bf] hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-800 transition-colors"
                         >
                           Sklopi policu
                         </button>
@@ -217,7 +217,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                         <button
                           onClick={() => handleStatusUpdate(q.id, 'lost')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                         >
                           Arhiviraj
                         </button>

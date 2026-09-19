@@ -36,25 +36,25 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-[#06080c]/80 backdrop-blur-md z-50 animate-in fade-in duration-150" />
+        <Dialog.Overlay className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 animate-in fade-in duration-150" />
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <Dialog.Content
             className={twMerge(
               clsx(
-                'w-full bg-[#0a0d16] rounded-3xl p-6 sm:p-8 shadow-floating border border-white/[0.1] relative my-8 animate-in zoom-in-95 duration-150 text-slate-100',
+                'w-full bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-floating border border-slate-200 dark:border-slate-800 relative my-8 animate-in zoom-in-95 duration-150 text-slate-900 dark:text-slate-100',
                 maxWidths[effectiveWidth]
               )
             )}
           >
-            <div className="flex items-start justify-between gap-4 pb-4 border-b border-white/[0.08] mb-6">
+            <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800 mb-6">
               <div className="space-y-1">
                 {title && (
-                  <Dialog.Title className="text-lg sm:text-xl font-black text-white tracking-tight">
+                  <Dialog.Title className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                     {title}
                   </Dialog.Title>
                 )}
                 {description && (
-                  <Dialog.Description className="text-xs text-slate-400">
+                  <Dialog.Description className="text-xs text-slate-500 dark:text-slate-400">
                     {description}
                   </Dialog.Description>
                 )}
@@ -62,7 +62,7 @@ export const Modal: React.FC<ModalProps> = ({
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className="rounded-xl p-2 text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+                  className="rounded-xl p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-800 transition-colors cursor-pointer"
                   aria-label="Zatvori"
                 >
                   <X className="w-5 h-5" />

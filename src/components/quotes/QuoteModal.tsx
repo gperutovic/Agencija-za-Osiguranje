@@ -65,7 +65,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/70">
           <div>
             <h2 className="text-xl font-bold text-slate-900">Izračunaj i usporedi police</h2>
-            <p className="text-xs text-slate-500">10 vodećih osiguratelja • Službene HANFA tarife • Bez provizije</p>
+            <p className="text-xs text-slate-500">Vodeći osiguratelji u RH • Transparentne tarife • Bez agencijske provizije</p>
           </div>
           <button
             onClick={onClose}
@@ -88,7 +88,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                   onClick={() => setActiveCategory(cat.id)}
                   className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                      ? 'bg-teal-600 text-white shadow-md shadow-teal-500/20'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
                   }`}
                 >

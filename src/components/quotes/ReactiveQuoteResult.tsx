@@ -505,7 +505,7 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1 text-slate-600">
                   <p className="flex items-center gap-1 text-slate-900 font-bold">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    Sigurna transakcija & HANFA zaštita potrošača
+                    Sigurna transakcija &amp; Zaštita potrošača
                   </p>
                   <p className="text-[11px] text-slate-500">
                     Polica ima izravnu pravnu snagu. Preuzimanje digitalnog certifikata i Zelene karte omogućeno je odmah po autorizaciji.

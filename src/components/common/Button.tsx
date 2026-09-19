@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'destructive' | 'danger' | 'ghost' | 'teal';
+  variant?: 'primary' | 'secondary' | 'outline' | 'destructive' | 'danger' | 'ghost' | 'teal' | 'gold' | 'amber';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -22,23 +22,27 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#06080c] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
+    'inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-900 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
 
   const variants = {
     primary:
-      'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-glow-orange hover:shadow-glow-orange-lg hover:scale-[1.02] border border-orange-400/30 focus:ring-[#fb6504]',
+      'bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-600/20 hover:shadow-teal-600/30 hover:scale-[1.01] border border-teal-500/30 focus:ring-teal-500',
     secondary:
-      'bg-[#0f1422] hover:bg-[#151c30] text-white border border-white/10 hover:border-white/20 shadow-md focus:ring-slate-500',
+      'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200/80 shadow-xs focus:ring-slate-400 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-100 dark:border-slate-700',
     teal:
-      'bg-gradient-to-r from-teal-500 to-emerald-600 text-white shadow-glow-teal hover:scale-[1.02] border border-teal-400/30 focus:ring-teal-400',
+      'bg-gradient-to-r from-teal-600 to-teal-700 text-white shadow-teal-glow hover:scale-[1.02] border border-teal-500/30 focus:ring-teal-500',
+    gold:
+      'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20 hover:scale-[1.02] border border-amber-400/30 focus:ring-amber-500',
+    amber:
+      'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20 hover:scale-[1.02] border border-amber-400/30 focus:ring-amber-500',
     outline:
-      'bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 hover:text-white border border-white/[0.12] hover:border-white/[0.25] backdrop-blur-md focus:ring-white/20',
+      'bg-white/80 hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 shadow-xs backdrop-blur-md focus:ring-teal-500 dark:bg-slate-800/80 dark:hover:bg-slate-800 dark:text-slate-200 dark:border-slate-700',
     destructive:
       'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md hover:scale-[1.02] border border-rose-500/30 focus:ring-rose-500',
     danger:
       'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md hover:scale-[1.02] border border-rose-500/30 focus:ring-rose-500',
     ghost:
-      'bg-transparent hover:bg-white/[0.06] text-slate-300 hover:text-white focus:ring-white/20',
+      'bg-transparent hover:bg-slate-100 text-slate-600 hover:text-slate-900 focus:ring-slate-300 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white',
   };
 
   const sizes = {

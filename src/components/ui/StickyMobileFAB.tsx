@@ -58,7 +58,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
 
         <button
           onClick={() => setIsCallbackModalOpen(true)}
-          className="flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-900/30 active:scale-95 transition-all"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-500 hover:to-teal-600 text-white text-xs font-bold shadow-lg shadow-teal-950/40 active:scale-95 transition-all"
         >
           <Clock className="w-4 h-4 text-amber-300" />
           <span>Nazovite me (15m)</span>
@@ -82,7 +82,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
             <div className="absolute bottom-16 right-0 w-72 p-4 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-xl space-y-3 animate-in fade-in slide-in-from-bottom-3">
               <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                 <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-blue-400" />
+                  <ShieldCheck className="w-4 h-4 text-teal-400" />
                   <span>Brzi kontakt s agentom</span>
                 </span>
                 <button
@@ -126,7 +126,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                   setIsOpen(false);
                   setIsCallbackModalOpen(true);
                 }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md shadow-blue-900/30"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-all shadow-md shadow-teal-950/30"
               >
                 <Clock className="w-4 h-4 text-amber-300" />
                 <span>Nazovite me u roku od 15 min</span>
@@ -136,7 +136,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-2xl shadow-blue-950/50 border border-white/20 transition-all hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-500 hover:to-teal-600 text-white font-bold text-xs shadow-2xl shadow-teal-950/50 border border-teal-400/20 transition-all hover:scale-105 active:scale-95"
             aria-label="Podrška agenata"
           >
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -158,7 +158,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
             </button>
 
             <div className="space-y-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-mono text-[11px] font-bold uppercase">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-mono text-[11px] font-bold uppercase">
                 <Clock className="w-3.5 h-3.5 text-amber-400" />
                 <span>Besplatni povratni poziv</span>
               </span>
@@ -166,7 +166,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                 Nazovite me u roku od 15 minuta
               </h3>
               <p className="text-xs text-slate-400">
-                Ostavite svoj kontakt i licencirani HANFA zastupnik pripremit će izračune i javiti vam se u najkraćem roku.
+                Ostavite svoj kontakt i ovlašteni savjetnik za osiguranje pripremit će izračune i javiti vam se u najkraćem roku.
               </p>
             </div>
 
@@ -188,7 +188,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                     placeholder="npr. Ivan Horvat"
                     value={callbackName}
                     onChange={(e) => setCallbackName(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
                   />
                 </div>
 
@@ -200,7 +200,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                     placeholder="+385 91 ..."
                     value={callbackPhone}
                     onChange={(e) => setCallbackPhone(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
                   />
                 </div>
 
@@ -209,7 +209,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                   <select
                     value={callbackTopic}
                     onChange={(e) => setCallbackTopic(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-teal-500"
                   >
                     <option>Auto osiguranje (AO i kasko)</option>
                     <option>Osiguranje doma i potres</option>
@@ -223,7 +223,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-900/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-all shadow-lg shadow-teal-950/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <span>Slanje zahtjeva...</span>

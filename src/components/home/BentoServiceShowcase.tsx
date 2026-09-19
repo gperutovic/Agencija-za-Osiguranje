@@ -53,8 +53,6 @@ export const BentoServiceShowcase: React.FC<BentoServiceShowcaseProps> = ({
             onMouseLeave={() => setHoveredCard(null)}
             className="lg:col-span-2 p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-bento hover:shadow-bento-hover transition-all duration-300 flex flex-col justify-between relative overflow-hidden group"
           >
-            <div className="absolute top-0 right-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-teal-500/15 transition-all" />
-
             <div className="space-y-4 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/30 group-hover:scale-105 transition-transform">
@@ -236,8 +234,6 @@ export const BentoServiceShowcase: React.FC<BentoServiceShowcaseProps> = ({
             onMouseLeave={() => setHoveredCard(null)}
             className="lg:col-span-2 p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 text-white border border-slate-800 shadow-2xl flex flex-col justify-between relative overflow-hidden group"
           >
-            <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-
             <div className="space-y-4 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="w-14 h-14 rounded-2xl bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">

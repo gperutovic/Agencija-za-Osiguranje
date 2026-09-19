@@ -1,4 +1,4 @@
-﻿import React, { useId } from 'react';
+import React, { useId } from 'react';
 import { CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
 import { validateOibWithFeedback, sanitizeOIB } from '../../utils/oibValidator';
 import { Tooltip } from './Tooltip';
@@ -41,10 +41,10 @@ export const OibInput: React.FC<OibInputProps> = ({
           <span>{label}</span>
           {required && <span className="text-red-400 ml-1">*</span>}
         </label>
-        <Tooltip text="OIB (Osobni identifikacijski broj) je zakonska obveza propisana Zakonom o osiguranju RH i HANFA propisima za provjeru identiteta i ugovaranje polica.">
+        <Tooltip text="OIB (Osobni identifikacijski broj) je zakonska obveza propisana Zakonom o osiguranju RH za provjeru identiteta i izdavanje police.">
           <span className="text-[11px] text-slate-400 flex items-center gap-1">
-            <ShieldCheck className="w-3 h-3 text-blue-400" />
-            <span>HANFA Zahtjev</span>
+            <ShieldCheck className="w-3 h-3 text-teal-400" />
+            <span>Sigurnosna provjera</span>
           </span>
         </Tooltip>
       </div>

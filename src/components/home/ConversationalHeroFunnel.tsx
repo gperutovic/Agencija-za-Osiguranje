@@ -144,22 +144,18 @@ export const ConversationalHeroFunnel: React.FC<ConversationalHeroFunnelProps> =
 
   return (
     <section className={`relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200 dark:border-slate-800 ${className}`}>
-      {/* Subtle Ambient Radial Backdrops */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-10 right-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         {/* Top Eyebrow & Institutional Authority */}
         <div className="text-center max-w-4xl mx-auto space-y-4">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold shadow-xs"
           >
             <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-            <span className="text-teal-700 dark:text-teal-400">MODERN AGENCY ADVANTAGE</span>
+            <span className="text-teal-700 dark:text-teal-400">OVLAŠTENI ZASTUPNIK</span>
             <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-            <span>HANFA LICENCA ZO-88912</span>
+            <span>NEOVISNA USPOREDBA POLICA</span>
             <span className="text-slate-300 dark:text-slate-700">&bull;</span>
             <span className="text-amber-600 dark:text-amber-400">GENERALI PARTNER</span>
           </motion.div>
@@ -342,19 +338,57 @@ export const ConversationalHeroFunnel: React.FC<ConversationalHeroFunnelProps> =
           </form>
         </motion.div>
 
-        {/* 3 Pillars of Modern Trust */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto pt-4 text-center">
-          <div className="p-4 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-2xl font-black text-slate-900 dark:text-white font-mono block">0 €</span>
-            <span className="text-xs text-slate-500 font-medium">Agencijske provizije (čl. 401. Zakona o osiguranju)</span>
+        {/* 3 Factual Actionable Workflow Steps */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto pt-4 text-left">
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="w-7 h-7 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 flex items-center justify-center font-mono font-bold text-xs border border-teal-200 dark:border-teal-800">
+                1
+              </span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400 font-mono">
+                Korak 1
+              </span>
+            </div>
+            <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white">
+              Unos podataka
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Brzi unos registarske oznake ili OIB-a u manje od 60 sekundi bez suvišne papirologije.
+            </p>
           </div>
-          <div className="p-4 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-2xl font-black text-teal-600 dark:text-teal-400 font-mono block">&lt; 90 sek</span>
-            <span className="text-xs text-slate-500 font-medium">Vrijeme digitalnog izdavanja police i Zelene karte</span>
+
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="w-7 h-7 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 flex items-center justify-center font-mono font-bold text-xs border border-teal-200 dark:border-teal-800">
+                2
+              </span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400 font-mono">
+                Korak 2
+              </span>
+            </div>
+            <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white">
+              Usporedba vodećih osiguratelja
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Transparentan izračun premije i odabir pokrića prilagođenih vašim stvarnim potrebama.
+            </p>
           </div>
-          <div className="p-4 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-2xl font-black text-amber-500 font-mono block">4 Osiguratelja</span>
-            <span className="text-xs text-slate-500 font-medium">Generali, Croatia, Allianz i Wiener u usporedbi</span>
+
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="w-7 h-7 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 flex items-center justify-center font-mono font-bold text-xs border border-teal-200 dark:border-teal-800">
+                3
+              </span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400 font-mono">
+                Korak 3
+              </span>
+            </div>
+            <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white">
+              Aktivacija police i digitalna arhiva
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Trenutno zaprimanje police na e-mail i trajan siguran pristup unutar Moj Portal novčanika.
+            </p>
           </div>
         </div>
       </div>

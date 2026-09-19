@@ -125,7 +125,7 @@ export const NeedsAssessmentQuiz: React.FC = () => {
           Pronađite idealno osiguranje za vašu životnu situaciju
         </h3>
         <p className="text-xs text-slate-400">
-          U skladu sa Zakonom o osiguranju RH i HANFA direktivom o distribuciji osiguranja (IDD).
+          U skladu sa Zakonom o osiguranju RH i EU Direktivom o distribuciji osiguranja (IDD).
         </p>
       </div>
 

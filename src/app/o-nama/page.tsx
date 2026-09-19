@@ -3,9 +3,9 @@ import { ShieldCheck, Award, Users, Building, MapPin, Phone, Mail, FileCheck, Ch
 import { AGENCY_DETAILS, CARRIER_PARTNERS } from '../../lib/content/insurance-data';
 
 export const metadata = {
-  title: 'O Nama & HANFA Licenca ZO-88912 | Agencija Život Zagreb',
+  title: 'O Nama & Pravni Identitet | Agencija za osiguranje Zagreb',
   description:
-    'Saznajte više o ŽIVOT d.o.o. (Agencija Život), ovlaštenom partneru Generali osiguranja i Toyota Centra Zagreb pod nadzorom HANFA-e. Registar ZO-88912.',
+    'Saznajte više o poslovanju agencije, ovlaštenom partneru Generali osiguranja i Toyota Centra Zagreb.',
 };
 
 export default function ONamaPage() {
@@ -14,9 +14,9 @@ export default function ONamaPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Hero Banner */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>HANFA REGISTAR ZO-88912 &bull; ZAGREB, PALMOTIĆEVA 76</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-mono font-semibold">
+            <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+            <span>OVLAŠTENI DISTRIBUTER OSIGURANJA &bull; ZAGREB, PALMOTIĆEVA 76</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">

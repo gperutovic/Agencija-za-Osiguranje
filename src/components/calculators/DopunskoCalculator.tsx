@@ -244,7 +244,7 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
             {/* Carrier Choices List */}
             <div className="mt-6 space-y-2">
               <span className="text-xs font-mono text-slate-600 uppercase font-bold block">
-                Izravna ponuda licenciranih osiguratelja (HANFA nadzor)
+                Izravna ponuda licenciranih osiguratelja (Usporedba u realnom vremenu)
               </span>
               <div className="space-y-2">
                 {result.carrierOptions.map((opt) => (

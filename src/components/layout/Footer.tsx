@@ -7,10 +7,9 @@ import {
   Mail,
   MapPin,
   ExternalLink,
-  Award,
   Lock,
   Scale,
-  CreditCard,
+  CheckCircle2,
 } from 'lucide-react';
 import { BrandLogo } from '../common/BrandLogo';
 import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
@@ -20,28 +19,25 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[#0B1528] text-slate-300 border-t border-slate-800 text-left relative overflow-hidden">
-      {/* Decorative subtle ambient highlight */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 space-y-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          {/* Col 1 & 2: Entity & Regulatory Credentials */}
+          {/* Col 1 & 2: Entity & Value Proposition */}
           <div className="lg:col-span-2 space-y-4">
             <BrandLogo variant="full" theme="dark" showBadge={false} />
 
             <p className="text-xs text-slate-300 leading-relaxed pr-4 pt-1">
-              Ovlašteni distributer osiguranja upisan u sudski registar Trgovačkog suda u Zagrebu i registar Hrvatske agencije za nadzor financijskih usluga (HANFA). Ekskluzivni partner Generali osiguranja d.d. i Toyota Centra Zagreb za posebne kasko pogodnosti.
+              Ovlašteni distributer osiguranja i pouzdani savjetnik za privatne i poslovne osiguranike. Pružamo stručno savjetovanje, neovisnu usporedbu polica vodećih osiguravajućih društava i podršku pri obradi šteta bez dodatnih naknada za ugovaratelja.
             </p>
 
-            {/* Official HANFA Badge Callout */}
+            {/* Advisory Trust & Consumer Value Note */}
             <div className="p-4 bg-slate-900/90 rounded-2xl border border-slate-800 text-xs space-y-2">
               <div className="flex items-center gap-2 text-teal-400 font-bold text-[11px] font-mono">
-                <Award className="w-4 h-4 shrink-0" />
-                <span>HANFA REGISTAR DISTRIBUTERA OSIGURANJA: {AGENCY_DETAILS.hanfaRegisterNumber}</span>
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                <span>SAVJETOVANJE I ZASTUPANJE BEZ PROVIZIJE</span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed font-mono">
-                Rješenje: <strong>{AGENCY_DETAILS.hanfaLicense}</strong>. Poslovanje u cijelosti usklađeno sa Zakonom o osiguranju (NN 30/15, 112/18, 63/20, 133/20, 151/22) i EU Direktivom o distribuciji osiguranja (IDD).
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Sukladno čl. 401. Zakona o osiguranju, ugovaranje polica putem agencije ne stvara nikakav dodatni trošak za osiguranika. Police imaju jednake ili povoljnije uvjete u odnosu na izravne ponude osiguratelja.
               </p>
             </div>
           </div>
@@ -78,6 +74,11 @@ export const Footer: React.FC = () => {
                   Kalkulator prijepisa vozila (NN 92/21)
                 </Link>
               </li>
+              <li>
+                <Link to="/services" className="hover:text-white transition-colors">
+                  Svi programi i poslovna osiguranja
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -100,7 +101,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/o-nama" className="hover:text-white transition-colors">
-                  O nama &amp; Registracija društva
+                  O nama &amp; Profil agencije
                 </Link>
               </li>
               <li>
@@ -141,7 +142,7 @@ export const Footer: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-rose-400 shrink-0" />
                 <a href={`tel:${AGENCY_DETAILS.secondaryPhone.replace(/\s+/g, '')}`} className="hover:text-white font-mono font-semibold">
-                  {AGENCY_DETAILS.secondaryPhone} (Dežurni 24/7)
+                  {AGENCY_DETAILS.secondaryPhone} (Dežurni za štete)
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
@@ -188,38 +189,34 @@ export const Footer: React.FC = () => {
               256-bitna TLS enkripcija
             </span>
             <span>&bull;</span>
-            <span className="text-slate-400">HANFA nadzor</span>
+            <span className="text-slate-400">Ovlašteni ugovorni zastupnik</span>
           </div>
         </div>
 
-        {/* Legal Disclaimer & Copyright */}
-        <div className="pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p className="text-center md:text-left text-[11px]">
-            &copy; {currentYear} {AGENCY_DETAILS.legalName}. Sva prava pridržana.
-            MBS: {AGENCY_DETAILS.mbs} &bull; OIB: {AGENCY_DETAILS.oib} &bull; Trgovački sud u Zagrebu.
+        {/* Statutory Legal Sub-bar (Exclusively Isolated Regulatory Mentions) */}
+        <div className="border-t border-slate-800 pt-6 mt-8 text-[11px] text-slate-400 font-sans leading-relaxed">
+          <p>
+            Agencija za zastupanje u osiguranju d.o.o. je ovlašteni distributer osiguranja upisan u Registar distributera osiguranja koji vodi Hrvatska agencija za nadzor financijskih usluga (HANFA) pod brojem {AGENCY_DETAILS.hanfaRegisterNumber}, temeljem rješenja {AGENCY_DETAILS.hanfaLicense}. 
+            Strateški partner: Generali osiguranje d.d. Sjedište: {AGENCY_DETAILS.address}, {AGENCY_DETAILS.postalCode} {AGENCY_DETAILS.city}. MBS: {AGENCY_DETAILS.mbs}, OIB: {AGENCY_DETAILS.oib}.
           </p>
+          <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-slate-400 text-center md:text-left">
+              &copy; {currentYear} {AGENCY_DETAILS.legalName}. Sva prava pridržana. Informacije na ovoj stranici imaju informativni karakter i ne predstavljaju obvezujuću ponudu do trenutka izdavanja police.
+            </p>
 
-          <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono">
-            <Link to="/o-nama" className="hover:text-white transition-colors">
-              Pravne obavijesti
-            </Link>
-            <span>&bull;</span>
-            <Link to="/prigovori" className="hover:text-white transition-colors">
-              Zaštita potrošača
-            </Link>
-            <span>&bull;</span>
-            <Link to="/o-nama" className="hover:text-white transition-colors">
-              IDD direktiva
-            </Link>
-            <span>&bull;</span>
-            <a
-              href="https://www.hanfa.hr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-white transition-colors inline-flex items-center gap-1"
-            >
-              HANFA portal <ExternalLink className="w-3 h-3" />
-            </a>
+            <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono">
+              <Link to="/o-nama" className="hover:text-white transition-colors">
+                Pravne obavijesti
+              </Link>
+              <span>&bull;</span>
+              <Link to="/prigovori" className="hover:text-white transition-colors">
+                Zaštita potrošača
+              </Link>
+              <span>&bull;</span>
+              <Link to="/o-nama" className="hover:text-white transition-colors">
+                IDD direktiva
+              </Link>
+            </div>
           </div>
         </div>
       </div>

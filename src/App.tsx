@@ -59,7 +59,7 @@ export const App: React.FC = () => {
     <BrowserRouter>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-teal-600 selection:text-white">
-        {/* Global Navigation Header with HANFA license & direct quoting triggers */}
+        {/* Global Navigation Header */}
         <Header
           onOpenQuote={handleOpenQuote}
           onOpenSavjetnik={handleOpenSavjetnik}
@@ -92,7 +92,7 @@ export const App: React.FC = () => {
             <Route path="/claims" element={<ClaimsReportingPage />} />
             <Route path="/claims/file" element={<ClaimsReportingPage />} />
 
-            {/* 7. O nama, HANFA licenca ZO-88912 i tim */}
+            {/* 7. O nama i tim */}
             <Route path="/o-nama" element={<ONamaPage />} />
             <Route path="/about" element={<ONamaPage />} />
 

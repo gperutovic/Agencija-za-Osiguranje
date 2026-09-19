@@ -12,7 +12,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   className = '',
   variant = 'full',
   theme = 'light',
-  showBadge = true,
+  showBadge = false,
 }) => {
   const isDark = theme === 'dark';
 
@@ -91,7 +91,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             </span>
             {showBadge && (
               <span className="hidden sm:inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-mono font-bold bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20 uppercase tracking-wide">
-                HANFA ZO-88912
+                OVLAŠTENI ZASTUPNIK
               </span>
             )}
           </div>

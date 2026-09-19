@@ -50,7 +50,7 @@ export const PortalDashboardPage: React.FC = () => {
                   </span>
                 )}
                 <span className="text-xs font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
-                  HANFA ZO-88912
+                  Digitalni novčanik
                 </span>
               </div>
 

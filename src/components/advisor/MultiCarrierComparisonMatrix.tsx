@@ -246,7 +246,7 @@ export const MultiCarrierComparisonMatrix: React.FC<MultiCarrierComparisonMatrix
           <span>Sve cijene uključuju zakonski porez na premije osiguranja i važeći bonus od 50%.</span>
         </div>
         <div className="font-mono font-bold text-slate-700 dark:text-slate-300">
-          Agencija Život d.o.o. &bull; HANFA ZO-88912
+          Agencija za osiguranje &bull; Ovlašteni distributer
         </div>
       </div>
     </div>

@@ -87,7 +87,7 @@ export default function HomePage() {
             Izračunajte premiju i usporedite ponude
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Izravni izračuni usklađeni s propisima HANFA-e i važećim tarifnim pravilnicima vodećih osiguratelja.
+            Izravni izračuni usklađeni s važećim tarifnim pravilnicima vodećih osiguratelja u Hrvatskoj.
           </p>
 
           {/* Module Selector Pills */}
@@ -235,23 +235,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. Partner Carriers Banner */}
-      <section className="py-12 bg-slate-100 dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
+      {/* 7. Partner Carriers Trust Bar */}
+      <section className="py-12 bg-slate-100/70 dark:bg-slate-900/60 border-y border-slate-200/80 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
-            Ovlašteni ugovorni partneri pod nadzorom HANFA-e
+            Vodeća osiguravajuća društva u ugovornoj mreži
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             {CARRIER_PARTNERS.map((c) => (
               <div
                 key={c.id}
-                className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-2 text-slate-800 dark:text-slate-200 font-black text-sm"
+                className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex items-center gap-2.5 text-slate-600 dark:text-slate-300 font-bold text-xs sm:text-sm hover:text-slate-950 dark:hover:text-white transition-colors"
               >
-                <ShieldCheck className="w-4 h-4 text-teal-600" />
+                <ShieldCheck className="w-4 h-4 text-slate-400" />
                 <span>{c.name}</span>
                 {c.isPrimaryPartner && (
-                  <span className="text-[10px] font-mono bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300 px-2 py-0.5 rounded-full font-bold">
-                    Glavni partner
+                  <span className="text-[10px] font-mono bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 px-2 py-0.5 rounded-full font-bold border border-teal-200/60 dark:border-teal-800">
+                    Strateški partner
                   </span>
                 )}
               </div>

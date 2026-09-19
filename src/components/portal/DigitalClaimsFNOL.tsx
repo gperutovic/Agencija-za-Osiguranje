@@ -194,16 +194,16 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
   return (
     <div className="space-y-6">
       {/* Emergency Hotline Alert Strip */}
-      <div className="p-4 rounded-3xl bg-rose-500/10 border border-rose-500/20 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-4 rounded-3xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
             <PhoneCall className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <div className="text-xs font-bold text-white uppercase tracking-wider">
+            <div className="text-xs font-bold text-rose-900 dark:text-rose-200 uppercase tracking-wider">
               Hitne službe u Republici Hrvatskoj &bull; 24/7 Dežurstvo
             </div>
-            <p className="text-[11px] text-rose-200">
+            <p className="text-[11px] text-rose-700 dark:text-rose-300">
               U slučaju teže nezgode ili ozljeda najprije osigurajte mjesto događaja i nazovite hitne službe.
             </p>
           </div>
@@ -212,19 +212,19 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
         <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
           <a
             href="tel:112"
-            className="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-white font-bold border border-rose-500/30"
+            className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition-colors shadow-sm"
           >
             112 Hitna/Centar
           </a>
           <a
             href="tel:192"
-            className="px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white font-bold border border-white/[0.1]"
+            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold border border-slate-700 transition-colors"
           >
             192 Policija
           </a>
           <a
             href="tel:1987"
-            className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/30"
+            className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors shadow-sm"
           >
             1987 HAK Pomoć
           </a>
@@ -232,30 +232,30 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
       </div>
 
       {submittedClaimNumber ? (
-        <Card className="p-8 bg-[#0a0d16]/95 border-emerald-500/30 backdrop-blur-xl text-center shadow-2xl space-y-6">
-          <div className="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-500/40 text-[#2dd4bf] flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(45,212,191,0.25)]">
+        <Card className="p-8 bg-white dark:bg-slate-900 border-emerald-200 dark:border-emerald-800/60 rounded-3xl text-center shadow-bento space-y-6">
+          <div className="w-16 h-16 rounded-3xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-sm">
             <CheckCircle2 className="w-10 h-10" />
           </div>
 
           <div className="space-y-2">
-            <span className="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">
+            <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold tracking-widest uppercase">
               Prijava uspješno evidentirana
             </span>
-            <h3 className="text-2xl sm:text-3xl font-black text-white">
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
               Odštetni spis je otvoren u sustavu
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
               Vaša prijava štete je zaprimljena u Agenciji Život te proslijeđena nadležnom odjelu
               likvidacije osiguratelja. Procjenitelj će vas kontaktirati unutar 24 radna sata.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] max-w-md mx-auto flex items-center justify-between">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 max-w-md mx-auto flex items-center justify-between">
             <div className="text-left">
-              <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Službeni broj spisa (Referenca)
               </span>
-              <span className="text-2xl font-mono font-black text-[#ff7b1a]">
+              <span className="text-2xl font-mono font-black text-teal-700 dark:text-teal-400">
                 {submittedClaimNumber}
               </span>
             </div>
@@ -268,7 +268,7 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   Kopirano
                 </>
               ) : (
@@ -287,19 +287,19 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                 setSubmittedClaimNumber(null);
                 setStep(1);
               }}
-              className="font-mono text-xs shadow-[0_0_15px_rgba(251,101,4,0.3)]"
+              className="font-mono text-xs shadow-md shadow-teal-600/20"
             >
               Povratak na nadzornu ploču
             </Button>
           </div>
         </Card>
       ) : (
-        <Card className="p-6 sm:p-8 bg-[#0a0d16]/90 border-white/[0.08] backdrop-blur-xl shadow-2xl text-white">
+        <Card className="p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-bento rounded-3xl text-slate-900 dark:text-white">
           {/* Progress Indicators */}
           <div className="mb-8">
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-3">
-              <span className="text-white font-bold">Korak {step} od 4</span>
-              <span className="text-[#ff7b1a]">
+            <div className="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400 mb-3">
+              <span className="text-slate-900 dark:text-white font-bold">Korak {step} od 4</span>
+              <span className="text-teal-700 dark:text-teal-400 font-semibold">
                 {step === 1
                   ? 'Kategorija štete'
                   : step === 2
@@ -309,17 +309,17 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                   : 'Isplata i suglasnost'}
               </span>
             </div>
-            <div className="w-full bg-white/[0.05] h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] h-full transition-all duration-300"
+                className="bg-gradient-to-r from-teal-500 to-teal-600 h-full transition-all duration-300"
                 style={{ width: `${(step / 4) * 100}%` }}
               />
             </div>
           </div>
 
           {errorMsg && (
-            <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-3">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+            <div className="mb-6 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-800 dark:text-rose-300 text-xs flex items-center gap-3">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -328,8 +328,8 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-white">Kakav štetni događaj prijavljujete?</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Kakav štetni događaj prijavljujete?</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Odaberite primarnu vrstu oštećenja kako bismo pripremili odgovarajući obrazac.
                 </p>
               </div>
@@ -345,23 +345,23 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                       onClick={() => setIncidentType(opt.id)}
                       className={`p-4 rounded-2xl text-left border transition-all flex flex-col justify-between ${
                         isSelected
-                          ? 'border-[#fb6504] bg-[#fb6504]/10 shadow-[0_0_16px_rgba(251,101,4,0.25)]'
-                          : 'border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] hover:bg-white/[0.04]'
+                          ? 'border-teal-600 bg-teal-50/80 dark:bg-teal-950/40 ring-2 ring-teal-500/20 shadow-sm'
+                          : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/70'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-2">
                         <div
                           className={`w-9 h-9 rounded-xl flex items-center justify-center ${
                             isSelected
-                              ? 'bg-[#fb6504] text-white'
-                              : 'bg-white/[0.05] text-slate-400'
+                              ? 'bg-teal-600 text-white shadow-sm'
+                              : 'bg-slate-200 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300'
                           }`}
                         >
                           <Icon className="w-5 h-5" />
                         </div>
-                        <h4 className="font-bold text-sm text-white">{opt.title}</h4>
+                        <h4 className="font-bold text-sm text-slate-900 dark:text-white">{opt.title}</h4>
                       </div>
-                      <p className="text-[11px] text-slate-400 leading-relaxed">{opt.desc}</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{opt.desc}</p>
                     </button>
                   );
                 })}
@@ -369,23 +369,23 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
 
               {/* Policy selector */}
               <div className="pt-2">
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Vezana polica osiguranja
                 </label>
                 <select
                   value={policyId}
                   onChange={(e) => setPolicyId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-white/[0.04] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#fb6504]"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 >
                   {policies.length > 0 ? (
                     policies.map((p) => (
-                      <option key={p.id} value={p.id} className="bg-[#0a0d16]">
+                      <option key={p.id} value={p.id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                         {p.policyNumber} &bull; {p.type.toUpperCase()} ({p.insurer}) &bull; do{' '}
                         {formatDate(p.endDate)}
                       </option>
                     ))
                   ) : (
-                    <option value="POL-GEN-2026" className="bg-[#0a0d16]">
+                    <option value="POL-GEN-2026" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                       POL-GEN-2026-HR &bull; Opća polica osiguranja
                     </option>
                   )}
@@ -408,15 +408,15 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-xl font-bold text-white">Gdje i kada se dogodila nezgoda?</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Gdje i kada se dogodila nezgoda?</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Navedite točne podatke radi bržeg postupka obrade i izlaska procjenitelja na uviđaj.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Datum nezgode
                   </label>
                   <Input
@@ -429,7 +429,7 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Mjesto i adresa nezgode
                   </label>
                   <Input
@@ -442,12 +442,12 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Opis nastanka štete i vidljiva oštećenja
                 </label>
                 <textarea
                   rows={4}
-                  className="w-full px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-2xl text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#fb6504]"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white text-xs placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                   placeholder="Opišite detaljno kako je došlo do događaja, tko je sudjelovao i koja su vidljiva oštećenja na vozilu ili objektu..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -455,22 +455,22 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={policeInvolved}
                     onChange={(e) => setPoliceInvolved(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#fb6504] focus:ring-0 bg-white/[0.1] border-white/[0.2]"
+                    className="w-4 h-4 rounded text-teal-600 focus:ring-teal-500 accent-teal-600 border-slate-300 dark:border-slate-600"
                   />
-                  <span className="text-xs text-white font-medium">
+                  <span className="text-xs text-slate-800 dark:text-slate-200 font-medium">
                     Policija je izašla na očevid / sastavljen je policijski zapisnik
                   </span>
                 </label>
 
                 {policeInvolved && (
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">
+                    <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">
                       Nadležna policijska postaja (npr. I. PP Zagreb - Centar)
                     </label>
                     <Input
@@ -502,16 +502,16 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
           {step === 3 && (
             <div className="space-y-5">
               <div>
-                <h3 className="text-xl font-bold text-white">Foto-dokumentacija oštećenja</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Foto-dokumentacija oštećenja</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Priložite fotografije oštećenja, Europsko izvješće ili policijski zapisnik (do 10 datoteka, maks. 15 MB po datoteci).
                 </p>
               </div>
 
               <DamagePhotoUploader onFilesChanged={setEvidenceFiles} maxFiles={10} />
 
-              <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[11px] text-slate-400 space-y-1">
-                <p className="font-semibold text-white">Savjeti za kvalitetne fotografije:</p>
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
+                <p className="font-semibold text-slate-900 dark:text-white">Savjeti za kvalitetne fotografije:</p>
                 <p>&bull; Slikajte širi kadar objekta/vozila s registarskom oznakom i okolinom.</p>
                 <p>&bull; Slikajte detalje svakog oštećenog dijela izbliza pri dobrom osvjetljenju.</p>
                 <p>&bull; Ako je dostupno, priložite sliku prometne dozvole ili računa kupljene opreme.</p>
@@ -537,15 +537,15 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
           {step === 4 && (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <h3 className="text-xl font-bold text-white">Isplata odštete i autorizacija</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Isplata odštete i autorizacija</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Unesite podatke vašeg tekućeg računa za izravnu uplatu nespornog dijela štete.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     IBAN račun za isplatu odštete
                   </label>
                   <Input
@@ -561,7 +561,7 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Okvirna procjena štete (€) <span className="text-slate-500 font-normal">(opcionalno)</span>
                   </label>
                   <Input
@@ -574,16 +574,16 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
               </div>
 
               {/* Legal confirmation checkbox */}
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-2">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={legalAccepted}
                     onChange={(e) => setLegalAccepted(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 rounded text-[#fb6504] focus:ring-0 bg-white/[0.1] border-white/[0.2]"
+                    className="w-4 h-4 mt-0.5 rounded text-teal-600 focus:ring-teal-500 accent-teal-600 border-slate-300 dark:border-slate-600"
                     required
                   />
-                  <span className="text-xs text-slate-300 leading-relaxed">
+                  <span className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                     Izjavljujem pod materijalnom i kaznenom odgovornošću da su svi navedeni podaci
                     o nastanku štete istiniti i potpuni te ovlašćujem Agenciju Život d.o.o. i
                     osiguratelja za obradu podataka i kontaktiranje s ciljem likvidacije odštetnog
@@ -597,11 +597,11 @@ export const DigitalClaimsFNOL: React.FC<DigitalClaimsFNOLProps> = ({
                   <ArrowLeft className="w-4 h-4 mr-1" /> Natrag
                 </Button>
                 <Button
-                  variant="danger"
+                  variant="primary"
                   type="submit"
                   size="sm"
                   disabled={isSubmitting || !legalAccepted}
-                  className="font-mono text-xs flex items-center gap-2 shadow-[0_0_18px_rgba(244,63,94,0.3)]"
+                  className="font-mono text-xs flex items-center gap-2 shadow-md shadow-teal-600/20"
                 >
                   <Send className="w-4 h-4" />
                   {isSubmitting ? 'Slanje prijave u tijeku...' : 'Potvrdi i podnesi prijavu štete'}

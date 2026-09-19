@@ -280,7 +280,7 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
                       <span className="font-mono">{estimate.annualPremium.toFixed(2)} €</span>
                     </div>
                     <div className="text-slate-500">
-                      Izdavatelj: Partner Generali osiguranje d.d. &bull; Licenca HANFA ZO-88912
+                      Izdavatelj: Partner Generali osiguranje d.d. &bull; Ovlašteni distributer
                     </div>
                   </div>
 

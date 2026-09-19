@@ -65,10 +65,10 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                     isSuccess
-                      ? 'bg-emerald-500/20 border-emerald-500/40 text-[#2dd4bf]'
+                      ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
                       : isExpired
-                      ? 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-                      : 'bg-amber-500/20 border-amber-500/40 text-[#fb6504]'
+                      ? 'bg-rose-500/20 border-rose-500/40 text-rose-500 dark:text-rose-400'
+                      : 'bg-amber-500/20 border-amber-500/40 text-amber-600 dark:text-amber-400'
                   }`}
                 >
                   {isSuccess ? (
@@ -79,14 +79,14 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-sm sm:text-base text-white">
+                  <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
                     {isSuccess
                       ? `Uspješno zatražena obnova police ${p.policyNumber}`
                       : isExpired
                       ? `Polica osiguranja ${p.policyNumber} je istekla!`
                       : `Upozorenje o isteku: Polica ${p.policyNumber} ističe za ${diffDays} dana`}
                   </h4>
-                  <p className="text-xs text-slate-300 mt-0.5">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
                     {isSuccess
                       ? 'Vaš zahtjev za obnovom je proslijeđen agentu. Potvrda i nova polica stići će na vaš email.'
                       : `Polica za ${p.type.toUpperCase()} (${p.insurer}) završava ${formatDate(
@@ -103,7 +103,7 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                     size="sm"
                     disabled={renewingId === p.id}
                     onClick={() => handleRenew(p.id)}
-                    className="flex items-center gap-2 whitespace-nowrap shadow-[0_0_15px_rgba(251,101,4,0.3)]"
+                    className="flex items-center gap-2 whitespace-nowrap shadow-sm"
                   >
                     {renewingId === p.id ? (
                       <>

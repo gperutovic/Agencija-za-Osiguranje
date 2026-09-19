@@ -111,22 +111,20 @@ export const ServicesPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-16 pb-24 text-slate-100">
+    <div className="space-y-16 pb-24 text-slate-900 relative">
       {/* Hero Header */}
       <section className="relative overflow-hidden pt-12 pb-14 text-center space-y-4">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/10 rounded-full blur-[120px] pointer-events-none" />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono font-bold tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-[#fb6504] animate-pulse" />
-            <span className="text-white">Distribucija Generali Osiguranja d.d.</span>
-            <span className="text-slate-500">&bull;</span>
-            <span className="text-[#ff7b1a]">HANFA Licenca</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-xs text-xs font-mono font-bold tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+            <span className="text-slate-800">Distribucija Generali Osiguranja d.d.</span>
+            <span className="text-slate-300">&bull;</span>
+            <span className="text-teal-700">Ovlašteni partner</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto text-white">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto text-slate-900">
             Osigurateljni programi skrojeni po vašoj mjeri
           </h1>
-          <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-light">
+          <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-normal">
             Istražite detalje svakog pokrića, usporedite uvjete i zatražite personaliziranu ponudu uz asistenciju licenciranih zastupnika Agencije Život.
           </p>
         </div>
@@ -140,60 +138,60 @@ export const ServicesPage: React.FC = () => {
             return (
               <div
                 key={prog.id}
-                className="p-8 bg-[#0a0d16]/90 border border-white/[0.08] hover:border-[#fb6504]/50 backdrop-blur-xl rounded-3xl flex flex-col justify-between shadow-2xl transition-all group"
+                className="p-8 bg-white border border-slate-200/80 hover:border-teal-500/40 rounded-3xl flex flex-col justify-between shadow-bento hover:shadow-bento-hover transition-all duration-300 group"
               >
                 <div className="space-y-6">
                   {/* Top Header */}
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-white flex items-center justify-center group-hover:scale-110 group-hover:border-[#fb6504]/40 group-hover:text-[#ff7b1a] transition-all">
+                      <div className="w-14 h-14 rounded-2xl bg-teal-50 border border-teal-200/80 text-teal-700 flex items-center justify-center group-hover:scale-105 group-hover:bg-teal-600 group-hover:text-white transition-all shadow-xs">
                         <Icon className="w-7 h-7" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white group-hover:text-[#ff7b1a] transition-colors">{prog.title}</h3>
-                        <p className="text-xs text-slate-400 mt-0.5">{prog.subtitle}</p>
+                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-teal-700 transition-colors">{prog.title}</h3>
+                        <p className="text-xs text-slate-500 mt-0.5">{prog.subtitle}</p>
                       </div>
                     </div>
-                    <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[#ff7b1a] whitespace-nowrap">
+                    <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 whitespace-nowrap shadow-2xs">
                       {prog.badge}
                     </span>
                   </div>
 
                   {/* Pricing Badge */}
-                  <div className="bg-white/[0.02] p-3.5 rounded-2xl border border-white/[0.06] flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-mono">Početna okvirna cijena:</span>
-                    <span className="font-mono font-bold text-[#ff7b1a] text-sm">
+                  <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center justify-between text-xs">
+                    <span className="text-slate-500 font-mono">Početna okvirna cijena:</span>
+                    <span className="font-mono font-bold text-teal-700 text-sm">
                       {prog.startingPrice}
                     </span>
                   </div>
 
                   {/* Features */}
                   <div className="space-y-2.5">
-                    <p className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                    <p className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
                       Ključna pokrića i prednosti:
                     </p>
                     {prog.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-600">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="p-3 bg-[#fb6504]/10 rounded-2xl text-xs text-slate-300 border border-[#fb6504]/20 font-mono">
-                    <strong className="text-[#ff7b1a]">Preporučeno za:</strong> {prog.idealFor}
+                  <div className="p-3 bg-teal-50/50 rounded-2xl text-xs text-slate-700 border border-teal-100 font-mono">
+                    <strong className="text-teal-800">Preporučeno za:</strong> {prog.idealFor}
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="pt-6 mt-6 border-t border-white/[0.06] flex flex-col sm:flex-row gap-3">
+                <div className="pt-6 mt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
                   <Link to={`/calculator?type=${prog.id}`} className="flex-1">
                     <Button variant="primary" className="w-full text-xs font-mono font-bold">
                       Izračunaj u kalkulatoru
                     </Button>
                   </Link>
                   <Link to={`/services/${prog.id}`} className="flex-1">
-                    <Button variant="outline" className="w-full text-xs font-mono text-slate-300 hover:text-white">
+                    <Button variant="outline" className="w-full text-xs font-mono text-slate-700 hover:text-slate-900">
                       Pregledaj detalje &rarr;
                     </Button>
                   </Link>
@@ -207,13 +205,13 @@ export const ServicesPage: React.FC = () => {
       {/* FAQ Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#fb6504]" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#ff7b1a]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-teal-800">
               Česta Pitanja (FAQ)
             </span>
           </div>
-          <h2 className="text-3xl font-extrabold text-white">
+          <h2 className="text-3xl font-extrabold text-slate-900">
             Sve što trebate znati o ugovaranju osiguranja
           </h2>
         </div>

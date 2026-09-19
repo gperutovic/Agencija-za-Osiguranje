@@ -56,16 +56,16 @@ export const AutoQuoteCalculator: React.FC<AutoQuoteCalculatorProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       {/* Configuration Controls (2 Cols) */}
-      <div className="lg:col-span-2 bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-8 text-white">
-        <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
-          <div className="w-10 h-10 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#fb6504] flex items-center justify-center font-black shadow-[0_0_15px_rgba(251,101,4,0.2)]">
+      <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-bento p-6 sm:p-8 space-y-8 text-slate-900 dark:text-white">
+        <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400 flex items-center justify-center font-black shadow-sm">
             <Car className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-white">
+            <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
               {t('calculators.auto.title')}
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Obvezno auto osiguranje (AO) i kasko pokrića s Generali asistencijom
             </p>
           </div>
@@ -110,8 +110,8 @@ export const AutoQuoteCalculator: React.FC<AutoQuoteCalculatorProps> = ({
         </div>
 
         {/* Vehicle Usage */}
-        <div className="space-y-2 pt-2 border-t border-white/[0.08]">
-          <label className="text-xs font-semibold text-slate-300">
+        <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
             {t('calculators.auto.usage')}
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -120,12 +120,12 @@ export const AutoQuoteCalculator: React.FC<AutoQuoteCalculatorProps> = ({
               onClick={() => setUsageType('private')}
               className={`p-3.5 rounded-2xl border text-left transition-all ${
                 usageType === 'private'
-                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
-                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
+                  ? 'border-teal-600 bg-teal-50/80 dark:bg-teal-950/40 text-teal-950 dark:text-teal-200 font-bold shadow-sm shadow-teal-600/10'
+                  : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <div className="text-xs font-bold">{t('calculators.auto.private')}</div>
-              <div className="text-[10px] text-slate-400">Osobne i obiteljske potrebe</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400">Osobne i obiteljske potrebe</div>
             </button>
 
             <button
@@ -133,84 +133,100 @@ export const AutoQuoteCalculator: React.FC<AutoQuoteCalculatorProps> = ({
               onClick={() => setUsageType('commercial')}
               className={`p-3.5 rounded-2xl border text-left transition-all ${
                 usageType === 'commercial'
-                  ? 'border-[#fb6504] bg-[#fb6504]/10 text-white font-bold shadow-[0_0_15px_rgba(251,101,4,0.2)]'
-                  : 'border-white/[0.08] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-white'
+                  ? 'border-teal-600 bg-teal-50/80 dark:bg-teal-950/40 text-teal-950 dark:text-teal-200 font-bold shadow-sm shadow-teal-600/10'
+                  : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <div className="text-xs font-bold">{t('calculators.auto.commercial')}</div>
-              <div className="text-[10px] text-slate-400">Tvrtke, obrti, rent-a-car (+25%)</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400">Tvrtke, obrti, rent-a-car (+25%)</div>
             </button>
           </div>
         </div>
 
         {/* Addons Selection Toggles */}
-        <div className="space-y-3 pt-2 border-t border-white/[0.08]">
-          <label className="text-xs font-semibold text-slate-300 block">
+        <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">
             {t('calculators.auto.addons')}
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] cursor-pointer transition-colors">
+            <label className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all cursor-pointer ${
+              includeKasko 
+                ? 'border-teal-200 dark:border-teal-800 bg-teal-50/30 dark:bg-teal-950/20' 
+                : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
+            }`}>
               <input
                 type="checkbox"
                 checked={includeKasko}
                 onChange={(e) => setIncludeKasko(e.target.checked)}
-                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
+                className="mt-0.5 rounded accent-teal-600 w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5 text-[#fb6504]" />
+                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                   <span>Puni Kasko</span>
                 </span>
-                <p className="text-[11px] text-slate-400">Štete, krađa, tuča i sudar</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Štete, krađa, tuča i sudar</p>
               </div>
             </label>
 
-            <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] cursor-pointer transition-colors">
+            <label className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all cursor-pointer ${
+              includeAssistance 
+                ? 'border-teal-200 dark:border-teal-800 bg-teal-50/30 dark:bg-teal-950/20' 
+                : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
+            }`}>
               <input
                 type="checkbox"
                 checked={includeAssistance}
                 onChange={(e) => setIncludeAssistance(e.target.checked)}
-                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
+                className="mt-0.5 rounded accent-teal-600 w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <Wrench className="w-3.5 h-3.5 text-[#2dd4bf]" />
+                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <Wrench className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                   <span>24/7 Asistencija na cesti</span>
                 </span>
-                <p className="text-[11px] text-slate-400">Besplatan popravak i vuča u EU</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Besplatan popravak i vuča u EU</p>
               </div>
             </label>
 
-            <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] cursor-pointer transition-colors">
+            <label className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all cursor-pointer ${
+              includeGlass 
+                ? 'border-teal-200 dark:border-teal-800 bg-teal-50/30 dark:bg-teal-950/20' 
+                : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
+            }`}>
               <input
                 type="checkbox"
                 checked={includeGlass}
                 onChange={(e) => setIncludeGlass(e.target.checked)}
-                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
+                className="mt-0.5 rounded accent-teal-600 w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-[#fb6504]" />
+                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-amber-500" />
                   <span>Zaštita stakala</span>
                 </span>
-                <p className="text-[11px] text-slate-400">Zamjena vjetrobranskog stakla</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Zamjena vjetrobranskog stakla</p>
               </div>
             </label>
 
-            <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] cursor-pointer transition-colors">
+            <label className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all cursor-pointer ${
+              includeBonusProtection 
+                ? 'border-teal-200 dark:border-teal-800 bg-teal-50/30 dark:bg-teal-950/20' 
+                : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
+            }`}>
               <input
                 type="checkbox"
                 checked={includeBonusProtection}
                 onChange={(e) => setIncludeBonusProtection(e.target.checked)}
-                className="mt-0.5 rounded accent-[#fb6504] w-4 h-4 cursor-pointer"
+                className="mt-0.5 rounded accent-teal-600 w-4 h-4 cursor-pointer"
               />
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#2dd4bf]" />
+                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                   <span>Zaštita bonusa</span>
                 </span>
-                <p className="text-[11px] text-slate-400">Prva štetna nezgoda bez pada razreda</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Prva štetna nezgoda bez pada razreda</p>
               </div>
             </label>
           </div>
