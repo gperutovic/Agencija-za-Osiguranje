@@ -19,7 +19,6 @@ import { usePolicies } from '../hooks/usePolicies';
 import { LeadPipelineKanban } from '../components/admin/LeadPipelineKanban';
 import { RenewalAlertEngine } from '../components/admin/RenewalAlertEngine';
 import { LeadsTable } from '../components/admin/LeadsTable';
-import { QuotePipelineBoard } from '../components/admin/QuotePipelineBoard';
 import { ClaimsManagementTable } from '../components/admin/ClaimsManagementTable';
 import { RegulatoryAuditView } from '../components/admin/RegulatoryAuditView';
 import { QuoteRequest, Claim } from '../types/database';

@@ -1,6 +1,5 @@
 import React from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
-import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export interface SliderProps {
@@ -10,7 +9,9 @@ export interface SliderProps {
   step?: number;
   value: number;
   onChange: (value: number) => void;
+  unit?: string;
   formatValue?: (val: number) => string;
+  ticks?: { value: number; label: string }[];
   helperText?: string;
   className?: string;
 }
@@ -22,7 +23,9 @@ export const Slider: React.FC<SliderProps> = ({
   step = 1,
   value,
   onChange,
-  formatValue = (v) => v.toString(),
+  unit,
+  formatValue = (v) => (unit ? `${v} ${unit}` : v.toString()),
+  ticks,
   helperText,
   className,
 }) => {
@@ -52,11 +55,19 @@ export const Slider: React.FC<SliderProps> = ({
         />
       </RadixSlider.Root>
 
-      <div className="flex justify-between items-center text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-        <span>{formatValue(min)}</span>
-        {helperText && <span className="text-slate-500">{helperText}</span>}
-        <span>{formatValue(max)}</span>
-      </div>
+      {ticks && ticks.length > 0 ? (
+        <div className="flex justify-between items-center text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+          {ticks.map((t, idx) => (
+            <span key={idx}>{t.label}</span>
+          ))}
+        </div>
+      ) : (
+        <div className="flex justify-between items-center text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+          <span>{formatValue(min)}</span>
+          {helperText && <span className="text-slate-500">{helperText}</span>}
+          <span>{formatValue(max)}</span>
+        </div>
+      )}
     </div>
   );
 };

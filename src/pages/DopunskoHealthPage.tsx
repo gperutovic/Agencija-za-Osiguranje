@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { HeartPulse, CheckCircle2, TrendingDown, Sparkles, ShieldCheck, Pill, Smartphone, AlertCircle } from 'lucide-react';
-import { DopunskoCalculator } from '../../components/calculators/DopunskoCalculator';
-import { JsonLd } from '../../components/seo/JsonLd';
-import { FAQ_DOPUNSKO, AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { DopunskoCalculator } from '../components/calculators/DopunskoCalculator';
+import { JsonLd } from '../components/seo/JsonLd';
+import { FAQ_DOPUNSKO, AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
   title: 'Dopunsko Zdravstveno Osiguranje 2026 | HZZO 15 € vs Privatno od 6,50 €',
@@ -164,3 +164,4 @@ export default function DopunskoZdravstvenoPage() {
     </div>
   );
 }
+

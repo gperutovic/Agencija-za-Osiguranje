@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Calendar,
 } from 'lucide-react';
-import { AppointmentScheduler } from '../components/portal/AppointmentScheduler';
+import { AppointmentScheduler } from '../components/advisor/AppointmentScheduler';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';

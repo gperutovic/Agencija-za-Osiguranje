@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { ShieldCheck, Award, Users, Building, MapPin, Phone, Mail, FileCheck, CheckCircle2 } from 'lucide-react';
-import { AGENCY_DETAILS, CARRIER_PARTNERS } from '../../lib/content/insurance-data';
+import { AGENCY_DETAILS, CARRIER_PARTNERS } from '../lib/content/insurance-data';
 
 export const metadata = {
   title: 'O Nama & Pravni Identitet | Agencija za osiguranje Zagreb',
@@ -112,3 +112,4 @@ export default function ONamaPage() {
     </div>
   );
 }
+

@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { ShieldCheck, Car, Check, Award, FileText, Sparkles, Phone, HelpCircle } from 'lucide-react';
-import { AutoInsuranceCalculator } from '../../components/calculators/AutoInsuranceCalculator';
-import { JsonLd } from '../../components/seo/JsonLd';
-import { FAQ_AUTO, AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { AutoInsuranceCalculator } from '../components/calculators/AutoInsuranceCalculator';
+import { JsonLd } from '../components/seo/JsonLd';
+import { FAQ_AUTO, AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
   title: 'Obvezno Auto Osiguranje (AO) & Kasko | Agencija Život Zagreb',
@@ -150,3 +150,4 @@ export default function AutoOsiguranjePage() {
     </div>
   );
 }
+

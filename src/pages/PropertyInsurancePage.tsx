@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { Home, ShieldCheck, Waves, Lock, Building, Flame, Check, HelpCircle } from 'lucide-react';
-import { PropertyCalculator } from '../../components/calculators/PropertyCalculator';
-import { JsonLd } from '../../components/seo/JsonLd';
-import { FAQ_PROPERTY, AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { PropertyCalculator } from '../components/calculators/PropertyCalculator';
+import { JsonLd } from '../components/seo/JsonLd';
+import { FAQ_PROPERTY, AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
   title: 'Osiguranje Imovine, Stana i Kuće od Potresa | Agencija Život',
@@ -144,3 +144,4 @@ export default function ImovinaPage() {
     </div>
   );
 }
+

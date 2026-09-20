@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { FileCheck2, AlertTriangle, Phone, Search, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
-import { ClaimsIntakeForm } from '../../components/claims/ClaimsIntakeForm';
-import { ClaimStatusTimeline } from '../../components/claims/ClaimStatusTimeline';
-import { JsonLd } from '../../components/seo/JsonLd';
-import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { ClaimsIntakeForm } from '../components/claims/ClaimsIntakeForm';
+import { ClaimStatusTimeline } from '../components/claims/ClaimStatusTimeline';
+import { JsonLd } from '../components/seo/JsonLd';
+import { AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
   title: 'Prijava Štete 24/7 (FNOL) | Agencija Život Zagreb',
@@ -199,3 +199,4 @@ export default function PrijavaStetePage() {
     </div>
   );
 }
+

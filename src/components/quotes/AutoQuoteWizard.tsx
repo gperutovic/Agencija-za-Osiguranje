@@ -9,9 +9,9 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { calculateAutoPremium, formatEuro } from '../../lib/calculations';
-import { Slider } from '../ui/Slider';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
+import { Slider } from '../common/Slider';
+import { Button } from '../common/Button';
+import { Input } from '../common/Input';
 import { ReactiveQuoteResult } from './ReactiveQuoteResult';
 
 const REGISTRATION_ZONES = [

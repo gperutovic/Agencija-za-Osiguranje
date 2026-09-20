@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   ShieldCheck,
   Building2,
@@ -199,3 +199,4 @@ export default function LegalImpressumPage() {
     </div>
   );
 }
+

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Plane, Compass, ShieldCheck, ArrowRight, ArrowLeft, Users, Calendar, Activity } from 'lucide-react';
 import { calculateTravelPremium, formatEuro } from '../../lib/calculations';
-import { Slider } from '../ui/Slider';
-import { Button } from '../ui/Button';
+import { Slider } from '../common/Slider';
+import { Button } from '../common/Button';
 import { ReactiveQuoteResult } from './ReactiveQuoteResult';
 
 export const TravelQuoteWizard: React.FC = () => {

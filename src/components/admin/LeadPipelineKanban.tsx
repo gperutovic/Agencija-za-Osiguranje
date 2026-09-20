@@ -25,7 +25,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { LeadRecord, QuoteRequest } from '../../types/database';
-import { leadService } from '../../services/firebase';
+import { leadService } from '../../api/firestoreService';
 import { formatCurrency, formatDateTime, formatDate } from '../../utils/formatters';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';

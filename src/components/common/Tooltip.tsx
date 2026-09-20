@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { HelpCircle, Info } from 'lucide-react';
 
 export const INSURANCE_GLOSSARY: Record<string, string> = {
@@ -13,7 +13,7 @@ export const INSURANCE_GLOSSARY: Record<string, string> = {
   'osiguranik': 'Osoba čiji su život, zdravlje ili imovina zaštićeni policom osiguranja.',
 };
 
-interface TooltipProps {
+export interface TooltipProps {
   term?: string;
   text?: string;
   children?: React.ReactNode;
@@ -38,23 +38,23 @@ export const Tooltip: React.FC<TooltipProps> = ({
       onClick={() => setIsVisible(!isVisible)}
     >
       {children ? (
-        <span className="border-b border-dashed border-slate-400 group-hover:border-[#1E40AF] transition-colors">
+        <span className="border-b border-dashed border-slate-400 group-hover:border-teal-600 transition-colors">
           {children}
         </span>
       ) : null}
 
-      <HelpCircle className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors shrink-0" />
+      <HelpCircle className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-600 transition-colors shrink-0" />
 
       {isVisible && content && (
         <span
           role="tooltip"
-          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 text-xs leading-relaxed text-slate-100 bg-[#0F172A] border border-slate-700/80 rounded-xl shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-none"
+          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 text-xs leading-relaxed text-slate-100 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl backdrop-blur-md pointer-events-none"
         >
           <span className="flex items-start gap-2">
-            <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+            <Info className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
             <span>{content}</span>
           </span>
-          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#0F172A]" />
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900" />
         </span>
       )}
     </span>

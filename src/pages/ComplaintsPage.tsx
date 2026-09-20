@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ShieldAlert, CheckCircle2, FileText, Send, Building, Scale, AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { consumerComplaintSchema, ConsumerComplaintFormData } from '../../lib/schemas/quote-schemas';
-import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { consumerComplaintSchema, ConsumerComplaintFormData } from '../lib/validation';
+import { AGENCY_DETAILS } from '../lib/content/insurance-data';
 
 export const metadata = {
   title: 'Postupak Rješavanja Prigovora Potrošača | Agencija Život',
@@ -228,3 +228,4 @@ export default function PrigovoriPage() {
     </div>
   );
 }
+

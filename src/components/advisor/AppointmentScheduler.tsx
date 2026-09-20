@@ -13,7 +13,7 @@ import {
   Mail,
   ShieldCheck,
 } from 'lucide-react';
-import { appointmentSchema, AppointmentFormData } from '../../utils/validators';
+import { appointmentSchema, AppointmentFormData } from '../../lib/validation';
 import { useAppointments } from '../../hooks/useAppointments';
 import { useAuth } from '../../hooks/useAuth';
 import { downloadAppointmentIcs, formatDateTime } from '../../utils/formatters';

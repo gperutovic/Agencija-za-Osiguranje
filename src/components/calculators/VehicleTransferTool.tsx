@@ -10,8 +10,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { calculateVehicleTransferCost, formatEuro } from '../../lib/calculations';
-import { Slider } from '../ui/Slider';
-import { Button } from '../ui/Button';
+import { Slider } from '../common/Slider';
+import { Button } from '../common/Button';
 import { QuoteModal } from '../quotes/QuoteModal';
 
 interface VehicleTransferToolProps {

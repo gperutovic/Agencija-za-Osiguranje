@@ -14,9 +14,9 @@ import {
   Check,
 } from 'lucide-react';
 import { formatEuro } from '../../lib/calculations';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
-import { CARRIER_PARTNERS } from '../../data/mockData';
+import { Button } from '../common/Button';
+import { Card } from '../common/Card';
+import { CARRIER_PARTNERS } from '../../lib/content/insurance-data';
 
 interface ReactiveQuoteResultProps {
   baseAnnualPrice: number;
@@ -286,7 +286,7 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                     <div>
                       <h5 className="font-bold text-sm text-slate-900">{carrier.shortName}</h5>
                       <span className="text-[10px] text-slate-400 font-mono">
-                        Ocjena: {carrier.rating} ★ ({carrier.reviewCount})
+                        Ocjena: {carrier.rating || carrier.claimSpeedScore} ★
                       </span>
                     </div>
                     {isBestRate && (

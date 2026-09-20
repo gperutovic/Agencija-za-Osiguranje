@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, X, Settings2, Check } from 'lucide-react';
-import { Button } from '../ui/Button';
+import { Button } from '../common/Button';
 
 export const CookieConsent: React.FC = () => {
   const [visible, setVisible] = useState(false);

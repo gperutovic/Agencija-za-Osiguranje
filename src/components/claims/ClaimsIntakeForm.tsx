@@ -17,9 +17,9 @@ import {
   FileCheck,
 } from 'lucide-react';
 import { isValidOIB } from '../../lib/validation';
-import { CARRIER_PARTNERS } from '../../data/mockData';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
+import { CARRIER_PARTNERS } from '../../lib/content/insurance-data';
+import { Button } from '../common/Button';
+import { Input } from '../common/Input';
 
 type ClaimCategory = 'collision' | 'property' | 'health' | 'travel';
 

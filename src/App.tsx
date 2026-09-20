@@ -4,22 +4,22 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 // Layout & Global Components
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { StickyMobileFAB } from './components/ui/StickyMobileFAB';
+import { StickyMobileFAB } from './components/layout/StickyMobileFAB';
 import { CookieConsent } from './components/layout/CookieConsent';
 import { QuoteModal } from './components/quotes/QuoteModal';
 import { ConversationalWizard } from './components/conversational/ConversationalWizard';
 import { InsuranceCategory } from './lib/types';
 
 // Core Insurtech Funnels & Pages
-import HomePage from './app/page';
-import AutoOsiguranjePage from './app/auto-osiguranje/page';
-import DopunskoZdravstvenoPage from './app/dopunsko-zdravstveno/page';
-import ImovinaPage from './app/imovina/page';
-import ClaimsReportingPage from './app/prijava-stete/page';
-import ONamaPage from './app/o-nama/page';
-import PrigovoriPage from './app/prigovori/page';
-import VehicleTransferPage from './app/kalkulator-prijepisa/page';
-import LegalImpressumPage from './app/o-nama-pravno/page';
+import HomePage from './pages/HomePage';
+import AutoOsiguranjePage from './pages/AutoInsurancePage';
+import DopunskoZdravstvenoPage from './pages/DopunskoHealthPage';
+import ImovinaPage from './pages/PropertyInsurancePage';
+import ClaimsReportingPage from './pages/ClaimsReportingPage';
+import ONamaPage from './pages/AboutUsPage';
+import PrigovoriPage from './pages/ComplaintsPage';
+import VehicleTransferPage from './pages/VehicleTransferPage';
+import LegalImpressumPage from './pages/LegalImpressumPage';
 
 // Portal, Admin, & Auxiliary Pages
 import { PortalDashboardPage } from './pages/PortalDashboardPage';

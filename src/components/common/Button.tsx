@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'destructive' | 'danger' | 'ghost' | 'teal' | 'gold' | 'amber';
+  variant?: 'primary' | 'secondary' | 'outline' | 'destructive' | 'danger' | 'ghost' | 'teal' | 'gold' | 'amber' | 'emerald';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -27,6 +27,8 @@ export const Button: React.FC<ButtonProps> = ({
   const variants = {
     primary:
       'bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-600/20 hover:shadow-teal-600/30 hover:scale-[1.01] border border-teal-500/30 focus:ring-teal-500',
+    emerald:
+      'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 hover:scale-[1.01] border border-emerald-500/30 focus:ring-emerald-500',
     secondary:
       'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200/80 shadow-xs focus:ring-slate-400 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-100 dark:border-slate-700',
     teal:

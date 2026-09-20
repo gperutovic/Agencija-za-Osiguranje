@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Home, ShieldCheck, ArrowRight, ArrowLeft, Building2, Flame, Droplets, Activity } from 'lucide-react';
 import { calculatePropertyPremium, formatEuro } from '../../lib/calculations';
-import { Slider } from '../ui/Slider';
-import { Button } from '../ui/Button';
+import { Slider } from '../common/Slider';
+import { Button } from '../common/Button';
 import { ReactiveQuoteResult } from './ReactiveQuoteResult';
 
 export const PropertyQuoteWizard: React.FC = () => {

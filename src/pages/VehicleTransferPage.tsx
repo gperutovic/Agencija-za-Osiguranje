@@ -1,5 +1,5 @@
-import React from 'react';
-import { VehicleTransferTool } from '../../components/calculators/VehicleTransferTool';
+﻿import React from 'react';
+import { VehicleTransferTool } from '../components/calculators/VehicleTransferTool';
 import { FileText, CheckCircle2, HelpCircle } from 'lucide-react';
 
 export default function VehicleTransferPage() {
@@ -132,3 +132,4 @@ export default function VehicleTransferPage() {
     </div>
   );
 }
+

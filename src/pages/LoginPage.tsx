@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Shield, Lock, Mail, UserCheck, AlertCircle, ArrowRight } from 'lucide-react';
-import { loginSchema, LoginFormData } from '../utils/validators';
+import { loginSchema, LoginFormData } from '../lib/validation';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
