@@ -31,7 +31,7 @@ const MILESTONES: Array<{
 }> = [
   {
     id: 'submitted',
-    label: 'Prijava zaprimljena',
+    label: 'Zaprimljeno',
     sublabel: 'FNOL elektronički evidentiran',
     icon: FileText,
   },
@@ -43,13 +43,13 @@ const MILESTONES: Array<{
   },
   {
     id: 'assessor_assigned',
-    label: 'Dodijeljen procjenitelj',
+    label: 'Procjena štete',
     sublabel: 'Procjena štete i servisni nalog',
     icon: UserCheck,
   },
   {
     id: 'approved',
-    label: 'Odobrena isplata',
+    label: 'Isplata odobrena',
     sublabel: 'Obračunat iznos odštete',
     icon: CheckCircle2,
   },

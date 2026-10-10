@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { VehicleTransferTool } from '../components/calculators/VehicleTransferTool';
 import { FileText, CheckCircle2, HelpCircle } from 'lucide-react';
 
@@ -147,13 +148,13 @@ export default function VehicleTransferPage() {
             </div>
           </div>
 
-          <a
-            href="/auto-osiguranje"
+          <Link
+            to="/auto-osiguranje"
             className="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-teal-600/30 flex items-center justify-center gap-2 transition-all hover:scale-105 shrink-0"
           >
             <span>Ugovori auto policu (50% bonusa)</span>
             <CheckCircle2 className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>

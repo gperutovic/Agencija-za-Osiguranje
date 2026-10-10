@@ -365,7 +365,7 @@ export const firestoreService = {
   },
 
   // ==========================================
-  // 6. CERTIFIED BROKER APPOINTMENTS
+  // 6. CERTIFIED INSURANCE AGENT APPOINTMENTS
   // ==========================================
   async getAppointments(): Promise<Appointment[]> {
     try {

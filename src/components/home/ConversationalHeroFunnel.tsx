@@ -14,6 +14,8 @@ import {
   Search,
   Lock,
   Zap,
+  Star,
+  ShieldCheck,
 } from 'lucide-react';
 import { useInsurtechStore } from '../../store/useInsurtechStore';
 import { InsuranceProductType } from '../../types/insurance';
@@ -147,18 +149,37 @@ export const ConversationalHeroFunnel: React.FC<ConversationalHeroFunnelProps> =
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         {/* Top Eyebrow & Institutional Authority */}
         <div className="text-center max-w-4xl mx-auto space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold shadow-xs"
-          >
-            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-            <span className="text-teal-700 dark:text-teal-400">OVLAŠTENI ZASTUPNIK</span>
-            <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-            <span>NEOVISNA USPOREDBA POLICA</span>
-            <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-            <span className="text-amber-600 dark:text-amber-400">GENERALI PARTNER</span>
-          </motion.div>
+          {/* Eyebrow and Google Reviews Trust Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold shadow-xs"
+            >
+              <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+              <span className="text-teal-700 dark:text-teal-400">OVLAŠTENI ZASTUPNIK</span>
+              <span className="text-slate-300 dark:text-slate-700">&bull;</span>
+              <span>NEOVISNA USPOREDBA POLICA</span>
+              <span className="text-slate-300 dark:text-slate-700">&bull;</span>
+              <span className="text-amber-600 dark:text-amber-400">GENERALI PARTNER</span>
+            </motion.div>
+
+            {/* Google Reviews rating widget (4.9/5 ⭐⭐⭐⭐⭐) */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono shadow-xs"
+            >
+              <div className="flex items-center text-amber-400 gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <span className="font-black text-slate-900 dark:text-white">4.9/5</span>
+              <span className="text-slate-400 dark:text-slate-500 font-sans text-[11px]">&bull; Google Reviews (1.280+ ocjena)</span>
+            </motion.div>
+          </div>
 
           {/* Main Conversational Headline */}
           <motion.h1

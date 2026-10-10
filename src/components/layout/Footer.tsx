@@ -10,6 +10,7 @@ import {
   Lock,
   Scale,
   CheckCircle2,
+  Star,
 } from 'lucide-react';
 import { BrandLogo } from '../common/BrandLogo';
 import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
@@ -158,46 +159,74 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Payment Rails & Security Trust Strip */}
-        <div className="pt-8 border-t border-slate-800 flex flex-wrap items-center justify-between gap-6 text-xs text-slate-400">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
-              Sigurni kanali naplate:
-            </span>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">
-                CORVUSPAY (DO 12 RATA)
+        {/* Trust Signals: Google Reviews, HUO, SSL & Payment Rails */}
+        <div className="pt-8 border-t border-slate-800 space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* Google Reviews rating widget */}
+            <div className="flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-sm">
+              <div className="flex items-center text-amber-400 gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <div className="flex items-baseline gap-1.5 font-mono">
+                <span className="text-white font-black text-xs">4.9 / 5</span>
+                <span className="text-[11px] text-slate-400">Google Reviews</span>
+              </div>
+              <span className="text-[10px] text-teal-400 bg-teal-950/60 border border-teal-800 px-2 py-0.5 rounded font-mono font-semibold">
+                1.280+ verificiranih ocjena
               </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">
-                VISA / MASTERCARD
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-emerald-400 text-[10px] font-mono">
-                KEKS PAY
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-amber-400 text-[10px] font-mono">
-                AIRCASH
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-blue-400 text-[10px] font-mono">
-                HUB 3A (2D BARKOD)
-              </span>
+            </div>
+
+            {/* HUO Certified Member & SSL Security */}
+            <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 text-slate-300">
+                <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
+                <span>HUO ČLAN (Hrvatski ured za osiguranje)</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 text-emerald-400">
+                <Lock className="w-3.5 h-3.5 shrink-0" />
+                <span>SSL 256-bitna TLS enkripcija</span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-[11px] font-mono">
-            <span className="flex items-center gap-1.5 text-slate-400">
-              <Lock className="w-3.5 h-3.5 text-emerald-400" />
-              256-bitna TLS enkripcija
-            </span>
-            <span>&bull;</span>
-            <span className="text-slate-400">Ovlašteni ugovorni zastupnik</span>
+          {/* Payment Rails Strip */}
+          <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800/60">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                Sigurni kanali naplate:
+              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">
+                  CORVUSPAY (DO 12 RATA)
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">
+                  VISA / MASTERCARD
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-emerald-400 text-[10px] font-mono">
+                  KEKS PAY
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-amber-400 text-[10px] font-mono">
+                  AIRCASH
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-blue-400 text-[10px] font-mono">
+                  HUB 3A (2D BARKOD)
+                </span>
+              </div>
+            </div>
+
+            <div className="text-[11px] font-mono text-slate-400">
+              Ovlašteni zastupnik u osiguranju &bull; Bez provizije za klijenta
+            </div>
           </div>
         </div>
 
         {/* Statutory Legal Sub-bar (Exclusively Isolated Regulatory Mentions) */}
         <div className="border-t border-slate-800 pt-6 mt-8 text-[11px] text-slate-400 font-sans leading-relaxed">
           <p>
-            Agencija za zastupanje u osiguranju d.o.o. je ovlašteni distributer osiguranja upisan u Registar distributera osiguranja koji vodi Hrvatska agencija za nadzor financijskih usluga (HANFA) pod brojem {AGENCY_DETAILS.hanfaRegisterNumber}, temeljem rješenja {AGENCY_DETAILS.hanfaLicense}. 
-            Strateški partner: Generali osiguranje d.d. Sjedište: {AGENCY_DETAILS.address}, {AGENCY_DETAILS.postalCode} {AGENCY_DETAILS.city}. MBS: {AGENCY_DETAILS.mbs}, OIB: {AGENCY_DETAILS.oib}.
+            {AGENCY_DETAILS.legalName} je ovlašteni zastupnik u osiguranju upisan u Registar distributera osiguranja koji vodi Hrvatska agencija za nadzor financijskih usluga (HANFA) pod brojem {AGENCY_DETAILS.hanfaRegisterNumber}, temeljem rješenja {AGENCY_DETAILS.hanfaLicense}. 
+            Ekskluzivni strateški partner Generali osiguranja d.d. • Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO). Sjedište: {AGENCY_DETAILS.address}, {AGENCY_DETAILS.postalCode} {AGENCY_DETAILS.city}. MBS: {AGENCY_DETAILS.mbs}, OIB: {AGENCY_DETAILS.oib}.
           </p>
           <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-slate-400 text-center md:text-left">

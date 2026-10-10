@@ -90,12 +90,12 @@ export const INITIAL_POLICIES: Policy[] = [
     documents: [
       {
         title: 'Polica osiguranja doma i potresa (Generali Dom Sigurnost)',
-        url: 'https://example.com/polica-dom.pdf',
+        url: '/documents/polica-dom.pdf',
         uploadedAt: '2024-04-01T10:00:00Z',
       },
       {
         title: 'Predugovorni informativni dokument (IPID)',
-        url: 'https://example.com/ipid-dom.pdf',
+        url: '/documents/ipid-dom.pdf',
         uploadedAt: '2024-04-01T10:00:00Z',
       },
     ],
@@ -116,12 +116,12 @@ export const INITIAL_POLICIES: Policy[] = [
     documents: [
       {
         title: 'Polica autoodgovornosti i punog kaska s 50% bonusa',
-        url: 'https://example.com/polica-auto.pdf',
+        url: '/documents/polica-auto.pdf',
         uploadedAt: '2025-01-10T09:30:00Z',
       },
       {
         title: 'Potvrda o asistenciji na cesti 24/7 (RH i Europa)',
-        url: 'https://example.com/asistencija.pdf',
+        url: '/documents/asistencija.pdf',
         uploadedAt: '2025-01-10T09:30:00Z',
       },
     ],
@@ -142,7 +142,7 @@ export const INITIAL_POLICIES: Policy[] = [
     documents: [
       {
         title: 'Ugovor o životnom osiguranju ŽIVOT+ s doživljenjem',
-        url: 'https://example.com/polica-zivot.pdf',
+        url: '/documents/polica-zivot.pdf',
         uploadedAt: '2023-11-01T11:00:00Z',
       },
     ],

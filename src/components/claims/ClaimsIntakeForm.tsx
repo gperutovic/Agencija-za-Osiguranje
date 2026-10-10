@@ -361,15 +361,49 @@ export const ClaimsIntakeForm: React.FC = () => {
             <p>3. Za hitne vuče ili zamjensko Toyota vozilo nazovite 24/7 dežurni broj 01 555 0666.</p>
           </div>
 
-          <button
-            onClick={() => {
-              setSubmitSuccess(false);
-              setStep(1);
-            }}
-            className="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-md shadow-teal-600/20 transition-all"
-          >
-            Nova prijava štete
-          </button>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (trackingCode) {
+                  setSearchCode(trackingCode);
+                  setSearchResult({
+                    code: trackingCode,
+                    carrier: `${carrierName} (Agencija Život)`,
+                    category: categories.find((c) => c.id === category)?.title || 'Odštetni zahtjev',
+                    status: 'Prijava zaprimljena (U obradi)',
+                    date: new Date().toLocaleDateString('hr-HR'),
+                    assignedAdjuster: 'Dežurni likvidator u obradi',
+                    estimatedResolution: '24-48 radnih sati',
+                    steps: [
+                      { title: 'Prijava zaprimljena u digitalni sustav (FNOL)', done: true, active: true, date: new Date().toLocaleDateString('hr-HR') },
+                      { title: 'Verifikacija pokrića i franšize', done: false, date: 'U tijeku' },
+                      { title: 'Procjena štete i servisni nalog', done: false, date: 'Očekivano unutar 24h' },
+                      { title: 'Likvidacija i odobrenje isplate', done: false, date: 'Slijedi' },
+                      { title: 'Isplata na IBAN ugovaratelja', done: false, date: 'Završni korak' },
+                    ],
+                  });
+                  setActiveTab('track_status');
+                  setSubmitSuccess(false);
+                }
+              }}
+              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 transition-all"
+            >
+              <Search className="w-4 h-4" />
+              <span>Prati status predmeta ({trackingCode})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSubmitSuccess(false);
+                setStep(1);
+              }}
+              className="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-sm transition-all"
+            >
+              Nova prijava štete
+            </button>
+          </div>
         </div>
       ) : (
         /* Multi-Step Intake Form */

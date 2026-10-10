@@ -138,7 +138,7 @@ export const registerSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['licenseNumber'],
-          message: 'Broj HANFA licence je obvezan za brokere / zastupnike',
+          message: 'Broj HANFA licence je obvezan za ovlaštene zastupnike u osiguranju',
         });
       }
     }
