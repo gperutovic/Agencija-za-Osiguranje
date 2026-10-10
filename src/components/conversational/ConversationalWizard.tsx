@@ -574,7 +574,7 @@ export const ConversationalWizard: React.FC<ConversationalWizardProps> = ({
                   Zahtjev je uspješno zaprimljen
                 </h2>
                 <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                  Zahvaljujemo, {name || 'poštovani klijentu'}. Vaš zahtjev za izračunom evidentiran je pod nadzorom licenciranog brokera Agencije Život. Službenu ponudu s Generali / Allianz / Croatia policama dostavljamo na <strong>{email || 'Vaš e-mail'}</strong> u roku od 15 minuta.
+                  Zahvaljujemo, {name || 'poštovani klijentu'}. Vaš zahtjev za izračunom evidentiran je pod nadzorom licenciranog zastupnika Agencije Život. Službenu ponudu s Generali / Allianz / Croatia policama dostavljamo na <strong>{email || 'Vaš e-mail'}</strong> u roku od 15 minuta.
                 </p>
                 <div className="pt-4">
                   <button

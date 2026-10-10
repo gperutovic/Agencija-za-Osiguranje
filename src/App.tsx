@@ -20,6 +20,7 @@ import ONamaPage from './pages/AboutUsPage';
 import PrigovoriPage from './pages/ComplaintsPage';
 import VehicleTransferPage from './pages/VehicleTransferPage';
 import LegalImpressumPage from './pages/LegalImpressumPage';
+import PolicyExpiryReminderPage from './pages/PolicyExpiryReminderPage';
 
 // Portal, Admin, & Auxiliary Pages
 import { PortalDashboardPage } from './pages/PortalDashboardPage';
@@ -99,6 +100,10 @@ export const App: React.FC = () => {
             {/* 8. Zakonski postupak rješavanja prigovora potrošača (čl. 401.) */}
             <Route path="/prigovori" element={<PrigovoriPage />} />
             <Route path="/zalbe" element={<PrigovoriPage />} />
+
+            {/* 8b. Podsjetnik na istek police osiguranja */}
+            <Route path="/podsjetnik-isteka" element={<PolicyExpiryReminderPage />} />
+            <Route path="/podsjetnik" element={<PolicyExpiryReminderPage />} />
 
             {/* 9. Pravne stranice, IDD obavijest i izvansudsko rješavanje sporova */}
             <Route path="/o-nama-pravno" element={<LegalImpressumPage />} />

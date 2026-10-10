@@ -290,7 +290,7 @@ export const ServiceDetailPage: React.FC = () => {
               </div>
               <Link to="/contact">
                 <Button variant="primary" size="sm" className="whitespace-nowrap font-mono font-bold">
-                  Kontaktiraj brokera
+                  Kontaktiraj zastupnika
                 </Button>
               </Link>
             </div>

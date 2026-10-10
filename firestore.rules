@@ -51,6 +51,16 @@ service cloud.firestore {
     match /needs_assessments/{assessmentId} {
       allow read, write: if true;
     }
+
+    // Official Complaints Register (čl. 401. Zakona o osiguranju)
+    match /complaints/{complaintId} {
+      allow read, write: if true;
+    }
+
+    // Policy Expiry Reminders (Lead alerts machine)
+    match /expiry_reminders/{reminderId} {
+      allow read, write: if true;
+    }
   }
 }
 

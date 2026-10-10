@@ -56,11 +56,11 @@ export interface InsurtechStoreState {
   appendClaimMessage: (claimId: string, note: string) => void;
 }
 
-// Dedicated Assigned Broker for Agencija Život
+// Dedicated Assigned Agent for Agencija Život
 export const DEFAULT_ADVISOR: Advisor = {
   id: 'adv-goran-horvat',
   name: 'Goran Horvat',
-  title: 'Ovlašteni broker osiguranja & Voditelj klijenata',
+  title: 'Ovlašteni zastupnik u osiguranju & Voditelj klijenata',
   phone: '+385 1 4800 120',
   email: 'goran.horvat@agencija-zivot.hr',
   whatsappNumber: '385984800120',

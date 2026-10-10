@@ -125,7 +125,7 @@ export const RegisterPage: React.FC = () => {
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900'
                   }`}
                 >
-                  Ovlašteni Zastupnik (Broker)
+                  Ovlašteni Zastupnik u osiguranju
                 </button>
               </div>
             </div>

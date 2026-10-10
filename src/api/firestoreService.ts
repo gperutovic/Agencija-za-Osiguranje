@@ -22,7 +22,9 @@ import {
   CoiCertificate,
   EndorsementRequest,
   LeadRecord,
-  NeedsAssessmentRecord
+  NeedsAssessmentRecord,
+  ComplaintRecord,
+  ExpiryReminderRecord,
 } from '../types/database';
 
 export interface InquiryRecord {
@@ -660,4 +662,109 @@ export function calculateExpiringPolicies(policies: ConsumerPolicy[]): RenewalAl
 
   return alerts.sort((a, b) => a.daysRemaining - b.daysRemaining);
 }
+
+// ====================================================
+// 10. Official Complaints Register (čl. 401. Zakona o osiguranju)
+// ====================================================
+
+export const complaintService = {
+  async submitComplaint(
+    complaintData: Omit<ComplaintRecord, 'id' | 'protocolNumber' | 'createdAt' | 'updatedAt' | 'statutoryDeadline' | 'status'> & {
+      protocolNumber?: string;
+    }
+  ): Promise<ComplaintRecord> {
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const protocolNumber = complaintData.protocolNumber || `PRIG-2026-${randomSuffix}`;
+    const id = protocolNumber;
+    const now = new Date();
+    const deadline = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000); // Statutory 15-day deadline
+
+    const record: ComplaintRecord = {
+      ...complaintData,
+      id,
+      protocolNumber,
+      status: 'received',
+      statutoryDeadline: deadline.toISOString(),
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
+    };
+
+    try {
+      await setDoc(doc(db, 'complaints', id), {
+        ...record,
+        serverTimestamp: serverTimestamp(),
+      });
+    } catch (e) {
+      console.warn('Firestore submitComplaint fallback:', e);
+    }
+    return record;
+  },
+
+  async getComplaints(): Promise<ComplaintRecord[]> {
+    try {
+      const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as ComplaintRecord));
+      }
+    } catch (e) {
+      console.warn('Firestore getComplaints error:', e);
+    }
+    return [];
+  },
+
+  async getComplaintByProtocol(protocolNumber: string): Promise<ComplaintRecord | null> {
+    try {
+      const snap = await getDoc(doc(db, 'complaints', protocolNumber));
+      if (snap.exists()) {
+        return snap.data() as ComplaintRecord;
+      }
+    } catch (e) {
+      console.warn('Firestore getComplaintByProtocol error:', e);
+    }
+    return null;
+  },
+};
+
+// ====================================================
+// 11. Policy Expiry Reminder Engine
+// ====================================================
+
+export const expiryReminderService = {
+  async saveReminder(
+    data: Omit<ExpiryReminderRecord, 'id' | 'createdAt' | 'status'>
+  ): Promise<ExpiryReminderRecord> {
+    const id = `exp-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
+    const now = new Date().toISOString();
+
+    const record: ExpiryReminderRecord = {
+      ...data,
+      id,
+      status: 'pending',
+      createdAt: now,
+    };
+
+    try {
+      await setDoc(doc(db, 'expiry_reminders', id), {
+        ...record,
+        serverTimestamp: serverTimestamp(),
+      });
+    } catch (e) {
+      console.warn('Firestore saveReminder fallback:', e);
+    }
+    return record;
+  },
+
+  async getReminders(): Promise<ExpiryReminderRecord[]> {
+    try {
+      const snap = await getDocs(collection(db, 'expiry_reminders'));
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as ExpiryReminderRecord));
+      }
+    } catch (e) {
+      console.warn('Firestore getReminders error:', e);
+    }
+    return [];
+  },
+};
 

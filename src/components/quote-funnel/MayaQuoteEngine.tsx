@@ -389,7 +389,7 @@ export const MayaQuoteEngine: React.FC<MayaQuoteEngineProps> = ({
                     Izračun je završen i spreman za aktivaciju
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Odaberite instant online ugovaranje ili zatražite savjet vašeg osobnog brokera na WhatsAppu.
+                    Odaberite instant online ugovaranje ili zatražite savjet vašeg osobnog zastupnika na WhatsAppu.
                   </p>
                 </div>
 

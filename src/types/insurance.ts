@@ -38,7 +38,7 @@ export interface Policy {
   id: string;
   userId: string;
   policyNumber: string;
-  type: 'auto' | 'kasko' | 'property' | 'life' | 'travel';
+  type: 'auto' | 'kasko' | 'property' | 'life' | 'health' | 'travel';
   carrier: string; // e.g. "Generali osiguranje d.d."
   startDate: string;
   endDate: string;

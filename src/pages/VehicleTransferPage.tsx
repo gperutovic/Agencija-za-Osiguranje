@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { VehicleTransferTool } from '../components/calculators/VehicleTransferTool';
 import { FileText, CheckCircle2, HelpCircle } from 'lucide-react';
 
@@ -127,6 +127,33 @@ export default function VehicleTransferPage() {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Sticky Bottom CTA for 50% Bonus Transfer Auto Insurance */}
+      <div className="sticky bottom-0 z-30 w-full mt-12 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-4 sm:p-5 shadow-2xl">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-white text-center sm:text-left">
+            <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold shrink-0 hidden sm:flex">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm sm:text-base font-black text-white">
+                Završili ste prijenos? Odmah ugovorite novu policu s 50% prenesenog bonusa!
+              </p>
+              <p className="text-xs text-teal-300">
+                Prijenos bonusa u bazi HUO-a • Generali, Croatia, Allianz • Zelena karta u PDF-u za tehnički pregled
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="/auto-osiguranje"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-teal-600/30 flex items-center justify-center gap-2 transition-all hover:scale-105 shrink-0"
+          >
+            <span>Ugovori auto policu (50% bonusa)</span>
+            <CheckCircle2 className="w-4 h-4" />
+          </a>
         </div>
       </div>
     </div>

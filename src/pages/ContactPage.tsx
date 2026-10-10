@@ -94,7 +94,7 @@ export const ContactPage: React.FC = () => {
                       +385 1 4828 000 (Centrala)
                     </a>
                     <a href="tel:+385914828000" className="text-slate-600 hover:text-teal-700 block font-mono">
-                      +385 91 482 8000 (Mobilni broker)
+                      +385 91 482 8000 (Mobilni zastupnik)
                     </a>
                   </div>
                 </div>

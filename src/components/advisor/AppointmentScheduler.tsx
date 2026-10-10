@@ -113,7 +113,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
         </div>
         <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Termin je potvrđen!</h3>
         <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-          Vaš sastanak s ovlaštenim brokerom Agencije Život uspješno je zabilježen. Poslali smo detalje na{' '}
+          Vaš sastanak s ovlaštenim zastupnikom Agencije Život uspješno je zabilježen. Poslali smo detalje na{' '}
           <strong className="text-teal-700 dark:text-teal-400">{confirmedAppt.customerEmail}</strong>.
         </p>
 
@@ -167,7 +167,7 @@ export const AppointmentScheduler: React.FC<AppointmentSchedulerProps> = ({ onSc
     <Card className="p-6 sm:p-8 bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 text-slate-900 dark:text-white shadow-bento rounded-3xl">
       <div className="mb-6">
         <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-          Dogovorite termin savjetovanja s brokerom
+          Dogovorite termin savjetovanja sa zastupnikom
         </h3>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Izaberite način komunikacije, željeni datum i vrijeme. Naš ovlašteni stručni savjetnik pripremit će optimalnu ponudu za vas.

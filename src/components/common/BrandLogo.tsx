@@ -98,17 +98,17 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
           <div className="flex items-center gap-2 mt-1">
             <span
-              className={`text-[10px] uppercase font-bold tracking-[0.16em] font-sans leading-none ${
-                isDark ? 'text-slate-400' : 'text-slate-500'
+              className={`text-[10px] uppercase font-bold tracking-[0.14em] font-sans leading-none ${
+                isDark ? 'text-teal-400' : 'text-teal-700'
               }`}
             >
-              Digitalni brokerski portal
+              Ovlašteni zastupnik u osiguranju
             </span>
             {variant === 'full' && (
               <>
                 <span className="text-slate-300 dark:text-slate-700 text-[10px]">•</span>
                 <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 tracking-wide font-sans">
-                  Generali Partner
+                  Ekskluzivni partner Generali d.d.
                 </span>
               </>
             )}

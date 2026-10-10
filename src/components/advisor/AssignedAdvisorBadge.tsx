@@ -53,7 +53,7 @@ export const AssignedAdvisorBadge: React.FC<AssignedAdvisorBadgeProps> = ({
             <a
               href={`tel:${advisor.phone}`}
               className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200"
-              title="Pozovi brokera"
+              title="Pozovi zastupnika"
             >
               <Phone className="w-3.5 h-3.5" />
             </a>
@@ -105,7 +105,7 @@ export const AssignedAdvisorBadge: React.FC<AssignedAdvisorBadgeProps> = ({
             <div className="space-y-0.5">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300">
                 <Award className="w-3 h-3 text-blue-600" />
-                <span>Osobni ovlašteni broker</span>
+                <span>Osobni ovlašteni zastupnik</span>
               </div>
               <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
                 {advisor.name}

@@ -151,13 +151,13 @@ export default function HomePage() {
       <section className="py-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <div className="text-center space-y-2 mb-6">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400">
-            Osobna podrška ovlaštenog brokera
+            Osobna podrška ovlaštenog zastupnika
           </span>
           <h3 className="text-2xl sm:text-3xl font-black font-heading text-slate-950 dark:text-white">
             Modern Agency Advantage &bull; Hibridno savjetovanje
           </h3>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-            Kombiniramo brzinu digitalnog portala s individualnim pristupom. Vaš dodijeljeni broker stoji vam na raspolaganju bez provizije.
+            Kombiniramo brzinu digitalnog portala s individualnim pristupom. Vaš dodijeljeni licencirani zastupnik stoji vam na raspolaganju bez provizije.
           </p>
         </div>
         <AssignedAdvisorBadge advisor={advisor} />
@@ -183,7 +183,7 @@ export default function HomePage() {
               <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
                 <th className="p-4 sm:p-5 font-bold text-slate-900 dark:text-white">Ugovorni element</th>
                 <th className="p-4 sm:p-5 font-bold text-teal-900 dark:text-teal-200 bg-teal-50/70 dark:bg-teal-950/40 border-x border-slate-200 dark:border-slate-800">
-                  Agencija za osiguranje (Licencirani broker)
+                  Agencija za zastupanje u osiguranju
                 </th>
                 <th className="p-4 sm:p-5 font-semibold text-slate-600 dark:text-slate-400">Klasična poslovnica</th>
                 <th className="p-4 sm:p-5 font-semibold text-slate-600 dark:text-slate-400">Generički web agregator</th>

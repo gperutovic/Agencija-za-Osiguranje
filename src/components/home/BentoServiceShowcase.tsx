@@ -261,7 +261,7 @@ export const BentoServiceShowcase: React.FC<BentoServiceShowcaseProps> = ({
                   <CheckCircle2 className="w-4 h-4" /> Praćenje spisa u realnom vremenu
                 </span>
                 <span className="flex items-center gap-1 text-amber-400">
-                  <CheckCircle2 className="w-4 h-4" /> Pomoć ovlaštenog brokera
+                  <CheckCircle2 className="w-4 h-4" /> Pomoć ovlaštenog zastupnika
                 </span>
               </div>
             </div>

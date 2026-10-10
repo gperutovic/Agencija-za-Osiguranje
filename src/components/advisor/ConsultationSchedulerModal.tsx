@@ -105,7 +105,7 @@ export const ConsultationSchedulerModal: React.FC<ConsultationSchedulerModalProp
             </h4>
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs space-y-1.5 max-w-sm mx-auto text-left">
               <div>Datum i termin: <strong className="text-slate-900 dark:text-white font-mono">{selectedDate} ({selectedSlot})</strong></div>
-              <div>Oblik razgovora: <strong className="text-slate-900 dark:text-white">{meetingType === 'video' ? 'Google Meet Video poziv' : meetingType === 'phone' ? 'Telefonski poziv brokera' : 'Ured Zagreb (Radnička 80)'}</strong></div>
+              <div>Oblik razgovora: <strong className="text-slate-900 dark:text-white">{meetingType === 'video' ? 'Google Meet Video poziv' : meetingType === 'phone' ? 'Telefonski poziv zastupnika' : 'Ured Zagreb (Radnička 80)'}</strong></div>
               <div>Tema: <strong className="text-slate-900 dark:text-white">{selectedTopic}</strong></div>
             </div>
             <p className="text-xs text-slate-500">

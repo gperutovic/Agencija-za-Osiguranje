@@ -20,6 +20,7 @@ import { isValidOIB } from '../../lib/validation';
 import { CARRIER_PARTNERS } from '../../lib/content/insurance-data';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
+import { firestoreService } from '../../api/firestoreService';
 
 type ClaimCategory = 'collision' | 'property' | 'health' | 'travel';
 
@@ -119,11 +120,34 @@ export const ClaimsIntakeForm: React.FC = () => {
     setStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleSubmitClaim = (e: React.FormEvent) => {
+  const handleSubmitClaim = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = `ST-2026-${Math.floor(100000 + Math.random() * 900000)}`;
     setTrackingCode(code);
     setSubmitSuccess(true);
+
+    try {
+      await firestoreService.createClaim({
+        id: code,
+        claimNumber: code,
+        policyId: policyNumber || 'POL-ONLINE-2026',
+        userId: 'guest',
+        claimantName,
+        claimantOib,
+        claimantPhone,
+        claimantEmail,
+        carrierName,
+        incidentDate,
+        incidentLocation,
+        description,
+        iban,
+        policeInvolved: policeReportFiled,
+        photos: files,
+        status: 'submitted',
+      });
+    } catch (err) {
+      console.warn('Failed to save claim:', err);
+    }
   };
 
   const handleCopyCode = () => {

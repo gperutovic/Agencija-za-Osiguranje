@@ -55,12 +55,12 @@ export const AdminDashboardPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-xs text-xs font-mono font-bold tracking-wider mb-2">
               <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-              <span className="text-slate-800">Broker Back-Office & CRM</span>
+              <span className="text-slate-800">Agency Back-Office & CRM</span>
               <span className="text-slate-300">&bull;</span>
               <span className="text-teal-700">Agencija Život</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
-              Upravljačka ploča brokera
+              Upravljačka ploča zastupnika
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
               Pregled prodajnog lijevka, obrada dolaznih upita i rješavanje odštetnih spisa Generali osiguranja.
@@ -69,7 +69,7 @@ export const AdminDashboardPage: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-slate-600 bg-white px-3.5 py-2 rounded-2xl border border-slate-200 shadow-xs">
-              Prijavljeni broker:{' '}
+              Prijavljeni zastupnik:{' '}
               <strong className="text-slate-900 font-bold">{user?.displayName || 'Marija Šarić'}</strong>
             </span>
           </div>

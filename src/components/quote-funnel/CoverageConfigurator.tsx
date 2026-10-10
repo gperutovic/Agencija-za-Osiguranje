@@ -330,7 +330,7 @@ const RiderToggleCard: React.FC<RiderToggleCardProps> = ({
             "{explainer.realLifeExample}"
           </p>
           <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
-            Preporuka brokera: {explainer.recommendation}
+            Preporuka zastupnika: {explainer.recommendation}
           </div>
         </motion.div>
       )}

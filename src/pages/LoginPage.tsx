@@ -88,7 +88,7 @@ export const LoginPage: React.FC = () => {
               className="p-2 rounded-2xl bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-800 text-center transition-colors group cursor-pointer"
             >
               <span className="block font-bold text-[11px] group-hover:text-teal-700">Marija Šarić</span>
-              <span className="text-[10px] text-sky-600 font-mono">Broker</span>
+              <span className="text-[10px] text-sky-600 font-mono">Zastupnik</span>
             </button>
             <button
               type="button"

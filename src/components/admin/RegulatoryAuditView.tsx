@@ -18,7 +18,7 @@ export const RegulatoryAuditView: React.FC = () => {
   const licensedAgents = [
     {
       name: 'Marija Šarić',
-      role: 'Ovlašteni zastupnik u osiguranju (Broker)',
+      role: 'Ovlašteni zastupnik u osiguranju',
       license: 'HR-HANFA-2024-88912',
       status: 'Aktivna licenca',
       validUntil: '31.12.2028.',
@@ -26,7 +26,7 @@ export const RegulatoryAuditView: React.FC = () => {
     },
     {
       name: 'Ivan Radić',
-      role: 'Glavni procjenitelj šteta i broker',
+      role: 'Glavni procjenitelj šteta i zastupnik',
       license: 'HR-HANFA-2023-41094',
       status: 'Aktivna licenca',
       validUntil: '30.06.2027.',

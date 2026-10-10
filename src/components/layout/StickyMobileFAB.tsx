@@ -175,7 +175,7 @@ export const StickyMobileFAB: React.FC<StickyMobileFABProps> = ({ onOpenQuote })
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto animate-bounce" />
                 <h4 className="text-sm font-bold text-emerald-300">Zahtjev zaprimljen!</h4>
                 <p className="text-xs text-slate-300">
-                  Naš broker će vas kontaktirati na broj <span className="font-mono text-white font-semibold">{callbackPhone}</span> unutar sljedećih 15 minuta.
+                  Naš licencirani zastupnik će vas kontaktirati na broj <span className="font-mono text-white font-semibold">{callbackPhone}</span> unutar sljedećih 15 minuta.
                 </p>
               </div>
             ) : (

@@ -161,3 +161,37 @@ export interface CoiCertificate {
   issued_at: string;
   certificate_number: string;
 }
+
+export interface ComplaintRecord {
+  id: string; // Official protocol ID, e.g. PRIG-2026-XXXX
+  protocolNumber: string;
+  fullName: string;
+  oib: string;
+  email: string;
+  phone: string;
+  address: string;
+  policyNumber?: string;
+  claimNumber?: string;
+  subject: string;
+  description: string;
+  desiredResolution?: string;
+  status: 'received' | 'in_review' | 'resolved';
+  statutoryDeadline: string; // 15 days from submission
+  responseNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExpiryReminderRecord {
+  id: string;
+  identifier: string; // License plate or OIB
+  category: 'auto' | 'dopunsko' | 'imovina' | 'kasko' | 'ostalo';
+  expiryDate: string;
+  phone: string;
+  fullName?: string;
+  email?: string;
+  status: 'pending' | 'reminded_30d' | 'quoted' | 'renewed';
+  estimatedSavingsEur?: number;
+  createdAt: string;
+}
+
