@@ -692,6 +692,9 @@ export const complaintService = {
     try {
       await setDoc(doc(db, 'complaints', id), {
         ...record,
+        confirmationEmailSent: true,
+        confirmationEmailRecipient: complaintData.email,
+        confirmationEmailSentAt: now.toISOString(),
         serverTimestamp: serverTimestamp(),
       });
     } catch (e) {

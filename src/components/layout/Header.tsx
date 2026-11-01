@@ -19,6 +19,7 @@ import {
   Calculator,
   ShieldCheck,
   Briefcase,
+  Bell,
 } from 'lucide-react';
 import { BrandLogo } from '../common/BrandLogo';
 import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
@@ -78,6 +79,32 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/90 shadow-xs transition-all">
+      {/* Regulatory & HANFA Compliance Top Strip */}
+      <div className="bg-slate-900 text-slate-300 border-b border-slate-800 text-[11px] py-1.5 px-4 hidden md:block">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 truncate">
+            <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+            <span className="font-semibold text-white">Ovlašteni zastupnik u osiguranju</span>
+            <span className="text-slate-600">&bull;</span>
+            <span className="text-teal-300 font-medium">Ekskluzivni strateški partner Generali osiguranja d.d.</span>
+            <span className="text-slate-600 hidden xl:inline">&bull;</span>
+            <span className="text-slate-400 hidden xl:inline">
+              Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO)
+            </span>
+          </div>
+          <div className="flex items-center gap-4 shrink-0 font-mono">
+            <Link to="/podsjetnik-isteka" className="text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1">
+              <Bell className="w-3 h-3" />
+              <span>Podsjetnik na istek (-35%)</span>
+            </Link>
+            <span className="text-slate-700">|</span>
+            <Link to="/prigovori" className="hover:text-white transition-colors">
+              Prigovori (čl. 401.)
+            </Link>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20" ref={dropdownRef}>
           {/* 1. Brand Logo */}
@@ -104,7 +131,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
                 aria-haspopup="true"
                 className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500 ${
                   openDropdown === 'osiguranja' ||
-                  ['/auto-osiguranje', '/dopunsko-zdravstveno', '/imovina', '/services'].includes(location.pathname)
+                  ['/auto-osiguranje', '/dopunsko-zdravstveno', '/imovina', '/kalkulator-prijepisa', '/podsjetnik-isteka', '/services'].includes(location.pathname)
                     ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-900 dark:text-teal-200 font-bold'
                     : 'hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
                 }`}
@@ -168,6 +195,23 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
                           </div>
                           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                             Točan izračun upravne pristojbe prema zakonu (NN 92/21)
+                          </p>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/podsjetnik-isteka"
+                          className="p-2 rounded-xl hover:bg-teal-50/70 dark:hover:bg-teal-950/30 block group transition-colors border border-teal-100 dark:border-teal-900/50"
+                        >
+                          <div className="font-semibold text-teal-800 dark:text-teal-300 text-xs group-hover:text-teal-600 flex items-center justify-between">
+                            <span className="flex items-center gap-1.5">
+                              <Bell className="w-3.5 h-3.5 text-teal-600" />
+                              <span>Podsjetnik na istek police</span>
+                            </span>
+                            <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Ušteda 35%</span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            30 dana prije isteka šaljemo 3 najpovoljnije ponude
                           </p>
                         </Link>
                       </li>
@@ -378,6 +422,20 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
               )}
             </div>
 
+            {/* DIRECT LINK 0: Podsjetnik na istek */}
+            <Link
+              to="/podsjetnik-isteka"
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 text-xs sm:text-sm ${
+                isActive('/podsjetnik-isteka')
+                  ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-800 dark:text-teal-200 font-bold border border-teal-200 dark:border-teal-800'
+                  : 'hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
+              }`}
+              title="Podsjetnik na istek police - 30 dana ranije uz 3 najpovoljnije ponude"
+            >
+              <Bell className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+              <span>Podsjetnik isteka</span>
+            </Link>
+
             {/* DIRECT LINK 1: Prijava štete (High Visibility) */}
             <Link
               to="/prijava-stete"
@@ -536,6 +594,18 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
                     </Link>
 
                     <Link
+                      to="/podsjetnik-isteka"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
+                    >
+                      <Bell className="w-4 h-4 text-teal-600 shrink-0" />
+                      <div>
+                        <div className="font-bold text-teal-800 dark:text-teal-300">Podsjetnik na istek police</div>
+                        <div className="text-[11px] text-slate-500">30 dana prije isteka + 3 ponude (-35%)</div>
+                      </div>
+                    </Link>
+
+                    <Link
                       to="/services"
                       onClick={() => setMobileMenuOpen(false)}
                       className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
@@ -602,6 +672,19 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
 
               {/* Direct Links in Drawer */}
               <div className="space-y-1.5 pt-2">
+                {/* Podsjetnik na istek */}
+                <Link
+                  to="/podsjetnik-isteka"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-300 font-bold text-sm min-h-[44px]"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Bell className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>Podsjetnik na istek police (-35%)</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-emerald-400" />
+                </Link>
+
                 {/* Prijava štete */}
                 <Link
                   to="/prijava-stete"

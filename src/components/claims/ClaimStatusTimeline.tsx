@@ -21,19 +21,19 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
       desc: 'Prijava zabilježena pod referentnim brojem',
     },
     {
-      key: 'assessing',
-      label: 'U procjeni',
-      desc: 'Izvid štete i prikupljanje dokumentacije',
+      key: 'under_review',
+      label: 'U obradi likvidatora',
+      desc: 'Verifikacija pokrića i obrada dokumentacije',
     },
     {
-      key: 'review',
-      label: 'Rješavanje',
-      desc: 'Likvidacija i utvrđivanje visine odštete',
+      key: 'assessing',
+      label: 'Procjena štete',
+      desc: 'Izvid procjenitelja i obračun visine štete',
     },
     {
       key: 'closed',
-      label: 'Zatvoreno',
-      desc: status === 'rejected' ? 'Zahtjev odbijen' : 'Odšteta isplaćena',
+      label: status === 'rejected' ? 'Odbijeno' : 'Isplata odobrena',
+      desc: status === 'rejected' ? 'Zahtjev odbijen' : 'Odšteta odobrena za isplatu na IBAN',
     },
   ];
 

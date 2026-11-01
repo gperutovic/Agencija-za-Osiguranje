@@ -19,7 +19,7 @@
     "about": "About Us",
     "contact": "Contact",
     "portal": "Client Portal",
-    "admin": "Broker CRM",
+    "admin": "Agency CRM",
     "login": "Sign In",
     "register": "Register",
     "logout": "Sign Out"
@@ -150,7 +150,7 @@
     "appointmentModal": "Appointment Booking (Zagreb Office / Video / Phone)"
   },
   "admin": {
-    "title": "Agency Back-Office & Broker CRM",
+    "title": "Agency Back-Office & Advisory CRM",
     "leads": "Incoming Prospect Leads & Inquiries",
     "kanban": "Sales Pipeline (Kanban)",
     "claimsDesk": "Claims Inspection & Investigator Desk",

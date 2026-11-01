@@ -200,7 +200,7 @@ export default function PrigovoriPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 pt-2">
                 <button
                   type="button"
                   onClick={handleDownloadReceiptPdf}
@@ -209,6 +209,13 @@ export default function PrigovoriPage() {
                   <Download className="w-4 h-4" />
                   <span>Preuzmi službenu potvrdu (PDF)</span>
                 </button>
+                <a
+                  href={`mailto:${submittedEmail}?subject=${encodeURIComponent(`Potvrda o zaprimanju prigovora ${protocolId} - ŽIVOT d.o.o.`)}&body=${encodeURIComponent(`Poštovani,\n\nVaš pisani prigovor urudžbiran je u službenu Knjigu prigovora društva ŽIVOT d.o.o. sukladno čl. 401. Zakona o osiguranju.\n\n• Službeni urudžbeni broj: ${protocolId}\n• Datum zaprimanja: ${new Date().toLocaleDateString('hr-HR')}\n• Zakonski rok za pisani odgovor: najkasnije 15 dana od dana zaprimanja\n\nS poštovanjem,\nŽIVOT d.o.o. (HANFA Reg. 518-06-11)`)}`}
+                  className="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow flex items-center justify-center gap-2"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Pošalji kopiju potvrde na e-mail</span>
+                </a>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}

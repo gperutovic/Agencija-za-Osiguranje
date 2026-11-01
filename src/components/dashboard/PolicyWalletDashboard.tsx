@@ -17,11 +17,13 @@ import {
   Sparkles,
   ExternalLink,
   Layers,
+  QrCode,
 } from 'lucide-react';
 import { useInsurtechStore } from '../../store/useInsurtechStore';
 import { Policy, InsuranceProductType } from '../../types/insurance';
 import { InstantDocumentCenter } from './InstantDocumentCenter';
 import { ProactiveRenewalRadar } from './ProactiveRenewalRadar';
+import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
 
 interface PolicyWalletDashboardProps {
   onAddNewPolicy?: () => void;
@@ -32,9 +34,17 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
   onAddNewPolicy,
   className = '',
 }) => {
-  const { policies, acceptPolicyRenewal } = useInsurtechStore();
+  const { policies, acceptPolicyRenewal, user } = useInsurtechStore();
   const [selectedAssetFilter, setSelectedAssetFilter] = useState<string>('all');
   const [activeDocumentPolicy, setActiveDocumentPolicy] = useState<Policy | null>(null);
+  const [activePaymentSlipPolicy, setActivePaymentSlipPolicy] = useState<Policy | null>(null);
+
+  const getDaysUntilExpiry = (endDateStr: string) => {
+    const end = new Date(endDateStr).getTime();
+    const now = Date.now();
+    const diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
   // Filter policies
   const filteredPolicies =
@@ -54,28 +64,48 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
     return acc;
   }, {});
 
-  const getStatusBadge = (status: Policy['status']) => {
+  const getStatusBadge = (status: Policy['status'], endDate: string) => {
+    const daysLeft = getDaysUntilExpiry(endDate);
+    const countdownLabel =
+      daysLeft > 0
+        ? `Istječe za ${daysLeft} dana`
+        : daysLeft === 0
+        ? 'Istječe danas'
+        : `Isteklo prije ${Math.abs(daysLeft)} dana`;
+
     switch (status) {
       case 'active':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Aktivna polica
-          </span>
+          <div className="inline-flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Aktivna polica
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+              <Clock className="w-3 h-3 text-blue-600" />
+              {countdownLabel}
+            </span>
+          </div>
         );
       case 'expiring_soon':
         return (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300">
             <Clock className="w-3.5 h-3.5" />
-            Istječe uskoro (&lt;30 dana)
+            Istječe uskoro ({daysLeft > 0 ? `${daysLeft} dana` : '<30 dana'})
           </span>
         );
       case 'renewal_pending':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300">
-            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-            Čeka obnovu
-          </span>
+          <div className="inline-flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+              Čeka obnovu
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+              <Clock className="w-3 h-3" />
+              {countdownLabel}
+            </span>
+          </div>
         );
       default:
         return (
@@ -120,7 +150,7 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
             Aktivna pokrića grupirana po imovini
           </h2>
           <p className="text-xs text-slate-500">
-            Prikaz {policies.length} polica s trenutnim pristupom policama u PDF-u, zelenim kartama i uplatnicama.
+            Prikaz {policies.length} polica s trenutnim pristupom policama u PDF-u, zelenim kartama i SEPA uplatnicama.
           </p>
         </div>
 
@@ -194,7 +224,7 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
                   >
                     <div className="space-y-2 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        {getStatusBadge(policy.status)}
+                        {getStatusBadge(policy.status, policy.endDate)}
                         <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
                           {policy.policyNumber}
                         </span>
@@ -234,24 +264,38 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2.5 shrink-0 self-start lg:self-auto">
+                    <div className="flex flex-wrap items-center gap-2 shrink-0 self-start lg:self-auto">
                       <button
                         type="button"
                         onClick={() => setActiveDocumentPolicy(policy)}
-                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold shadow-sm transition-all"
+                        className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold shadow-sm transition-all"
                       >
                         <FileText className="w-4 h-4 text-blue-600" />
                         <span>Dokumenti & Zelena Karta ({policy.documents.length})</span>
                       </button>
 
-                      {policy.renewalOffer && !policy.renewalOffer.accepted && (
+                      <button
+                        type="button"
+                        onClick={() => setActivePaymentSlipPolicy(policy)}
+                        className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold shadow-sm transition-all"
+                      >
+                        <QrCode className="w-4 h-4 text-emerald-600" />
+                        <span>SEPA Uplatnica</span>
+                      </button>
+
+                      {policy.renewalOffer?.accepted ? (
+                        <span className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Obnovljeno ✓</span>
+                        </span>
+                      ) : (
                         <button
                           type="button"
                           onClick={() => acceptPolicyRenewal(policy.id)}
                           className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md transition-all"
                         >
                           <Sparkles className="w-4 h-4" />
-                          <span>Obnovi s popustom</span>
+                          <span>Obnovi policu (1-klik)</span>
                         </button>
                       )}
                     </div>
@@ -269,6 +313,23 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
           policy={activeDocumentPolicy}
           isOpen={!!activeDocumentPolicy}
           onClose={() => setActiveDocumentPolicy(null)}
+        />
+      )}
+
+      {/* SEPA HUB 3A 2D Barcode Payment Slip Modal */}
+      {activePaymentSlipPolicy && (
+        <Hub3aPaymentSlipModal
+          isOpen={!!activePaymentSlipPolicy}
+          onClose={() => setActivePaymentSlipPolicy(null)}
+          data={{
+            payerName: user?.displayName || 'Marko Horvatić',
+            amountEur:
+              activePaymentSlipPolicy.paymentFrequency === 'monthly'
+                ? Math.round((activePaymentSlipPolicy.premiumAnnual / 12) * 100) / 100
+                : activePaymentSlipPolicy.premiumAnnual,
+            paymentDescription: `Premija ${activePaymentSlipPolicy.carrier} polica ${activePaymentSlipPolicy.policyNumber}`,
+            callNumber: `2026-${activePaymentSlipPolicy.policyNumber.replace(/\D/g, '').slice(0, 8) || '889120'}`,
+          }}
         />
       )}
     </div>

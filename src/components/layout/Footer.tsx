@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
             <BrandLogo variant="full" theme="dark" showBadge={false} />
 
             <p className="text-xs text-slate-300 leading-relaxed pr-4 pt-1">
-              Ovlašteni distributer osiguranja i pouzdani savjetnik za privatne i poslovne osiguranike. Pružamo stručno savjetovanje, neovisnu usporedbu polica vodećih osiguravajućih društava i podršku pri obradi šteta bez dodatnih naknada za ugovaratelja.
+              Ovlašteni zastupnik u osiguranju • Ekskluzivni strateški partner Generali osiguranja d.d. • Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO). Pružamo stručno savjetovanje i podršku pri obradi šteta bez dodatnih naknada za ugovaratelja.
             </p>
 
             {/* Advisory Trust & Consumer Value Note */}
@@ -90,6 +90,11 @@ export const Footer: React.FC = () => {
               Digitalni servisi &amp; Prava
             </h4>
             <ul className="space-y-2.5">
+              <li>
+                <Link to="/podsjetnik-isteka" className="hover:text-white transition-colors font-semibold text-teal-400">
+                  Podsjetnik na istek police (-35%)
+                </Link>
+              </li>
               <li>
                 <Link to="/prijava-stete" className="hover:text-white transition-colors font-medium text-rose-400">
                   Prijava štete (FNOL 24/7)

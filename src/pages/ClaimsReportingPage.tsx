@@ -1,9 +1,10 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { FileCheck2, AlertTriangle, Phone, Search, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
 import { ClaimsIntakeForm } from '../components/claims/ClaimsIntakeForm';
 import { ClaimStatusTimeline } from '../components/claims/ClaimStatusTimeline';
 import { JsonLd } from '../components/seo/JsonLd';
 import { AGENCY_DETAILS } from '../lib/content/insurance-data';
+import { firestoreService } from '../api/firestoreService';
 
 export const metadata = {
   title: 'Prijava Štete 24/7 (FNOL) | Agencija Život Zagreb',
@@ -50,12 +51,28 @@ export default function PrijavaStetePage() {
     ],
   };
 
-  const handleSearchStatus = (e: React.FormEvent) => {
+  const handleSearchStatus = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchClaimId.trim()) {
+    const cleaned = searchClaimId.trim().toUpperCase();
+    if (cleaned) {
+      try {
+        const claims = await firestoreService.getClaims();
+        const found = claims.find(
+          (c) =>
+            c.claimNumber?.toUpperCase() === cleaned ||
+            c.id?.toUpperCase() === cleaned ||
+            c.claimantOib === cleaned
+        );
+        if (found) {
+          setActiveClaimData(found);
+          return;
+        }
+      } catch {
+        // fallback to demo record below
+      }
       setActiveClaimData({
         id: 'claim-' + Date.now(),
-        claimNumber: searchClaimId.toUpperCase(),
+        claimNumber: cleaned.startsWith('ST-') ? cleaned : `ST-2026-${cleaned.slice(-4) || '8912'}`,
         policyId: 'POL-88912-ZG',
         userId: 'usr_guest',
         claimantName: 'Ivan Horvat',

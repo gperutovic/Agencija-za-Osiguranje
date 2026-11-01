@@ -14,8 +14,12 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  Share2,
 } from 'lucide-react';
 import { CalculatedQuoteEstimate, Advisor, InsuranceProductType } from '../../types/insurance';
+import { generateIpidPdf } from '../../lib/services/ipidService';
+import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
+import { ShareQuoteModal } from '../quotes/ShareQuoteModal';
 
 interface QuoteSummaryCardProps {
   productType: InsuranceProductType;
@@ -38,6 +42,28 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
   const [isBreakdownOpen, setIsBreakdownOpen] = useState(false);
   const [isBindingModalOpen, setIsBindingModalOpen] = useState(false);
   const [isBoundSuccess, setIsBoundSuccess] = useState(false);
+  const [hub3aOpen, setHub3aOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+
+  const ipidProductKey: 'auto' | 'kasko' | 'dopunsko' | 'imovina' | 'zivot' =
+    productType === 'property'
+      ? 'imovina'
+      : productType === 'health'
+      ? 'dopunsko'
+      : productType === 'life'
+      ? 'zivot'
+      : productType === 'kasko'
+      ? 'kasko'
+      : 'auto';
+
+  const shareCategory: 'auto' | 'property' | 'health' | 'life' | 'business' =
+    productType === 'property'
+      ? 'property'
+      : productType === 'health'
+      ? 'health'
+      : productType === 'life'
+      ? 'life'
+      : 'auto';
 
   const priceDisplay =
     billingFrequency === 'monthly'
@@ -193,27 +219,78 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           </AnimatePresence>
         </div>
 
+        {/* Mandatory IPID Pre-Contractual Disclosure (IDD EU 2016/97 & HANFA) */}
+        <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-xs">
+            <FileText className="w-4 h-4 text-teal-600 shrink-0" />
+            <div>
+              <span className="font-bold text-slate-900 dark:text-white block">
+                IPID obrazac (Informacije o proizvodu osiguranja)
+              </span>
+              <span className="text-[11px] text-slate-500">
+                Obvezni predugovorni dokument sukladno IDD direktivi i čl. 381. Zakona o osiguranju
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() =>
+              generateIpidPdf({
+                category: ipidProductKey,
+                carrierName: 'Generali osiguranje d.d.',
+                productName: assetLabel,
+                customDetails: { annualPremium: estimate.annualPremium },
+              })
+            }
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-teal-300 dark:border-teal-700 hover:bg-teal-50 text-teal-700 dark:text-teal-300 font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Preuzmi IPID (PDF)</span>
+          </button>
+        </div>
+
         {/* 1-CLICK ACTIONS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           {/* Action 1: Bind Online */}
           <button
             type="button"
             onClick={handleSimulateOnlineBinding}
-            className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all"
+            className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Ugovori policu online</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          {/* Action 2: Review with WhatsApp Agent */}
+          {/* Action 2: HUB 3A 2D Barcode Payment Slip */}
+          <button
+            type="button"
+            onClick={() => setHub3aOpen(true)}
+            className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm border border-slate-700 shadow-sm transition-all cursor-pointer"
+          >
+            <QrCode className="w-4 h-4 text-teal-400" />
+            <span>HUB 3A 2D Barkod uplatnica</span>
+          </button>
+        </div>
+
+        {/* Secondary Actions: Save Quote to WhatsApp / E-mail & Direct Advisor Chat */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button
+            type="button"
+            onClick={() => setShareOpen(true)}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 text-teal-800 dark:text-teal-300 hover:bg-teal-100 text-xs font-bold transition-all cursor-pointer"
+          >
+            <Share2 className="w-3.5 h-3.5 text-teal-600" />
+            <span>Spremi ponudu na WhatsApp / E-mail</span>
+          </button>
+
           <a
             href={generateWhatsAppMessage()}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm border border-slate-700 shadow-sm transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold text-xs transition-all"
           >
-            <MessageSquare className="w-4 h-4 text-emerald-400" />
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
             <span>Pregledaj s agentom (WhatsApp)</span>
           </a>
         </div>
@@ -280,7 +357,7 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
                       <span className="font-mono">{estimate.annualPremium.toFixed(2)} €</span>
                     </div>
                     <div className="text-slate-500">
-                      Izdavatelj: Partner Generali osiguranje d.d. &bull; Ovlašteni distributer
+                      Izdavatelj: Partner Generali osiguranje d.d. &bull; Ovlašteni zastupnik u osiguranju
                     </div>
                   </div>
 
@@ -297,10 +374,17 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
                         <CreditCard className="w-5 h-5" />
                         <span>Kartice do 12 rata</span>
                       </div>
-                      <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex flex-col items-center justify-center gap-1.5 text-slate-700 dark:text-slate-300">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsBindingModalOpen(false);
+                          setHub3aOpen(true);
+                        }}
+                        className="p-3 rounded-xl border border-teal-300 dark:border-teal-700 bg-teal-50/40 dark:bg-slate-800 hover:bg-teal-100 flex flex-col items-center justify-center gap-1.5 text-teal-800 dark:text-teal-300 cursor-pointer"
+                      >
                         <FileText className="w-5 h-5" />
-                        <span>SEPA Uplatnica</span>
-                      </div>
+                        <span>HUB 3A Barkod</span>
+                      </button>
                     </div>
                   </div>
 
@@ -326,6 +410,33 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           </div>
         )}
       </AnimatePresence>
+
+      {/* HUB 3A 2D Barcode Payment Slip Modal */}
+      <Hub3aPaymentSlipModal
+        isOpen={hub3aOpen}
+        onClose={() => setHub3aOpen(false)}
+        data={{
+          payerName: 'Ugovaratelj osiguranja',
+          amountEur: estimate.annualPremium,
+          paymentDescription: `Premija osiguranja - ${assetLabel}`,
+        }}
+      />
+
+      {/* Save Quote to WhatsApp / E-mail Modal */}
+      <ShareQuoteModal
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        category={shareCategory}
+        summaryTitle={assetLabel}
+        calculatedPriceEur={estimate.annualPremium}
+        monthlyPriceEur={estimate.monthlyPremium}
+        carrierName="Generali osiguranje d.d."
+        details={{
+          productType,
+          deductible: estimate.deductible,
+          coverageLimit: estimate.coverageLimit,
+        }}
+      />
     </div>
   );
 };

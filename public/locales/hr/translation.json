@@ -19,7 +19,7 @@
     "about": "O nama",
     "contact": "Kontakt",
     "portal": "Klijentski portal",
-    "admin": "Broker CRM",
+    "admin": "Agencijski CRM",
     "login": "Prijava",
     "register": "Registracija",
     "logout": "Odjava"
@@ -134,9 +134,9 @@
     "submit": "Podnesi službeni zahtjev za odštetu",
     "timeline": {
       "submitted": "Zaprimljeno",
-      "assessing": "U procjeni",
-      "review": "Rješavanje",
-      "closed": "Zatvoreno"
+      "assessing": "U obradi likvidatora",
+      "review": "Procjena štete",
+      "closed": "Isplata odobrena"
     }
   },
   "portal": {
@@ -150,7 +150,7 @@
     "appointmentModal": "Rezervacija termina (Palmotićeva 76 / Video / Tel)"
   },
   "admin": {
-    "title": "Agency Back-Office & Broker CRM",
+    "title": "Agencijski Back-Office & Nadzor Zastupanja",
     "leads": "Pristigli upiti i potencijalni klijenti",
     "kanban": "Prodajni prodajni lijevak (Kanban)",
     "claimsDesk": "Odjel za obradu i procjenu šteta",

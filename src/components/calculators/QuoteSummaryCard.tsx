@@ -14,8 +14,14 @@ import {
   Euro,
   FileCheck,
   Send,
+  FileText,
+  Download,
+  QrCode,
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
+import { generateIpidPdf } from '../../lib/services/ipidService';
+import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
+import { ShareQuoteModal } from '../quotes/ShareQuoteModal';
 
 export interface QuoteSummaryCardProps {
   productType: InsuranceProductType;
@@ -41,12 +47,20 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
   const [phone, setPhone] = useState(user?.phone || '');
   const [oib, setOib] = useState(user?.oib || '');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [hub3aOpen, setHub3aOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+
+  const ipidKey =
+    productType === 'property'
+      ? 'property'
+      : productType === 'health'
+      ? 'dopunsko'
+      : productType === 'life'
+      ? 'life'
+      : 'auto';
 
   const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Poveznica s izračunom kopirana u međuspremnik!');
-    }
+    setShareOpen(true);
   };
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
@@ -104,8 +118,8 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           <button
             type="button"
             onClick={handleShare}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            title="Podijeli izračun"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            title="Spremi ponudu na WhatsApp / E-mail"
           >
             <Share2 className="w-4 h-4" />
           </button>
@@ -172,8 +186,44 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           </div>
         )}
 
+        {/* Mandatory IPID Pre-Contractual Disclosure (IDD EU 2016/97 & HANFA) */}
+        <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-xs">
+            <FileText className="w-4 h-4 text-teal-600 shrink-0" />
+            <div>
+              <span className="font-bold text-slate-900 dark:text-white block text-[11px]">
+                IPID obrazac (Informacije o proizvodu)
+              </span>
+              <span className="text-[10px] text-slate-500">IDD direktiva &amp; čl. 381. ZO</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() =>
+              generateIpidPdf({
+                category:
+                  productType === 'property'
+                    ? 'imovina'
+                    : productType === 'health'
+                    ? 'dopunsko'
+                    : productType === 'life'
+                    ? 'zivot'
+                    : productType === 'kasko'
+                    ? 'kasko'
+                    : 'auto',
+                carrierName: 'Generali osiguranje d.d.',
+                customDetails: { annualPremium: estimate.annualPremium },
+              })
+            }
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-teal-300 text-teal-700 dark:text-teal-300 font-bold text-[11px] hover:bg-teal-50 shrink-0 cursor-pointer"
+          >
+            <Download className="w-3 h-3" />
+            <span>IPID PDF</span>
+          </button>
+        </div>
+
         {/* Action buttons */}
-        <div className="space-y-2.5 pt-2">
+        <div className="space-y-2.5 pt-1">
           <Button
             variant="primary"
             size="md"
@@ -183,6 +233,24 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           >
             {isSubmitted ? 'Pošalji novi upit' : t('calculators.summary.requestQuote')}
           </Button>
+
+          <button
+            type="button"
+            onClick={() => setHub3aOpen(true)}
+            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <QrCode className="w-4 h-4 text-teal-400" />
+            <span>Generiraj HUB 3A 2D barkod uplatnicu</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShareOpen(true)}
+            className="w-full py-2.5 px-4 rounded-xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 text-teal-800 dark:text-teal-300 hover:bg-teal-100 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <Share2 className="w-3.5 h-3.5 text-teal-600" />
+            <span>Spremi ponudu na WhatsApp / E-mail</span>
+          </button>
 
           {onBookAppointment && (
             <Button
@@ -202,6 +270,37 @@ export const QuoteSummaryCard: React.FC<QuoteSummaryCardProps> = ({
           {t('calculators.summary.disclaimer')}
         </p>
       </div>
+
+      {/* HUB 3A 2D Barcode Payment Slip Modal */}
+      <Hub3aPaymentSlipModal
+        isOpen={hub3aOpen}
+        onClose={() => setHub3aOpen(false)}
+        data={{
+          payerName: fullName || 'Ugovaratelj osiguranja',
+          amountEur: estimate.annualPremium,
+          paymentDescription: `Premija osiguranja (${productType.toUpperCase()})`,
+        }}
+      />
+
+      {/* Save Quote to WhatsApp / E-mail Modal */}
+      <ShareQuoteModal
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        category={
+          productType === 'property'
+            ? 'property'
+            : productType === 'health'
+            ? 'health'
+            : productType === 'life'
+            ? 'life'
+            : 'auto'
+        }
+        summaryTitle={`Polica osiguranja (${productType.toUpperCase()})`}
+        calculatedPriceEur={estimate.annualPremium}
+        monthlyPriceEur={estimate.monthlyPremium}
+        carrierName="Generali osiguranje d.d."
+        details={inputs}
+      />
 
       {/* Lead capture modal */}
       <Modal

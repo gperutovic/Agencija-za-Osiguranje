@@ -282,6 +282,29 @@ export const BentoServiceShowcase: React.FC<BentoServiceShowcaseProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Killer Conversion Strip: Podsjetnik na Istek Police */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-teal-900 via-slate-900 to-teal-950 text-white border border-teal-500/30 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+              <Clock className="w-3.5 h-3.5 text-teal-400" />
+              <span>BESPLATNI ALARM &bull; PODSJETNIK NA ISTEK POLICE</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black font-heading text-white">
+              Podsjetit ćemo vas 30 dana prije isteka uz 3 najjeftinije ponude i uštedu do 35%
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300">
+              Aktivirajte podsjetnik po registraciji ili OIB-u u 30 sekundi i osigurajte maksimalnih 50% bonusa bez kašnjenja s tehničkim pregledom.
+            </p>
+          </div>
+          <Link
+            to="/podsjetnik-isteka"
+            className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-teal-500/25 transition-all shrink-0"
+          >
+            <span>Aktiviraj podsjetnik isteka</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
     </section>
   );

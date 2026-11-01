@@ -432,20 +432,23 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
       acceptPolicyRenewal: (policyId: string) => {
         set((state) => ({
           policies: state.policies.map((p) => {
-            if (p.id === policyId && p.renewalOffer) {
+            if (p.id === policyId) {
               const currentEnd = new Date(p.endDate);
               const nextEnd = new Date(currentEnd);
               nextEnd.setFullYear(nextEnd.getFullYear() + 1);
+              const newAnnual = p.renewalOffer?.newPremiumAnnual ?? Math.round(p.premiumAnnual * 0.95 * 100) / 100;
 
               return {
                 ...p,
                 status: 'active' as const,
-                premiumAnnual: p.renewalOffer.newPremiumAnnual,
+                premiumAnnual: newAnnual,
                 startDate: p.endDate,
                 endDate: nextEnd.toISOString().split('T')[0],
                 renewalOffer: {
-                  ...p.renewalOffer,
+                  newPremiumAnnual: newAnnual,
+                  validUntil: nextEnd.toISOString().split('T')[0],
                   accepted: true,
+                  carrierDiscountPercentage: p.renewalOffer?.carrierDiscountPercentage ?? 5,
                 },
               };
             }
@@ -464,7 +467,7 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
 
       submitNewClaim: (claimInput) => {
         const claimId = `clm-${Date.now().toString().slice(-6)}`;
-        const claimNumber = `ŠT-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+        const claimNumber = `ST-2026-${Math.floor(1000 + Math.random() * 9000)}`;
         const now = new Date().toISOString();
 
         const initialEvent: ClaimTimelineEvent = {

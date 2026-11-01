@@ -8,11 +8,15 @@ import {
   ArrowRight,
   Info,
   Sparkles,
+  Download,
+  Share2,
 } from 'lucide-react';
 import { calculateVehicleTransferCost, formatEuro } from '../../lib/calculations';
 import { Slider } from '../common/Slider';
 import { Button } from '../common/Button';
 import { QuoteModal } from '../quotes/QuoteModal';
+import { ShareQuoteModal } from '../quotes/ShareQuoteModal';
+import { generateIpidPdf } from '../../lib/services/ipidService';
 
 interface VehicleTransferToolProps {
   standalone?: boolean;
@@ -25,6 +29,7 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
   const [ageYears, setAgeYears] = useState<number>(6);
   const [retainPlates, setRetainPlates] = useState<boolean>(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 
   // Approximate Horsepower (KS)
   const horsepower = Math.round(kw * 1.35962);
@@ -219,6 +224,32 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
                 </p>
               </div>
 
+              {/* Save Calculation to WhatsApp / E-mail & IPID */}
+              <div className="mt-5 pt-5 border-t border-slate-800 space-y-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="w-full py-2.5 px-4 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-teal-400" />
+                  <span>Spremi izračun na WhatsApp / E-mail</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    generateIpidPdf({
+                      category: 'auto',
+                      carrierName: 'Generali osiguranje d.d.',
+                      customDetails: { kw },
+                    })
+                  }
+                  className="w-full py-2 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5 text-teal-400" />
+                  <span>Preuzmi IPID obrazac za Auto osiguranje (PDF)</span>
+                </button>
+              </div>
+
               {/* Steps at STP */}
               <div className="mt-6 pt-6 border-t border-slate-800/80 space-y-2 text-xs text-slate-300">
                 <p className="font-semibold text-white text-[11px] font-mono uppercase tracking-wider">
@@ -276,6 +307,24 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Save Calculation to WhatsApp / E-mail Modal */}
+      <ShareQuoteModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        category="auto"
+        summaryTitle={`Prijepis vozila (${kw} kW, ${ageYears} god.)`}
+        calculatedPriceEur={result.totalCost}
+        monthlyPriceEur={result.totalCost}
+        carrierName="Stanica za tehnički pregled (NN 92/21)"
+        details={{
+          kw,
+          ageYears,
+          administrativeFee: result.administrativeFee,
+          permitFee: result.permitFee,
+          plateFee: retainPlates ? 0 : result.plateFee,
+        }}
+      />
 
       {/* Embedded Quote Modal */}
       <QuoteModal
