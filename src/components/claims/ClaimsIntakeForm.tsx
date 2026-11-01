@@ -23,8 +23,16 @@ import { CARRIER_PARTNERS } from '../../lib/content/insurance-data';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { firestoreService } from '../../api/firestoreService';
+import { dualStore } from '../../api/firebase';
+import { useInsurtechStore } from '../../store/useInsurtechStore';
 
 type ClaimCategory = 'collision' | 'property' | 'health' | 'travel';
+
+interface UploadedFileMeta {
+  name: string;
+  sizeKb: number;
+  previewUrl?: string;
+}
 
 export const ClaimsIntakeForm: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'new_claim' | 'track_status'>('new_claim');
@@ -55,6 +63,7 @@ export const ClaimsIntakeForm: React.FC = () => {
   const [iban, setIban] = useState<string>('');
 
   const [files, setFiles] = useState<string[]>([]);
+  const [fileMetas, setFileMetas] = useState<UploadedFileMeta[]>([]);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [oibError, setOibError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
@@ -94,21 +103,32 @@ export const ClaimsIntakeForm: React.FC = () => {
   const handleOibChange = (val: string) => {
     const cleaned = val.replace(/\D/g, '').slice(0, 11);
     setClaimantOib(cleaned);
-    if (cleaned.length === 11) {
-      if (!isValidOIB(cleaned)) {
-        setOibError('Neispravan OIB prema kontrolnom broju (ISO 7064).');
-      } else {
-        setOibError(null);
-      }
+    if (cleaned.length > 0 && cleaned.length < 11) {
+      setOibError(`Unesite još ${11 - cleaned.length} znamenki (uneseno ${cleaned.length}/11).`);
     } else {
       setOibError(null);
     }
   };
 
+  const ingestFileList = (fileList: FileList) => {
+    const incomingNames: string[] = [];
+    const incomingMetas: UploadedFileMeta[] = [];
+    Array.from(fileList).forEach((f) => {
+      incomingNames.push(f.name);
+      const isImg = f.type.startsWith('image/');
+      incomingMetas.push({
+        name: f.name,
+        sizeKb: Math.max(12, Math.round(f.size / 1024)),
+        previewUrl: isImg ? URL.createObjectURL(f) : undefined,
+      });
+    });
+    setFiles((prev) => [...prev, ...incomingNames]);
+    setFileMetas((prev) => [...prev, ...incomingMetas]);
+  };
+
   const handleFileUploadMock = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const fileNames = Array.from(e.target.files).map((f) => f.name);
-      setFiles((prev) => [...prev, ...fileNames]);
+    if (e.target.files && e.target.files.length > 0) {
+      ingestFileList(e.target.files);
     }
   };
 
@@ -116,8 +136,7 @@ export const ClaimsIntakeForm: React.FC = () => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const fileNames = Array.from(e.dataTransfer.files).map((f) => f.name);
-      setFiles((prev) => [...prev, ...fileNames]);
+      ingestFileList(e.dataTransfer.files);
     }
   };
 
@@ -131,21 +150,82 @@ export const ClaimsIntakeForm: React.FC = () => {
 
   const handleSubmitClaim = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (claimantOib && !isValidOIB(claimantOib)) {
-      setOibError('Molimo unesite valjani 11-znamenkasti OIB.');
+    if (!claimantOib || !/^\d{11}$/.test(claimantOib)) {
+      setOibError('Molimo unesite 11-znamenkasti OIB.');
       return;
     }
 
     const code = `ST-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    const nowIso = new Date().toISOString();
+    const locFull = `${incidentLocation || 'Zagreb'}${assetIdentifier ? ` (${assetIdentifier})` : ''}`;
+    const polId = policyNumber || assetIdentifier || 'POL-ONLINE-2026';
+
     setTrackingCode(code);
     setSubmitSuccess(true);
     setStep(3);
+
+    // Sync immediately with client portal store (useInsurtechStore) & dualStore
+    try {
+      useInsurtechStore.setState((state) => ({
+        claims: [
+          {
+            id: code,
+            claimNumber: code,
+            policyId: polId,
+            userId: state.user?.uid || 'usr_01',
+            incidentDate: `${incidentDate}T${incidentTime || '14:30'}:00`,
+            reportedDate: nowIso,
+            createdAt: nowIso,
+            category: (category === 'collision' ? 'collision' : category === 'property' ? 'water_damage' : 'other') as any,
+            description: description || 'Prijava štete putem 24/7 FNOL obrasca',
+            location: locFull,
+            policeReportFiled,
+            policeStation: policeStation || undefined,
+            photos: files.length > 0 ? files : ['Dokazna-fotografija-FNOL.jpg'],
+            mediaUrls: files.length > 0 ? files : ['Dokazna-fotografija-FNOL.jpg'],
+            iban: iban || 'HR1223600003219847561',
+            status: 'submitted',
+            claimAmountRequested: 950,
+            assessorName: 'Ing. Damir Kovačević (Ovlašteni procjenitelj)',
+            assessorPhone: '+385 91 4455 889',
+            timeline: [
+              {
+                status: 'submitted',
+                timestamp: nowIso,
+                title: 'Zaprimljeno (Digitalna prijava FNOL)',
+                description: `Prijava štete urudžbirana pod brojem ${code} (${carrierName}).`,
+                author: 'Sustav Agencije Život',
+              },
+            ],
+          },
+          ...state.claims,
+        ],
+      }));
+
+      dualStore.saveClaim({
+        id: code,
+        claimNumber: code,
+        policyId: polId,
+        userId: 'user-policyholder-1',
+        incidentDate: `${incidentDate} ${incidentTime}`,
+        incidentLocation: locFull,
+        description: description || 'Prijava štete putem 24/7 FNOL obrasca',
+        estimatedDamage: 950,
+        currency: 'EUR',
+        evidenceUrls: files,
+        status: 'submitted',
+        createdAt: nowIso,
+        updatedAt: nowIso,
+      });
+    } catch (storeErr) {
+      console.warn('Store claim sync warning:', storeErr);
+    }
 
     try {
       await firestoreService.createClaim({
         id: code,
         claimNumber: code,
-        policyId: policyNumber || assetIdentifier || 'POL-ONLINE-2026',
+        policyId: polId,
         userId: 'guest',
         claimantName,
         claimantOib,
@@ -153,7 +233,7 @@ export const ClaimsIntakeForm: React.FC = () => {
         claimantEmail,
         carrierName,
         incidentDate: `${incidentDate} ${incidentTime}`,
-        incidentLocation: `${incidentLocation}${assetIdentifier ? ` (${assetIdentifier})` : ''}`,
+        incidentLocation: locFull,
         description,
         iban,
         policeInvolved: policeReportFiled,
@@ -728,48 +808,79 @@ export const ClaimsIntakeForm: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[11px] font-mono text-slate-400">Brzi testni prilozi:</span>
                   {[
-                    'Europsko-izvjesce-potpisano.pdf',
-                    'Fotografija-ostecenja-prednji-kraj.jpg',
-                    'Prometna-dozvola-vozila.jpg',
+                    { name: 'Europsko-izvjesce-potpisano.pdf', sizeKb: 420 },
+                    { name: 'Fotografija-ostecenja-prednji-kraj.jpg', sizeKb: 1840 },
+                    { name: 'Prometna-dozvola-vozila.jpg', sizeKb: 960 },
                   ].map((sample) => (
                     <button
-                      key={sample}
+                      key={sample.name}
                       type="button"
                       onClick={() => {
-                        if (!files.includes(sample)) setFiles((prev) => [...prev, sample]);
+                        if (!files.includes(sample.name)) {
+                          setFiles((prev) => [...prev, sample.name]);
+                          setFileMetas((prev) => [...prev, sample]);
+                        }
                       }}
                       className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 text-[11px] font-mono text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 cursor-pointer"
                     >
-                      + {sample}
+                      + {sample.name}
                     </button>
                   ))}
                 </div>
 
-                {/* File list */}
+                {/* File list with size & thumbnail preview */}
                 {files.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 uppercase">
-                      Priloženi dokumenti ({files.length}):
+                      Priloženi dokumenti i fotografije ({files.length}):
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {files.map((name, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-between text-xs text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 font-mono"
-                        >
-                          <span className="flex items-center space-x-2 truncate">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                            <span className="truncate">{name}</span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
-                            className="text-slate-400 hover:text-rose-600 ml-2 font-bold"
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {files.map((name, i) => {
+                        const meta = fileMetas[i];
+                        const isPdf = name.toLowerCase().endsWith('.pdf');
+                        return (
+                          <div
+                            key={i}
+                            className="flex items-center justify-between text-xs text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 font-mono"
                           >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
+                            <div className="flex items-center space-x-2.5 truncate">
+                              {meta?.previewUrl ? (
+                                <img
+                                  src={meta.previewUrl}
+                                  alt={name}
+                                  className="w-9 h-9 rounded-lg object-cover border border-slate-300 shrink-0"
+                                />
+                              ) : (
+                                <div
+                                  className={`w-9 h-9 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                                    isPdf
+                                      ? 'bg-rose-100 text-rose-700 border border-rose-200'
+                                      : 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                  }`}
+                                >
+                                  {isPdf ? 'PDF' : 'IMG'}
+                                </div>
+                              )}
+                              <div className="truncate">
+                                <span className="block truncate font-bold">{name}</span>
+                                <span className="text-[10px] text-emerald-600 dark:text-emerald-400">
+                                  ✓ Spremno za prijenos &bull; {meta?.sizeKb || 540} KB
+                                </span>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setFiles((prev) => prev.filter((_, idx) => idx !== i));
+                                setFileMetas((prev) => prev.filter((_, idx) => idx !== i));
+                              }}
+                              className="text-slate-400 hover:text-rose-600 ml-2 font-bold px-1.5"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}

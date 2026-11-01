@@ -24,6 +24,7 @@ import { Policy, InsuranceProductType } from '../../types/insurance';
 import { InstantDocumentCenter } from './InstantDocumentCenter';
 import { ProactiveRenewalRadar } from './ProactiveRenewalRadar';
 import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
+import { LiveClaimMilestoneTracker } from '../claims/LiveClaimMilestoneTracker';
 
 interface PolicyWalletDashboardProps {
   onAddNewPolicy?: () => void;
@@ -34,7 +35,7 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
   onAddNewPolicy,
   className = '',
 }) => {
-  const { policies, acceptPolicyRenewal, user } = useInsurtechStore();
+  const { policies, claims, acceptPolicyRenewal, user } = useInsurtechStore();
   const [selectedAssetFilter, setSelectedAssetFilter] = useState<string>('all');
   const [activeDocumentPolicy, setActiveDocumentPolicy] = useState<Policy | null>(null);
   const [activePaymentSlipPolicy, setActivePaymentSlipPolicy] = useState<Policy | null>(null);
@@ -306,6 +307,30 @@ export const PolicyWalletDashboard: React.FC<PolicyWalletDashboardProps> = ({
           );
         })}
       </div>
+
+      {/* 4. Live Claim Progress Timeline (Zaprimljeno -> U obradi likvidatora -> Procjena štete -> Isplata odobrena) */}
+      {claims && claims.length > 0 && (
+        <div className="space-y-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-wider font-bold text-blue-600 block">
+                Praćenje Šteta Uživo (24/7 FNOL)
+              </span>
+              <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
+                Aktivni odštetni zahtjevi ({claims.length})
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-slate-500">
+              Zaprimljeno &rarr; U obradi likvidatora &rarr; Procjena štete &rarr; Isplata odobrena
+            </span>
+          </div>
+          <div className="space-y-6">
+            {claims.map((claim) => (
+              <LiveClaimMilestoneTracker key={claim.id} claim={claim} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Instant Document Center Modal */}
       {activeDocumentPolicy && (

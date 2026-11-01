@@ -175,6 +175,10 @@ export const PropertyCalculator: React.FC<PropertyCalculatorProps> = ({
     return carrierOffers.find((c) => c.name === selectedCarrier) || carrierOffers[0];
   }, [carrierOffers, selectedCarrier]);
 
+  const activeMonthlyInstallment = useMemo(() => {
+    return parseFloat((activeOffer.price / 12).toFixed(2));
+  }, [activeOffer.price]);
+
   const handleDownloadIpid = () => {
     generateIpidPdf({
       category: 'imovina',
@@ -490,7 +494,7 @@ export const PropertyCalculator: React.FC<PropertyCalculatorProps> = ({
               <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
                 <span>Ili do 12 rata bez kamata:</span>
                 <strong className="text-sm font-extrabold text-amber-700 font-mono">
-                  {formatEuro(calculation.monthlyInstallment)} / mj.
+                  {formatEuro(activeMonthlyInstallment)} / mj.
                 </strong>
               </div>
             </div>
@@ -644,7 +648,7 @@ export const PropertyCalculator: React.FC<PropertyCalculatorProps> = ({
         category="property"
         summaryTitle={`Osiguranje doma (${squareMeters} m², ${propertyType})`}
         calculatedPriceEur={activeOffer.price}
-        monthlyPriceEur={calculation.monthlyInstallment}
+        monthlyPriceEur={activeMonthlyInstallment}
         carrierName={selectedCarrier}
         details={{
           propertyType,

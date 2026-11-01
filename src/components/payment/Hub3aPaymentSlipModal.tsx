@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   QrCode,
@@ -34,8 +34,12 @@ export const Hub3aPaymentSlipModal: React.FC<Hub3aPaymentSlipModalProps> = ({
   const [copiedCallNumber, setCopiedCallNumber] = useState<boolean>(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
 
+  const fallbackCallNumber = useMemo(
+    () => `2026-${Math.floor(100000 + Math.random() * 900000)}`,
+    []
+  );
   const recipientIban = data.recipientIban || DEFAULT_AGENCY_PAYMENT.recipientIban;
-  const callNumber = data.callNumber || `2026-${Math.floor(100000 + Math.random() * 900000)}`;
+  const callNumber = data.callNumber || fallbackCallNumber;
   const model = data.model || DEFAULT_AGENCY_PAYMENT.model;
   const recipientName = data.recipientName || DEFAULT_AGENCY_PAYMENT.recipientName;
   const recipientAddress = data.recipientAddress || DEFAULT_AGENCY_PAYMENT.recipientAddress;

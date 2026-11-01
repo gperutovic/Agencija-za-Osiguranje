@@ -15,10 +15,10 @@ import {
 } from 'lucide-react';
 import { Policy, PolicyDocument } from '../../types/insurance';
 
-import { jsPDF } from 'jspdf';
 import { generateHub3aPaymentSlipPdf } from '../../lib/services/hub3aService';
 import { generateIpidPdf } from '../../lib/services/ipidService';
 import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { createSafePdf } from '../../utils/formatters';
 
 interface InstantDocumentCenterProps {
   policy: Policy;
@@ -57,7 +57,7 @@ export const InstantDocumentCenter: React.FC<InstantDocumentCenterProps> = ({
 
       // 2. Green Card (Međunarodna karta osiguranja automobila)
       if (doc.type === 'green_card' || titleLower.includes('zelena') || titleLower.includes('green')) {
-        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        const pdf = createSafePdf({ orientation: 'landscape', unit: 'mm', format: 'a4' });
         
         // Green header banner
         pdf.setFillColor(236, 253, 245);
@@ -120,7 +120,7 @@ export const InstantDocumentCenter: React.FC<InstantDocumentCenterProps> = ({
         // Insurer signature info
         pdf.setFontSize(9);
         pdf.text(`9. Naziv i adresa osiguratelja: ${policy.carrier}`, 16, 130);
-        pdf.text(`Distributer u osiguranju: ${AGENCY_DETAILS.legalName} (HANFA Reg. ${AGENCY_DETAILS.hanfaRegisterNumber})`, 16, 137);
+        pdf.text(`Ovlašteni zastupnik u osiguranju: ${AGENCY_DETAILS.legalName} (HANFA Reg. ${AGENCY_DETAILS.hanfaRegisterNumber})`, 16, 137);
         pdf.text(`Verifikacijski QR kod & MUP registar: VERIFICIRANO (Status: AKTIVNO)`, 16, 144);
 
         pdf.save(`Zelena_Karta_${policy.policyNumber}.pdf`);
@@ -143,7 +143,7 @@ export const InstantDocumentCenter: React.FC<InstantDocumentCenterProps> = ({
       }
 
       // 4. Default: Official Policy Document PDF
-      const pdf = new jsPDF();
+      const pdf = createSafePdf();
       pdf.setFillColor(15, 23, 42);
       pdf.rect(0, 0, 210, 32, 'F');
 

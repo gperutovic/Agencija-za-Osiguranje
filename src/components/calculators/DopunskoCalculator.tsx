@@ -36,13 +36,19 @@ interface DopunskoCalculatorProps {
   className?: string;
 }
 
+const DOPUNSKO_CARRIERS = [
+  { name: 'Generali Osiguranje', diff: 0, tag: 'Glavni partner' },
+  { name: 'Allianz Hrvatska', diff: 0.5, tag: 'B-lista do 200 €' },
+  { name: 'Croatia Osiguranje', diff: 0.8, tag: 'Vlastite poliklinike' },
+];
+
 export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
   onSelectPlan,
   className = '',
 }) => {
   const [age, setAge] = useState<number>(28);
   const [includeBList, setIncludeBList] = useState<boolean>(true);
-  const [includeSpecialistFastTrack, setIncludeSpecialistFastTrack] = useState<boolean>(true);
+  const [includeSpecialistFastTrack, setIncludeSpecialistFastTrack] = useState<boolean>(false);
   const [selectedCarrier, setSelectedCarrier] = useState<string>('Generali Osiguranje');
 
   // Modal states
@@ -59,18 +65,24 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
     return calculateDopunskoHealth({ age, includeBList });
   }, [age, includeBList]);
 
-  // Adjust for specialist fast-track add-on if chosen (+4.50 €/mo for private clinic MR/CT/sistematski)
+  // Adjust for specialist fast-track add-on (+4.50 €/mo for private clinic MR/CT/sistematski) & carrier differential
   const specialistAddonMonthly = includeSpecialistFastTrack ? 4.5 : 0;
-  const privateMonthly = parseFloat((baseResult.privateMonthly + specialistAddonMonthly).toFixed(2));
+  const basePlanMonthly = parseFloat((baseResult.privateMonthly + specialistAddonMonthly).toFixed(2));
+  const selectedCarrierDiff =
+    DOPUNSKO_CARRIERS.find((c) => c.name === selectedCarrier)?.diff ?? 0;
+  const privateMonthly = parseFloat((basePlanMonthly + selectedCarrierDiff).toFixed(2));
   const privateAnnual = parseFloat((privateMonthly * 12).toFixed(2));
+  const dopunskoOnlyAnnual = parseFloat(((baseResult.privateMonthly + selectedCarrierDiff) * 12).toFixed(2));
   const annualSavings = parseFloat(
-    Math.max(0, HZZO_STATUTORY_ANNUAL_2026 - baseResult.privateAnnual).toFixed(2)
+    Math.max(0, HZZO_STATUTORY_ANNUAL_2026 - dopunskoOnlyAnnual).toFixed(2)
   );
 
   const handleOpenBind = (carrier: string) => {
     setSelectedCarrier(carrier);
+    const diff = DOPUNSKO_CARRIERS.find((c) => c.name === carrier)?.diff ?? 0;
+    const carrierMonthly = parseFloat((basePlanMonthly + diff).toFixed(2));
     if (onSelectPlan) {
-      onSelectPlan(carrier, privateMonthly);
+      onSelectPlan(carrier, carrierMonthly);
     } else {
       setShowBindModal(true);
     }
@@ -352,12 +364,8 @@ export const DopunskoCalculator: React.FC<DopunskoCalculatorProps> = ({
                 Licencirani osiguratelji u ponudi (Allianz, Generali, Croatia)
               </span>
               <div className="space-y-2">
-                {[
-                  { name: 'Generali Osiguranje', diff: 0, tag: 'Glavni partner' },
-                  { name: 'Allianz Hrvatska', diff: 0.5, tag: 'B-lista do 200 €' },
-                  { name: 'Croatia Osiguranje', diff: 0.8, tag: 'Vlastite poliklinike' },
-                ].map((c) => {
-                  const monthlyC = parseFloat((privateMonthly + c.diff).toFixed(2));
+                {DOPUNSKO_CARRIERS.map((c) => {
+                  const monthlyC = parseFloat((basePlanMonthly + c.diff).toFixed(2));
                   const isSelected = selectedCarrier === c.name;
                   return (
                     <div

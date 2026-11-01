@@ -1,5 +1,5 @@
-import { jsPDF } from 'jspdf';
 import { AGENCY_DETAILS } from '../content/insurance-data';
+import { createSafePdf } from '../../utils/formatters';
 
 export type IpidProductCategory = 'auto' | 'kasko' | 'dopunsko' | 'imovina' | 'zivot';
 
@@ -18,7 +18,7 @@ interface IpidGeneratorOptions {
 export function generateIpidPdf(options: IpidGeneratorOptions): void {
   const { category, carrierName = 'Generali osiguranje d.d.', productName, customDetails } = options;
 
-  const doc = new jsPDF({
+  const doc = createSafePdf({
     orientation: 'portrait',
     unit: 'mm',
     format: 'a4',

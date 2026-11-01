@@ -50,14 +50,8 @@ const MILESTONES: Array<{
   {
     id: 'approved',
     label: 'Isplata odobrena',
-    sublabel: 'Obračunat iznos odštete',
+    sublabel: 'Odobrena isplata odštete na IBAN',
     icon: CheckCircle2,
-  },
-  {
-    id: 'paid',
-    label: 'Isplata izvršena',
-    sublabel: 'Sredstva na IBAN računu',
-    icon: CreditCard,
   },
 ];
 
@@ -69,15 +63,17 @@ export const LiveClaimMilestoneTracker: React.FC<LiveClaimMilestoneTrackerProps>
   const [clientMessage, setClientMessage] = useState('');
   const [isTimelineExpanded, setIsTimelineExpanded] = useState(true);
 
-  // Determine active milestone index
-  const statusOrder: Claim['status'][] = [
-    'submitted',
-    'under_review',
-    'assessor_assigned',
-    'approved',
-    'paid',
-  ];
-  const currentStepIdx = statusOrder.indexOf(claim.status) >= 0 ? statusOrder.indexOf(claim.status) : 2;
+  // Determine active milestone index (0..3)
+  const currentStepIdx =
+    claim.status === 'submitted'
+      ? 0
+      : claim.status === 'under_review'
+      ? 1
+      : claim.status === 'assessor_assigned'
+      ? 2
+      : claim.status === 'approved' || claim.status === 'paid'
+      ? 3
+      : 2;
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();

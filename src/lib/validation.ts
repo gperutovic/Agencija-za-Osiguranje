@@ -90,12 +90,24 @@ export const oibSchema = z
     message: 'Neispravan OIB. Mora imati 11 znamenki i točnu kontrolnu znamenku po ISO 7064 Mod 11, 10.',
   });
 
+export const oib11DigitSchema = z
+  .string()
+  .min(1, 'OIB je obvezan podatak')
+  .refine((val) => /^\d{11}$/.test(val.replace(/[\s-]+/g, '')), {
+    message: 'OIB mora sadržavati točno 11 znamenki.',
+  });
+
 export const croatianPhoneSchema = z
   .string()
-  .min(8, 'Broj telefona je prekratak')
-  .regex(
-    /^(\+385|00385|0)[1-9][0-9]{6,8}$/,
-    'Unesite valjani telefonski broj u Hrvatskoj (npr. 091 234 5678 ili +385 91 234 5678)'
+  .min(6, 'Broj telefona je prekratak')
+  .refine(
+    (val) => {
+      const normalized = val.replace(/[\s\-()/]+/g, '');
+      return /^(\+385|00385|0)[1-9][0-9]{6,9}$/.test(normalized);
+    },
+    {
+      message: 'Unesite valjani telefonski broj u Hrvatskoj (npr. 091 234 5678 ili +385 91 234 5678)',
+    }
   );
 
 export const emailSchema = z
@@ -239,7 +251,7 @@ export type PropertyCalculatorFormData = z.infer<typeof propertyCalculatorSchema
 
 export const consumerComplaintSchema = z.object({
   fullName: z.string().min(3, 'Ime i prezime ili naziv pravne osobe je obvezno'),
-  oib: oibSchema,
+  oib: oib11DigitSchema,
   email: emailSchema,
   phone: croatianPhoneSchema,
   address: z.string().min(5, 'Adresa prebivališta je obvezna'),
@@ -296,7 +308,7 @@ export const claimsIntakeSchema = z.object({
   category: z.enum(['collision', 'property', 'health', 'travel']),
   policyNumber: z.string().min(3, 'Unesite broj police osiguranja'),
   carrierName: z.string().min(2, 'Odaberite osiguratelja'),
-  claimantOib: oibSchema,
+  claimantOib: oib11DigitSchema,
   claimantName: z.string().min(3, 'Ime i prezime osiguranika je obvezno'),
   claimantPhone: croatianPhoneSchema,
   claimantEmail: emailSchema,

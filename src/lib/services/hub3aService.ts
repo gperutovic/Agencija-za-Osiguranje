@@ -1,6 +1,6 @@
 import bwipjs from 'bwip-js';
-import { jsPDF } from 'jspdf';
 import { AGENCY_DETAILS } from '../content/insurance-data';
+import { createSafePdf } from '../../utils/formatters';
 
 export interface Hub3aPaymentData {
   payerName: string;
@@ -96,7 +96,7 @@ export function renderHub3aBarcodeToCanvas(
  * Generates an official HUB 3A SEPA payment slip PDF
  */
 export async function generateHub3aPaymentSlipPdf(data: Hub3aPaymentData): Promise<void> {
-  const doc = new jsPDF({
+  const doc = createSafePdf({
     orientation: 'landscape',
     unit: 'mm',
     format: [210, 99], // Standard Croatian HUB 3A payment slip dimensions (1/3 A4)

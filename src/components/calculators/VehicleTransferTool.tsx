@@ -10,12 +10,14 @@ import {
   Sparkles,
   Download,
   Share2,
+  QrCode,
 } from 'lucide-react';
 import { calculateVehicleTransferCost, formatEuro } from '../../lib/calculations';
 import { Slider } from '../common/Slider';
 import { Button } from '../common/Button';
 import { QuoteModal } from '../quotes/QuoteModal';
 import { ShareQuoteModal } from '../quotes/ShareQuoteModal';
+import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
 import { generateIpidPdf } from '../../lib/services/ipidService';
 
 interface VehicleTransferToolProps {
@@ -30,6 +32,7 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
   const [retainPlates, setRetainPlates] = useState<boolean>(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState<boolean>(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [isHub3aModalOpen, setIsHub3aModalOpen] = useState<boolean>(false);
 
   // Approximate Horsepower (KS)
   const horsepower = Math.round(kw * 1.35962);
@@ -224,16 +227,26 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
                 </p>
               </div>
 
-              {/* Save Calculation to WhatsApp / E-mail & IPID */}
+              {/* Save Calculation to WhatsApp / E-mail, HUB 3A & IPID */}
               <div className="mt-5 pt-5 border-t border-slate-800 space-y-2.5">
-                <button
-                  type="button"
-                  onClick={() => setIsShareModalOpen(true)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Share2 className="w-3.5 h-3.5 text-teal-400" />
-                  <span>Spremi izračun na WhatsApp / E-mail</span>
-                </button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsShareModalOpen(true)}
+                    className="py-2.5 px-3 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <Share2 className="w-3.5 h-3.5 text-teal-400" />
+                    <span>WhatsApp / E-mail</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsHub3aModalOpen(true)}
+                    className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <QrCode className="w-3.5 h-3.5 text-teal-400" />
+                    <span>HUB 3A Uplatnica</span>
+                  </button>
+                </div>
                 <button
                   type="button"
                   onClick={() =>
@@ -307,6 +320,17 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           </div>
         </div>
       </div>
+
+      {/* HUB 3A Payment Slip Modal */}
+      <Hub3aPaymentSlipModal
+        isOpen={isHub3aModalOpen}
+        onClose={() => setIsHub3aModalOpen(false)}
+        data={{
+          payerName: 'Stjecatelj vozila',
+          amountEur: result.totalCost,
+          paymentDescription: `Prijepis vozila (${kw} kW, ${ageYears} god.) - NN 92/21`,
+        }}
+      />
 
       {/* Save Calculation to WhatsApp / E-mail Modal */}
       <ShareQuoteModal

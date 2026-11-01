@@ -37,12 +37,12 @@ export const ClaimStatusTimeline: React.FC<ClaimStatusTimelineProps> = ({
     },
   ];
 
-  // Map database status to stage index
+  // Map database status to stage index (0: Zaprimljeno, 1: U obradi likvidatora, 2: Procjena štete, 3: Isplata odobrena)
   let activeIndex = 0;
   if (status === 'submitted') activeIndex = 0;
-  else if (status === 'under_review' || status === 'assessing') activeIndex = 1;
-  else if (status === 'approved') activeIndex = 2;
-  else if (status === 'paid' || status === 'rejected') activeIndex = 3;
+  else if (status === 'under_review') activeIndex = 1;
+  else if (status === 'assessing') activeIndex = 2;
+  else if (status === 'approved' || status === 'paid' || status === 'rejected') activeIndex = 3;
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-bento p-6 sm:p-8 space-y-6 text-slate-900 dark:text-white">

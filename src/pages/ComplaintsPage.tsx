@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { consumerComplaintSchema, ConsumerComplaintFormData } from '../lib/validation';
 import { AGENCY_DETAILS } from '../lib/content/insurance-data';
 import { complaintService } from '../api/firestoreService';
-import { jsPDF } from 'jspdf';
+import { createSafePdf } from '../utils/formatters';
 
 export const metadata = {
   title: 'Postupak Rješavanja Prigovora Potrošača | Agencija Život',
@@ -44,11 +44,11 @@ export default function PrigovoriPage() {
         email: data.email,
         phone: data.phone,
         address: data.address,
-        policyNumber: data.policyNumber,
-        claimNumber: data.claimNumber,
+        policyNumber: data.policyNumber || undefined,
+        claimNumber: data.claimNumber || undefined,
         subject: data.subject,
         description: data.description,
-        desiredResolution: data.desiredResolution,
+        desiredResolution: data.desiredResolution || undefined,
       });
 
       setProtocolId(generatedProtocol);
@@ -71,7 +71,7 @@ export default function PrigovoriPage() {
 
   const handleDownloadReceiptPdf = () => {
     if (!submittedData || !protocolId) return;
-    const doc = new jsPDF();
+    const doc = createSafePdf();
 
     doc.setFillColor(15, 23, 42);
     doc.rect(0, 0, 210, 30, 'F');
@@ -248,7 +248,7 @@ export default function PrigovoriPage() {
                     {...register('oib')}
                     maxLength={11}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono focus:ring-2 focus:ring-rose-500"
-                    placeholder="12345678901"
+                    placeholder="14329077049"
                   />
                   {errors.oib && (
                     <p className="text-rose-500 text-[11px] mt-1">{errors.oib.message}</p>

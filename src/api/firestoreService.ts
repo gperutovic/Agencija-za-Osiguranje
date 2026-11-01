@@ -679,8 +679,12 @@ export const complaintService = {
     const now = new Date();
     const deadline = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000); // Statutory 15-day deadline
 
+    const cleanInput = Object.fromEntries(
+      Object.entries(complaintData).filter(([, v]) => v !== undefined)
+    ) as typeof complaintData;
+
     const record: ComplaintRecord = {
-      ...complaintData,
+      ...cleanInput,
       id,
       protocolNumber,
       status: 'received',
@@ -740,8 +744,12 @@ export const expiryReminderService = {
     const id = `exp-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
     const now = new Date().toISOString();
 
+    const cleanData = Object.fromEntries(
+      Object.entries(data).filter(([, v]) => v !== undefined)
+    ) as typeof data;
+
     const record: ExpiryReminderRecord = {
-      ...data,
+      ...cleanData,
       id,
       status: 'pending',
       createdAt: now,

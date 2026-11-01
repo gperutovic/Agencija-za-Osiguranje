@@ -98,10 +98,50 @@ export function downloadAppointmentIcs(appointment: Appointment): void {
 }
 
 /**
+ * Sanitizes text for jsPDF built-in Helvetica (WinAnsiEncoding / Windows-1252).
+ * Prevents jsPDF from switching strings containing č, ć, đ, Č, Ć, Đ or symbols (✓, ✗, ℹ)
+ * into unrendered 2-byte UTF-16BE streams while keeping š, ž, Š, Ž, €, • intact.
+ */
+export function toPdfText(input: string): string {
+  if (!input) return '';
+  return input
+    .replace(/č/g, 'c')
+    .replace(/ć/g, 'c')
+    .replace(/đ/g, 'd')
+    .replace(/Č/g, 'C')
+    .replace(/Ć/g, 'C')
+    .replace(/Đ/g, 'D')
+    .replace(/✓/g, '[+]')
+    .replace(/✗/g, '[-]')
+    .replace(/ℹ/g, '[i]');
+}
+
+/**
+ * Creates a jsPDF instance whose text() and splitTextToSize() methods automatically
+ * sanitize strings through toPdfText() so no line suffers WinAnsiEncoding corruption.
+ */
+export function createSafePdf(options?: any): jsPDF {
+  const doc = options ? new jsPDF(options) : new jsPDF();
+  const origText = doc.text.bind(doc);
+  const origSplit = doc.splitTextToSize.bind(doc);
+
+  doc.text = ((text: string | string[], x: number, y: number, opts?: any, transform?: any) => {
+    const safeText = Array.isArray(text) ? text.map((t) => toPdfText(String(t))) : toPdfText(String(text));
+    return origText(safeText as any, x, y, opts, transform);
+  }) as any;
+
+  doc.splitTextToSize = ((text: string, maxLen: number, opts?: any) => {
+    return origSplit(toPdfText(String(text)), maxLen, opts);
+  }) as any;
+
+  return doc;
+}
+
+/**
  * Generate client-side PDF certificate using jsPDF
  */
 export function generatePolicyCertificatePdf(policy: Policy): void {
-  const doc = new jsPDF();
+  const doc = createSafePdf();
 
   // Header navy bar
   doc.setFillColor(10, 25, 47);
@@ -114,7 +154,7 @@ export function generatePolicyCertificatePdf(policy: Policy): void {
 
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
-  doc.text('Ovlašteni distributer osiguranja • Partner Generali osiguranja d.d.', 20, 26);
+  doc.text('Ovlašteni zastupnik u osiguranju • Ekskluzivni strateški partner Generali osiguranja d.d.', 20, 26);
 
   // Policy Title
   doc.setTextColor(30, 41, 59);
@@ -168,7 +208,7 @@ export function generatePolicyCertificatePdf(policy: Policy): void {
  * Generate official Croatian / European Green Card (Zelena karta / Međunarodna karta osiguranja)
  */
 export function generateGreenCardPdf(policy: Policy): void {
-  const doc = new jsPDF();
+  const doc = createSafePdf();
 
   // Distinctive Green Header Bar
   doc.setFillColor(22, 101, 52); // Forest green
@@ -230,7 +270,7 @@ export function generateGreenCardPdf(policy: Policy): void {
   doc.setFontSize(7.5);
   doc.setTextColor(100, 116, 139);
   doc.text(
-    'ŽIVOT d.o.o. za poslove zastupanja u osiguranju • Ovlašteni distributer • Registar HANFA-e',
+    'ŽIVOT d.o.o. za poslove zastupanja u osiguranju • Ovlašteni zastupnik u osiguranju • Registar HANFA-e',
     20,
     257
   );

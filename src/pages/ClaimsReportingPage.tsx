@@ -111,79 +111,12 @@ export default function PrijavaStetePage() {
               <strong>Prijava štete (First Notice of Loss - FNOL)</strong> je službeni početak postupka naknade štete iz osiguranja. U slučaju prometne nezgode, loma stakla ili štete na stanu (potres, izljev vode), prijavu možete podnijeti online 24 sata dnevno bez odlaska u poslovnicu. Agencija Život osigurava besplatnu pravnu i administrativnu asistenciju: od prijave i zakazivanja procjene do kontrole izračuna i isplate naknade od strane osiguratelja (Generali, Croatia, Allianz, Wiener).
             </p>
           </div>
-
-          {/* Selector Tabs */}
-          <div className="inline-flex p-1.5 rounded-2xl bg-slate-200/80 mt-2">
-            <button
-              onClick={() => setActiveTab('nova')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
-                activeTab === 'nova'
-                  ? 'bg-white text-slate-950 shadow-md'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <FileCheck2 className="w-4 h-4 text-rose-600" />
-              <span>Nova digitalna prijava štete</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('status')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
-                activeTab === 'status'
-                  ? 'bg-white text-slate-950 shadow-md'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Search className="w-4 h-4 text-blue-600" />
-              <span>Provjeri status postojećeg predmeta</span>
-            </button>
-          </div>
         </div>
 
-        {/* Tab 1: New Claim Intake Form */}
-        {activeTab === 'nova' && (
-          <div className="max-w-5xl mx-auto">
-            <ClaimsIntakeForm />
-          </div>
-        )}
-
-        {/* Tab 2: Claim Status Lookup */}
-        {activeTab === 'status' && (
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-6">
-              <div>
-                <h3 className="text-xl font-bold text-slate-900">Praćenje statusa likvidacije štete</h3>
-                <p className="text-xs text-slate-500 mt-1">
-                  Unesite broj predmeta štete (npr. ST-2026-8912) za provjeru faze obrade.
-                </p>
-              </div>
-
-              <form onSubmit={handleSearchStatus} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="text"
-                  required
-                  value={searchClaimId}
-                  onChange={(e) => setSearchClaimId(e.target.value)}
-                  placeholder="ST-2026-8912"
-                  className="flex-1 px-4 py-3 rounded-xl border border-slate-300 text-sm font-mono uppercase focus:ring-2 focus:ring-blue-600"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow flex items-center justify-center gap-2"
-                >
-                  <Search className="w-4 h-4" />
-                  <span>Provjeri spis</span>
-                </button>
-              </form>
-
-              {activeClaimData && (
-                <div className="pt-6 border-t border-slate-200">
-                  <ClaimStatusTimeline claim={activeClaimData} />
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Unified FNOL Intake & Live Claim Tracker */}
+        <div className="max-w-5xl mx-auto">
+          <ClaimsIntakeForm />
+        </div>
 
         {/* Emergency Assistance Hotline Card */}
         <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">

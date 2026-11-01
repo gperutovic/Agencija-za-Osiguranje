@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ShieldCheck, Award, Users, Building, MapPin, Phone, Mail, FileCheck, CheckCircle2 } from 'lucide-react';
 import { AGENCY_DETAILS, CARRIER_PARTNERS } from '../lib/content/insurance-data';
 
@@ -16,17 +16,30 @@ export default function ONamaPage() {
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-mono font-semibold">
             <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
-            <span>OVLAŠTENI DISTRIBUTER OSIGURANJA &bull; ZAGREB, PALMOTIĆEVA 76</span>
+            <span>OVLAŠTENI ZASTUPNIK U OSIGURANJU &bull; ZAGREB, PALMOTIĆEVA 76</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
-            O Agenciji Život: Tehnološki predvodnik i pouzdani savjetnik
+            O Agenciji Život: Ovlašteni zastupnik u osiguranju
           </h1>
+
+          {/* Mandatory HANFA Regulatory Pills */}
+          <div className="flex flex-wrap justify-center gap-2 pt-1">
+            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+              Ovlašteni zastupnik u osiguranju
+            </span>
+            <span className="px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold">
+              Ekskluzivni strateški partner Generali osiguranja d.d.
+            </span>
+            <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold">
+              Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO)
+            </span>
+          </div>
 
           {/* Standalone GEO Direct Answer Block */}
           <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm text-left text-sm text-slate-700 leading-relaxed">
             <p>
-              <strong>ŽIVOT d.o.o. za poslove zastupanja u osiguranju (Agencija Život)</strong> je licencirana agencija za osiguranje osnovana u Zagrebu, sa sjedištem na adresi <strong>Junija Palmotića 76, 10000 Zagreb</strong> (OIB: 14329077049, MBS: 080514170). Društvo posluje na temelju rješenja Hrvatske agencije za nadzor financijskih usluga (<strong>HANFA</strong>, klasa: UP/I-983-02/24-01/12, broj registra: <strong>ZO-88912</strong>). Kao ovlašteni ugovorni partner Generali osiguranja d.d. i ekskluzivni partner Toyota Centra Zagreb, klijentima pružamo besplatno aktuarsko savjetovanje, instant izračun polica i 24/7 asistenciju kod likvidacije šteta.
+              <strong>ŽIVOT d.o.o. za poslove zastupanja u osiguranju (Agencija Život)</strong> je <strong>Ovlašteni zastupnik u osiguranju</strong> osnovan u Zagrebu, sa sjedištem na adresi <strong>Junija Palmotića 76, 10000 Zagreb</strong> (OIB: 14329077049, MBS: 080514170). Društvo posluje na temelju rješenja Hrvatske agencije za nadzor financijskih usluga (<strong>HANFA</strong>, klasa: UP/I-983-02/24-01/12, broj registra: <strong>518-06-11</strong>). Kao <strong>Ekskluzivni strateški partner Generali osiguranja d.d.</strong> i partner Toyota Centra Zagreb, uz <strong>neovisnu digitalnu usporedbu ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO)</strong>, klijentima pružamo besplatno aktuarsko savjetovanje, instant izračun polica i 24/7 asistenciju kod likvidacije šteta.
             </p>
           </div>
         </div>
