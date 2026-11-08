@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   AlertTriangle,
   Phone,
@@ -88,6 +88,11 @@ const CHECKLIST_OPTIONS = [
 
 export default function PrijavaStetePage() {
   const { user, policies, submitNewClaim } = useInsurtechStore();
+  const location = useLocation();
+  const routeState = (location.state || {}) as {
+    prefilledFnolDescription?: string;
+    fnolIncidentType?: string;
+  };
 
   const [mode, setMode] = useState<'guided_fnol' | 'classic_fnol'>('guided_fnol');
   const [category, setCategory] = useState<FnolCategory>('Prometna nesreća - AO/Kasko');
@@ -117,8 +122,24 @@ export default function PrijavaStetePage() {
   const [estimatedAmountEur, setEstimatedAmountEur] = useState<number>(850);
   const [payoutIban, setPayoutIban] = useState<string>(user.iban || 'HR1223600003219847561');
   const [description, setDescription] = useState<string>(
-    'Prilikom vožnje došlo je do oštećenja prednjeg vjetrobranskog stakla i prednjeg branika. Vozilo je vozno, tražim izvid i popravak u ovlaštenom servisu Toyota Centar Zagreb.'
+    routeState.prefilledFnolDescription ||
+      'Prilikom vožnje došlo je do oštećenja prednjeg vjetrobranskog stakla i prednjeg branika. Vozilo je vozno, tražim izvid i popravak u ovlaštenom servisu Toyota Centar Zagreb.'
   );
+
+  useEffect(() => {
+    if (routeState.prefilledFnolDescription) {
+      setDescription(routeState.prefilledFnolDescription);
+      if (
+        routeState.fnolIncidentType?.toLowerCase().includes('izljev') ||
+        routeState.fnolIncidentType?.toLowerCase().includes('poplav') ||
+        routeState.fnolIncidentType?.toLowerCase().includes('imovin')
+      ) {
+        setCategory('Šteta na imovini / Lom / Poplava');
+        setCulpability(CULPABILITY_OPTIONS['Šteta na imovini / Lom / Poplava'][0]);
+        setSelectedZones([DAMAGE_ZONES_MAP['Šteta na imovini / Lom / Poplava'][0]]);
+      }
+    }
+  }, [routeState.prefilledFnolDescription, routeState.fnolIncidentType]);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [submittedClaim, setSubmittedClaim] = useState<any | null>(null);

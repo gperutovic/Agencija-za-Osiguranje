@@ -153,11 +153,12 @@ export const PortalDashboardPage: React.FC = () => {
 
   const openClaimAiModal = (claim: Claim) => {
     const currentPhase = claim.phase ?? 1;
+    const displayClaimNo = claim.claimNumber || claim.id;
     const phaseInfo = CLAIM_PHASE_LABELS.find((p) => p.phase === currentPhase) || CLAIM_PHASE_LABELS[0];
-    const initialMsg = `Pratim vaš odštetni zahtjev ${claim.id} za policu ${claim.policyNumber || claim.policyId}. Trenutni status je Faza ${currentPhase}/5: "${phaseInfo.label}" (${phaseInfo.description}). Traženi iznos: ${formatEUR(claim.claimAmountRequested || 0)} na IBAN ${claim.iban}. Bilješka zastupnika: "${claim.agentNotes || 'Dokumentacija je uredno zaprimljena.'}"`;
+    const initialMsg = `Pratim vaš odštetni zahtjev ${displayClaimNo} za policu ${claim.policyNumber || claim.policyId}. Trenutni status je Faza ${currentPhase}/5: "${phaseInfo.label}" (${phaseInfo.description}). Traženi iznos: ${formatEUR(claim.claimAmountRequested || 0)} na IBAN ${claim.iban}. Bilješka zastupnika: "${claim.agentNotes || 'Dokumentacija je uredno zaprimljena.'}"`;
     setAiModal({
       mode: 'claim',
-      title: `AI Status štete: ${claim.id}`,
+      title: `AI Status štete: ${displayClaimNo}`,
       subtitle: `Faza ${currentPhase}/5 (${phaseInfo.label}) • Polica ${claim.policyNumber || claim.policyId}`,
       systemSummary: `Kategorija: ${claim.category} | Lokacija: ${claim.location} | IBAN za isplatu: ${claim.iban}`,
       suggestedQuestions: [
@@ -607,6 +608,8 @@ export const PortalDashboardPage: React.FC = () => {
                               startDate: pol.startDate,
                               endDate: pol.endDate,
                               premiumEur: pol.premiumAnnual,
+                              paymentFrequency: pol.paymentFrequency,
+                              documents: pol.documents,
                               coverageRiders: pol.coverageDetails?.riders || [],
                             })
                           }
@@ -735,7 +738,7 @@ export const PortalDashboardPage: React.FC = () => {
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-mono tabular-nums text-xs font-bold">
-                              Broj spisa: {claim.id}
+                              Broj spisa: {claim.claimNumber || claim.id}
                             </span>
                             <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-mono tabular-nums text-xs font-semibold">
                               Polica: {claim.policyNumber || claim.policyId}

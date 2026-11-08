@@ -760,6 +760,8 @@ export const AdminDashboardPage: React.FC = () => {
                             startDate: pol.startDate,
                             endDate: pol.endDate,
                             premiumEur: pol.premiumAnnual,
+                            paymentFrequency: pol.paymentFrequency,
+                            documents: pol.documents,
                             coverageRiders: pol.coverageDetails?.riders || [],
                           })
                         }
@@ -813,6 +815,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="space-y-4">
               {claims.map((claim) => {
                 const cPhase = claim.phase ?? 1;
+                const displayClaimNo = claim.claimNumber || claim.id;
                 return (
                   <div
                     key={claim.id}
@@ -822,7 +825,7 @@ export const AdminDashboardPage: React.FC = () => {
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-mono tabular-nums text-xs font-bold">
-                            {claim.id}
+                            {displayClaimNo}
                           </span>
                           <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-mono tabular-nums text-xs font-bold">
                             Polica: {claim.policyNumber || claim.policyId}
@@ -854,7 +857,7 @@ export const AdminDashboardPage: React.FC = () => {
                           type="button"
                           onClick={() => {
                             removeClaim(claim.id);
-                            setBannerMessage(`Spis štete ${claim.id} je uklonjen.`);
+                            setBannerMessage(`Spis štete ${displayClaimNo} je uklonjen.`);
                           }}
                           className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:text-red-600 hover:bg-red-50 cursor-pointer"
                           title="Obriši spis štete (-)"
@@ -880,7 +883,7 @@ export const AdminDashboardPage: React.FC = () => {
                                 claimNoteDrafts[claim.id] || claim.agentNotes
                               );
                               setBannerMessage(
-                                `Spis ${claim.id} prebačen je u Fazu ${st.phase} (${st.label}) — vidljivo klijentu u Korisničkom portalu.`
+                                `Spis ${displayClaimNo} prebačen je u Fazu ${st.phase} (${st.label}) — vidljivo klijentu u Korisničkom portalu.`
                               );
                             }}
                             className={`p-3 rounded-xl border text-left text-xs transition-all cursor-pointer ${
@@ -917,7 +920,7 @@ export const AdminDashboardPage: React.FC = () => {
                             cPhase,
                             claimNoteDrafts[claim.id] ?? claim.agentNotes
                           );
-                          setBannerMessage(`Bilješka zastupnika za spis ${claim.id} je spremljena.`);
+                          setBannerMessage(`Bilješka zastupnika za spis ${displayClaimNo} je spremljena.`);
                         }}
                         className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer"
                       >
@@ -963,7 +966,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-mono tabular-nums text-xs font-bold">
-                          {item.id}
+                          {item.referenceCode || item.id}
                         </span>
                         <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-mono tabular-nums text-xs font-bold">
                           OIB: {item.clientOib}

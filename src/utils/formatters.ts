@@ -126,14 +126,30 @@ export function createSafePdf(options?: any): jsPDF {
   const doc = options ? new jsPDF(options) : new jsPDF();
   const origText = doc.text.bind(doc);
   const origSplit = doc.splitTextToSize.bind(doc);
+  const origSave = doc.save.bind(doc);
+  const renderedLines: string[] = [];
+  (doc as any).__renderedLines = renderedLines;
 
   doc.text = ((text: string | string[], x: number, y: number, opts?: any, transform?: any) => {
     const safeText = Array.isArray(text) ? text.map((t) => toPdfText(String(t))) : toPdfText(String(text));
+    if (Array.isArray(safeText)) {
+      renderedLines.push(...safeText);
+    } else {
+      renderedLines.push(safeText);
+    }
     return origText(safeText as any, x, y, opts, transform);
   }) as any;
 
   doc.splitTextToSize = ((text: string, maxLen: number, opts?: any) => {
     return origSplit(toPdfText(String(text)), maxLen, opts);
+  }) as any;
+
+  doc.save = ((filename: string, opts?: any) => {
+    (doc as any).__savedFilename = filename;
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      return origSave(filename, opts);
+    }
+    return doc;
   }) as any;
 
   return doc;
@@ -142,7 +158,7 @@ export function createSafePdf(options?: any): jsPDF {
 /**
  * Generate client-side PDF certificate using jsPDF
  */
-export function generatePolicyCertificatePdf(policy: Policy | any): void {
+export function generatePolicyCertificatePdf(policy: Policy | any): jsPDF {
   const doc = createSafePdf();
 
   // Header Generali Crimson bar
@@ -166,37 +182,78 @@ export function generatePolicyCertificatePdf(policy: Policy | any): void {
 
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Šifra police: ${policy.policyNumber}`, 20, 62);
-  doc.text(`Ugovaratelj: ${policy.insuredName || policy.clientName || 'Marko Horvatić'}`, 20, 70);
-  doc.text(`Osiguratelj: ${policy.insurer || policy.carrier || 'Generali osiguranje d.d.'}`, 20, 78);
-  doc.text(`Predmet / Program: ${policy.assetName || String(policy.type || 'AUTO').toUpperCase()}`, 20, 86);
-  doc.text(`Razdoblje valjanosti: ${formatDate(policy.startDate)} do ${formatDate(policy.endDate)}`, 20, 94);
-  const prem = policy.premiumAmount ?? policy.premiumAnnual ?? 0;
-  doc.text(`Ugovorena premija: ${formatCurrency(prem)} (${policy.paymentFrequency || 'annual'})`, 20, 102);
+  const clientName = policy.insuredName || policy.clientName || 'Marko Horvatić';
+  const clientOib = policy.clientOib || policy.oib;
+  const prem = policy.premiumAmount ?? policy.premiumAnnual ?? policy.premiumEur ?? 0;
+  const startDate = policy.startDate || policy.validFrom || new Date().toISOString();
+  const endDate = policy.endDate || policy.validUntil || new Date().toISOString();
 
-  // Document Vault files listed
-  doc.setFont('helvetica', 'bold');
-  doc.text('Priloženi elektronički dokumenti i pokrića:', 20, 118);
-  doc.setFont('helvetica', 'normal');
+  let y = 62;
+  doc.text(`Šifra police: ${policy.policyNumber}`, 20, y);
+  y += 8;
+  doc.text(`Ugovaratelj: ${clientName}${clientOib ? ` (OIB: ${clientOib})` : ''}`, 20, y);
+  y += 8;
+  doc.text(`Osiguratelj: ${policy.insurer || policy.carrier || 'Generali osiguranje d.d.'}`, 20, y);
+  y += 8;
 
-  let y = 126;
-  const docs = policy.documents || [];
-  docs.forEach((docItem: any) => {
-    const docTitle = docItem.title || docItem.name || 'Dokument police';
-    const docDate = formatDate(docItem.uploadedAt || policy.startDate);
-    doc.text(`• ${docTitle} (evidencija: ${docDate})`, 24, y);
-    y += 8;
+  const assetLines: string[] = doc.splitTextToSize(
+    `Predmet / Program: ${policy.assetName || policy.vehicleDesc || String(policy.type || 'AUTO').toUpperCase()}`,
+    170
+  );
+  assetLines.forEach((line: string) => {
+    doc.text(line, 20, y);
+    y += 7;
   });
 
-  if (policy.coverageDetails?.riders?.length) {
+  doc.text(`Razdoblje valjanosti: ${formatDate(startDate)} do ${formatDate(endDate)}`, 20, y);
+  y += 8;
+  doc.text(`Ugovorena premija: ${formatCurrency(prem)} (${policy.paymentFrequency || 'annual'})`, 20, y);
+  y += 14;
+
+  // Document Vault files listed
+  const docs = policy.documents || [];
+  if (docs.length > 0) {
+    doc.setFont('helvetica', 'bold');
+    doc.text('Priloženi elektronički dokumenti:', 20, y);
+    doc.setFont('helvetica', 'normal');
+    y += 8;
+
+    docs.forEach((docItem: any) => {
+      const docTitle = docItem.title || docItem.name || 'Dokument police';
+      const docDate = formatDate(docItem.uploadedAt || startDate);
+      const wrapped: string[] = doc.splitTextToSize(`• ${docTitle} (evidencija: ${docDate})`, 166);
+      wrapped.forEach((wLine: string) => {
+        if (y > 235) {
+          doc.addPage();
+          y = 25;
+        }
+        doc.text(wLine, 24, y);
+        y += 6.5;
+      });
+    });
     y += 4;
+  }
+
+  const riders: string[] = policy.coverageDetails?.riders || policy.coverageRiders || [];
+  if (riders.length > 0) {
+    if (y > 225) {
+      doc.addPage();
+      y = 25;
+    }
     doc.setFont('helvetica', 'bold');
     doc.text('Ugovorena pokrića (Riders):', 20, y);
     y += 8;
     doc.setFont('helvetica', 'normal');
-    policy.coverageDetails.riders.forEach((rider: string) => {
-      doc.text(`• ${rider}`, 24, y);
-      y += 7;
+    riders.forEach((rider: string) => {
+      const wrappedRider: string[] = doc.splitTextToSize(`• ${rider}`, 166);
+      wrappedRider.forEach((rLine: string) => {
+        if (y > 235) {
+          doc.addPage();
+          y = 25;
+        }
+        doc.text(rLine, 24, y);
+        y += 6.5;
+      });
     });
   }
 
@@ -218,12 +275,13 @@ export function generatePolicyCertificatePdf(policy: Policy | any): void {
   );
 
   doc.save(`Polica_${policy.policyNumber}.pdf`);
+  return doc;
 }
 
 /**
  * Generate official Croatian / European Green Card (Zelena karta / Međunarodna karta osiguranja)
  */
-export function generateGreenCardPdf(policy: Policy | any): void {
+export function generateGreenCardPdf(policy: Policy | any): jsPDF {
   const doc = createSafePdf();
 
   // Distinctive Green Header Bar
@@ -242,6 +300,10 @@ export function generateGreenCardPdf(policy: Policy | any): void {
   doc.setFontSize(8);
   doc.text('Hrvatski ured za osiguranje (HUO) • Council of Bureaux', 20, 30);
 
+  const validFrom = policy.startDate || policy.validFrom || new Date().toISOString();
+  const validUntil = policy.endDate || policy.validUntil || new Date().toISOString();
+  const vehicleDesc = policy.assetName || policy.vehicleDesc || policy.id || policy.policyNumber;
+
   // Policy info
   doc.setTextColor(30, 41, 59);
   doc.setFontSize(11);
@@ -250,10 +312,10 @@ export function generateGreenCardPdf(policy: Policy | any): void {
 
   doc.setFontSize(9.5);
   doc.setFont('helvetica', 'normal');
-  doc.text(`2. Vrijedi od: ${formatDate(policy.startDate)} do: ${formatDate(policy.endDate)}`, 20, 58);
+  doc.text(`2. Vrijedi od: ${formatDate(validFrom)} do: ${formatDate(validUntil)}`, 20, 58);
   doc.text(`3. Kod države / Osiguratelj: HR / ${(policy.insurer || policy.carrier || 'Generali osiguranje d.d.').toUpperCase()}`, 20, 66);
   doc.text(`4. Ugovaratelj i osiguranik: ${policy.insuredName || policy.clientName || 'Marko Horvatić'}`, 20, 74);
-  doc.text(`5. Registarska oznaka / Br. šasije: ${policy.assetName || policy.id}`, 20, 82);
+  doc.text(`5. Registarska oznaka / Br. šasije: ${vehicleDesc}`, 20, 82);
   doc.text(`6. Kategorija vozila: Osobni automobil (A)`, 20, 90);
 
   // Grid of countries
@@ -297,6 +359,7 @@ export function generateGreenCardPdf(policy: Policy | any): void {
   );
 
   doc.save(`Zelena_Karta_${policy.policyNumber}.pdf`);
+  return doc;
 }
 
 /**
@@ -319,7 +382,7 @@ export function generateInformativeOfferPdf(offer: {
   agentName?: string;
   agentEmail?: string;
   validUntil: string;
-}): void {
+}): jsPDF {
   const doc = createSafePdf();
 
   doc.setFillColor(194, 24, 23);
@@ -347,24 +410,53 @@ export function generateInformativeOfferPdf(offer: {
   doc.text(`Broj ponude: ${offer.offerNumber}`, 20, 48);
   doc.setFontSize(9.5);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Klijent / Ugovaratelj: ${offer.clientName} (OIB: ${offer.clientOib})`, 20, 56);
-  doc.text(`Proizvod: ${offer.productTitle} ${offer.assetDescription ? `— ${offer.assetDescription}` : ''}`, 20, 64);
-  doc.text(`Osiguratelj: ${offer.carrier}`, 20, 72);
-  doc.text(`Godišnja premija: ${formatCurrency(prem)} (${dynamics})`, 20, 80);
-  doc.text(`Ugovorena franšiza: ${formatCurrency(deduct)}`, 20, 88);
-  doc.text(`Valjanost ponude do: ${offer.validUntil}`, 20, 96);
-  doc.text(`Ovlašteni zastupnik: ${agentName} (${agentEmail})`, 20, 104);
 
-  doc.setFont('helvetica', 'bold');
-  doc.text('Specifikacija pokrića i prednosti:', 20, 118);
-  doc.setFont('helvetica', 'normal');
-  let y = 126;
-  summaryList.forEach((item) => {
-    doc.text(`• ${item}`, 24, y);
+  let y = 56;
+  doc.text(`Klijent / Ugovaratelj: ${offer.clientName} (OIB: ${offer.clientOib})`, 20, y);
+  y += 8;
+
+  const productLines: string[] = doc.splitTextToSize(
+    `Proizvod: ${offer.productTitle} ${offer.assetDescription ? `— ${offer.assetDescription}` : ''}`,
+    170
+  );
+  productLines.forEach((line: string) => {
+    doc.text(line, 20, y);
     y += 7;
   });
 
+  doc.text(`Osiguratelj: ${offer.carrier}`, 20, y);
   y += 8;
+  doc.text(`Godišnja premija: ${formatCurrency(prem)} (${dynamics})`, 20, y);
+  y += 8;
+  doc.text(`Ugovorena franšiza: ${formatCurrency(deduct)}`, 20, y);
+  y += 8;
+  doc.text(`Valjanost ponude do: ${offer.validUntil}`, 20, y);
+  y += 8;
+  doc.text(`Ovlašteni zastupnik: ${agentName} (${agentEmail})`, 20, y);
+  y += 14;
+
+  doc.setFont('helvetica', 'bold');
+  doc.text('Specifikacija pokrića i prednosti:', 20, y);
+  doc.setFont('helvetica', 'normal');
+  y += 8;
+
+  summaryList.forEach((item) => {
+    const wrappedItem: string[] = doc.splitTextToSize(`• ${item}`, 166);
+    wrappedItem.forEach((wLine: string) => {
+      if (y > 235) {
+        doc.addPage();
+        y = 25;
+      }
+      doc.text(wLine, 24, y);
+      y += 6.5;
+    });
+  });
+
+  y += 6;
+  if (y > 235) {
+    doc.addPage();
+    y = 25;
+  }
   doc.setFontSize(8.5);
   doc.setTextColor(71, 85, 105);
   doc.text(
@@ -389,12 +481,13 @@ export function generateInformativeOfferPdf(offer: {
   );
 
   doc.save(`Ponuda_${offer.offerNumber}.pdf`);
+  return doc;
 }
 
 /**
  * Generate Downloadable Europsko izvješće o prometnoj nesreći / Uvjeti osiguranja PDF
  */
-export function generateSupportDocumentPdf(docType: 'euro_report' | 'general_terms' | 'toyota_terms'): void {
+export function generateSupportDocumentPdf(docType: 'euro_report' | 'general_terms' | 'toyota_terms'): jsPDF {
   const doc = createSafePdf();
 
   doc.setFillColor(15, 23, 42);
@@ -418,11 +511,12 @@ export function generateSupportDocumentPdf(docType: 'euro_report' | 'general_ter
   doc.setTextColor(15, 23, 42);
   doc.setFontSize(10);
 
+  let headerText = '';
+  let lines: string[] = [];
+
   if (docType === 'euro_report') {
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. OBVEZNI PODACI KOD POPUNJAVANJA EUROPSKOG IZVJEŠĆA:', 20, 48);
-    doc.setFont('helvetica', 'normal');
-    const lines = [
+    headerText = '1. OBVEZNI PODACI KOD POPUNJAVANJA EUROPSKOG IZVJEŠĆA:';
+    lines = [
       '• Datum, sat i točna lokacija prometne nesreće (ulica, kućni broj, grad ili km autoceste).',
       '• Podaci o vozilu A i vozilu B: registarska oznaka, marka, tip i broj šasije (VIN).',
       '• Podaci o osiguratelju i Šifra police obveznog automobilskog osiguranja (AO) i Kasko police.',
@@ -431,44 +525,41 @@ export function generateSupportDocumentPdf(docType: 'euro_report' | 'general_ter
       '• Fotografirajte sva 4 kuta vozila, oštećene zone i potpisano Europsko izvješće te prijavite u FNOL centar.',
       '• Dežurna pomoć na cesti 0-24 (HR i EU): +385 91 450 1458 | agencija.zivot@generali.com',
     ];
-    let y = 58;
-    lines.forEach((l) => {
-      doc.text(l, 22, y);
-      y += 8;
-    });
   } else if (docType === 'toyota_terms') {
-    doc.setFont('helvetica', 'bold');
-    doc.text('POSEBNE POGODNOSTI PROGRAMA TOYOTA OSIGURANJE (TOYOTA CENTAR ZAGREB):', 20, 48);
-    doc.setFont('helvetica', 'normal');
-    const lines = [
+    headerText = 'POSEBNE POGODNOSTI PROGRAMA TOYOTA OSIGURANJE (TOYOTA CENTAR ZAGREB):';
+    lines = [
       '• Jamstvo popravka u ovlaštenom servisu Toyota Centar Zagreb uz 100% originalne OEM dijelove.',
       '• Prošireno pokriće za visokonaponsku Hybrid / EV bateriju, inverter i elektroničke sustave Toyota Safety Sense.',
       '• Uključeno zamjensko vozilo tijekom trajanja kasko popravka u ovlaštenom servisu.',
       '• Paketni popust za istodobno ugovaranje Obveznog AO + Puni Kasko osiguranja.',
       '• Kontakt zastupnika u TCZ: Hrvoje (osiguranje@tcz.hr) i Laura (osiguranje2@tcz.hr).',
     ];
-    let y = 58;
-    lines.forEach((l) => {
-      doc.text(l, 22, y);
-      y += 8;
-    });
   } else {
-    doc.setFont('helvetica', 'bold');
-    doc.text('SAŽETAK PREDUUGOVORNIH INFORMACIJA (ČLANAK 417. ZAKONA O OSIGURANJU):', 20, 48);
-    doc.setFont('helvetica', 'normal');
-    const lines = [
+    headerText = 'SAŽETAK PREDUUGOVORNIH INFORMACIJA (ČLANAK 417. ZAKONA O OSIGURANJU):';
+    lines = [
       '• Zastupnik: ŽIVOT d.o.o. za zastupanje u osiguranju, Palmotićeva ulica 76, 10000 Zagreb.',
       '• Identifikatori: OIB: 14329077049, MBS: 01918940, Registar HANFA-e.',
       '• Zastupnik djeluje u ime i za račun društva Generali osiguranje d.d. te partnerskih osiguratelja.',
       '• Naknada: Zastupnik ostvaruje proviziju od društva za osiguranje koja je već uključena u premiju (0 € troška za klijenta).',
       '• Prigovori: Pisani prigovori podnose se na agencija.zivot@generali.com uz zakonski rok odgovora od 15 dana.',
     ];
-    let y = 58;
-    lines.forEach((l) => {
-      doc.text(l, 22, y);
-      y += 8;
-    });
   }
+
+  doc.setFont('helvetica', 'bold');
+  doc.text(headerText, 20, 48);
+  doc.setFont('helvetica', 'normal');
+  let y = 58;
+  lines.forEach((l) => {
+    const wrapped: string[] = doc.splitTextToSize(l, 168);
+    wrapped.forEach((wLine: string) => {
+      if (y > 235) {
+        doc.addPage();
+        y = 25;
+      }
+      doc.text(wLine, 22, y);
+      y += 7;
+    });
+  });
 
   doc.setDrawColor(226, 232, 240);
   doc.line(20, 250, 190, 250);
@@ -481,4 +572,5 @@ export function generateSupportDocumentPdf(docType: 'euro_report' | 'general_ter
   );
 
   doc.save(`Dokument_${docType}_Agencija_Zivot.pdf`);
+  return doc;
 }

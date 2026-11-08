@@ -4,13 +4,15 @@ import { getFirestore, initializeFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { UserProfile, Policy, Claim, QuoteRequest, Appointment } from '../types/database';
 
+const env = (import.meta as any).env || {};
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBM2g2zVhRbEkxTsFnKL-NpgT4XBDsDBks',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'agencija-za-osiguranje.firebaseapp.com',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'agencija-za-osiguranje',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'agencija-za-osiguranje.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '175340495427',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:175340495427:web:dcaeb89300970b547b2af6',
+  apiKey: env.VITE_FIREBASE_API_KEY || 'AIzaSyBM2g2zVhRbEkxTsFnKL-NpgT4XBDsDBks',
+  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || 'agencija-za-osiguranje.firebaseapp.com',
+  projectId: env.VITE_FIREBASE_PROJECT_ID || 'agencija-za-osiguranje',
+  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || 'agencija-za-osiguranje.firebasestorage.app',
+  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || '175340495427',
+  appId: env.VITE_FIREBASE_APP_ID || '1:175340495427:web:dcaeb89300970b547b2af6',
 };
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();

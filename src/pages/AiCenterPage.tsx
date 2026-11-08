@@ -486,6 +486,10 @@ export const AiCenterPage: React.FC = () => {
 
             <Link
               to="/prijava-stete"
+              state={{
+                prefilledFnolDescription: generatedFnolText,
+                fnolIncidentType,
+              }}
               className="w-full mt-4 py-3.5 px-4 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2"
             >
               <span>Nastavi u Prijava šteta (FNOL centar)</span>

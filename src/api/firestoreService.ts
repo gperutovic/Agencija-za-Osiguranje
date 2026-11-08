@@ -232,14 +232,20 @@ export const firestoreService = {
   async updateClaimStatus(
     id: string,
     status: string,
-    brokerNotes?: string
+    brokerNotes?: string,
+    extraFields?: Record<string, any>
   ): Promise<void> {
     try {
-      await updateDoc(doc(db, 'claims', id), {
-        status,
-        ...(brokerNotes !== undefined ? { brokerNotes } : {}),
-        updatedAt: new Date().toISOString(),
-      });
+      await setDoc(
+        doc(db, 'claims', id),
+        {
+          status,
+          ...(brokerNotes !== undefined ? { brokerNotes, agentNotes: brokerNotes } : {}),
+          ...(extraFields || {}),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
     } catch {
       // Fallback
     }
@@ -795,6 +801,23 @@ export const portalSyncService = {
     }
   },
 
+  async removeOffer(offerId: string): Promise<void> {
+    try {
+      await setDoc(
+        doc(db, 'informative_offers', offerId),
+        {
+          id: offerId,
+          status: 'odbijena',
+          deletedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      console.warn('Firestore removeOffer fallback:', e);
+    }
+  },
+
   async syncPipelineItem(item: Record<string, any>): Promise<void> {
     try {
       await setDoc(doc(db, 'contract_pipeline', item.id), {
@@ -803,6 +826,38 @@ export const portalSyncService = {
       });
     } catch (e) {
       console.warn('Firestore syncPipelineItem fallback:', e);
+    }
+  },
+
+  async removePipelineItem(id: string): Promise<void> {
+    try {
+      await setDoc(
+        doc(db, 'contract_pipeline', id),
+        {
+          id,
+          status: 'archived',
+          deletedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      console.warn('Firestore removePipelineItem fallback:', e);
+    }
+  },
+
+  async syncClaim(claim: Record<string, any>): Promise<void> {
+    try {
+      await setDoc(
+        doc(db, 'claims', claim.id),
+        {
+          ...claim,
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      console.warn('Firestore syncClaim fallback:', e);
     }
   },
 

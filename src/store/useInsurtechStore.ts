@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import {
   UserProfile,
   Advisor,
@@ -17,6 +17,43 @@ import {
   CalculatedQuoteEstimate,
 } from '../types/insurance';
 import { firestoreService, portalSyncService } from '../api/firestoreService';
+
+const memoryFallbackStorage = new Map<string, string>();
+
+export const safeBrowserStorage: StateStorage = {
+  getItem: (name: string): string | null => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const val = window.localStorage.getItem(name);
+        if (val !== null) return val;
+      }
+    } catch {
+      // Fallback to in-memory map if localStorage is blocked
+    }
+    return memoryFallbackStorage.get(name) ?? null;
+  },
+  setItem: (name: string, value: string): void => {
+    memoryFallbackStorage.set(name, value);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(name, value);
+      }
+    } catch (err) {
+      // Gracefully absorb QuotaExceededError or SecurityError while preserving memoryFallbackStorage
+      console.warn('localStorage quota/security fallback active:', err);
+    }
+  },
+  removeItem: (name: string): void => {
+    memoryFallbackStorage.delete(name);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem(name);
+      }
+    } catch {
+      // Ignore
+    }
+  },
+};
 
 export interface InsurtechStoreState {
   // 1. User, Advisor & Active Agent Profile Switcher
@@ -821,9 +858,12 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
         };
 
         set((state) => ({
-          claims: state.claims.map((c) =>
-            c.id === claimId ? { ...c, timeline: [...c.timeline, newEvent] } : c
-          ),
+          claims: state.claims.map((c) => {
+            if (c.id !== claimId) return c;
+            const updated: Claim = { ...c, timeline: [...c.timeline, newEvent] };
+            portalSyncService.syncClaim(updated).catch(() => {});
+            return updated;
+          }),
         }));
       },
 
@@ -849,7 +889,13 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
               agentNotes: agentNotes !== undefined ? agentNotes : c.agentNotes,
               timeline: [...c.timeline, newEvent],
             };
-            firestoreService.updateClaimStatus(claimId, meta.status, updated.agentNotes).catch(() => {});
+            firestoreService
+              .updateClaimStatus(claimId, meta.status, updated.agentNotes, {
+                phase,
+                timeline: updated.timeline,
+              })
+              .catch(() => {});
+            portalSyncService.syncClaim(updated).catch(() => {});
             return updated;
           }),
         }));
@@ -1005,25 +1051,32 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
         set((cur) => ({
           policies: [boundPolicy, ...cur.policies],
           informativeOffers: cur.informativeOffers.map((o) => (o.id === offerId ? updatedOffer : o)),
-          contractPipeline: cur.contractPipeline.map((p) =>
-            p.offerId === offerId
-              ? {
-                  ...p,
-                  stage: 5,
-                  updatedAt: startDate,
-                  notes: `Klijent prihvatio ponudu! Izdan broj police ${boundPolicy.policyNumber}.`,
-                }
-              : p
-          ),
+          contractPipeline: cur.contractPipeline.map((p) => {
+            if (p.offerId !== offerId) return p;
+            const updatedPipe: ContractPipelineItem = {
+              ...p,
+              stage: 5,
+              updatedAt: startDate,
+              notes: `Klijent prihvatio ponudu! Izdan broj police ${boundPolicy.policyNumber}.`,
+            };
+            portalSyncService.syncPipelineItem(updatedPipe).catch(() => {});
+            return updatedPipe;
+          }),
         }));
 
         return boundPolicy;
       },
 
       removeInformativeOffer: (offerId) => {
-        set((state) => ({
-          informativeOffers: state.informativeOffers.filter((o) => o.id !== offerId),
-          contractPipeline: state.contractPipeline.filter((p) => p.offerId !== offerId),
+        const state = get();
+        const linkedPipeItems = state.contractPipeline.filter((p) => p.offerId === offerId);
+        portalSyncService.removeOffer(offerId).catch(() => {});
+        linkedPipeItems.forEach((p) => {
+          portalSyncService.removePipelineItem(p.id).catch(() => {});
+        });
+        set((cur) => ({
+          informativeOffers: cur.informativeOffers.filter((o) => o.id !== offerId),
+          contractPipeline: cur.contractPipeline.filter((p) => p.offerId !== offerId),
         }));
       },
 
@@ -1067,9 +1120,71 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
       },
 
       updateContractPipelineStage: (id, stage, notes) => {
+        const state = get();
+        const targetItem = state.contractPipeline.find((item) => item.id === id);
+        if (!targetItem) return;
+
+        // If advancing to Stage 5 ("5. Polica izdana i arhivirana") and linked offer is not yet bound,
+        // automatically bind the linked offer (or issue a standalone policy) so both portals stay synchronized.
+        if (stage === 5 && targetItem.offerId) {
+          const linkedOffer = state.informativeOffers.find((o) => o.id === targetItem.offerId);
+          if (linkedOffer && linkedOffer.status !== 'prihvacena') {
+            get().acceptInformativeOffer(targetItem.offerId);
+            if (notes !== undefined) {
+              const now = new Date().toISOString().split('T')[0];
+              set((cur) => ({
+                contractPipeline: cur.contractPipeline.map((item) => {
+                  if (item.id !== id) return item;
+                  const updated: ContractPipelineItem = { ...item, stage: 5, updatedAt: now, notes };
+                  portalSyncService.syncPipelineItem(updated).catch(() => {});
+                  return updated;
+                }),
+              }));
+            }
+            return;
+          }
+        } else if (stage === 5 && !targetItem.offerId && targetItem.stage !== 5) {
+          const standalonePolId = `pol-pipe-${targetItem.id}`;
+          if (!state.policies.some((p) => p.id === standalonePolId)) {
+            const suffix = Math.floor(100000 + Math.random() * 900000);
+            const startDate = new Date().toISOString().split('T')[0];
+            const endDate = daysFromNowIso(365);
+            get().addPolicy({
+              id: standalonePolId,
+              userId: state.user.uid,
+              policyNumber: `HR-GEN-${suffix}`,
+              type: 'auto',
+              clientName: targetItem.clientName,
+              clientOib: targetItem.clientOib,
+              carrier: targetItem.carrier,
+              startDate,
+              endDate,
+              status: 'active',
+              assetName: targetItem.productTitle,
+              premiumAnnual: targetItem.annualPremiumEur,
+              paymentFrequency: 'annual',
+              assignedAgentId: targetItem.assignedAgentId,
+              provisionStatus: 'paid_provision',
+              coverageDetails: {
+                limitEur: 35000,
+                deductibleEur: 150,
+                riders: ['Osnovno pokriće', 'Asistencija 24/7', 'Zaštita bonusa'],
+              },
+              documents: [
+                {
+                  title: `Polica osiguranja (HR-GEN-${suffix})`,
+                  type: 'policy_pdf',
+                  downloadUrl: `/documents/polica-${suffix}.pdf`,
+                  fileSizeBytes: 356000,
+                },
+              ],
+            });
+          }
+        }
+
         const now = new Date().toISOString().split('T')[0];
-        set((state) => ({
-          contractPipeline: state.contractPipeline.map((item) => {
+        set((cur) => ({
+          contractPipeline: cur.contractPipeline.map((item) => {
             if (item.id !== id) return item;
             const updated: ContractPipelineItem = {
               ...item,
@@ -1084,6 +1199,7 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
       },
 
       removeContractPipelineItem: (id) => {
+        portalSyncService.removePipelineItem(id).catch(() => {});
         set((state) => ({
           contractPipeline: state.contractPipeline.filter((item) => item.id !== id),
         }));
@@ -1118,6 +1234,7 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
     }),
     {
       name: 'agencija-zivot-insurtech-store-v2',
+      storage: createJSONStorage(() => safeBrowserStorage),
       partialize: (state) => ({
         policies: state.policies,
         claims: state.claims,
@@ -1130,3 +1247,12 @@ export const useInsurtechStore = create<InsurtechStoreState>()(
     }
   )
 );
+
+// Cross-tab real-time synchronization between Korisnički portal & Zastupnički portal
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'agencija-zivot-insurtech-store-v2') {
+      useInsurtechStore.persist.rehydrate();
+    }
+  });
+}

@@ -258,32 +258,46 @@ export const ClaimsIntakeForm: React.FC = () => {
     setSearchError(null);
     const cleaned = searchCode.trim().toUpperCase();
     if (!cleaned) {
-      setSearchError('Molimo unesite broj prijave (npr. ST-2026-4819) ili OIB.');
+      setSearchError('Molimo unesite broj prijave (npr. ŠT-2026-4819) ili OIB.');
       return;
     }
 
+    const normalizeCode = (s?: string) =>
+      (s || '').trim().toUpperCase().replace(/^ŠT-/, 'ST-');
+    const targetNorm = normalizeCode(cleaned);
+
     try {
-      const claims = await firestoreService.getClaims();
-      const found = claims.find(
+      const storeClaims = useInsurtechStore.getState().claims || [];
+      const remoteClaims = await firestoreService.getClaims();
+      const allClaims: any[] = [...storeClaims, ...remoteClaims];
+
+      const found = allClaims.find(
         (c) =>
-          c.claimNumber?.toUpperCase() === cleaned ||
-          c.id?.toUpperCase() === cleaned ||
-          c.claimantOib === cleaned
+          normalizeCode(c.claimNumber) === targetNorm ||
+          normalizeCode(c.id) === targetNorm ||
+          c.claimantOib === cleaned ||
+          c.clientOib === cleaned
       );
       if (found) {
+        const phase = found.phase ?? 1;
         const statusIndex =
-          found.status === 'submitted'
+          phase === 1 || found.status === 'submitted' || found.status === 'received'
             ? 0
-            : found.status === 'under_review'
+            : phase === 2 ||
+              phase === 3 ||
+              found.status === 'under_review' ||
+              found.status === 'in_review' ||
+              found.status === 'documents_verified' ||
+              found.status === 'forwarded_to_carrier'
             ? 1
-            : found.status === 'assessing'
+            : phase === 4 || found.status === 'assessing' || found.status === 'assessor_assigned'
             ? 2
             : 3;
 
         setSearchResult({
           code: found.claimNumber || found.id,
           carrier: `${found.carrierName || 'Generali osiguranje d.d.'} (Agencija Život)`,
-          category: found.incidentLocation || 'Odštetni zahtjev',
+          category: found.category || found.incidentLocation || 'Odštetni zahtjev',
           status:
             statusIndex === 0
               ? 'Zaprimljeno'
