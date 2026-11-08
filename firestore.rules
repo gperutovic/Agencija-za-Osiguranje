@@ -22,6 +22,26 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
+    // Informative Offers (Synchronized between Korisnicki & Zastupnicki Portal)
+    match /informative_offers/{offerId} {
+      allow read, write: if true;
+    }
+
+    // Multi-Phase Contracting Pipeline
+    match /contract_pipeline/{pipelineId} {
+      allow read, write: if true;
+    }
+
+    // GDPR Data Export & Deletion Requests
+    match /gdpr_requests/{requestId} {
+      allow read, write: if true;
+    }
+
+    // Marketing Campaigns & Renewal Dispatches
+    match /marketing_campaigns/{campaignId} {
+      allow read, write: if true;
+    }
+
     // Policy Endorsement & Change Requests
     match /endorsements/{endorsementId} {
       allow read, write: if true;
@@ -52,7 +72,7 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    // Official Complaints Register (čl. 401. Zakona o osiguranju)
+    // Official Complaints Register (čl. 401. / čl. 417. Zakona o osiguranju)
     match /complaints/{complaintId} {
       allow read, write: if true;
     }
@@ -63,5 +83,3 @@ service cloud.firestore {
     }
   }
 }
-
-

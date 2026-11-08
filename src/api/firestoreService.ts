@@ -779,3 +779,54 @@ export const expiryReminderService = {
   },
 };
 
+// ====================================================
+// 12. Bidirectional Portal Sync Service (Offers, Pipeline, GDPR)
+// ====================================================
+
+export const portalSyncService = {
+  async syncOffer(offer: Record<string, any>): Promise<void> {
+    try {
+      await setDoc(doc(db, 'informative_offers', offer.id), {
+        ...offer,
+        updatedAt: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Firestore syncOffer fallback:', e);
+    }
+  },
+
+  async syncPipelineItem(item: Record<string, any>): Promise<void> {
+    try {
+      await setDoc(doc(db, 'contract_pipeline', item.id), {
+        ...item,
+        updatedAt: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Firestore syncPipelineItem fallback:', e);
+    }
+  },
+
+  async syncGdprRequest(req: Record<string, any>): Promise<void> {
+    try {
+      await setDoc(doc(db, 'gdpr_requests', req.id), {
+        ...req,
+        updatedAt: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Firestore syncGdprRequest fallback:', e);
+    }
+  },
+
+  async syncMarketingCampaign(campaign: Record<string, any>): Promise<void> {
+    try {
+      await setDoc(doc(db, 'marketing_campaigns', campaign.id), {
+        ...campaign,
+        sentAt: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Firestore syncMarketingCampaign fallback:', e);
+    }
+  },
+};
+
+

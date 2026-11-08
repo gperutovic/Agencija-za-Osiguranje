@@ -2,15 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   ShieldCheck,
-  Building2,
   Phone,
   Mail,
   MapPin,
   ExternalLink,
   Lock,
   Scale,
-  CheckCircle2,
   Star,
+  FileCheck2,
 } from 'lucide-react';
 import { BrandLogo } from '../common/BrandLogo';
 import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
@@ -19,55 +18,107 @@ export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0B1528] text-slate-300 border-t border-slate-800 text-left relative overflow-hidden">
-      {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 space-y-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          {/* Col 1 & 2: Entity & Value Proposition */}
+    <footer className="bg-[#0F172A] text-slate-300 border-t border-slate-800 text-left relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-12 space-y-10 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {/* Col 1 & 2: Corporate Entity & Članak 417. Notice */}
           <div className="lg:col-span-2 space-y-4">
-            <BrandLogo variant="full" theme="dark" showBadge={false} />
+            <BrandLogo variant="full" theme="dark" showBadge={true} />
 
             <p className="text-xs text-slate-300 leading-relaxed pr-4 pt-1">
-              Ovlašteni zastupnik u osiguranju • Ekskluzivni strateški partner Generali osiguranja d.d. • Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO). Pružamo stručno savjetovanje i podršku pri obradi šteta bez dodatnih naknada za ugovaratelja.
+              <strong>{AGENCY_DETAILS.legalName}</strong> službeni je partner društva{' '}
+              <strong className="text-white">Generali osiguranje d.d.</strong> i ovlašteni partner{' '}
+              <strong className="text-white">Toyota Centra Zagreb (Toyota Osiguranje)</strong>. Pružamo cjelovito
+              savjetovanje, izračun premije, ugovaranje polica i vođenje odštetnih zahtjeva (FNOL).
             </p>
 
-            {/* Advisory Trust & Consumer Value Note */}
-            <div className="p-4 bg-slate-900/90 rounded-2xl border border-slate-800 text-xs space-y-2">
-              <div className="flex items-center gap-2 text-teal-400 font-bold text-[11px] font-mono">
-                <ShieldCheck className="w-4 h-4 shrink-0" />
-                <span>SAVJETOVANJE I ZASTUPANJE BEZ PROVIZIJE</span>
+            {/* Commission Transparency Notice (Članak 417. Zakona o osiguranju) */}
+            <div className="p-4 bg-[#1E293B] rounded-2xl border border-slate-700/80 text-xs space-y-2">
+              <div className="flex items-center gap-2 text-[#F87171] font-bold text-[11px] font-mono uppercase">
+                <Scale className="w-4 h-4 shrink-0 text-[#C21817]" />
+                <span>TRANSPARENTNOST NAKNADE &bull; ČLANAK 417. ZAKONA O OSIGURANJU</span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                Sukladno čl. 401. Zakona o osiguranju, ugovaranje polica putem agencije ne stvara nikakav dodatni trošak za osiguranika. Police imaju jednake ili povoljnije uvjete u odnosu na izravne ponude osiguratelja.
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Društvo djeluje kao zastupnik u osiguranju te za svoj rad prima proviziju od društva za osiguranje koja je već uračunata u premiju police osiguranja. Ugovaratelj osiguranja ne plaća nikakvu dodatnu naknadu niti proviziju zastupniku.
               </p>
             </div>
           </div>
 
-          {/* Col 3: Osigurateljni Programi */}
-          <div className="space-y-3.5 text-xs">
+          {/* Col 3: 9 Glavnih Modula Platforme */}
+          <div className="space-y-3 text-xs">
             <h4 className="font-mono font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-              Programi osiguranja
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C21817]" />
+              Glavni moduli portala
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2">
               <li>
-                <Link to="/dopunsko-zdravstveno" className="hover:text-white transition-colors text-rose-300 font-semibold">
-                  Dopunsko 2026 (HZZO 15 €)
+                <Link to="/" className="hover:text-white transition-colors font-semibold text-slate-200">
+                  1. AGENCIJA ŽIVOT (Početna &amp; Kalkulator)
+                </Link>
+              </li>
+              <li>
+                <Link to="/toyota-partnerstvo" className="hover:text-white transition-colors font-semibold text-red-300">
+                  2. Toyota partnerstvo (Toyota Centar Zagreb)
+                </Link>
+              </li>
+              <li>
+                <Link to="/zatrazi-ponudu" className="hover:text-white transition-colors font-semibold text-white">
+                  3. Zatraži ponudu (Višeproizvodni izračun)
+                </Link>
+              </li>
+              <li>
+                <Link to="/prijava-stete" className="hover:text-white transition-colors text-slate-300">
+                  4. Prijava šteta (Vođeni FNOL centar)
+                </Link>
+              </li>
+              <li>
+                <Link to="/ai-centar" className="hover:text-white transition-colors text-slate-300">
+                  5. AI Centar (AI Agenti &amp; Štit pokrića)
+                </Link>
+              </li>
+              <li>
+                <Link to="/program-vjernosti" className="hover:text-white transition-colors text-slate-300">
+                  6. Program vjernosti (Silver / Gold / Platinum)
+                </Link>
+              </li>
+              <li>
+                <Link to="/brza-podrska" className="hover:text-white transition-colors text-slate-300">
+                  7. Brza podrška (24/7 Pomoć na cesti &amp; Dokumenti)
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: Portali & Specijalizirani Kalkulatori */}
+          <div className="space-y-3 text-xs">
+            <h4 className="font-mono font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              Portali &amp; Specijalni alati
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/korisnicki-portal" className="hover:text-white transition-colors font-bold text-[#F87171]">
+                  8. Korisnički portal (Moje police, štete i ponude)
+                </Link>
+              </li>
+              <li>
+                <Link to="/zastupnicki-portal" className="hover:text-white transition-colors font-bold text-emerald-400">
+                  9. Zastupnički portal (Agent CRM &amp; Skadencar)
                 </Link>
               </li>
               <li>
                 <Link to="/auto-osiguranje" className="hover:text-white transition-colors">
-                  Auto odgovornost (AO) &amp; 50% bonusa
+                  Auto odgovornost (AO) &amp; Kasko kalkulator
                 </Link>
               </li>
               <li>
-                <Link to="/auto-osiguranje" className="hover:text-white transition-colors text-blue-300 font-semibold">
-                  Toyota Centar Zagreb VIP Kasko
+                <Link to="/dopunsko-zdravstveno" className="hover:text-white transition-colors">
+                  Dopunsko 2026 (HZZO 15 € vs Privatno)
                 </Link>
               </li>
               <li>
                 <Link to="/imovina" className="hover:text-white transition-colors">
-                  Osiguranje doma &amp; Zaštita od potresa
+                  Osiguranje doma i potresa
                 </Link>
               </li>
               <li>
@@ -76,181 +127,105 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="hover:text-white transition-colors">
-                  Svi programi i poslovna osiguranja
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 4: Digitalni Alati & Zaštita Potrošača */}
-          <div className="space-y-3.5 text-xs">
-            <h4 className="font-mono font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              Digitalni servisi &amp; Prava
-            </h4>
-            <ul className="space-y-2.5">
-              <li>
-                <Link to="/podsjetnik-isteka" className="hover:text-white transition-colors font-semibold text-teal-400">
+                <Link to="/podsjetnik-isteka" className="hover:text-white transition-colors">
                   Podsjetnik na istek police (-35%)
                 </Link>
               </li>
-              <li>
-                <Link to="/prijava-stete" className="hover:text-white transition-colors font-medium text-rose-400">
-                  Prijava štete (FNOL 24/7)
-                </Link>
-              </li>
-              <li>
-                <Link to="/portal" className="hover:text-white transition-colors">
-                  Klijentski portal "Moj Portal"
-                </Link>
-              </li>
-              <li>
-                <Link to="/o-nama" className="hover:text-white transition-colors">
-                  O nama &amp; Profil agencije
-                </Link>
-              </li>
-              <li>
-                <Link to="/prigovori" className="hover:text-white transition-colors font-semibold text-amber-300">
-                  Prigovori potrošača (čl. 401.)
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="https://www.huo.hr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors inline-flex items-center gap-1"
-                >
-                  Centar za mirenje pri HUO <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
             </ul>
           </div>
 
-          {/* Col 5: Kontakt & Sjedište */}
-          <div className="space-y-3.5 text-xs">
+          {/* Col 5: Sjedište, Kontakt & Licencirani Zastupnici */}
+          <div className="space-y-3 text-xs">
             <h4 className="font-mono font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-              Sjedište &amp; Kontakt
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              Sjedište &amp; Licencirani tim
             </h4>
-            <div className="space-y-2.5 text-slate-300">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                <span>{AGENCY_DETAILS.address}, {AGENCY_DETAILS.postalCode} {AGENCY_DETAILS.city}</span>
+            <div className="space-y-2 text-slate-300">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-[#C21817] shrink-0 mt-0.5" />
+                <span>Palmotićeva ulica 76, 10000 Zagreb, Hrvatska</span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                <a href={`tel:${AGENCY_DETAILS.phone.replace(/\s+/g, '')}`} className="hover:text-white font-mono font-semibold">
-                  {AGENCY_DETAILS.phone}
+                <a href="tel:+385914501458" className="hover:text-white font-mono font-bold text-white">
+                  +385 91 450 1458
                 </a>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-rose-400 shrink-0" />
-                <a href={`tel:${AGENCY_DETAILS.secondaryPhone.replace(/\s+/g, '')}`} className="hover:text-white font-mono font-semibold">
-                  {AGENCY_DETAILS.secondaryPhone} (Dežurni za štete)
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#F87171] shrink-0" />
+                <a href="mailto:agencija.zivot@generali.com" className="hover:text-white font-mono">
+                  agencija.zivot@generali.com
                 </a>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-slate-400 shrink-0" />
-                <a href={`mailto:${AGENCY_DETAILS.email}`} className="hover:text-white">
-                  {AGENCY_DETAILS.email}
-                </a>
-              </div>
-              <div className="pt-2 text-[11px] text-slate-400 font-mono">
-                {AGENCY_DETAILS.workingHours}
+              <div className="pt-2 border-t border-slate-800 space-y-1 text-[11px] font-mono text-slate-400">
+                <div>Diana: agencija.zivot@generali.com</div>
+                <div>Hrvoje (TCZ): osiguranje@tcz.hr</div>
+                <div>Laura (TCZ): osiguranje2@tcz.hr</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Trust Signals: Google Reviews, HUO, SSL & Payment Rails */}
-        <div className="pt-8 border-t border-slate-800 space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Google Reviews rating widget */}
-            <div className="flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-sm">
-              <div className="flex items-center text-amber-400 gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <div className="flex items-baseline gap-1.5 font-mono">
-                <span className="text-white font-black text-xs">4.9 / 5</span>
-                <span className="text-[11px] text-slate-400">Google Reviews</span>
-              </div>
-              <span className="text-[10px] text-teal-400 bg-teal-950/60 border border-teal-800 px-2 py-0.5 rounded font-mono font-semibold">
-                1.280+ verificiranih ocjena
-              </span>
+        {/* Statutory Disclosures Block (Članak 417. Zakona o osiguranju & HANFA Registar) */}
+        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2 text-white font-bold font-mono text-xs">
+              <FileCheck2 className="w-4 h-4 text-[#C21817]" />
+              <span>ZAKONSKE OBAVIJESTI SUKLADNO ČLANKU 417. ZAKONA O OSIGURANJU (NN 30/15, 112/18, 63/20, 133/20, 151/22)</span>
             </div>
-
-            {/* HUO Certified Member & SSL Security */}
-            <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 text-slate-300">
-                <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
-                <span>HUO ČLAN (Hrvatski ured za osiguranje)</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 text-emerald-400">
-                <Lock className="w-3.5 h-3.5 shrink-0" />
-                <span>SSL 256-bitna TLS enkripcija</span>
-              </div>
-            </div>
+            <a
+              href="https://www.hanfa.hr/registri/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#1E293B] hover:bg-slate-700 text-slate-200 border border-slate-700 font-mono text-[11px] font-bold transition-colors"
+            >
+              <span>Provjera u javnom registru HANFA-e</span>
+              <ExternalLink className="w-3 h-3 text-[#F87171]" />
+            </a>
           </div>
 
-          {/* Payment Rails Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800/60">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
-                Sigurni kanali naplate:
-              </span>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">
-                  CORVUSPAY (DO 12 RATA)
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-slate-200 text-[10px] font-mono">
-                  VISA / MASTERCARD
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-emerald-400 text-[10px] font-mono">
-                  KEKS PAY
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-amber-400 text-[10px] font-mono">
-                  AIRCASH
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-bold text-blue-400 text-[10px] font-mono">
-                  HUB 3A (2D BARKOD)
-                </span>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px] text-slate-300 leading-relaxed">
+            <div>
+              <strong className="text-white block mb-1">1. Podaci o zastupniku i registru HANFA-e:</strong>
+              Pun naziv tvrtke: <strong>ŽIVOT d.o.o. za zastupanje u osiguranju</strong>. Sjedište: <strong>Palmotićeva ulica 76, 10000 Zagreb</strong>. Upisano u sudski registar Trgovačkog suda u Zagrebu pod <strong>MBS: 01918940</strong>, <strong>OIB: 14329077049</strong>. Društvo je ovlašteno društvo za zastupanje u osiguranju upisano u javni Registar distributera osiguranja koji vodi Hrvatska agencija za nadzor financijskih usluga (HANFA, Franje Račkoga 6, 10000 Zagreb, <a href="https://www.hanfa.hr" target="_blank" rel="noopener noreferrer" className="underline text-slate-200">www.hanfa.hr</a>).
             </div>
 
-            <div className="text-[11px] font-mono text-slate-400">
-              Ovlašteni zastupnik u osiguranju &bull; Bez provizije za klijenta
+            <div>
+              <strong className="text-white block mb-1">2. Ovlaštenje, savjetovanje i transparentnost provizije:</strong>
+              Društvo obavlja poslove distribucije osiguranja kao zastupnik u osiguranju u ime i za račun <strong>Generali osiguranja d.d.</strong> te u okviru partnerstva s <strong>Toyota Centrom Zagreb (Toyota Osiguranje)</strong>. Prije sklapanja ugovora provodi se obvezni Test zahtjeva i potreba (IDD). Za rad zastupnika obračunava se provizija sadržana u premiji osiguranja koju plaća osiguratelj (bez dodatnog troška za ugovaratelja).
+            </div>
+
+            <div>
+              <strong className="text-white block mb-1">3. Postupak podnošenja pisanih prigovora (rok 15 dana):</strong>
+              Ugovaratelj, osiguranik ili korisnik osiguranja ima pravo podnijeti pisani prigovor na rad zastupnika putem e-pošte na <a href="mailto:agencija.zivot@generali.com" className="text-[#F87171] font-mono font-bold underline">agencija.zivot@generali.com</a>, poštom na adresu <em>Palmotićeva ulica 76, 10000 Zagreb</em> ili putem obrasca <Link to="/prigovori" className="underline text-white font-semibold">Prigovori potrošača</Link>. Društvo je obvezno dostaviti pisani odgovor na prigovor najkasnije u roku od <strong>15 dana</strong> od dana zaprimanja prigovora.
             </div>
           </div>
         </div>
 
-        {/* Statutory Legal Sub-bar (Exclusively Isolated Regulatory Mentions) */}
-        <div className="border-t border-slate-800 pt-6 mt-8 text-[11px] text-slate-400 font-sans leading-relaxed">
-          <p>
-            {AGENCY_DETAILS.legalName} je ovlašteni zastupnik u osiguranju upisan u Registar distributera osiguranja koji vodi Hrvatska agencija za nadzor financijskih usluga (HANFA) pod brojem {AGENCY_DETAILS.hanfaRegisterNumber}, temeljem rješenja {AGENCY_DETAILS.hanfaLicense}. 
-            Ekskluzivni strateški partner Generali osiguranja d.d. • Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO). Sjedište: {AGENCY_DETAILS.address}, {AGENCY_DETAILS.postalCode} {AGENCY_DETAILS.city}. MBS: {AGENCY_DETAILS.mbs}, OIB: {AGENCY_DETAILS.oib}.
-          </p>
-          <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-slate-400 text-center md:text-left">
-              &copy; {currentYear} {AGENCY_DETAILS.legalName}. Sva prava pridržana. Informacije na ovoj stranici imaju informativni karakter i ne predstavljaju obvezujuću ponudu do trenutka izdavanja police.
-            </p>
+        {/* Bottom Copyright & Security Strip */}
+        <div className="pt-4 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+          <div className="flex flex-wrap items-center gap-3 font-mono">
+            <span className="inline-flex items-center gap-1 text-emerald-400">
+              <Lock className="w-3.5 h-3.5" />
+              <span>TLS 256-bit &amp; GDPR / AZOP Usklađeno</span>
+            </span>
+            <span>&bull;</span>
+            <span className="inline-flex items-center gap-1 text-amber-400">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <span>4.9/5 Ocjena klijenata</span>
+            </span>
+            <span>&bull;</span>
+            <span>HUB 3A 2D Barkod &amp; SEPA</span>
+          </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono">
-              <Link to="/o-nama" className="hover:text-white transition-colors">
-                Pravne obavijesti
-              </Link>
-              <span>&bull;</span>
-              <Link to="/prigovori" className="hover:text-white transition-colors">
-                Zaštita potrošača
-              </Link>
-              <span>&bull;</span>
-              <Link to="/o-nama" className="hover:text-white transition-colors">
-                IDD direktiva
-              </Link>
-            </div>
+          <div className="flex flex-wrap items-center gap-4 font-mono">
+            <span>&copy; {currentYear} ŽIVOT d.o.o. za zastupanje u osiguranju. Sva prava pridržana.</span>
+            <Link to="/o-nama-pravno" className="hover:text-white transition-colors">
+              Impresum &amp; IDD
+            </Link>
+            <Link to="/prigovori" className="hover:text-white transition-colors">
+              Prigovori (15 dana)
+            </Link>
           </div>
         </div>
       </div>

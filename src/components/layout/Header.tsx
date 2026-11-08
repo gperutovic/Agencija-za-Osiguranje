@@ -4,15 +4,11 @@ import {
   Car,
   Home,
   HeartPulse,
-  Building2,
   ChevronDown,
   ChevronRight,
   AlertTriangle,
   Shield,
   Phone,
-  Mail,
-  Users,
-  FileText,
   Sparkles,
   X,
   Menu,
@@ -20,10 +16,18 @@ import {
   ShieldCheck,
   Briefcase,
   Bell,
+  Award,
+  Headphones,
+  Bot,
+  FilePlus2,
+  UserCheck,
+  Building2,
+  FileText,
 } from 'lucide-react';
 import { BrandLogo } from '../common/BrandLogo';
-import { AGENCY_DETAILS } from '../../lib/content/insurance-data';
+import { AGENCY_DETAILS, LICENSED_AGENTS } from '../../lib/content/insurance-data';
 import { InsuranceCategory } from '../../lib/types';
+import { useInsurtechStore } from '../../store/useInsurtechStore';
 
 interface HeaderProps {
   onOpenQuote?: (category?: InsuranceCategory) => void;
@@ -31,33 +35,40 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [openDropdown, setOpenDropdown] = useState<'osiguranja' | 'o-nama' | null>(null);
-  const [mobileAccordion, setMobileAccordion] = useState<'osiguranja' | 'o-nama' | null>('osiguranja');
+  /**
+   * Collision-Free Mutual-Exclusion Menu Manager:
+   * Only ONE menu/dropdown/drawer can be active at any time (`activeMenuId: string | null`).
+   * Values: 'more-tools' | 'agent-switcher' | 'mobile-drawer' | null
+   */
+  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const [mobileSubMenuId, setMobileSubMenuId] = useState<string | null>(null);
+
+  const { activeAgentId, setActiveAgentId, policies, claims, informativeOffers } = useInsurtechStore();
+  const currentAgent = LICENSED_AGENTS.find((a) => a.id === activeAgentId) || LICENSED_AGENTS[0];
 
   const location = useLocation();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns on route changes
+  // Automatically close any open menu on route change
   useEffect(() => {
-    setOpenDropdown(null);
-    setMobileMenuOpen(false);
+    setActiveMenuId(null);
+    setMobileSubMenuId(null);
   }, [location.pathname]);
 
-  // Handle outside clicks to close desktop dropdowns
+  // Outside click closes any open desktop dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpenDropdown(null);
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setActiveMenuId((prev) => (prev === 'mobile-drawer' ? prev : null));
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Prevent background scroll when mobile drawer is open
+  // Lock body scroll when mobile drawer is open
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (activeMenuId === 'mobile-drawer') {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -65,706 +76,530 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuote, onOpenSavjetnik }) 
     return () => {
       document.body.style.overflow = '';
     };
-  }, [mobileMenuOpen]);
+  }, [activeMenuId]);
 
-  const toggleDropdown = (name: 'osiguranja' | 'o-nama') => {
-    setOpenDropdown((prev) => (prev === name ? null : name));
+  const toggleMenu = (menuId: string) => {
+    setActiveMenuId((prev) => (prev === menuId ? null : menuId));
   };
 
-  const toggleMobileAccordion = (name: 'osiguranja' | 'o-nama') => {
-    setMobileAccordion((prev) => (prev === name ? null : name));
-  };
+  const isPathActive = (paths: string[]) => paths.includes(location.pathname);
 
-  const isActive = (path: string) => location.pathname === path;
+  const pendingOffersCount = informativeOffers.filter((o) => o.status !== 'prihvacena' && o.status !== 'odbijena').length;
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/90 shadow-xs transition-all">
-      {/* Regulatory & HANFA Compliance Top Strip */}
-      <div className="bg-slate-900 text-slate-300 border-b border-slate-800 text-[11px] py-1.5 px-4 hidden md:block">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-subtle transition-all"
+    >
+      {/* Top Institutional Compliance & Dual Partner Strip */}
+      <div className="bg-[#0F172A] text-slate-300 border-b border-slate-800 text-[11px] py-1.5 px-4">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 truncate">
-            <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-            <span className="font-semibold text-white">Ovlašteni zastupnik u osiguranju</span>
-            <span className="text-slate-600">&bull;</span>
-            <span className="text-teal-300 font-medium">Ekskluzivni strateški partner Generali osiguranja d.d.</span>
-            <span className="text-slate-600 hidden xl:inline">&bull;</span>
-            <span className="text-slate-400 hidden xl:inline">
-              Neovisna digitalna usporedba ponuda vodećih društava (Croatia, Allianz, Wiener, Triglav, LAQO)
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#C21817] text-white font-mono font-bold text-[10px]">
+              GENERALI PARTNER
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#1E293B] border border-slate-700 text-slate-100 font-mono font-bold text-[10px]">
+              TOYOTA CENTAR ZAGREB
+            </span>
+            <span className="hidden md:inline text-slate-400 truncate">
+              ŽIVOT d.o.o. za zastupanje u osiguranju &bull; Palmotićeva 76, Zagreb &bull; OIB: 14329077049
             </span>
           </div>
-          <div className="flex items-center gap-4 shrink-0 font-mono">
-            <Link to="/podsjetnik-isteka" className="text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1">
-              <Bell className="w-3 h-3" />
-              <span>Podsjetnik na istek (-35%)</span>
-            </Link>
-            <span className="text-slate-700">|</span>
-            <Link to="/prigovori" className="hover:text-white transition-colors">
-              Prigovori (čl. 401.)
-            </Link>
-          </div>
-        </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20" ref={dropdownRef}>
-          {/* 1. Brand Logo */}
-          <Link
-            to="/"
-            className="group focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-xl"
-            aria-label="Naslovna stranica - Agencija za osiguranje"
-          >
-            <BrandLogo variant="full" theme="light" showBadge={false} />
-          </Link>
-
-          {/* 2. Desktop Navigation Menu */}
-          <nav
-            className="hidden lg:flex items-center gap-1 text-sm font-semibold text-slate-700 dark:text-slate-200"
-            aria-label="Glavna navigacija"
-          >
-            {/* DROPDOWN 1: Osiguranja */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => toggleDropdown('osiguranja')}
-                onMouseEnter={() => setOpenDropdown('osiguranja')}
-                aria-expanded={openDropdown === 'osiguranja'}
-                aria-haspopup="true"
-                className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                  openDropdown === 'osiguranja' ||
-                  ['/auto-osiguranje', '/dopunsko-zdravstveno', '/imovina', '/kalkulator-prijepisa', '/podsjetnik-isteka', '/services'].includes(location.pathname)
-                    ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-900 dark:text-teal-200 font-bold'
-                    : 'hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
-                }`}
-              >
-                <span>Osiguranja</span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
-                    openDropdown === 'osiguranja' ? 'rotate-180 text-teal-600' : 'text-slate-400'
-                  }`}
-                />
-              </button>
-
-              {/* Mega Dropdown Menu Panel */}
-              {openDropdown === 'osiguranja' && (
-                <div
-                  onMouseLeave={() => setOpenDropdown(null)}
-                  className="absolute left-1/2 -translate-x-1/2 mt-2 w-[780px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 p-6 grid grid-cols-2 gap-6 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-                >
-                  {/* Category: Vozila */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800 text-teal-800 dark:text-teal-300 font-bold text-xs uppercase tracking-wider font-mono">
-                      <Car className="w-4 h-4 text-teal-600" />
-                      <span>Vozila</span>
-                    </div>
-                    <ul className="space-y-1">
-                      <li>
-                        <Link
-                          to="/auto-osiguranje"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600 flex items-center justify-between">
-                            <span>Obvezno auto osiguranje (AO)</span>
-                            <span className="text-[10px] font-mono font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded">50% bonusa</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Trenutni prijenos bonusa, asistencija i brza registracija
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/auto-osiguranje"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                            Kasko osiguranje
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Puna zaštita od šteta, sudara, krađe i elementarnih nepogoda
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/kalkulator-prijepisa"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600 flex items-center gap-1.5">
-                            <Calculator className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-600" />
-                            <span>Kalkulator prijepisa vozila</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Točan izračun upravne pristojbe prema zakonu (NN 92/21)
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/podsjetnik-isteka"
-                          className="p-2 rounded-xl hover:bg-teal-50/70 dark:hover:bg-teal-950/30 block group transition-colors border border-teal-100 dark:border-teal-900/50"
-                        >
-                          <div className="font-semibold text-teal-800 dark:text-teal-300 text-xs group-hover:text-teal-600 flex items-center justify-between">
-                            <span className="flex items-center gap-1.5">
-                              <Bell className="w-3.5 h-3.5 text-teal-600" />
-                              <span>Podsjetnik na istek police</span>
-                            </span>
-                            <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Ušteda 35%</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            30 dana prije isteka šaljemo 3 najpovoljnije ponude
-                          </p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Category: Imovina */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800 text-amber-700 dark:text-amber-400 font-bold text-xs uppercase tracking-wider font-mono">
-                      <Home className="w-4 h-4 text-amber-500" />
-                      <span>Imovina</span>
-                    </div>
-                    <ul className="space-y-1">
-                      <li>
-                        <Link
-                          to="/imovina"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                            Osiguranje stana i kuće
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Požar, oluja, izljev vode iz instalacija i provalna krađa
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/imovina"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                            Osiguranje od potresa
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Nova građevinska vrijednost bez podosiguranja i skrivenih odbitaka
-                          </p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Category: Život i Zdravlje */}
-                  <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800 text-rose-700 dark:text-rose-400 font-bold text-xs uppercase tracking-wider font-mono">
-                      <HeartPulse className="w-4 h-4 text-rose-500" />
-                      <span>Život i Zdravlje</span>
-                    </div>
-                    <ul className="space-y-1">
-                      <li>
-                        <Link
-                          to="/dopunsko-zdravstveno"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600 flex items-center justify-between">
-                            <span>Dopunsko zdravstveno (2026)</span>
-                            <span className="text-[10px] font-mono font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded">od 9,50 €</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Zaštita od poskupljenja HZZO-a uz pokriće B-liste lijekova
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/services"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                            Dodatno zdravstveno &amp; Životno
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Sistematski pregledi u privatnim poliklinikama bez čekanja
-                          </p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Category: Poslovanje */}
-                  <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800 text-blue-700 dark:text-blue-400 font-bold text-xs uppercase tracking-wider font-mono">
-                      <Briefcase className="w-4 h-4 text-blue-600" />
-                      <span>Poslovanje</span>
-                    </div>
-                    <ul className="space-y-1">
-                      <li>
-                        <Link
-                          to="/services"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                            Odgovornost iz djelatnosti
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Opća i profesionalna odgovornost za tvrtke i obrtnike
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/services"
-                          className="p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 block group transition-colors"
-                        >
-                          <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                            Imovina poduzeća &amp; Djelatnici
-                          </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            Zaštita zaliha, opreme i kolektivno osiguranje zaposlenika
-                          </p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Bottom Strip in Mega Menu */}
-                  <div className="col-span-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-500">
-                    <span>Trebate pomoć oko izbora optimalnog pokrića?</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenDropdown(null);
-                        if (onOpenSavjetnik) onOpenSavjetnik();
-                      }}
-                      className="text-teal-600 hover:text-teal-700 dark:text-teal-400 font-bold flex items-center gap-1"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Pokrenite digitalnog savjetnika</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* DROPDOWN 2: O nama & Partneri */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => toggleDropdown('o-nama')}
-                onMouseEnter={() => setOpenDropdown('o-nama')}
-                aria-expanded={openDropdown === 'o-nama'}
-                aria-haspopup="true"
-                className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                  openDropdown === 'o-nama' || isActive('/o-nama') || isActive('/prigovori')
-                    ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-900 dark:text-teal-200 font-bold'
-                    : 'hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
-                }`}
-              >
-                <span>O nama &amp; Partneri</span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
-                    openDropdown === 'o-nama' ? 'rotate-180 text-teal-600' : 'text-slate-400'
-                  }`}
-                />
-              </button>
-
-              {/* O nama Dropdown Panel */}
-              {openDropdown === 'o-nama' && (
-                <div
-                  onMouseLeave={() => setOpenDropdown(null)}
-                  className="absolute left-0 mt-2 w-80 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 p-3 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-                >
-                  <Link
-                    to="/o-nama"
-                    className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 flex items-start gap-3 group transition-colors"
-                  >
-                    <Users className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
-                    <div>
-                      <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                        Tko smo mi
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        O agenciji, naš tim ovlaštenih savjetnika i misija neovisnog zastupanja
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    to="/o-nama"
-                    className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 flex items-start gap-3 group transition-colors"
-                  >
-                    <Building2 className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
-                    <div>
-                      <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                        Naša uloga i strateško partnerstvo
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        Strateški partner Generali osiguranja d.d. i neovisno posredovanje
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    to="/prigovori"
-                    className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 flex items-start gap-3 group transition-colors border-t border-slate-100 dark:border-slate-800"
-                  >
-                    <FileText className="w-5 h-5 text-slate-400 mt-0.5 shrink-0 group-hover:text-teal-600" />
-                    <div>
-                      <div className="font-semibold text-slate-900 dark:text-white text-xs group-hover:text-teal-600">
-                        Pravne obavijesti &amp; Zaštita potrošača
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        Postupak rješavanja prigovora i transparentno poslovanje
-                      </p>
-                    </div>
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* DIRECT LINK 0: Podsjetnik na istek */}
-            <Link
-              to="/podsjetnik-isteka"
-              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 text-xs sm:text-sm ${
-                isActive('/podsjetnik-isteka')
-                  ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-800 dark:text-teal-200 font-bold border border-teal-200 dark:border-teal-800'
-                  : 'hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
-              }`}
-              title="Podsjetnik na istek police - 30 dana ranije uz 3 najpovoljnije ponude"
+          <div className="flex items-center gap-3 shrink-0 font-mono text-[11px]">
+            <a
+              href="tel:+385914501458"
+              className="hidden sm:inline-flex items-center gap-1 text-white hover:text-red-300 font-semibold transition-colors"
             >
-              <Bell className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+              <Phone className="w-3 h-3 text-[#C21817]" />
+              <span>+385 91 450 1458</span>
+            </a>
+            <span className="text-slate-700 hidden sm:inline">|</span>
+            <Link to="/podsjetnik-isteka" className="text-amber-400 hover:text-amber-300 font-bold hidden lg:inline-flex items-center gap-1">
+              <Bell className="w-3 h-3" />
               <span>Podsjetnik isteka</span>
             </Link>
+            <span className="text-slate-700 hidden lg:inline">|</span>
 
-            {/* DIRECT LINK 1: Prijava štete (High Visibility) */}
-            <Link
-              to="/prijava-stete"
-              className="px-3.5 py-2 rounded-xl text-rose-600 dark:text-rose-400 bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/80 dark:border-rose-900/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition-all flex items-center gap-1.5 font-bold text-xs sm:text-sm shadow-xs"
-              title="24/7 Digitalna prijava i praćenje šteta"
-            >
-              <AlertTriangle className="w-4 h-4 text-rose-500" />
-              <span>Prijava štete</span>
-            </Link>
+            {/* Mutual-Exclusion Agent Switcher */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => toggleMenu('agent-switcher')}
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors cursor-pointer"
+                title="Aktivni licencirani zastupnik"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span>Zastupnik: {currentAgent.name}</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
 
-            {/* DIRECT LINK 2: Moj Portal */}
+              {activeMenuId === 'agent-switcher' && (
+                <div className="absolute right-0 mt-2 w-72 bg-white text-[#0F172A] rounded-2xl shadow-floating border border-[#E2E8F0] p-2.5 z-50 font-sans">
+                  <div className="px-2.5 py-1.5 border-b border-slate-100 text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">
+                    Odabir licenciranog zastupnika
+                  </div>
+                  <div className="mt-1 space-y-1">
+                    {LICENSED_AGENTS.map((agent) => {
+                      const isSelected = agent.id === activeAgentId;
+                      return (
+                        <button
+                          key={agent.id}
+                          type="button"
+                          onClick={() => {
+                            setActiveAgentId(agent.id);
+                            setActiveMenuId(null);
+                          }}
+                          className={`w-full text-left p-2 rounded-xl flex items-start gap-2.5 transition-colors cursor-pointer ${
+                            isSelected ? 'bg-[#FEF2F2] border border-[#FECACA]' : 'hover:bg-slate-50'
+                          }`}
+                        >
+                          <div
+                            className="w-7 h-7 rounded-lg text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5"
+                            style={{ backgroundColor: agent.badgeColor }}
+                          >
+                            {agent.avatarInitials}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs font-bold text-[#0F172A] flex items-center justify-between">
+                              <span>{agent.name}</span>
+                              {isSelected && (
+                                <span className="text-[10px] font-mono text-[#C21817] font-bold">AKTIVAN</span>
+                              )}
+                            </div>
+                            <div className="text-[11px] text-slate-500 font-mono truncate">{agent.email}</div>
+                            <div className="text-[10px] text-slate-500 truncate">{agent.organization}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Collision-Free Navigation Bar (All 9 Core Platform Destinations) */}
+      <div className="max-w-[1400px] mx-auto px-3 sm:px-6">
+        <div className="flex items-center justify-between h-16 sm:h-[72px] gap-2">
+          {/* 1. Brand Logo -> AGENCIJA ŽIVOT (/) */}
+          <Link
+            to="/"
+            onClick={() => setActiveMenuId(null)}
+            className="shrink-0 focus:outline-none rounded-xl"
+            aria-label="AGENCIJA ŽIVOT - Početna stranica"
+          >
+            <BrandLogo variant="compact" theme="light" showBadge={false} />
+          </Link>
+
+          {/* 2. Desktop Navigation: 9 Core Destinations + Specijalni Alati Dropdown */}
+          <nav
+            className="hidden xl:flex items-center gap-0.5 text-[12.5px] font-semibold text-[#0F172A]"
+            aria-label="Glavna navigacija"
+          >
+            {/* Destination 1: AGENCIJA ŽIVOT */}
             <Link
-              to="/portal"
-              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
-                isActive('/portal')
-                  ? 'bg-teal-600 text-white shadow-md font-bold'
-                  : 'hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
+              to="/"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap ${
+                isPathActive(['/'])
+                  ? 'bg-[#FEF2F2] text-[#C21817] font-bold border border-[#FECACA]'
+                  : 'hover:bg-slate-100 text-slate-700 hover:text-[#0F172A]'
               }`}
             >
-              <Shield className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-              <span>Moj Portal</span>
+              AGENCIJA ŽIVOT
             </Link>
+
+            {/* Destination 2: Toyota partnerstvo */}
+            <Link
+              to="/toyota-partnerstvo"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${
+                isPathActive(['/toyota-partnerstvo'])
+                  ? 'bg-[#0F172A] text-white font-bold shadow-xs'
+                  : 'hover:bg-slate-100 text-slate-700 hover:text-[#0F172A]'
+              }`}
+            >
+              <Car className="w-3.5 h-3.5 text-[#C21817]" />
+              <span>Toyota partnerstvo</span>
+            </Link>
+
+            {/* Destination 3: Zatraži ponudu */}
+            <Link
+              to="/zatrazi-ponudu"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${
+                isPathActive(['/zatrazi-ponudu'])
+                  ? 'bg-[#C21817] text-white font-bold shadow-xs'
+                  : 'hover:bg-[#FEF2F2] text-[#C21817] font-bold'
+              }`}
+            >
+              <FilePlus2 className="w-3.5 h-3.5" />
+              <span>Zatraži ponudu</span>
+            </Link>
+
+            {/* Destination 4: Prijava šteta */}
+            <Link
+              to="/prijava-stete"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${
+                isPathActive(['/prijava-stete', '/claims'])
+                  ? 'bg-[#FEF2F2] text-[#C21817] font-bold border border-[#FECACA]'
+                  : 'hover:bg-slate-100 text-slate-700 hover:text-[#0F172A]'
+              }`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-[#C21817]" />
+              <span>Prijava šteta</span>
+            </Link>
+
+            {/* Destination 5: AI Centar */}
+            <Link
+              to="/ai-centar"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${
+                isPathActive(['/ai-centar'])
+                  ? 'bg-[#FEF2F2] text-[#C21817] font-bold border border-[#FECACA]'
+                  : 'hover:bg-slate-100 text-slate-700 hover:text-[#0F172A]'
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5 text-[#C21817]" />
+              <span>AI Centar</span>
+            </Link>
+
+            {/* Destination 6: Program vjernosti */}
+            <Link
+              to="/program-vjernosti"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${
+                isPathActive(['/program-vjernosti'])
+                  ? 'bg-[#FEF2F2] text-[#C21817] font-bold border border-[#FECACA]'
+                  : 'hover:bg-slate-100 text-slate-700 hover:text-[#0F172A]'
+              }`}
+            >
+              <Award className="w-3.5 h-3.5 text-amber-600" />
+              <span>Program vjernosti</span>
+            </Link>
+
+            {/* Destination 7: Brza podrška */}
+            <Link
+              to="/brza-podrska"
+              className={`px-2.5 py-2 rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${
+                isPathActive(['/brza-podrska'])
+                  ? 'bg-[#FEF2F2] text-[#C21817] font-bold border border-[#FECACA]'
+                  : 'hover:bg-slate-100 text-slate-700 hover:text-[#0F172A]'
+              }`}
+            >
+              <Headphones className="w-3.5 h-3.5 text-slate-600" />
+              <span>Brza podrška</span>
+            </Link>
+
+            {/* Mutual-Exclusion Dropdown for Preserved Specialized Calculators & Legal Pages */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => toggleMenu('more-tools')}
+                aria-expanded={activeMenuId === 'more-tools'}
+                className={`px-2 py-2 rounded-xl transition-all flex items-center gap-1 text-xs cursor-pointer ${
+                  activeMenuId === 'more-tools'
+                    ? 'bg-slate-100 text-[#0F172A] font-bold'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-[#0F172A]'
+                }`}
+              >
+                <span>Kalkulatori</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform ${
+                    activeMenuId === 'more-tools' ? 'rotate-180 text-[#C21817]' : 'text-slate-400'
+                  }`}
+                />
+              </button>
+
+              {activeMenuId === 'more-tools' && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-floating border border-[#E2E8F0] p-3 z-50 space-y-1">
+                  <div className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+                    Specijalizirani moduli i izračuni
+                  </div>
+                  <Link
+                    to="/auto-osiguranje"
+                    className="p-2.5 rounded-xl hover:bg-slate-50 flex items-center gap-2.5 text-xs font-semibold text-[#0F172A]"
+                  >
+                    <Car className="w-4 h-4 text-[#C21817] shrink-0" />
+                    <div>
+                      <div>Auto osiguranje (AO &amp; Kasko)</div>
+                      <div className="text-[10px] text-slate-500 font-normal">50% bonusa i izračun po kW</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/dopunsko-zdravstveno"
+                    className="p-2.5 rounded-xl hover:bg-slate-50 flex items-center gap-2.5 text-xs font-semibold text-[#0F172A]"
+                  >
+                    <HeartPulse className="w-4 h-4 text-[#C21817] shrink-0" />
+                    <div>
+                      <div>Dopunsko zdravstveno (HZZO 15 € vs Privatno)</div>
+                      <div className="text-[10px] text-slate-500 font-normal">Usporedba s B-listom lijekova</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/imovina"
+                    className="p-2.5 rounded-xl hover:bg-slate-50 flex items-center gap-2.5 text-xs font-semibold text-[#0F172A]"
+                  >
+                    <Home className="w-4 h-4 text-amber-600 shrink-0" />
+                    <div>
+                      <div>Osiguranje imovine i potresa</div>
+                      <div className="text-[10px] text-slate-500 font-normal">Stan, kuća i kuća za odmor</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/kalkulator-prijepisa"
+                    className="p-2.5 rounded-xl hover:bg-slate-50 flex items-center gap-2.5 text-xs font-semibold text-[#0F172A]"
+                  >
+                    <Calculator className="w-4 h-4 text-slate-600 shrink-0" />
+                    <div>
+                      <div>Kalkulator prijepisa vozila (NN 92/21)</div>
+                      <div className="text-[10px] text-slate-500 font-normal">Službeni izračun upravne pristojbe</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/podsjetnik-isteka"
+                    className="p-2.5 rounded-xl hover:bg-slate-50 flex items-center gap-2.5 text-xs font-semibold text-[#0F172A]"
+                  >
+                    <Bell className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <div>
+                      <div>Podsjetnik na istek police</div>
+                      <div className="text-[10px] text-slate-500 font-normal">Obavijest 30 dana prije isteka</div>
+                    </div>
+                  </Link>
+                  <div className="border-t border-slate-100 pt-1 mt-1 flex items-center justify-between px-2.5 py-1.5 text-[11px]">
+                    <Link to="/o-nama" className="text-slate-600 hover:text-[#C21817] font-semibold">
+                      O nama
+                    </Link>
+                    <Link to="/prigovori" className="text-slate-600 hover:text-[#C21817] font-semibold">
+                      Prigovori potrošača
+                    </Link>
+                    <Link to="/services" className="text-slate-600 hover:text-[#C21817] font-semibold">
+                      Katalog
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* 3. Right Action Center */}
-          <div className="hidden sm:flex items-center gap-2.5">
-            {/* Digital Advisor Launcher */}
-            <button
-              type="button"
-              onClick={() => onOpenSavjetnik && onOpenSavjetnik()}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2 transition-all shadow-xs"
-              title="Pokrenite digitalnog savjetnika za optimalan izračun"
+          {/* 3. Right Dual Portals: Destination 8 (Korisnički portal) & Destination 9 (Zastupnički portal) */}
+          <div className="hidden lg:flex items-center gap-2 shrink-0">
+            {/* Destination 8: Korisnički portal */}
+            <Link
+              to="/korisnicki-portal"
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
+                isPathActive(['/korisnicki-portal', '/portal', '/portal/coi'])
+                  ? 'bg-[#C21817] text-white border-[#C21817] shadow-crimson-glow'
+                  : 'bg-[#FEF2F2] text-[#C21817] border-[#FECACA] hover:bg-[#C21817] hover:text-white'
+              }`}
             >
-              <Sparkles className="w-4 h-4 text-teal-600" />
-              <span>Digitalni savjetnik</span>
-            </button>
+              <Shield className="w-3.5 h-3.5" />
+              <span>Korisnički portal</span>
+              {pendingOffersCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-white text-[#C21817] font-extrabold">
+                  {pendingOffersCount}
+                </span>
+              )}
+            </Link>
 
-            {/* Primary CTA: "Zatražite ponudu" */}
-            <button
-              type="button"
-              onClick={() => onOpenQuote && onOpenQuote('auto')}
-              className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-teal-600/20 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            {/* Destination 9: Zastupnički portal */}
+            <Link
+              to="/zastupnicki-portal"
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
+                isPathActive(['/zastupnicki-portal', '/admin'])
+                  ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-md'
+                  : 'bg-[#0F172A] text-white border-[#0F172A] hover:bg-[#1E293B]'
+              }`}
             >
-              <span>Zatražite ponudu</span>
-              <ChevronRight className="w-4 h-4 text-teal-100" />
-            </button>
+              <UserCheck className="w-3.5 h-3.5 text-red-400" />
+              <span>Zastupnički portal</span>
+            </Link>
           </div>
 
-          {/* 4. Mobile Menu Toggle Button */}
-          <div className="flex lg:hidden items-center">
+          {/* 4. Mobile & Tablet Menu Button */}
+          <div className="flex xl:hidden items-center gap-2">
+            <Link
+              to="/korisnicki-portal"
+              className="px-2.5 py-1.5 rounded-lg bg-[#FEF2F2] text-[#C21817] border border-[#FECACA] text-xs font-bold flex items-center gap-1 lg:hidden"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>Portal</span>
+            </Link>
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(true)}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-950 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              onClick={() => toggleMenu('mobile-drawer')}
+              className="p-2.5 rounded-xl bg-slate-100 border border-[#E2E8F0] text-[#0F172A] hover:bg-slate-200 transition-colors min-h-[42px] min-w-[42px] flex items-center justify-center cursor-pointer"
               aria-label="Otvori navigacijski izbornik"
             >
-              <Menu className="w-6 h-6" />
+              {activeMenuId === 'mobile-drawer' ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* 5. Accessible Mobile Off-Canvas Slide-Out Sheet Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex justify-end" role="dialog" aria-modal="true">
-          {/* Backdrop Overlay */}
+      {/* 5. Collision-Free Mobile & Tablet Slide-Out Navigation Drawer */}
+      {activeMenuId === 'mobile-drawer' && (
+        <div className="fixed inset-0 z-50 xl:hidden flex justify-end" role="dialog" aria-modal="true">
           <div
-            className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-300"
-            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs"
+            onClick={() => setActiveMenuId(null)}
             aria-hidden="true"
           />
 
-          {/* Slide-out Sheet Panel */}
-          <div className="relative w-full max-w-sm bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col z-10 overflow-y-auto border-l border-slate-200 dark:border-slate-800 animate-in slide-in-from-right duration-300">
-            {/* Sheet Header */}
-            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div className="relative w-full max-w-sm bg-white h-full shadow-2xl flex flex-col z-10 overflow-y-auto border-l border-[#E2E8F0]">
+            <div className="p-4 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC]">
               <BrandLogo variant="compact" theme="light" showBadge={false} />
               <button
                 type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                onClick={() => setActiveMenuId(null)}
+                className="p-2 rounded-xl text-slate-500 hover:text-[#0F172A] hover:bg-slate-200/60 transition-colors"
                 aria-label="Zatvori izbornik"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Sheet Navigation Body */}
-            <div className="p-4 space-y-4 flex-1">
-              {/* Accordion 1: Osiguranja */}
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div className="p-4 space-y-2 flex-1">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold px-2">
+                9 Glavnih modula platforme
+              </div>
+
+              {[
+                { path: '/', label: '1. AGENCIJA ŽIVOT (Početna & Kalkulator)', icon: ShieldCheck, accent: 'text-[#C21817]' },
+                { path: '/toyota-partnerstvo', label: '2. Toyota partnerstvo (TCZ Hub)', icon: Car, accent: 'text-[#0F172A]' },
+                { path: '/zatrazi-ponudu', label: '3. Zatraži ponudu (Višeproizvodni izračun)', icon: FilePlus2, accent: 'text-[#C21817]' },
+                { path: '/prijava-stete', label: '4. Prijava šteta (Vođeni FNOL centar)', icon: AlertTriangle, accent: 'text-[#C21817]' },
+                { path: '/ai-centar', label: '5. AI Centar (AI Agenti & Štit pokrića)', icon: Bot, accent: 'text-[#C21817]' },
+                { path: '/program-vjernosti', label: '6. Program vjernosti (Silver / Gold / Platinum)', icon: Award, accent: 'text-amber-600' },
+                { path: '/brza-podrska', label: '7. Brza podrška (24/7 Pomoć & Dokumenti)', icon: Headphones, accent: 'text-slate-700' },
+                {
+                  path: '/korisnicki-portal',
+                  label: `8. Korisnički portal (${policies.length} polica / ${claims.length} šteta)`,
+                  icon: Shield,
+                  accent: 'text-[#C21817]',
+                },
+                {
+                  path: '/zastupnicki-portal',
+                  label: `9. Zastupnički portal (CRM — ${currentAgent.name})`,
+                  icon: UserCheck,
+                  accent: 'text-[#0F172A]',
+                },
+              ].map((item) => {
+                const Icon = item.icon;
+                const active = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setActiveMenuId(null)}
+                    className={`flex items-center justify-between p-3 rounded-xl text-xs font-bold border transition-all ${
+                      active
+                        ? 'bg-[#FEF2F2] text-[#C21817] border-[#FECACA]'
+                        : 'bg-white text-[#0F172A] border-[#E2E8F0] hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon className={`w-4 h-4 shrink-0 ${item.accent}`} />
+                      <span>{item.label}</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </Link>
+                );
+              })}
+
+              {/* Single Mutual-Exclusion Sub-Accordion for Additional Tools */}
+              <div className="pt-2">
                 <button
                   type="button"
-                  onClick={() => toggleMobileAccordion('osiguranja')}
-                  className="w-full p-3.5 text-left font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 min-h-[44px]"
+                  onClick={() => setMobileSubMenuId((prev) => (prev === 'extra' ? null : 'extra'))}
+                  className="w-full p-3 rounded-xl bg-slate-100 text-[#0F172A] text-xs font-bold flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <ShieldCheck className="w-4 h-4 text-teal-600" />
-                    <span>Osiguranja</span>
-                  </div>
+                  <span>Dodatni kalkulatori i pravne stranice</span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      mobileAccordion === 'osiguranja' ? 'rotate-180 text-teal-600' : 'text-slate-400'
-                    }`}
+                    className={`w-4 h-4 transition-transform ${mobileSubMenuId === 'extra' ? 'rotate-180' : ''}`}
                   />
                 </button>
-
-                {mobileAccordion === 'osiguranja' && (
-                  <div className="p-2 space-y-1 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                {mobileSubMenuId === 'extra' && (
+                  <div className="mt-1.5 space-y-1 pl-2 border-l-2 border-[#C21817]">
                     <Link
                       to="/auto-osiguranje"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
                     >
-                      <Car className="w-4 h-4 text-teal-600 shrink-0" />
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white">Auto &amp; Kasko osiguranje</div>
-                        <div className="text-[11px] text-slate-500">50% bonusa i Toyota VIP program</div>
-                      </div>
+                      Auto osiguranje (AO &amp; Kasko)
                     </Link>
-
                     <Link
                       to="/dopunsko-zdravstveno"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
                     >
-                      <HeartPulse className="w-4 h-4 text-rose-500 shrink-0" />
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white">Dopunsko zdravstveno (2026)</div>
-                        <div className="text-[11px] text-slate-500">HZZO 15 € vs Privatno od 9,50 €</div>
-                      </div>
+                      Dopunsko zdravstveno (HZZO 15 € vs Privatno)
                     </Link>
-
                     <Link
                       to="/imovina"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
                     >
-                      <Home className="w-4 h-4 text-amber-500 shrink-0" />
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white">Osiguranje stana i kuće</div>
-                        <div className="text-[11px] text-slate-500">Zaštita od požara, oluje i potresa</div>
-                      </div>
+                      Osiguranje imovine i potresa
                     </Link>
-
                     <Link
                       to="/kalkulator-prijepisa"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
                     >
-                      <Calculator className="w-4 h-4 text-slate-400 shrink-0" />
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white">Kalkulator prijepisa vozila</div>
-                        <div className="text-[11px] text-slate-500">Službeni izračun upravne pristojbe</div>
-                      </div>
+                      Kalkulator prijepisa vozila (NN 92/21)
                     </Link>
-
                     <Link
                       to="/podsjetnik-isteka"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
                     >
-                      <Bell className="w-4 h-4 text-teal-600 shrink-0" />
-                      <div>
-                        <div className="font-bold text-teal-800 dark:text-teal-300">Podsjetnik na istek police</div>
-                        <div className="text-[11px] text-slate-500">30 dana prije isteka + 3 ponude (-35%)</div>
-                      </div>
+                      Podsjetnik na istek police
                     </Link>
-
-                    <Link
-                      to="/services"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-center gap-3 min-h-[44px]"
-                    >
-                      <Briefcase className="w-4 h-4 text-blue-500 shrink-0" />
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white">Svi programi osiguranja</div>
-                        <div className="text-[11px] text-slate-500">Poslovna i privatna pokrića</div>
-                      </div>
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* Accordion 2: O nama & Partneri */}
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => toggleMobileAccordion('o-nama')}
-                  className="w-full p-3.5 text-left font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 min-h-[44px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Users className="w-4 h-4 text-teal-600" />
-                    <span>O nama &amp; Partneri</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      mobileAccordion === 'o-nama' ? 'rotate-180 text-teal-600' : 'text-slate-400'
-                    }`}
-                  />
-                </button>
-
-                {mobileAccordion === 'o-nama' && (
-                  <div className="p-2 space-y-1 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-                    <Link
-                      to="/o-nama"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 block min-h-[44px]"
-                    >
-                      <div className="font-bold text-slate-900 dark:text-white">Tko smo mi</div>
-                      <div className="text-[11px] text-slate-500">O agenciji i licenciranom timu</div>
-                    </Link>
-
-                    <Link
-                      to="/o-nama"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 block min-h-[44px]"
-                    >
-                      <div className="font-bold text-slate-900 dark:text-white">Strateško partnerstvo</div>
-                      <div className="text-[11px] text-slate-500">Partnerstvo s Generali osiguranjem d.d.</div>
-                    </Link>
-
                     <Link
                       to="/prigovori"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 block min-h-[44px]"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
                     >
-                      <div className="font-bold text-slate-900 dark:text-white">Pravne obavijesti &amp; Prigovori</div>
-                      <div className="text-[11px] text-slate-500">Zaštita prava potrošača</div>
+                      Prigovori potrošača
+                    </Link>
+                    <Link
+                      to="/o-nama"
+                      onClick={() => setActiveMenuId(null)}
+                      className="block p-2 text-xs font-semibold text-slate-700 hover:text-[#C21817]"
+                    >
+                      O nama i impresum
                     </Link>
                   </div>
                 )}
-              </div>
-
-              {/* Direct Links in Drawer */}
-              <div className="space-y-1.5 pt-2">
-                {/* Podsjetnik na istek */}
-                <Link
-                  to="/podsjetnik-isteka"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-300 font-bold text-sm min-h-[44px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Bell className="w-5 h-5 text-emerald-600 shrink-0" />
-                    <span>Podsjetnik na istek police (-35%)</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-emerald-400" />
-                </Link>
-
-                {/* Prijava štete */}
-                <Link
-                  to="/prijava-stete"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 font-bold text-sm min-h-[44px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" />
-                    <span>Prijava štete (24/7 FNOL)</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-rose-400" />
-                </Link>
-
-                {/* Moj Portal */}
-                <Link
-                  to="/portal"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-900/50 text-teal-800 dark:text-teal-200 font-bold text-sm min-h-[44px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Shield className="w-5 h-5 text-teal-600 shrink-0" />
-                    <span>Moj Portal &bull; Digitalne police</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-teal-400" />
-                </Link>
-
-                {/* Kontakt */}
-                <Link
-                  to="/contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold text-sm min-h-[44px]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Mail className="w-5 h-5 text-slate-400 shrink-0" />
-                    <span>Kontakt i lokacija ureda</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
-                </Link>
-              </div>
-
-              {/* Direct Phone Support */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-teal-600" />
-                  <span>Savjetovanje:</span>
-                </div>
-                <a
-                  href={`tel:${AGENCY_DETAILS.phone.replace(/\s+/g, '')}`}
-                  className="font-bold text-teal-700 dark:text-teal-400 font-mono text-xs hover:underline"
-                >
-                  {AGENCY_DETAILS.phone}
-                </a>
               </div>
             </div>
 
-            {/* Bottom Actions */}
-            <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-2 bg-slate-50 dark:bg-slate-900/80">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  if (onOpenQuote) onOpenQuote('auto');
-                }}
-                className="w-full py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all min-h-[44px]"
-              >
-                <span>Zatražite ponudu</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  if (onOpenSavjetnik) onOpenSavjetnik();
-                }}
-                className="w-full py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-bold text-xs flex items-center justify-center gap-2 transition-all min-h-[44px]"
-              >
-                <Sparkles className="w-4 h-4 text-teal-600" />
-                <span>Digitalni savjetnik</span>
-              </button>
+            <div className="p-4 border-t border-[#E2E8F0] bg-[#F8FAFC] space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500">Hitni kontakt:</span>
+                <a href="tel:+385914501458" className="font-mono font-bold text-[#C21817]">
+                  +385 91 450 1458
+                </a>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  to="/zatrazi-ponudu"
+                  onClick={() => setActiveMenuId(null)}
+                  className="py-2.5 px-3 rounded-xl bg-[#C21817] text-white font-bold text-xs text-center"
+                >
+                  Zatraži ponudu
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveMenuId(null);
+                    if (onOpenSavjetnik) onOpenSavjetnik();
+                  }}
+                  className="py-2.5 px-3 rounded-xl bg-[#0F172A] text-white font-bold text-xs flex items-center justify-center gap-1"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-red-400" />
+                  <span>AI Savjetnik</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

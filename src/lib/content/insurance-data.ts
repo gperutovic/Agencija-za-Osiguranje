@@ -1,6 +1,6 @@
 /**
  * Službeni podaci o poslovanju, osiguravajućim partnerima, zakonskim ogradama i FAQ setovima
- * za tržište osiguranja u Republici Hrvatskoj (Agencija Život - ŽIVOT d.o.o.).
+ * za tržište osiguranja u Republici Hrvatskoj (AGENCIJA ŽIVOT - ŽIVOT d.o.o. za zastupanje u osiguranju).
  */
 
 export interface CarrierPartner {
@@ -24,8 +24,22 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '12.4%',
     solvencyRatio: '215%',
     claimSpeedScore: '4.9/5',
-    highlight: 'Glavni strateški partner & Toyota VIP Kasko program s originalnim dijelovima',
+    highlight: 'Službeni strateški partner Agencije Život & ekskluzivni nositelj programa Toyota Osiguranje',
     isPrimaryPartner: true,
+    rating: 4.9,
+    reviewCount: 840,
+  },
+  {
+    id: 'toyota',
+    name: 'Toyota Osiguranje (Generali × Toyota Centar Zagreb)',
+    shortName: 'Toyota Osiguranje',
+    marketShare: 'OEM VIP',
+    solvencyRatio: '215%',
+    claimSpeedScore: '5.0/5',
+    highlight: 'Specijalizirano kasko i hibrid/EV osiguranje uz popravak u Toyota Centru Zagreb s originalnim OEM dijelovima',
+    isPrimaryPartner: true,
+    rating: 5.0,
+    reviewCount: 420,
   },
   {
     id: 'croatia',
@@ -34,7 +48,9 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '25.8%',
     solvencyRatio: '228%',
     claimSpeedScore: '4.8/5',
-    highlight: 'Najveća mreža procjene šteta i dugogodišnja domaća tradicija',
+    highlight: 'Široka mreža procjene šteta i dugogodišnja domaća tradicija',
+    rating: 4.8,
+    reviewCount: 610,
   },
   {
     id: 'allianz',
@@ -43,7 +59,9 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '13.1%',
     solvencyRatio: '240%',
     claimSpeedScore: '4.9/5',
-    highlight: 'Vrhunsko dopunsko zdravstveno osiguranje s B-listom i telemedicinom',
+    highlight: 'Vrhunsko dopunsko i dobrovoljno zdravstveno osiguranje s B-listom i telemedicinom',
+    rating: 4.9,
+    reviewCount: 530,
   },
   {
     id: 'wiener',
@@ -52,16 +70,9 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '9.6%',
     solvencyRatio: '202%',
     claimSpeedScore: '4.7/5',
-    highlight: 'Odlični paketi imovinskog osiguranja doma i potresa',
-  },
-  {
-    id: 'laqo',
-    name: 'LAQO osiguranje (Croatia d.d.)',
-    shortName: 'LAQO',
-    marketShare: 'Digital',
-    solvencyRatio: '228%',
-    claimSpeedScore: '4.8/5',
-    highlight: 'Digitalno 100% ugovaranje putem mobilne aplikacije uz telematiku',
+    highlight: 'Sveobuhvatni paketi imovinskog osiguranja doma, potresa i poplave',
+    rating: 4.7,
+    reviewCount: 390,
   },
   {
     id: 'triglav',
@@ -71,32 +82,92 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     solvencyRatio: '210%',
     claimSpeedScore: '4.6/5',
     highlight: 'Regionalna snaga i pouzdana asistencija na cestama',
+    rating: 4.6,
+    reviewCount: 280,
   },
 ];
 
 export const AGENCY_DETAILS = {
-  legalName: 'ŽIVOT d.o.o. za poslove zastupanja u osiguranju',
-  brandName: 'Agencija Život',
-  address: 'Junija Palmotića 76',
+  legalName: 'ŽIVOT d.o.o. za zastupanje u osiguranju',
+  brandName: 'AGENCIJA ŽIVOT',
+  address: 'Palmotićeva ulica 76',
   city: 'Zagreb',
   postalCode: '10000',
-  country: 'Republika Hrvatska',
+  country: 'Hrvatska',
   oib: '14329077049',
-  mbs: '080514170',
+  mbs: '01918940',
   hanfaLicense: 'Klasa: UP/I-983-02/24-01/12',
-  hanfaRegisterNumber: 'ZO-88912',
-  phone: '01 4800 120',
-  secondaryPhone: '01 555 0666',
-  email: 'osiguranje@agencija-zivot.hr',
-  claimsEmail: 'stete@agencija-zivot.hr',
-  complaintsEmail: 'prigovori@agencija-zivot.hr',
-  workingHours: 'Pon – Pet: 08:00 – 18:00 h (Online 24/7)',
+  hanfaRegisterNumber: 'ZO-01918940',
+  phone: '+385 91 450 1458',
+  secondaryPhone: '+385 1 4800 120',
+  email: 'agencija.zivot@generali.com',
+  claimsEmail: 'agencija.zivot@generali.com',
+  complaintsEmail: 'agencija.zivot@generali.com',
+  toyotaEmailPrimary: 'osiguranje@tcz.hr',
+  toyotaEmailSecondary: 'osiguranje2@tcz.hr',
+  workingHours: 'Pon – Pet: 08:00 – 18:00 h (Digitalni portal & FNOL 24/7)',
   geoCoordinates: {
     latitude: 45.8082,
     longitude: 15.9835,
   },
   websiteUrl: 'https://agencija-za-osiguranje.web.app',
 };
+
+export interface LicensedAgentProfile {
+  id: 'diana' | 'hrvoje' | 'laura';
+  name: string;
+  fullName: string;
+  role: string;
+  email: string;
+  phone: string;
+  organization: string;
+  licenseNumber: string;
+  specialization: string;
+  avatarInitials: string;
+  badgeColor: string;
+}
+
+export const LICENSED_AGENTS: LicensedAgentProfile[] = [
+  {
+    id: 'diana',
+    name: 'Diana',
+    fullName: 'Diana — Agencija Život (Generali Partner)',
+    role: 'Ovlaštena zastupnica u osiguranju & Voditeljica ureda',
+    email: 'agencija.zivot@generali.com',
+    phone: '+385 91 450 1458',
+    organization: 'ŽIVOT d.o.o. / Generali osiguranje d.d.',
+    licenseNumber: 'HANFA Registar zastupnika',
+    specialization: 'Životno, imovinsko, zdravstveno, MSP i korporativna osiguranja',
+    avatarInitials: 'DI',
+    badgeColor: '#C21817',
+  },
+  {
+    id: 'hrvoje',
+    name: 'Hrvoje',
+    fullName: 'Hrvoje — Toyota Centar Zagreb',
+    role: 'Specijalist za Toyota Osiguranje (AO, Kasko & Hybrid/EV)',
+    email: 'osiguranje@tcz.hr',
+    phone: '+385 91 450 1458',
+    organization: 'Toyota Centar Zagreb / Agencija Život',
+    licenseNumber: 'HANFA Ovlašteni zastupnik',
+    specialization: 'Toyota & Lexus AO/Kasko, zaštita hibridne baterije i flotna vozila',
+    avatarInitials: 'HR',
+    badgeColor: '#0F172A',
+  },
+  {
+    id: 'laura',
+    name: 'Laura',
+    fullName: 'Laura — Toyota Centar Zagreb',
+    role: 'Savjetnica za prodaju i obnove polica vozila',
+    email: 'osiguranje2@tcz.hr',
+    phone: '+385 91 450 1458',
+    organization: 'Toyota Centar Zagreb / Agencija Život',
+    licenseNumber: 'HANFA Ovlašteni zastupnik',
+    specialization: 'Obnove polica, leasing kasko paketi, prijava šteta i asistencija',
+    avatarInitials: 'LA',
+    badgeColor: '#1E293B',
+  },
+];
 
 export const PAYMENT_METHODS = [
   {
@@ -125,7 +196,7 @@ export const FAQ_DOPUNSKO = [
   {
     question: 'Zašto je HZZO poskupio dopunsko na 15,00 € mjesečno od veljače 2026.?',
     answer:
-      'Sukladno odluci Upravnog vijeća HZZO-a, od 1. veljače 2026. cijena police dopunskog zdravstvenog osiguranja iznosi fiksnih 15,00 € mjesečno (180,00 € godišnje) za sve punoljetne osiguranike. Zbog tog rasta, privatna osiguranja (Allianz, Generali, Croatia) postala su znatno povoljnija za osiguranike u dobi od 18 do 50 godina, nudeći cijene već od 6,50 € mjesečno.',
+      'Sukladno odluci Upravnog vijeća HZZO-a, od 1. veljače 2026. cijena police dopunskog zdravstvenog osiguranja iznosi fiksnih 15,00 € mjesečno (180,00 € godišnje) za sve punoljetne osiguranike. Zbog tog rasta, privatna osiguranja (Generali, Allianz, Croatia) postala su znatno povoljnija za osiguranike u dobi od 18 do 50 godina, nudeći cijene već od 6,50 € mjesečno.',
   },
   {
     question: 'Koja je stvarna razlika između HZZO police i privatnog dopunskog osiguranja?',
@@ -156,14 +227,14 @@ export const FAQ_AUTO = [
       'Da. Prema hrvatskoj regulativi i praksi naših partnera, 50% bonusa prenosi se odmah temeljem kupoprodajnog ugovora ili police prethodnog vozila. Također, omogućujemo prijenos bonusa između bračnih drugova i s roditelja na djecu.',
   },
   {
-    question: 'Što donosi ekskluzivni Toyota Centar Zagreb VIP Kasko program?',
+    question: 'Što donosi ekskluzivni Toyota Centar Zagreb — Toyota Osiguranje program?',
     answer:
-      'Kao ovlašteni partner Toyota Centra Zagreb i Generali osiguranja, našim klijentima jamčimo popravak isključivo s originalnim OEM dijelovima u ovlaštenom servisu, zamjensko Toyota hibridno vozilo za vrijeme popravka, fiksnu franšizu bez skrivenih troškova i 50% popusta na osiguranje doma.',
+      'Kao ovlašteni partner Toyota Centra Zagreb i Generali osiguranja d.d., našim klijentima jamčimo popravak isključivo s originalnim OEM dijelovima u ovlaštenom servisu Toyota Centar Zagreb, zaštitu visokonaponske Hybrid/EV baterije, zamjensko Toyota vozilo za vrijeme popravka i paketne popuste za AO + Kasko.',
   },
   {
     question: 'Kada i kako preuzimam policu i Zelenu kartu?',
     answer:
-      'Odmah po autorizaciji plaćanja, digitalna polica i međunarodna karta osiguranja (Zelena karta) generiraju se u PDF formatu s QR kodom i šalju na Vaš e-mail, te su trenutno dostupne u portalu "Moj Život". Polica je odmah vidljiva u bazi MUP-a za tehnički pregled.',
+      'Odmah po autorizaciji plaćanja, digitalna polica i međunarodna karta osiguranja (Zelena karta) generiraju se u PDF formatu s QR kodom i šalju na Vaš e-mail, te su trenutno dostupne u Korisničkom portalu. Polica je odmah vidljiva u bazi HUO/MUP-a za tehnički pregled.',
   },
 ];
 
@@ -171,7 +242,7 @@ export const FAQ_PROPERTY = [
   {
     question: 'Pokriva li osnovno osiguranje stana ili kuće potres?',
     answer:
-      'Ne, rizik potresa (zemljotresa) je zasebno dopunsko pokriće. U našim paketima "ŽIVOT Dom" omogućujemo ugovaranje potresa bez franšize ili s minimalnom franšizom, pokrivajući građevinski dio i stvari kućanstva na novu nabavnu vrijednost.',
+      'Ne, rizik potresa (zemljotresa) je zasebno dopunsko pokriće. U našim paketima Generali Dom omogućujemo ugovaranje potresa na novu građevinsku vrijednost za građevinski dio i stvari kućanstva uz prilagođenu franšizu.',
   },
   {
     question: 'Što je franšiza kod osiguranja imovine i kako utječe na cijenu?',
@@ -179,3 +250,72 @@ export const FAQ_PROPERTY = [
       'Franšiza je iznos učešća osiguranika u šteti. Ako odaberete franšizu od npr. 150 €, Vaša godišnja premija bit će do 20% niža. Ako odaberete pokriće bez franšize (0 €), osiguranje u cijelosti isplaćuje štetu od prvog eura.',
   },
 ];
+
+export interface ClaimPhaseDefinition {
+  phase: 1 | 2 | 3 | 4 | 5;
+  label: string;
+  description: string;
+}
+
+export const CLAIM_PHASE_LABELS: ClaimPhaseDefinition[] = [
+  {
+    phase: 1,
+    label: '1. Zaprimljeno',
+    description: 'Prijava štete (FNOL) evidentirana u sustavu Agencije Život.',
+  },
+  {
+    phase: 2,
+    label: '2. Provjera dokumentacije',
+    description: 'Zastupnik provjerava Europsko izvješće, policu, fotografije i IBAN.',
+  },
+  {
+    phase: 3,
+    label: '3. Predano osiguratelju',
+    description: 'Kompletiran spis proslijeđen likvidaturi Generali / Toyota Osiguranja.',
+  },
+  {
+    phase: 4,
+    label: '4. Procjena štete',
+    description: 'Izvid procjenitelja i odobrenje popravka u ovlaštenom servisu.',
+  },
+  {
+    phase: 5,
+    label: '5. Isplata / Riješeno',
+    description: 'Odobrena isplata odštete na IBAN osiguranika ili servisu.',
+  },
+];
+
+export interface ContractStageDefinition {
+  stage: 1 | 2 | 3 | 4 | 5;
+  label: string;
+  description: string;
+}
+
+export const CONTRACT_STAGE_LABELS: ContractStageDefinition[] = [
+  {
+    stage: 1,
+    label: '1. Upit i IDD analiza',
+    description: 'Zaprimljen zahtjev i proveden HANFA IDD Test zahtjeva i potreba.',
+  },
+  {
+    stage: 2,
+    label: '2. Obrada i procjena rizika',
+    description: 'Provjera bonusa u HUO bazi, tehničkih parametara i pokrića.',
+  },
+  {
+    stage: 3,
+    label: '3. Ponuda poslana klijentu',
+    description: 'Informativna ponuda s IPID-om dostupna u Korisničkom portalu.',
+  },
+  {
+    stage: 4,
+    label: '4. Potpis i uplata premije',
+    description: 'Klijent prihvatio ponudu; SEPA HUB 3A ili kartična autorizacija.',
+  },
+  {
+    stage: 5,
+    label: '5. Polica izdana i arhivirana',
+    description: 'Polica aktivna u Skadencaru i Korisničkom portalu.',
+  },
+];
+
