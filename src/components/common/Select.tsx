@@ -20,10 +20,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
-      <div className="w-full space-y-1.5">
+      <div className="w-full space-y-1.5 text-left">
         {label && (
-          <label htmlFor={selectId} className="block text-xs font-semibold text-slate-300">
-            {label} {props.required && <span className="text-rose-400">*</span>}
+          <label htmlFor={selectId} className="block text-xs font-semibold text-slate-700">
+            {label} {props.required && <span className="text-red-600">*</span>}
           </label>
         )}
         <div className="relative">
@@ -32,17 +32,17 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             className={twMerge(
               clsx(
-                'block w-full appearance-none rounded-xl border bg-[#0d121f] py-2.5 pl-3.5 pr-10 text-sm text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#fb6504] focus:border-[#fb6504] shadow-2xs',
+                'block w-full appearance-none rounded-lg border bg-white py-2.5 pl-3.5 pr-10 text-sm text-slate-900 transition-colors focus:outline-none focus:ring-2',
                 error
-                  ? 'border-rose-500/60 text-white focus:border-rose-500 focus:ring-rose-500'
-                  : 'border-white/[0.1] hover:border-white/[0.2]',
+                  ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-100'
+                  : 'border-slate-300 hover:border-slate-400 focus:border-[#0F2942] focus:ring-[#0F2942]/15',
                 className
               )
             )}
             {...props}
           >
             {options.map((opt) => (
-              <option key={opt.value} value={opt.value} className="bg-[#0d121f] text-white">
+              <option key={opt.value} value={opt.value} className="bg-white text-slate-900">
                 {opt.label}
               </option>
             ))}
@@ -52,9 +52,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </div>
         </div>
         {error ? (
-          <p className="text-xs text-rose-400 font-medium">{error}</p>
+          <p className="text-xs text-red-600 font-medium">{error}</p>
         ) : helperText ? (
-          <p className="text-xs text-slate-400">{helperText}</p>
+          <p className="text-xs text-slate-500">{helperText}</p>
         ) : null}
       </div>
     );

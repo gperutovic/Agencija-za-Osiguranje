@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Home, ShieldCheck, ArrowRight, ArrowLeft, Building2, Flame, Droplets, Activity } from 'lucide-react';
+import { Home, ArrowRight, ArrowLeft } from 'lucide-react';
 import { calculatePropertyPremium, formatEuro } from '../../lib/calculations';
 import { Slider } from '../ui/Slider';
 import { Button } from '../ui/Button';
@@ -14,7 +14,6 @@ export const PropertyQuoteWizard: React.FC = () => {
   const [includeEarthquake, setIncludeEarthquake] = useState(true);
   const [includeWaterLeak, setIncludeWaterLeak] = useState(true);
   const [includeContents, setIncludeContents] = useState(true);
-  const [cityLocation, setCityLocation] = useState('Zagreb');
 
   const estimate = useMemo(() => {
     return calculatePropertyPremium({
@@ -39,16 +38,16 @@ export const PropertyQuoteWizard: React.FC = () => {
       {step === 1 ? (
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
-            <h3 className="text-xl font-black text-slate-900">Osiguranje Doma, Zgrade i Kućanstva</h3>
-            <p className="text-xs text-slate-500 font-mono mt-0.5">
-              Izračunajte potpunu zaštitu od potresa, požara, izljeva vode i provalne krađe.
+            <h3 className="text-xl font-bold text-slate-900">Osiguranje doma, zgrade i kućanstva</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Izračunajte zaštitu od potresa, požara, izljeva vode i provalne krađe.
             </p>
           </div>
 
           {/* Property Type Selector */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-slate-700">Vrsta nekretnine</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { id: 'stan' as const, label: 'Stan u zgradi', desc: '0,42 €/m² osnovno' },
                 { id: 'kuca' as const, label: 'Obiteljska kuća', desc: '0,56 €/m² osnovno' },
@@ -60,12 +59,12 @@ export const PropertyQuoteWizard: React.FC = () => {
                   onClick={() => setPropertyType(t.id)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     propertyType === t.id
-                      ? 'border-blue-600 bg-blue-50/70 text-blue-900 font-bold shadow-sm'
-                      : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
+                      ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold ring-1 ring-[#0F2942]'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                   }`}
                 >
-                  <p className="text-xs">{t.label}</p>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">{t.desc}</p>
+                  <p className="text-xs font-semibold">{t.label}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5 tabular-nums">{t.desc}</p>
                 </button>
               ))}
             </div>
@@ -96,11 +95,11 @@ export const PropertyQuoteWizard: React.FC = () => {
                     type="checkbox"
                     checked={includeEarthquake}
                     onChange={(e) => setIncludeEarthquake(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-0"
+                    className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900 block">Rizik od potresa</span>
-                    <span className="text-[10px] text-slate-500 font-mono">Građevina + stvari (+25%)</span>
+                    <span className="text-[11px] text-slate-500 tabular-nums">Građevina + stvari (+25%)</span>
                   </div>
                 </label>
 
@@ -109,11 +108,11 @@ export const PropertyQuoteWizard: React.FC = () => {
                     type="checkbox"
                     checked={includeWaterLeak}
                     onChange={(e) => setIncludeWaterLeak(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-0"
+                    className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900 block">Izljev vode iz cijevi</span>
-                    <span className="text-[10px] text-slate-500 font-mono">Puknuće instalacija (+24 €)</span>
+                    <span className="text-[11px] text-slate-500 tabular-nums">Puknuće instalacija (+24 €)</span>
                   </div>
                 </label>
 
@@ -122,11 +121,11 @@ export const PropertyQuoteWizard: React.FC = () => {
                     type="checkbox"
                     checked={includeContents}
                     onChange={(e) => setIncludeContents(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-0"
+                    className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900 block">Stvari kućanstva</span>
-                    <span className="text-[10px] text-slate-500 font-mono">Namještaj, tehnika, odjeća</span>
+                    <span className="text-[11px] text-slate-500">Namještaj, tehnika, odjeća</span>
                   </div>
                 </label>
               </div>
@@ -134,27 +133,27 @@ export const PropertyQuoteWizard: React.FC = () => {
           </div>
 
           {/* Quick Summary Card */}
-          <div className="p-4 bg-blue-50/80 border border-blue-200 rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-[#0F2942]/5 border border-[#0F2942]/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#0F2942] text-white flex items-center justify-center shrink-0">
                 <Home className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">
+                <p className="text-xs font-bold text-slate-900 tabular-nums">
                   {squareMeters} m² &bull; {propertyType === 'stan' ? 'Stan' : propertyType === 'kuca' ? 'Kuća' : 'Vikendica'}
                 </p>
-                <p className="text-[11px] text-slate-600">
-                  Premija: <strong>{formatEuro(estimate.annualPremium)}</strong> godišnje (ili {formatEuro(estimate.monthlyPremium)}/mj.)
+                <p className="text-xs text-slate-600 tabular-nums">
+                  Okvirna premija: <strong className="text-slate-900">{formatEuro(estimate.annualPremium)}</strong> godišnje (ili {formatEuro(estimate.monthlyPremium)}/mj.)
                 </p>
               </div>
             </div>
 
             <Button
-              variant="secondary"
+              variant="primary"
               size="sm"
               onClick={() => setStep(2)}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold text-xs"
+              className="font-semibold text-xs shrink-0"
             >
               Usporedi osiguratelje
             </Button>
@@ -162,15 +161,15 @@ export const PropertyQuoteWizard: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200">
             <div>
-              <h3 className="text-xl font-black text-slate-900">Usporedba ponuda za dom i potres</h3>
-              <p className="text-xs text-slate-500 font-mono">
-                {squareMeters} m² &bull; {propertyType.toUpperCase()}
+              <h3 className="text-xl font-bold text-slate-900">Usporedba ponuda za dom i potres</h3>
+              <p className="text-xs text-slate-500 tabular-nums">
+                {squareMeters} m² &bull; {propertyType === 'stan' ? 'Stan' : propertyType === 'kuca' ? 'Kuća' : 'Vikendica'}
               </p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setStep(1)}
               leftIcon={<ArrowLeft className="w-4 h-4" />}

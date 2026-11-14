@@ -2,8 +2,8 @@
   "brand": {
     "name": "Agencija Život",
     "legalName": "ŽIVOT d.o.o. za poslove zastupanja u osiguranju",
-    "tagline": "Vodeća digitalna agencija za osiguranje i financijsku sigurnost",
-    "description": "Ovlašteni i licencirani partner Generali osiguranja d.d. pod nadzorom HANFA-e. Pružamo vrhunska rješenja životnog, imovinskog, auto i zdravstvenog osiguranja.",
+    "tagline": "Ovlaštena agencija za zastupanje u osiguranju",
+    "description": "Ovlašteni i licencirani partner Generali osiguranja d.d. pod nadzorom HANFA-e. Pružamo stručnu pripremu životnog, imovinskog, auto i zdravstvenog osiguranja.",
     "address": "Junija Palmotića 76, 10000 Zagreb",
     "oib": "14329077049",
     "mbs": "080514170",
@@ -19,23 +19,23 @@
     "about": "O nama",
     "contact": "Kontakt",
     "portal": "Klijentski portal",
-    "admin": "Broker CRM",
+    "admin": "Zastupnički CRM",
     "login": "Prijava",
     "register": "Registracija",
     "logout": "Odjava"
   },
   "hero": {
-    "badge": "Ovlašteni Generali partner &bull; HANFA Licenca",
-    "title": "Pametno osiguranje za stvaran život.",
-    "subtitle": "Kombiniramo najvišu razinu insurtech inovacija i tradiciju Generali osiguranja. Trenutni izračun premije, digitalna prijava šteta i osobni savjetnik u Zagrebu.",
+    "badge": "Ovlašteni Generali partner • HANFA nadzor",
+    "title": "Pouzdano osiguranje za stvaran život.",
+    "subtitle": "Informativni izračun premije, strukturirana prijava štete i osobno savjetovanje u našem uredu u Zagrebu uz partnerstvo s Generali osiguranjem d.d.",
     "ctaQuote": "Izračunaj premiju online",
     "ctaClaims": "Prijavi štetu (FNOL)",
     "ctaPortal": "Moj Život Portal",
     "stats": {
-      "activePolicies": "12.400+",
-      "activePoliciesLabel": "Aktivnih polica",
-      "payoutRatio": "99,4%",
-      "payoutRatioLabel": "Uspješnost isplate šteta",
+      "activePolicies": "24 sata",
+      "activePoliciesLabel": "Obrada upita",
+      "payoutRatio": "100% digitalno ili osobno",
+      "payoutRatioLabel": "Način ugovaranja",
       "speed": "24 sata",
       "speedLabel": "Prosječna prva obrada",
       "satisfaction": "4,9 / 5",
@@ -92,7 +92,7 @@
       "holiday": "Vikendica / Kuća za odmor",
       "constructionYear": "Godina izgradnje",
       "contents": "Osiguranje stvari kućanstva",
-      "earthquake": "Pokriće od rizika potresa (seizmički rider)",
+      "earthquake": "Pokriće od rizika potresa",
       "flood": "Pokriće od poplave i bujica"
     },
     "life": {
@@ -150,9 +150,9 @@
     "appointmentModal": "Rezervacija termina (Palmotićeva 76 / Video / Tel)"
   },
   "admin": {
-    "title": "Agency Back-Office & Broker CRM",
+    "title": "Poslovni portal i CRM zastupnika",
     "leads": "Pristigli upiti i potencijalni klijenti",
-    "kanban": "Prodajni prodajni lijevak (Kanban)",
+    "kanban": "Prodajni lijevak (Kanban)",
     "claimsDesk": "Odjel za obradu i procjenu šteta",
     "audit": "Regulatorni HANFA & IDD nadzor"
   },

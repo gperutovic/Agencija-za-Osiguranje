@@ -13,7 +13,7 @@ import {
   Unsubscribe,
 } from 'firebase/firestore';
 import { app, auth, db, storage, INITIAL_USERS } from '../api/firebase';
-import { firestoreService } from '../api/firestoreService';
+import { firestoreService, sanitizeForFirestore } from '../api/firestoreService';
 import { LeadRecord, NeedsAssessmentRecord, Policy, Claim } from '../types/database';
 
 export { app, auth, db, storage, INITIAL_USERS, firestoreService };
@@ -26,12 +26,12 @@ export const leadService = {
   async saveLead(leadData: Omit<LeadRecord, 'id' | 'createdAt' | 'updatedAt'>): Promise<LeadRecord> {
     const id = `lead-${Date.now()}`;
     const now = new Date().toISOString();
-    const newLead: LeadRecord = {
+    const newLead = sanitizeForFirestore<LeadRecord>({
       ...leadData,
       id,
       createdAt: now,
       updatedAt: now,
-    };
+    });
 
     try {
       await setDoc(doc(db, 'leads', id), {
@@ -59,11 +59,11 @@ export const leadService = {
 
   async updateLeadStatus(id: string, status: LeadRecord['status'], notes?: string): Promise<void> {
     try {
-      await updateDoc(doc(db, 'leads', id), {
+      await updateDoc(doc(db, 'leads', id), sanitizeForFirestore({
         status,
         ...(notes !== undefined ? { notes } : {}),
         updatedAt: new Date().toISOString(),
-      });
+      }));
     } catch (e) {
       console.warn('Firestore updateLeadStatus error:', e);
     }
@@ -101,11 +101,11 @@ export const needsAssessmentService = {
     assessment: Omit<NeedsAssessmentRecord, 'id' | 'createdAt'>
   ): Promise<NeedsAssessmentRecord> {
     const id = `na-${Date.now()}`;
-    const newRecord: NeedsAssessmentRecord = {
+    const newRecord = sanitizeForFirestore<NeedsAssessmentRecord>({
       ...assessment,
       id,
       createdAt: new Date().toISOString(),
-    };
+    });
 
     try {
       await setDoc(doc(db, 'needs_assessments', id), newRecord);

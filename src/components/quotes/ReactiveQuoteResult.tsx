@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import {
   ShieldCheck,
-  Zap,
   PhoneCall,
   CheckCircle2,
-  AlertCircle,
   CreditCard,
-  Sparkles,
   ArrowRight,
-  Clock,
-  Car,
-  ChevronRight,
   Check,
 } from 'lucide-react';
 import { formatEuro } from '../../lib/calculations';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { CARRIER_PARTNERS } from '../../data/mockData';
+import { firestoreService } from '../../api/firestoreService';
+import { leadService } from '../../services/firebase';
 
 interface ReactiveQuoteResultProps {
   baseAnnualPrice: number;
@@ -50,11 +46,16 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
 
   // Online bind checkout modal state
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
-  const [selectedPaymentRail, setSelectedPaymentRail] = useState<'card' | 'keks' | 'aircash' | 'hub3a'>('card');
+  const [selectedPaymentRail, setSelectedPaymentRail] = useState<'card' | 'hub3a' | 'keks' | 'sepa'>('card');
+  const [checkoutName, setCheckoutName] = useState('');
+  const [checkoutPhone, setCheckoutPhone] = useState('');
+  const [checkoutEmail, setCheckoutEmail] = useState('');
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [isSubmittingCheckout, setIsSubmittingCheckout] = useState(false);
+  const [savedReference, setSavedReference] = useState<string | null>(null);
   const [checkoutComplete, setCheckoutComplete] = useState(false);
 
   // Dynamic price calculation
-  // Deductible discount: 0€ -> 100%, 150€ -> 85%, 300€ -> 72%
   let deductibleMultiplier = 1.0;
   if (deductible === 150) deductibleMultiplier = 0.88;
   if (deductible === 300) deductibleMultiplier = 0.76;
@@ -62,12 +63,15 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
   let computedAnnual = baseAnnualPrice * deductibleMultiplier;
 
   // Addon pricing
-  if (glassBreakage) computedAnnual += 45; // €3.75/mj
-  if (roadAssistance) computedAnnual += 25; // €2.08/mj
-  if (bonusProtection) computedAnnual += 18; // €1.50/mj
+  if (glassBreakage) computedAnnual += 45;
+  if (roadAssistance) computedAnnual += 25;
+  if (bonusProtection) computedAnnual += 18;
 
   const finalAnnual = parseFloat(computedAnnual.toFixed(2));
   const finalMonthly = parseFloat((finalAnnual / 12).toFixed(2));
+
+  const mappedProductType: 'auto' | 'property' | 'life' | 'health' =
+    category === 'travel' ? 'health' : category;
 
   const handleCallbackSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,70 +82,150 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
       if (onRequestAgentCallback) {
         await onRequestAgentCallback(callbackName, callbackPhone);
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 600));
+        await leadService.saveLead({
+          oib: '',
+          name: callbackName.trim(),
+          fullName: callbackName.trim(),
+          email: '',
+          phone: callbackPhone.trim(),
+          productType: mappedProductType,
+          data: {
+            ...inputsSummary,
+            originalCategory: category,
+            deductible,
+            glassBreakage,
+            roadAssistance,
+            bonusProtection,
+          },
+          annualPremium: finalAnnual,
+          status: 'new',
+          notes: `Povratni poziv: ${productName} (${formatEuro(finalAnnual)} god.)`,
+        });
       }
       setCallbackSuccess(true);
       setTimeout(() => {
         setCallbackSuccess(false);
         setIsCallbackModalOpen(false);
       }, 3000);
-    } catch {
-      // fallback
+    } catch (err) {
+      console.error('Callback submission error:', err);
     } finally {
       setIsSubmittingCallback(false);
+    }
+  };
+
+  const handleCheckoutSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCheckoutError(null);
+
+    if (!checkoutName.trim() || !checkoutPhone.trim() || !checkoutEmail.trim()) {
+      setCheckoutError('Molimo ispunite ime i prezime, broj telefona i e-mail adresu.');
+      return;
+    }
+
+    setIsSubmittingCheckout(true);
+    try {
+      const quote = await firestoreService.createQuote({
+        customer: {
+          fullName: checkoutName.trim(),
+          email: checkoutEmail.trim(),
+          phone: checkoutPhone.trim(),
+        },
+        type: mappedProductType,
+        inputs: {
+          ...inputsSummary,
+          originalCategory: category,
+          deductible,
+          glassBreakage,
+          roadAssistance,
+          bonusProtection,
+          paymentRail: selectedPaymentRail,
+        },
+        calculatedEstimate: {
+          annualPremium: finalAnnual,
+          monthlyPremium: finalMonthly,
+          currency: 'EUR',
+        },
+        status: 'new',
+      });
+
+      await leadService.saveLead({
+        oib: '',
+        name: checkoutName.trim(),
+        fullName: checkoutName.trim(),
+        email: checkoutEmail.trim(),
+        phone: checkoutPhone.trim(),
+        productType: mappedProductType,
+        data: {
+          ...inputsSummary,
+          originalCategory: category,
+          paymentRail: selectedPaymentRail,
+          quoteId: quote.id,
+        },
+        annualPremium: finalAnnual,
+        status: 'quoted',
+        notes: `Online zahtjev za ugovaranje (${productName}, plaćanje: ${selectedPaymentRail})`,
+      });
+
+      setSavedReference(quote.id);
+      setCheckoutComplete(true);
+      if (onCompleteOnlineBind) onCompleteOnlineBind();
+    } catch (err) {
+      console.error('Checkout submission error:', err);
+      setCheckoutError('Došlo je do pogreške pri spremanju zahtjeva. Pokušajte ponovno.');
+    } finally {
+      setIsSubmittingCheckout(false);
     }
   };
 
   return (
     <div className="space-y-6 text-left">
       {/* Primary Calculated Price Showcase */}
-      <Card className="p-6 sm:p-8 border-2 border-emerald-500/30 bg-gradient-to-br from-slate-900 to-slate-950 text-white relative overflow-hidden shadow-xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10 pb-6 border-b border-slate-800">
+      <Card className="p-6 sm:p-8 border border-slate-200 bg-white text-slate-900 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-mono font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Vaš izračun uživo &bull; Ušteda do 35%</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0F2942]/5 text-[#0F2942] border border-[#0F2942]/15 text-xs font-semibold mb-2">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Informativni izračun premije</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               {productName}
             </h3>
-            <p className="text-xs text-slate-400 mt-1 font-mono">
-              Statutarni izračun s uključenim popustima i odabranim pokrićima
+            <p className="text-xs text-slate-500 mt-1">
+              Obračun prema odabranim parametrima i dopunskim pokrićima
             </p>
           </div>
 
-          <div className="text-left md:text-right bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
-            <span className="text-[11px] font-mono text-slate-400 block uppercase">
-              Mjesečna rata
+          <div className="text-left md:text-right bg-[#0F2942] text-white p-4 sm:p-5 rounded-xl shrink-0">
+            <span className="text-[11px] font-medium text-slate-300 block uppercase tracking-wider">
+              Okvirna mjesečna rata
             </span>
-            <div className="flex items-baseline gap-1 text-3xl sm:text-4xl font-black text-emerald-400 font-mono">
+            <div className="flex items-baseline gap-1.5 text-3xl sm:text-4xl font-bold text-white tabular-nums mt-0.5">
               <span>{formatEuro(finalMonthly)}</span>
-              <span className="text-xs text-slate-400 font-normal">/ mj.</span>
+              <span className="text-xs text-slate-300 font-normal">/ mj.</span>
             </div>
-            <span className="text-xs text-slate-300 font-mono block mt-0.5">
+            <span className="text-xs text-slate-200 tabular-nums block mt-1">
               Godišnja premija: <strong>{formatEuro(finalAnnual)}</strong>
             </span>
           </div>
         </div>
 
         {/* Dynamic Reactive Sliders & Endorsement Toggles */}
-        <div className="py-6 space-y-6 relative z-10">
+        <div className="py-6 space-y-6">
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs font-semibold">
-              <span className="text-slate-300">Franšiza (Vaše sudjelovanje u šteti):</span>
-              <span className="font-mono text-emerald-400 font-bold">
+              <span className="text-slate-700">Franšiza (vlastito sudjelovanje u šteti):</span>
+              <span className="tabular-nums text-[#0F2942] font-bold">
                 {deductible === 0 ? 'Bez franšize (0 €)' : `${deductible} €`}
               </span>
             </div>
 
             {/* Deductible Segmented Switcher */}
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { val: 0 as const, label: '0 € (Bez franšize)', desc: '100% pokriveno' },
-                { val: 150 as const, label: '150 € franšiza', desc: 'Ušteda ~12%' },
-                { val: 300 as const, label: '300 € franšiza', desc: 'Ušteda ~24%' },
+                { val: 150 as const, label: '150 € franšiza', desc: 'Popust ~12%' },
+                { val: 300 as const, label: '300 € franšiza', desc: 'Popust ~24%' },
               ].map((item) => (
                 <button
                   key={item.val}
@@ -149,12 +233,18 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                   onClick={() => setDeductible(item.val)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     deductible === item.val
-                      ? 'bg-blue-600 border-blue-500 text-white shadow-md'
-                      : 'bg-slate-800/60 border-slate-700/80 text-slate-300 hover:border-slate-600'
+                      ? 'bg-[#0F2942] border-[#0F2942] text-white'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'
                   }`}
                 >
-                  <p className="font-bold text-xs">{item.label}</p>
-                  <p className="text-[10px] text-slate-200/70 font-mono mt-0.5">{item.desc}</p>
+                  <p className="font-bold text-xs tabular-nums">{item.label}</p>
+                  <p
+                    className={`text-[11px] mt-0.5 ${
+                      deductible === item.val ? 'text-slate-200' : 'text-slate-500'
+                    }`}
+                  >
+                    {item.desc}
+                  </p>
                 </button>
               ))}
             </div>
@@ -162,8 +252,8 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
 
           {/* Endorsement Toggles */}
           <div className="space-y-2 pt-2">
-            <span className="text-xs font-semibold text-slate-300 block">
-              Dodatna pokrića (klikom uključite u premiju):
+            <span className="text-xs font-semibold text-slate-700 block">
+              Dodatna pokrića (uključite prema potrebi):
             </span>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -172,19 +262,19 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                 onClick={() => setGlassBreakage(!glassBreakage)}
                 className={`p-3 rounded-xl border flex items-center justify-between text-left transition-all ${
                   glassBreakage
-                    ? 'bg-emerald-950/60 border-emerald-600/80 text-white'
-                    : 'bg-slate-800/40 border-slate-700/60 text-slate-400 hover:border-slate-600'
+                    ? 'bg-[#0F2942]/5 border-[#0F2942] text-slate-900'
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
                 }`}
               >
                 <div>
                   <p className="text-xs font-bold">Lom stakala</p>
-                  <p className="text-[10px] font-mono text-emerald-400">+3,75 €/mj.</p>
+                  <p className="text-[11px] tabular-nums text-[#0F2942] font-medium">+3,75 €/mj.</p>
                 </div>
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center border ${
                     glassBreakage
-                      ? 'bg-emerald-500 border-emerald-400 text-white'
-                      : 'border-slate-600'
+                      ? 'bg-[#0F2942] border-[#0F2942] text-white'
+                      : 'border-slate-300'
                   }`}
                 >
                   {glassBreakage && <Check className="w-3.5 h-3.5" />}
@@ -196,19 +286,19 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                 onClick={() => setRoadAssistance(!roadAssistance)}
                 className={`p-3 rounded-xl border flex items-center justify-between text-left transition-all ${
                   roadAssistance
-                    ? 'bg-emerald-950/60 border-emerald-600/80 text-white'
-                    : 'bg-slate-800/40 border-slate-700/60 text-slate-400 hover:border-slate-600'
+                    ? 'bg-[#0F2942]/5 border-[#0F2942] text-slate-900'
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
                 }`}
               >
                 <div>
                   <p className="text-xs font-bold">Asistencija 24/7</p>
-                  <p className="text-[10px] font-mono text-emerald-400">+2,08 €/mj.</p>
+                  <p className="text-[11px] tabular-nums text-[#0F2942] font-medium">+2,08 €/mj.</p>
                 </div>
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center border ${
                     roadAssistance
-                      ? 'bg-emerald-500 border-emerald-400 text-white'
-                      : 'border-slate-600'
+                      ? 'bg-[#0F2942] border-[#0F2942] text-white'
+                      : 'border-slate-300'
                   }`}
                 >
                   {roadAssistance && <Check className="w-3.5 h-3.5" />}
@@ -220,19 +310,19 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                 onClick={() => setBonusProtection(!bonusProtection)}
                 className={`p-3 rounded-xl border flex items-center justify-between text-left transition-all ${
                   bonusProtection
-                    ? 'bg-emerald-950/60 border-emerald-600/80 text-white'
-                    : 'bg-slate-800/40 border-slate-700/60 text-slate-400 hover:border-slate-600'
+                    ? 'bg-[#0F2942]/5 border-[#0F2942] text-slate-900'
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
                 }`}
               >
                 <div>
                   <p className="text-xs font-bold">Zaštita bonusa</p>
-                  <p className="text-[10px] font-mono text-emerald-400">+1,50 €/mj.</p>
+                  <p className="text-[11px] tabular-nums text-[#0F2942] font-medium">+1,50 €/mj.</p>
                 </div>
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center border ${
                     bonusProtection
-                      ? 'bg-emerald-500 border-emerald-400 text-white'
-                      : 'border-slate-600'
+                      ? 'bg-[#0F2942] border-[#0F2942] text-white'
+                      : 'border-slate-300'
                   }`}
                 >
                   {bonusProtection && <Check className="w-3.5 h-3.5" />}
@@ -243,65 +333,68 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
         </div>
 
         {/* Dual Conversion Buttons */}
-        <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative z-10">
+        <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <Button
-            variant="emerald"
+            variant="primary"
             size="lg"
-            onClick={() => setIsCheckoutModalOpen(true)}
+            onClick={() => {
+              setCheckoutComplete(false);
+              setCheckoutError(null);
+              setIsCheckoutModalOpen(true);
+            }}
             rightIcon={<ArrowRight className="w-4 h-4" />}
-            className="flex-1 font-bold shadow-lg shadow-emerald-900/30"
+            className="flex-1 font-semibold"
           >
-            Ugovori policu online
+            Zatražite policu prema izračunu
           </Button>
 
           <Button
             variant="outline"
             size="lg"
             onClick={() => setIsCallbackModalOpen(true)}
-            leftIcon={<PhoneCall className="w-4 h-4 text-emerald-400" />}
-            className="text-white border-slate-700 hover:bg-slate-800 font-semibold text-xs sm:text-sm"
+            leftIcon={<PhoneCall className="w-4 h-4 text-[#0F2942]" />}
+            className="text-slate-700 border-slate-300 hover:bg-slate-50 font-semibold text-xs sm:text-sm"
           >
-            Zatraži poziv agenta (15 min)
+            Zatražite povratni poziv
           </Button>
         </div>
       </Card>
 
       {/* Multi-Carrier Live Price Comparison Matrix */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h4 className="font-bold text-sm text-slate-900">Usporedba ponuda vodećih osiguratelja</h4>
-          <span className="text-[11px] font-mono text-slate-500">Ista pokrića &bull; Bez skrivenih troškova</span>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h4 className="font-bold text-sm text-slate-900">Informativna usporedba osiguratelja</h4>
+          <span className="text-xs text-slate-500">Usporedba istih pokrića &bull; Bez agencijske naknade</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {CARRIER_PARTNERS.slice(0, 4).map((carrier, idx) => {
-            // Slight natural variance between carriers
             const carrierPremium = parseFloat((finalAnnual * (1 + (idx - 1) * 0.04)).toFixed(2));
             const isBestRate = idx === 0;
 
             return (
-              <Card key={carrier.id} className="p-4 border hover:border-blue-400 flex flex-col justify-between">
+              <Card key={carrier.id} className="p-4 border border-slate-200 hover:border-[#0F2942]/40 bg-white flex flex-col justify-between">
                 <div>
                   <div className="flex items-start justify-between pb-2 border-b border-slate-100">
                     <div>
                       <h5 className="font-bold text-sm text-slate-900">{carrier.shortName}</h5>
-                      <span className="text-[10px] text-slate-400 font-mono">
-                        Ocjena: {carrier.rating} ★ ({carrier.reviewCount})
+                      <span className="text-[11px] text-slate-500">
+                        Partnersko društvo
                       </span>
                     </div>
                     {isBestRate && (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold font-mono">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-semibold">
                         Najpovoljnije
                       </span>
                     )}
                   </div>
 
-                  <div className="py-3">
-                    <span className="text-[10px] font-mono text-slate-400 block">Godišnja premija</span>
-                    <span className="text-xl font-black font-mono text-slate-900">
+                  <div className="py-3 tabular-nums">
+                    <span className="text-[11px] text-slate-500 block">Okvirna godišnja premija</span>
+                    <span className="text-xl font-bold text-slate-900">
                       {formatEuro(carrierPremium)}
                     </span>
-                    <span className="text-[11px] text-slate-500 block">
+                    <span className="text-xs text-slate-500 block">
                       ili {formatEuro(carrierPremium / 12)} / mj.
                     </span>
                   </div>
@@ -310,8 +403,12 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsCheckoutModalOpen(true)}
-                  className="w-full text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700"
+                  onClick={() => {
+                    setCheckoutComplete(false);
+                    setCheckoutError(null);
+                    setIsCheckoutModalOpen(true);
+                  }}
+                  className="w-full text-xs font-semibold"
                 >
                   Odaberi {carrier.shortName}
                 </Button>
@@ -321,23 +418,25 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
         </div>
       </div>
 
-      {/* MODAL 1: 15-Minute Callback Request */}
+      {/* MODAL 1: Callback Request */}
       {isCallbackModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 text-left space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 text-left space-y-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[#0F2942]/5 text-[#0F2942] flex items-center justify-center shrink-0">
                   <PhoneCall className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-base">Besplatni poziv licenciranog agenta</h4>
-                  <p className="text-xs text-slate-500 font-mono">Poziv unutar 15 minuta &bull; Bez obveze</p>
+                  <h4 className="font-bold text-slate-900 text-base">Povratni poziv licenciranog zastupnika</h4>
+                  <p className="text-xs text-slate-500">Javljamo se u najkraćem roku radnim danom &bull; Bez obveze</p>
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setIsCallbackModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 text-lg font-bold"
+                className="text-slate-400 hover:text-slate-700 p-1 text-lg font-bold"
+                aria-label="Zatvori"
               >
                 ✕
               </button>
@@ -345,41 +444,41 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
 
             {callbackSuccess ? (
               <div className="py-8 text-center space-y-3">
-                <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h5 className="font-bold text-slate-900 text-lg">Zahtjev je zaprimljen!</h5>
+                <h5 className="font-bold text-slate-900 text-lg">Zahtjev je zaprimljen</h5>
                 <p className="text-xs text-slate-600 max-w-xs mx-auto">
-                  Naš licencirani agent će vas kontaktirati na broj <strong>{callbackPhone}</strong> unutar 15 minuta.
+                  Naš licencirani zastupnik kontaktirat će vas na broj <strong>{callbackPhone}</strong> unutar jednog radnog dana.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleCallbackSubmit} className="space-y-3 pt-2">
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 tabular-nums">
                   Odabrani proizvod: <strong>{productName}</strong> ({formatEuro(finalMonthly)}/mj.)
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Vaše ime i prezime</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Ime i prezime *</label>
                   <input
                     type="text"
                     required
                     placeholder="npr. Ivan Horvat"
                     value={callbackName}
                     onChange={(e) => setCallbackName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-blue-600 min-h-[44px]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-[#0F2942] min-h-[44px]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Broj mobitela</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Broj mobitela *</label>
                   <input
                     type="tel"
                     required
                     placeholder="npr. 091 234 5678"
                     value={callbackPhone}
                     onChange={(e) => setCallbackPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-blue-600 min-h-[44px]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-[#0F2942] min-h-[44px]"
                   />
                 </div>
 
@@ -394,13 +493,13 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                     Odustani
                   </Button>
                   <Button
-                    variant="emerald"
+                    variant="primary"
                     size="sm"
                     type="submit"
                     disabled={isSubmittingCallback}
-                    className="w-2/3 font-bold"
+                    className="w-2/3 font-semibold"
                   >
-                    {isSubmittingCallback ? 'Slanje...' : 'Potvrdi poziv u 15m'}
+                    {isSubmittingCallback ? 'Slanje...' : 'Pošalji zahtjev za poziv'}
                   </Button>
                 </div>
               </form>
@@ -409,82 +508,107 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
         </div>
       )}
 
-      {/* MODAL 2: Digital Payment & Online Bind Checkout */}
+      {/* MODAL 2: Offer & Policy Request Checkout */}
       {isCheckoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 text-left space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 text-left space-y-4 my-auto">
             <div className="flex items-start justify-between">
               <div>
-                <h4 className="font-bold text-slate-900 text-lg">Sigurno online ugovaranje police</h4>
-                <p className="text-xs text-slate-500 font-mono">
-                  Iznos za naplatu: <strong>{formatEuro(finalAnnual)}</strong> (ili 12x {formatEuro(finalMonthly)})
+                <h4 className="font-bold text-slate-900 text-lg">Zahtjev za izradu police</h4>
+                <p className="text-xs text-slate-500 tabular-nums">
+                  Okvirni iznos: <strong>{formatEuro(finalAnnual)}</strong> godišnje (ili 12x {formatEuro(finalMonthly)})
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setIsCheckoutModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 font-bold text-lg"
+                className="text-slate-400 hover:text-slate-700 p-1 font-bold text-lg"
+                aria-label="Zatvori"
               >
                 ✕
               </button>
             </div>
 
             {checkoutComplete ? (
-              <div className="py-8 text-center space-y-3">
-                <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+              <div className="py-6 text-center space-y-4">
+                <div className="w-14 h-14 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-full flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h5 className="font-bold text-slate-900 text-lg">Polica je uspješno ugovorena!</h5>
-                <p className="text-xs text-slate-600 max-w-sm mx-auto">
-                  Potvrda police i IPID obrazac poslani su na vašu e-mail adresu. Polica stupa na snagu u ugovorenom terminu.
+                <h5 className="font-bold text-slate-900 text-lg">Zahtjev je uspješno zaprimljen</h5>
+                <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                  Ovlašteni zastupnik pripremit će službenu ponudu, IPID obrazac i uplatnicu prema vašem izračunu te ih dostaviti na vašu e-mail adresu.
                 </p>
+                {savedReference && (
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                    <span className="text-slate-500 block">Referentni broj zahtjeva:</span>
+                    <span className="font-mono font-bold text-[#0F2942]">{savedReference}</span>
+                  </div>
+                )}
                 <div className="pt-2">
-                  <Button variant="emerald" onClick={() => setIsCheckoutModalOpen(false)}>
+                  <Button variant="primary" onClick={() => setIsCheckoutModalOpen(false)}>
                     U redu, zatvori
                   </Button>
                 </div>
               </div>
             ) : (
-              <div className="space-y-4">
+              <form onSubmit={handleCheckoutSubmit} className="space-y-4">
+                {checkoutError && (
+                  <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+                    {checkoutError}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Ime i prezime *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="npr. Ana Horvat"
+                      value={checkoutName}
+                      onChange={(e) => setCheckoutName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-[#0F2942]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">Telefon *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="npr. 091 234 5678"
+                      value={checkoutPhone}
+                      onChange={(e) => setCheckoutPhone(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-[#0F2942]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">E-mail adresa za ponudu i IPID *</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="ana.horvat@domena.hr"
+                    value={checkoutEmail}
+                    onChange={(e) => setCheckoutEmail(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-[#0F2942]"
+                  />
+                </div>
+
                 <div className="space-y-2">
-                  <span className="text-xs font-semibold text-slate-700 block">Odaberite način plaćanja:</span>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                  <span className="text-xs font-semibold text-slate-700 block">Preferirani način plaćanja:</span>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
                     <button
                       type="button"
                       onClick={() => setSelectedPaymentRail('card')}
                       className={`p-3 rounded-xl border text-left flex items-center justify-between ${
                         selectedPaymentRail === 'card'
-                          ? 'border-blue-600 bg-blue-50 text-blue-900 font-bold'
-                          : 'border-slate-200 hover:bg-slate-50'
+                          ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold'
+                          : 'border-slate-200 hover:bg-slate-50 text-slate-700'
                       }`}
                     >
-                      <span>Kartice (1-12 rata)</span>
-                      <CreditCard className="w-4 h-4 text-blue-600" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPaymentRail('keks')}
-                      className={`p-3 rounded-xl border text-left flex items-center justify-between ${
-                        selectedPaymentRail === 'keks'
-                          ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold'
-                          : 'border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      <span>KEKS Pay</span>
-                      <span className="text-[10px] font-bold text-emerald-600">BRZO</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPaymentRail('aircash')}
-                      className={`p-3 rounded-xl border text-left flex items-center justify-between ${
-                        selectedPaymentRail === 'aircash'
-                          ? 'border-rose-600 bg-rose-50 text-rose-900 font-bold'
-                          : 'border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      <span>Aircash novčanik</span>
-                      <span className="text-[10px] font-bold text-rose-600">1-KLIK</span>
+                      <span>Kartice (1–12 rata)</span>
+                      <CreditCard className="w-4 h-4 text-[#0F2942]" />
                     </button>
 
                     <button
@@ -492,43 +616,73 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                       onClick={() => setSelectedPaymentRail('hub3a')}
                       className={`p-3 rounded-xl border text-left flex items-center justify-between ${
                         selectedPaymentRail === 'hub3a'
-                          ? 'border-slate-800 bg-slate-100 text-slate-900 font-bold'
-                          : 'border-slate-200 hover:bg-slate-50'
+                          ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold'
+                          : 'border-slate-200 hover:bg-slate-50 text-slate-700'
                       }`}
                     >
-                      <span>2D Barkod HUB 3A</span>
-                      <span className="text-[10px] text-slate-600">M-banking</span>
+                      <span>2D barkod (HUB 3A)</span>
+                      <span className="text-[11px] font-medium text-slate-500">m-Banking</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPaymentRail('keks')}
+                      className={`p-3 rounded-xl border text-left flex items-center justify-between ${
+                        selectedPaymentRail === 'keks'
+                          ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold'
+                          : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <span>KEKS Pay</span>
+                      <span className="text-[11px] font-medium text-slate-500">Mobilno</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPaymentRail('sepa')}
+                      className={`p-3 rounded-xl border text-left flex items-center justify-between ${
+                        selectedPaymentRail === 'sepa'
+                          ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold'
+                          : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <span>Virman / SEPA</span>
+                      <span className="text-[11px] font-medium text-slate-500">IBAN nalog</span>
                     </button>
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1 text-slate-600">
-                  <p className="flex items-center gap-1 text-slate-900 font-bold">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    Sigurna transakcija & HANFA zaštita potrošača
+                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1 text-slate-600">
+                  <p className="flex items-center gap-1.5 text-slate-900 font-semibold">
+                    <ShieldCheck className="w-4 h-4 text-[#0F2942]" />
+                    Obrada prema IDD i GDPR standardima
                   </p>
-                  <p className="text-[11px] text-slate-500">
-                    Polica ima izravnu pravnu snagu. Preuzimanje digitalnog certifikata i Zelene karte omogućeno je odmah po autorizaciji.
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    Prije konačnog sklapanja ugovora dobit ćete standardizirani IPID dokument i konačni izračun police na potvrdu.
                   </p>
                 </div>
 
                 <div className="flex gap-3 pt-2">
-                  <Button variant="ghost" size="sm" onClick={() => setIsCheckoutModalOpen(false)} className="w-1/3">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsCheckoutModalOpen(false)}
+                    className="w-1/3"
+                  >
                     Odustani
                   </Button>
                   <Button
-                    variant="emerald"
+                    type="submit"
+                    variant="primary"
                     size="sm"
-                    onClick={() => {
-                      setCheckoutComplete(true);
-                      if (onCompleteOnlineBind) onCompleteOnlineBind();
-                    }}
-                    className="w-2/3 font-bold text-sm"
+                    disabled={isSubmittingCheckout}
+                    className="w-2/3 font-semibold text-sm"
                   >
-                    Dovrši i plati {formatEuro(finalAnnual)}
+                    {isSubmittingCheckout ? 'Slanje zahtjeva...' : `Pošalji zahtjev (${formatEuro(finalAnnual)})`}
                   </Button>
                 </div>
-              </div>
+              </form>
             )}
           </div>
         </div>

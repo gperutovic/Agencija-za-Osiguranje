@@ -1,4 +1,4 @@
-// Domain types for Croatian InsurTech Platform
+// Domain types for Agencija Život Insurance Platform
 
 export type InsuranceCategory = 'auto' | 'property' | 'health' | 'travel' | 'business';
 

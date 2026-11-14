@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plane, Compass, ShieldCheck, ArrowRight, ArrowLeft, Users, Calendar, Activity } from 'lucide-react';
+import { Plane, ArrowRight, ArrowLeft } from 'lucide-react';
 import { calculateTravelPremium, formatEuro } from '../../lib/calculations';
 import { Slider } from '../ui/Slider';
 import { Button } from '../ui/Button';
@@ -32,16 +32,16 @@ export const TravelQuoteWizard: React.FC = () => {
       {step === 1 ? (
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
-            <h3 className="text-xl font-black text-slate-900">Putno Zdravstveno Osiguranje za Inozemstvo</h3>
-            <p className="text-xs text-slate-500 font-mono mt-0.5">
-              Pokriće hitnih medicinskih troškova, bolničkog liječenja i repatrijacije do 100.000 €.
+            <h3 className="text-xl font-bold text-slate-900">Putno zdravstveno osiguranje za inozemstvo</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Pokriće hitnih medicinskih troškova, bolničkog liječenja i asistencije u inozemstvu do 100.000 €.
             </p>
           </div>
 
           {/* Destination Selector */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-slate-700">Područje putovanja</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { id: 'europe' as const, label: 'Europa i Mediteran', desc: 'Pokriće do 30.000 €' },
                 { id: 'world' as const, label: 'Cijeli Svijet', desc: 'Pokriće do 50.000 €' },
@@ -53,12 +53,12 @@ export const TravelQuoteWizard: React.FC = () => {
                   onClick={() => setDestination(d.id)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     destination === d.id
-                      ? 'border-amber-600 bg-amber-50/70 text-amber-950 font-bold shadow-sm'
-                      : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
+                      ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold ring-1 ring-[#0F2942]'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                   }`}
                 >
-                  <p className="text-xs">{d.label}</p>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">{d.desc}</p>
+                  <p className="text-xs font-semibold">{d.label}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5 tabular-nums">{d.desc}</p>
                 </button>
               ))}
             </div>
@@ -95,11 +95,11 @@ export const TravelQuoteWizard: React.FC = () => {
                     type="checkbox"
                     checked={includeSports}
                     onChange={(e) => setIncludeSports(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-amber-600 focus:ring-0"
+                    className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900 block">Skijanje i sport</span>
-                    <span className="text-[10px] text-slate-500 font-mono">Rekreativni zimski sportovi</span>
+                    <span className="text-[11px] text-slate-500">Rekreativni zimski sportovi</span>
                   </div>
                 </label>
 
@@ -108,11 +108,11 @@ export const TravelQuoteWizard: React.FC = () => {
                     type="checkbox"
                     checked={includeBaggage}
                     onChange={(e) => setIncludeBaggage(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-amber-600 focus:ring-0"
+                    className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900 block">Gubitak prtljage</span>
-                    <span className="text-[10px] text-slate-500 font-mono">Krađa i kašnjenje torbe</span>
+                    <span className="text-[11px] text-slate-500">Krađa i kašnjenje torbe</span>
                   </div>
                 </label>
 
@@ -121,11 +121,11 @@ export const TravelQuoteWizard: React.FC = () => {
                     type="checkbox"
                     checked={includeCancellation}
                     onChange={(e) => setIncludeCancellation(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded text-amber-600 focus:ring-0"
+                    className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-900 block">Otkaz putovanja</span>
-                    <span className="text-[10px] text-slate-500 font-mono">Povrat troškova u slučaju bolesti</span>
+                    <span className="text-[11px] text-slate-500">Povrat troškova u slučaju bolesti</span>
                   </div>
                 </label>
               </div>
@@ -133,43 +133,43 @@ export const TravelQuoteWizard: React.FC = () => {
           </div>
 
           {/* Real-time Summary Card */}
-          <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-[#0F2942]/5 border border-[#0F2942]/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#0F2942] text-white flex items-center justify-center shrink-0">
                 <Plane className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">
+                <p className="text-xs font-bold text-slate-900 tabular-nums">
                   {days} dana &bull; {numberOfPersons} {numberOfPersons === 1 ? 'osoba' : 'osobe'} &bull; Limit: {formatEuro(estimate.medicalLimit)}
                 </p>
-                <p className="text-[11px] text-slate-600 font-mono">
-                  Ukupno za sve putnike: <strong>{formatEuro(estimate.totalPremium)}</strong> ({formatEuro(estimate.perPersonCost)} po osobi)
+                <p className="text-xs text-slate-600 tabular-nums">
+                  Ukupno za sve putnike: <strong className="text-slate-900">{formatEuro(estimate.totalPremium)}</strong> ({formatEuro(estimate.perPersonCost)} po osobi)
                 </p>
               </div>
             </div>
 
             <Button
-              variant="secondary"
+              variant="primary"
               size="sm"
               onClick={() => setStep(2)}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold text-xs"
+              className="font-semibold text-xs shrink-0"
             >
-              Ugovori policu
+              Nastavi na ponudu
             </Button>
           </div>
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200">
             <div>
-              <h3 className="text-xl font-black text-slate-900">Usporedba putnog osiguranja</h3>
-              <p className="text-xs text-slate-500 font-mono">
-                {days} dana &bull; {destination.toUpperCase()}
+              <h3 className="text-xl font-bold text-slate-900">Usporedba putnog osiguranja</h3>
+              <p className="text-xs text-slate-500 tabular-nums">
+                {days} dana &bull; {destination === 'europe' ? 'Europa' : destination === 'world' ? 'Svijet' : 'SAD/Kanada/Japan'}
               </p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setStep(1)}
               leftIcon={<ArrowLeft className="w-4 h-4" />}
@@ -182,7 +182,7 @@ export const TravelQuoteWizard: React.FC = () => {
             baseAnnualPrice={estimate.totalPremium}
             productName={`Putno Zdravstveno Osiguranje (${days} dana - ${numberOfPersons} putnika)`}
             category="travel"
-            inputsSummary={{ destination, days, numberOfPersons, includeSports, includeBaggage }}
+            inputsSummary={{ destination, days, numberOfPersons, includeSports, includeBaggage, includeCancellation }}
           />
         </div>
       )}

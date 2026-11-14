@@ -2,7 +2,7 @@
   "brand": {
     "name": "Agencija Život",
     "legalName": "ŽIVOT Ltd. for Insurance Agency Services",
-    "tagline": "Leading Digital Insurance Agency & Financial Protection",
+    "tagline": "Authorized Insurance Agency & Advisory",
     "description": "Authorized insurance agency partner of Generali osiguranje d.d. under HANFA regulatory supervision. Providing life, property, auto, and private health insurance.",
     "address": "Junija Palmotića 76, 10000 Zagreb, Croatia",
     "oib": "14329077049",
@@ -19,23 +19,23 @@
     "about": "About Us",
     "contact": "Contact",
     "portal": "Client Portal",
-    "admin": "Broker CRM",
+    "admin": "Agency CRM",
     "login": "Sign In",
     "register": "Register",
     "logout": "Sign Out"
   },
   "hero": {
-    "badge": "Official Generali Partner &bull; HANFA License",
-    "title": "Smart insurance built for real life.",
-    "subtitle": "Combining world-class insurtech innovation with the heritage of Generali. Instant actuarial calculations, digital claims filing, and dedicated personal advisory in Zagreb.",
+    "badge": "Official Generali Partner • HANFA Supervised",
+    "title": "Reliable insurance built for real life.",
+    "subtitle": "Indicative premium calculations, structured claims assistance, and personal advisory in Zagreb backed by Generali osiguranje d.d.",
     "ctaQuote": "Calculate Premium Online",
     "ctaClaims": "File a Claim (FNOL)",
     "ctaPortal": "Moj Život Portal",
     "stats": {
-      "activePolicies": "12,400+",
-      "activePoliciesLabel": "Active Policies",
-      "payoutRatio": "99.4%",
-      "payoutRatioLabel": "Claims Settlement Rate",
+      "activePolicies": "24 Hours",
+      "activePoliciesLabel": "Inquiry Response",
+      "payoutRatio": "Direct Advisory",
+      "payoutRatioLabel": "Licensed Support",
       "speed": "24 Hours",
       "speedLabel": "Average First Review",
       "satisfaction": "4.9 / 5",
@@ -77,7 +77,7 @@
       "usage": "Vehicle Usage",
       "private": "Private / Personal",
       "commercial": "Business / Commercial",
-      "addons": "Riders and Optional Coverages",
+      "addons": "Optional Coverages",
       "kasko": "Full Comprehensive Kasko",
       "assistance": "24/7 Roadside Assistance (EU)",
       "glass": "Zero-deductible Glass Breakage",
@@ -92,8 +92,8 @@
       "holiday": "Holiday Home / Villa",
       "constructionYear": "Construction Year",
       "contents": "Household Contents Cover",
-      "earthquake": "Earthquake Peril Rider",
-      "flood": "Torrential Flood & Water Rider"
+      "earthquake": "Earthquake Peril Coverage",
+      "flood": "Flood & Water Damage Coverage"
     },
     "life": {
       "title": "Life & Endowment Calculator",
@@ -150,7 +150,7 @@
     "appointmentModal": "Appointment Booking (Zagreb Office / Video / Phone)"
   },
   "admin": {
-    "title": "Agency Back-Office & Broker CRM",
+    "title": "Agency Back-Office & CRM",
     "leads": "Incoming Prospect Leads & Inquiries",
     "kanban": "Sales Pipeline (Kanban)",
     "claimsDesk": "Claims Inspection & Investigator Desk",

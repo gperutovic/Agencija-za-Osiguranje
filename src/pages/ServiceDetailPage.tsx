@@ -7,6 +7,7 @@ import {
   Activity,
   CheckCircle2,
   Shield,
+  ShieldCheck,
   FileText,
   AlertCircle,
   ArrowLeft,
@@ -64,7 +65,7 @@ const SERVICES_DATA: Record<string, ServiceDetailData> = {
   },
   property: {
     title: 'Osiguranje Doma, Stana & Zaštita od Potresa',
-    subtitle: 'Mir i sigurnost za vaše obiteljsko gnijezdo i cjelokupnu imovinu',
+    subtitle: 'Cjelovita zaštita za vaš dom i cjelokupnu imovinu',
     icon: Home,
     description:
       'Polica osiguranja imovine Agencije Život i Generali osiguranja pruža cjelovito jamstvo obnove doma. Uključuje građevinski dio, zidne i podne obloge, ugradbenu opremu te sve pokretnine i namještaj u kućanstvu.',
@@ -97,7 +98,7 @@ const SERVICES_DATA: Record<string, ServiceDetailData> = {
     subtitle: 'Financijski štit za obitelj i dugoročna kapitalizirana štednja',
     icon: Heart,
     description:
-      'Program ŽIVOT+ spaja osigurateljnu zaštitu obitelji u nepredviđenim situacijama s mogućnošću sigurne štednje za mirovinu ili školovanje djece. Polica je idealan instrument za miran san i osiguranje kredita.',
+      'Program ŽIVOT+ spaja osigurateljnu zaštitu obitelji s dugoročnom štednjom te služi i kao pouzdan instrument osiguranja kredita.',
     coverages: [
       {
         name: 'Osigurana svota za doživljenje',
@@ -124,18 +125,18 @@ const SERVICES_DATA: Record<string, ServiceDetailData> = {
   },
   health: {
     title: 'Dodatno & Dopunsko Zdravstveno Osiguranje',
-    subtitle: 'Prioritetni pristup vrhunskoj medicinskoj skrbi bez listi čekanja',
+    subtitle: 'Brži pristup specijalističkim pregledima i dijagnostici bez čekanja',
     icon: Activity,
     description:
-      'Nemojte čekati mjesece na pregled. Polica dodatnog zdravstvenog osiguranja omogućuje vam termine unutar nekoliko dana u preko 300 renomiranih privatnih poliklinika diljem Hrvatske.',
+      'Polica dodatnog zdravstvenog osiguranja omogućuje vam zakazivanje termina unutar nekoliko dana u mreži privatnih poliklinika diljem Hrvatske.',
     coverages: [
       {
         name: 'Specijalistički pregledi',
         desc: 'Kardiolog, dermatolog, neurolog, oftalmolog, ortoped, ginekolog, urolog i svi ostali specijalisti bez uputnice.',
       },
       {
-        name: 'Moderna dijagnostika (MR, CT, UZV)',
-        desc: 'Uključeni najsuvremeniji dijagnostički postupci, ultrazvuk srca, mamografija, endoskopija i laboratorijske pretrage krvi.',
+        name: 'Specijalistička dijagnostika (MR, CT, UZV)',
+        desc: 'Uključeni dijagnostički postupci, ultrazvuk srca, mamografija, endoskopija i laboratorijske pretrage krvi.',
       },
       {
         name: 'Godišnji sistematski pregled',
@@ -155,7 +156,7 @@ const SERVICES_DATA: Record<string, ServiceDetailData> = {
 };
 
 export const ServiceDetailPage: React.FC = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
+  const { slug: serviceId } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
   const service = serviceId ? SERVICES_DATA[serviceId] : null;
@@ -163,14 +164,14 @@ export const ServiceDetailPage: React.FC = () => {
   if (!service) {
     return (
       <div className="max-w-xl mx-auto py-24 text-center px-4">
-        <AlertCircle className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+        <AlertCircle className="w-14 h-14 text-slate-400 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-slate-900 mb-2">Program osiguranja nije pronađen</h2>
         <p className="text-sm text-slate-600 mb-6">
           Odabrana stranica ne postoji ili je premještena.
         </p>
-        <Link to="/services">
-          <Button variant="primary">Povratak na sve programe</Button>
-        </Link>
+        <Button variant="primary" onClick={() => navigate('/services')}>
+          Povratak na sve programe
+        </Button>
       </div>
     );
   }
@@ -193,87 +194,87 @@ export const ServiceDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 pb-24 text-slate-100">
+    <div className="bg-slate-50 min-h-screen pb-24 text-slate-900">
       {/* Header Banner */}
-      <section className="relative overflow-hidden pt-12 pb-14">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/10 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 relative z-10">
+      <section className="bg-white border-b border-slate-200 pt-10 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
           <Link
             to="/services"
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#ff7b1a] hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#0F2942] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Svi programi osiguranja
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-[#ff7b1a] flex items-center justify-center shadow-lg">
+            <div className="w-14 h-14 rounded-2xl bg-[#0F2942]/5 border border-[#0F2942]/15 text-[#0F2942] flex items-center justify-center shrink-0">
               <Icon className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">{service.title}</h1>
-              <p className="text-slate-400 text-sm mt-1 font-light">{service.subtitle}</p>
+              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">
+                {service.title}
+              </h1>
+              <p className="text-slate-600 text-sm sm:text-base mt-1">{service.subtitle}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Grid: Details + Embedded Calculator */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Left Column: Scope, Riders, IPID */}
-          <div className="lg:col-span-6 space-y-8">
-            <div className="p-6 sm:p-8 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl space-y-6 shadow-2xl">
+          <div className="lg:col-span-5 space-y-6">
+            <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-2xl space-y-6 shadow-sm">
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">Opis i svrha pokrića</h3>
-                <p className="text-sm text-slate-300 leading-relaxed font-light">{service.description}</p>
+                <h2 className="text-lg font-bold text-slate-900 mb-2">Opis i svrha pokrića</h2>
+                <p className="text-sm text-slate-600 leading-relaxed">{service.description}</p>
               </div>
 
               {/* Coverages */}
-              <div className="space-y-4 pt-4 border-t border-white/[0.08]">
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#ff7b1a]">
+              <div className="space-y-3.5 pt-5 border-t border-slate-100">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#0F2942]">
                   Temeljna pokrića police
-                </h4>
-                <div className="space-y-3">
+                </h3>
+                <div className="space-y-2.5">
                   {service.coverages.map((cov, idx) => (
-                    <div key={idx} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                      <h5 className="text-sm font-bold text-white flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                        {cov.name}
-                      </h5>
-                      <p className="text-xs text-slate-400 mt-1 pl-6 leading-relaxed">{cov.desc}</p>
+                    <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                      <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>{cov.name}</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 mt-1 pl-6 leading-relaxed">{cov.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Riders */}
-              <div className="space-y-4 pt-4 border-t border-white/[0.08]">
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
-                  Dopunska pokrića i opcije (Riders)
-                </h4>
-                <div className="space-y-3">
+              {/* Optional Coverages */}
+              <div className="space-y-3.5 pt-5 border-t border-slate-100">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  Dopunska pokrića i opcije
+                </h3>
+                <div className="space-y-2.5">
                   {service.riders.map((r, idx) => (
-                    <div key={idx} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                      <h5 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-[#ff7b1a]" />
-                        {r.name}
-                      </h5>
-                      <p className="text-xs text-slate-400 mt-1 pl-6 leading-relaxed">{r.desc}</p>
+                    <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                      <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-[#0F2942] shrink-0" />
+                        <span>{r.name}</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 mt-1 pl-6 leading-relaxed">{r.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* IPID Notice */}
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-400 space-y-1.5 font-mono">
-                <div className="flex items-center gap-2 font-bold text-slate-300">
-                  <FileText className="w-4 h-4 text-[#ff7b1a]" />
-                  <span>Regulatorne informacije (HANFA & IPID)</span>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+                <div className="flex items-center gap-2 font-semibold text-slate-900">
+                  <FileText className="w-4 h-4 text-[#0F2942] shrink-0" />
+                  <span>Predugovorne informacije (IDD &amp; IPID)</span>
                 </div>
                 {service.ipidNotes.map((note, idx) => (
-                  <p key={idx} className="text-[11px] leading-relaxed">
+                  <p key={idx} className="text-xs leading-relaxed text-slate-600">
                     &bull; {note}
                   </p>
                 ))}
@@ -281,30 +282,33 @@ export const ServiceDetailPage: React.FC = () => {
             </div>
 
             {/* Advisor Callout */}
-            <div className="p-6 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl text-white flex items-center justify-between gap-4 shadow-xl">
+            <div className="p-6 rounded-2xl bg-[#0F2942] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
               <div>
-                <h4 className="font-bold text-base text-white">Trebate pomoć ili ponudu za pravne osobe?</h4>
-                <p className="text-xs text-slate-400 mt-1 font-light">
-                  Naši licencirani agenti pripremit će individualni paket po mjeri.
+                <h3 className="font-bold text-base text-white">Trebate pomoć ili ponudu za pravne osobe?</h3>
+                <p className="text-xs text-slate-300 mt-1">
+                  Licencirani zastupnik pripremit će individualnu usporedbu pokrića.
                 </p>
               </div>
-              <Link to="/contact">
-                <Button variant="primary" size="sm" className="whitespace-nowrap font-mono font-bold">
-                  Kontaktiraj brokera
-                </Button>
-              </Link>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/contact')}
+                className="whitespace-nowrap shrink-0 bg-white text-[#0F2942] hover:bg-slate-100 border-transparent font-semibold"
+              >
+                Kontaktirajte zastupnika
+              </Button>
             </div>
           </div>
 
           {/* Right Column: Interactive Embedded Calculator */}
-          <div className="lg:col-span-6 sticky top-24">
+          <div className="lg:col-span-7 lg:sticky lg:top-24">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-white">
-                  Izračunajte vašu premiju uživo
-                </h3>
-                <span className="text-xs font-mono text-[#ff7b1a] bg-[#fb6504]/10 px-2.5 py-1 rounded-full font-bold border border-[#fb6504]/20">
-                  Aktuarski izračun
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-lg font-bold text-slate-900">
+                  Izračunajte okvirnu premiju
+                </h2>
+                <span className="text-xs font-semibold text-[#0F2942] bg-white px-3 py-1 rounded-full border border-slate-200">
+                  Informativni izračun
                 </span>
               </div>
               {renderCalculator()}

@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import {
   Search,
   Eye,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  Clock,
-  DollarSign,
-  FileText,
   Image as ImageIcon,
   ExternalLink,
 } from 'lucide-react';
 import { Claim } from '../../types/database';
-import { formatCurrency, formatDate, formatDateTime } from '../../utils/formatters';
+import { formatCurrency, formatDate } from '../../utils/formatters';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
@@ -87,14 +81,16 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
   };
 
   return (
-    <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] shadow-2xl backdrop-blur-xl overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden text-slate-900">
       {/* Top Filter Bar */}
-      <div className="p-5 border-b border-white/[0.08] bg-white/[0.01] flex flex-col sm:flex-row gap-3 items-center justify-between">
-        <div className="w-full sm:w-80">
+      <div className="p-5 border-b border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <Input
             placeholder="Pretraži broj spisa (ST-2026-XXXX) ili lokaciju..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9"
           />
         </div>
 
@@ -119,7 +115,7 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="bg-white/[0.02] border-b border-white/[0.08] text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
+            <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
               <th className="py-3.5 px-6">Broj spisa</th>
               <th className="py-3.5 px-6">Broj police</th>
               <th className="py-3.5 px-6">Datum i mjesto</th>
@@ -128,33 +124,33 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
               <th className="py-3.5 px-6 text-right">Radnja</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.05]">
+          <tbody className="divide-y divide-slate-100">
             {filteredClaims.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-500 font-mono">
+                <td colSpan={6} className="text-center py-12 text-slate-500 text-sm">
                   Nema odštetnih zahtjeva za prikaz.
                 </td>
               </tr>
             ) : (
               filteredClaims.map((claim) => (
-                <tr key={claim.id} className="hover:bg-white/[0.02] transition-colors">
-                  <td className="py-4 px-6 font-mono font-bold text-[#ff7b1a]">
+                <tr key={claim.id} className="hover:bg-slate-50/80 transition-colors">
+                  <td className="py-4 px-6 font-mono font-bold text-[#0F2942]">
                     {claim.claimNumber}
                   </td>
-                  <td className="py-4 px-6 font-mono text-xs text-slate-300">
+                  <td className="py-4 px-6 font-mono text-xs text-slate-600">
                     {claim.policyId}
                   </td>
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-semibold text-white block">
+                      <span className="font-semibold text-slate-900 block tabular-nums">
                         {formatDate(claim.incidentDate)}
                       </span>
-                      <span className="text-xs text-slate-400 line-clamp-1">
+                      <span className="text-xs text-slate-500 line-clamp-1">
                         {claim.incidentLocation}
                       </span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 font-mono font-semibold text-white">
+                  <td className="py-4 px-6 tabular-nums font-semibold text-slate-900">
                     {claim.estimatedDamage ? formatCurrency(claim.estimatedDamage) : 'Procjena u tijeku'}
                   </td>
                   <td className="py-4 px-6">
@@ -186,24 +182,24 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
           title={`Odštetni spis ${selectedClaim.claimNumber}`}
           size="lg"
         >
-          <div className="space-y-6">
+          <div className="space-y-6 text-slate-900">
             {/* Incident Summary */}
-            <div className="grid grid-cols-2 gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/[0.08] text-xs">
+            <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
               <div>
-                <span className="text-slate-400 block font-mono">Polica:</span>
-                <span className="font-mono font-bold text-white">{selectedClaim.policyId}</span>
+                <span className="text-slate-500 block font-medium">Polica:</span>
+                <span className="font-mono font-bold text-slate-900">{selectedClaim.policyId}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-mono">Datum nezgode:</span>
-                <span className="font-semibold text-white">{formatDate(selectedClaim.incidentDate)}</span>
+                <span className="text-slate-500 block font-medium">Datum nezgode:</span>
+                <span className="font-semibold text-slate-900 tabular-nums">{formatDate(selectedClaim.incidentDate)}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-mono">Mjesto:</span>
-                <span className="font-semibold text-white">{selectedClaim.incidentLocation}</span>
+                <span className="text-slate-500 block font-medium">Mjesto:</span>
+                <span className="font-semibold text-slate-900">{selectedClaim.incidentLocation}</span>
               </div>
               <div>
-                <span className="text-slate-400 block font-mono">Zahtijevani iznos:</span>
-                <span className="font-mono font-bold text-[#ff7b1a]">
+                <span className="text-slate-500 block font-medium">Zahtijevani iznos:</span>
+                <span className="tabular-nums font-bold text-[#0F2942]">
                   {selectedClaim.estimatedDamage ? formatCurrency(selectedClaim.estimatedDamage) : 'Nije specificirano'}
                 </span>
               </div>
@@ -211,10 +207,10 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
 
             {/* Description */}
             <div>
-              <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                 Opis događaja (Izjava osiguranika)
               </label>
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-sm text-slate-200 whitespace-pre-line leading-relaxed">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 whitespace-pre-line leading-relaxed">
                 {selectedClaim.description}
               </div>
             </div>
@@ -222,21 +218,21 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
             {/* Evidence files preview if any */}
             {selectedClaim.evidenceUrls && selectedClaim.evidenceUrls.length > 0 && (
               <div>
-                <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                   Priloženi dokazi i fotografije ({selectedClaim.evidenceUrls.length})
                 </label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {selectedClaim.evidenceUrls.map((url, idx) => (
                     <a
                       key={idx}
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 border border-white/[0.08] bg-white/[0.02] rounded-xl hover:border-[#fb6504] flex items-center gap-2 text-xs font-mono font-medium text-[#ff7b1a] transition-colors"
+                      className="p-3 border border-slate-200 bg-slate-50 rounded-xl hover:border-[#0F2942] flex items-center gap-2 text-xs font-medium text-[#0F2942] transition-colors"
                     >
-                      <ImageIcon className="w-4 h-4 text-[#fb6504] shrink-0" />
+                      <ImageIcon className="w-4 h-4 text-[#0F2942] shrink-0" />
                       <span className="truncate">Dokaz #{idx + 1}</span>
-                      <ExternalLink className="w-3 h-3 ml-auto" />
+                      <ExternalLink className="w-3 h-3 ml-auto shrink-0" />
                     </a>
                   ))}
                 </div>
@@ -244,9 +240,9 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
             )}
 
             {/* Status Change Selector */}
-            <div className="pt-4 border-t border-white/[0.08] space-y-4">
+            <div className="pt-4 border-t border-slate-200 space-y-4">
               <div>
-                <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                   Ažuriraj status odštetnog zahtjeva
                 </label>
                 <Select
@@ -264,21 +260,21 @@ export const ClaimsManagementTable: React.FC<ClaimsManagementTableProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-1">
-                  Interna bilješka likvidatora / obrazloženje
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  Interna bilješka obrade / obrazloženje
                 </label>
                 <textarea
                   rows={3}
                   value={brokerNotes}
                   onChange={(e) => setBrokerNotes(e.target.value)}
                   placeholder="Unesite zabilješke s uviđaja, broj zapisnika policije ili upute za računovodstvo..."
-                  className="w-full px-4 py-3 rounded-2xl border border-white/[0.1] text-sm text-white bg-[#06080c] placeholder:text-slate-600 shadow-inner focus:outline-none focus:border-[#fb6504] focus:ring-1 focus:ring-[#fb6504]"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-400 focus:outline-none focus:border-[#0F2942] focus:ring-1 focus:ring-[#0F2942]"
                 />
               </div>
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
               <Button
                 variant="outline"
                 onClick={() => setSelectedClaim(null)}

@@ -142,7 +142,7 @@ export function calculatePropertyPremium(params: PropertyQuoteParams): Calculate
   if (includeEarthquake) {
     const eqAmount = (areaM2 * 0.75) * (constructionYear < 1964 ? 1.6 : 1.15);
     addonsTotal += eqAmount;
-    breakdown.push({ title: 'Rizik potresa (seizmički rider)', amount: Math.round(eqAmount * 100) / 100 });
+    breakdown.push({ title: 'Rizik potresa', amount: Math.round(eqAmount * 100) / 100 });
   }
 
   // Flood rider

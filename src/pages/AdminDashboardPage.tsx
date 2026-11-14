@@ -1,39 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard,
   Users,
   Kanban,
   FileCheck,
   ShieldCheck,
   TrendingUp,
   AlertCircle,
-  FileText,
   DollarSign,
-  Plus,
   Bell,
+  MessageSquareWarning,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useQuotes } from '../hooks/useQuotes';
 import { useClaims } from '../hooks/useClaims';
 import { usePolicies } from '../hooks/usePolicies';
+import { firestoreService } from '../api/firestoreService';
 import { LeadPipelineKanban } from '../components/admin/LeadPipelineKanban';
 import { RenewalAlertEngine } from '../components/admin/RenewalAlertEngine';
 import { LeadsTable } from '../components/admin/LeadsTable';
-import { QuotePipelineBoard } from '../components/admin/QuotePipelineBoard';
 import { ClaimsManagementTable } from '../components/admin/ClaimsManagementTable';
 import { RegulatoryAuditView } from '../components/admin/RegulatoryAuditView';
-import { QuoteRequest, Claim } from '../types/database';
-import { formatCurrency } from '../utils/formatters';
-import { Card } from '../components/common/Card';
-import { Button } from '../components/common/Button';
+import { QuoteRequest, Claim, ComplaintRecord } from '../types/database';
+import { formatCurrency, formatDate } from '../utils/formatters';
+import { Badge } from '../components/common/Badge';
 
 export const AdminDashboardPage: React.FC = () => {
   const { user } = useAuth();
-  const { quotes, updateQuoteStatus, isLoading: quotesLoading } = useQuotes();
-  const { claims, updateClaimStatus, isLoading: claimsLoading } = useClaims();
+  const { quotes, updateQuoteStatus } = useQuotes();
+  const { claims, updateClaimStatus } = useClaims();
   const { policies } = usePolicies();
 
-  const [activeTab, setActiveTab] = useState<'kanban' | 'renewals' | 'leads' | 'claims' | 'audit'>('kanban');
+  const [complaints, setComplaints] = useState<ComplaintRecord[]>([]);
+  const [activeTab, setActiveTab] = useState<'kanban' | 'renewals' | 'leads' | 'claims' | 'complaints' | 'audit'>('kanban');
+
+  useEffect(() => {
+    firestoreService.getComplaints().then(setComplaints).catch(() => {});
+  }, []);
 
   // Aggregated KPIs
   const newLeadsCount = quotes.filter((q: QuoteRequest) => q.status === 'new').length;
@@ -47,77 +49,74 @@ export const AdminDashboardPage: React.FC = () => {
   );
 
   return (
-    <div className="space-y-8 pb-24 text-slate-100">
+    <div className="bg-slate-50 min-h-screen pb-24 text-slate-900">
       {/* Top Header Banner */}
-      <section className="relative overflow-hidden pt-12 pb-14">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#fb6504]/10 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+      <section className="bg-white border-b border-slate-200 pt-10 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono font-bold tracking-wider mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#fb6504] animate-pulse" />
-              <span className="text-white">Broker Back-Office & CRM</span>
-              <span className="text-slate-500">&bull;</span>
-              <span className="text-[#ff7b1a]">Agencija Život</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0F2942]/5 border border-[#0F2942]/15 text-xs font-semibold text-[#0F2942] mb-2">
+              <span>Agencijski CRM i back-office</span>
+              <span className="text-slate-400">&bull;</span>
+              <span>Agencija Život</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-              Upravljačka ploča brokera
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">
+              Upravljačka ploča zastupnika
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-light">
-              Pregled prodajnog lijevka, obrada dolaznih upita i rješavanje odštetnih spisa Generali osiguranja.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Pregled prodajnog lijevka, obrada dolaznih upita, obnova polica i praćenje odštetnih spisa.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-slate-400 bg-white/[0.02] px-3 py-1.5 rounded-2xl border border-white/[0.08]">
-              Prijavljeni broker:{' '}
-              <strong className="text-white font-bold">{user?.displayName || 'Marija Šarić'}</strong>
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="text-xs text-slate-600 bg-slate-100 px-3.5 py-2 rounded-xl border border-slate-200">
+              Prijavljeni zastupnik:{' '}
+              <strong className="text-slate-900 font-semibold">{user?.displayName || 'Marija Šarić'}</strong>
             </span>
           </div>
         </div>
       </section>
 
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
         {/* KPI Summary Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl flex items-center gap-4 group hover:border-cyan-500/40 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 flex items-center justify-center shrink-0">
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">Novi upiti</span>
-              <p className="text-2xl font-black text-white font-mono">{newLeadsCount}</p>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Novi upiti</span>
+              <p className="text-2xl font-bold text-slate-900 tabular-nums">{newLeadsCount}</p>
             </div>
           </div>
 
-          <div className="p-5 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl flex items-center gap-4 group hover:border-emerald-500/40 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">Ugovorene police</span>
-              <p className="text-2xl font-black text-emerald-400 font-mono">{boundQuotesCount}</p>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Ugovorene police</span>
+              <p className="text-2xl font-bold text-emerald-700 tabular-nums">{boundQuotesCount}</p>
             </div>
           </div>
 
-          <div className="p-5 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl flex items-center gap-4 group hover:border-rose-500/40 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">Štete u rješavanju</span>
-              <p className="text-2xl font-black text-rose-400 font-mono">{activeClaimsCount}</p>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Štete u rješavanju</span>
+              <p className="text-2xl font-bold text-rose-700 tabular-nums">{activeClaimsCount}</p>
             </div>
           </div>
 
-          <div className="p-5 bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl flex items-center gap-4 group hover:border-[#fb6504]/40 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#ff7b1a] flex items-center justify-center shrink-0">
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[#0F2942]/5 border border-[#0F2942]/15 text-[#0F2942] flex items-center justify-center shrink-0">
               <DollarSign className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">Vrijednost pipelinea</span>
-              <p className="text-xl font-bold text-[#ff7b1a] font-mono">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Vrijednost upita</span>
+              <p className="text-xl font-bold text-[#0F2942] tabular-nums">
                 {formatCurrency(totalPipelineVal)}
               </p>
             </div>
@@ -125,24 +124,26 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex flex-wrap gap-2 border-b border-white/[0.08] pb-3">
+        <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
           {[
-            { id: 'kanban', label: 'Kanban Prodajni Lijevak (Live CRM)', icon: Kanban },
-            { id: 'renewals', label: 'Automatizacija Obnova Polica', icon: Bell },
-            { id: 'leads', label: `Svi Upiti & Klijenti (${quotes.length})`, icon: Users },
-            { id: 'claims', label: `Likvidacija Šteta (${claims.length})`, icon: FileCheck },
-            { id: 'audit', label: 'HANFA & IDD Usklađenost', icon: ShieldCheck },
+            { id: 'kanban', label: 'Prodajni lijevak (CRM)', icon: Kanban },
+            { id: 'renewals', label: 'Obnove polica', icon: Bell },
+            { id: 'leads', label: `Svi upiti i klijenti (${quotes.length})`, icon: Users },
+            { id: 'claims', label: `Likvidacija šteta (${claims.length})`, icon: FileCheck },
+            { id: 'complaints', label: `Prigovori (${complaints.length})`, icon: MessageSquareWarning },
+            { id: 'audit', label: 'HANFA i IDD usklađenost', icon: ShieldCheck },
           ].map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-mono font-bold transition-all ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   isSelected
-                    ? 'bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] text-white shadow-[0_0_16px_rgba(251,101,4,0.35)]'
-                    : 'bg-[#0a0d16]/90 text-slate-400 hover:text-white border border-white/[0.08] hover:border-white/[0.16]'
+                    ? 'bg-[#0F2942] text-white shadow-sm'
+                    : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -172,7 +173,41 @@ export const AdminDashboardPage: React.FC = () => {
           <ClaimsManagementTable claims={claims} onUpdateStatus={updateClaimStatus} />
         )}
 
-        {/* TAB 5: REGULATORY AUDIT */}
+        {/* TAB 5: STATUTORY COMPLAINTS REGISTER */}
+        {activeTab === 'complaints' && (
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-slate-200 bg-slate-50/70">
+              <h3 className="text-base font-bold text-slate-900">Knjiga prigovora potrošača (čl. 401. Zakona o osiguranju)</h3>
+              <p className="text-xs text-slate-600 mt-0.5">Zakonski rok za pisani odgovor podnositelju iznosi 15 dana od primitka.</p>
+            </div>
+            {complaints.length === 0 ? (
+              <div className="py-12 text-center text-sm text-slate-500">
+                Trenutno nema zaprimljenih prigovora.
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100">
+                {complaints.map((c) => (
+                  <div key={c.id} className="p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono font-bold text-sm text-[#0F2942]">{c.protocolId || c.id}</span>
+                        <Badge variant={c.status === 'resolved' ? 'success' : 'warning'}>{c.status}</Badge>
+                        {c.policyNumber && (
+                          <span className="text-xs font-mono text-slate-500">Polica: {c.policyNumber}</span>
+                        )}
+                      </div>
+                      <p className="text-sm font-semibold text-slate-900">{c.fullName} &bull; {c.email}</p>
+                      <p className="text-xs text-slate-600 leading-relaxed max-w-3xl">{c.description}</p>
+                    </div>
+                    <span className="text-xs text-slate-500 tabular-nums shrink-0">{formatDate(c.createdAt)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 6: REGULATORY AUDIT */}
         {activeTab === 'audit' && (
           <RegulatoryAuditView />
         )}

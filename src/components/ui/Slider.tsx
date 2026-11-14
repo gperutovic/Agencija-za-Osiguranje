@@ -32,10 +32,10 @@ export const Slider: React.FC<SliderProps> = ({
     <div className={`w-full space-y-2 text-left ${className}`}>
       {label && (
         <div className="flex items-center justify-between">
-          <label htmlFor={id} className="block text-xs font-semibold text-slate-700 tracking-wide">
+          <label htmlFor={id} className="block text-xs font-semibold text-slate-700">
             {label}
           </label>
-          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200/60 text-xs font-bold text-blue-700 font-mono">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-xs font-bold text-[#0F2942] tabular-nums">
             {value} {unit}
           </span>
         </div>
@@ -50,22 +50,22 @@ export const Slider: React.FC<SliderProps> = ({
           step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          className="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-[#0F2942] focus:outline-none focus:ring-2 focus:ring-[#0F2942]/20 focus:ring-offset-2"
           style={{
-            background: `linear-gradient(to right, #2563EB 0%, #2563EB ${percentage}%, #E2E8F0 ${percentage}%, #E2E8F0 100%)`,
+            background: `linear-gradient(to right, #0F2942 0%, #0F2942 ${percentage}%, #E2E8F0 ${percentage}%, #E2E8F0 100%)`,
           }}
         />
       </div>
 
       {ticks && ticks.length > 0 ? (
-        <div className="flex justify-between text-[11px] font-medium text-slate-400 px-0.5 select-none">
+        <div className="flex justify-between text-[11px] font-medium text-slate-500 px-0.5 select-none">
           {ticks.map((t, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => onChange(t.value)}
-              className={`hover:text-blue-600 transition-colors ${
-                value === t.value ? 'text-blue-600 font-bold' : ''
+              className={`hover:text-[#0F2942] transition-colors ${
+                value === t.value ? 'text-[#0F2942] font-bold' : ''
               }`}
             >
               {t.label}
@@ -73,7 +73,7 @@ export const Slider: React.FC<SliderProps> = ({
           ))}
         </div>
       ) : (
-        <div className="flex justify-between text-[11px] font-medium text-slate-400 px-0.5">
+        <div className="flex justify-between text-[11px] font-medium text-slate-500 px-0.5 tabular-nums">
           <span>
             {min} {unit}
           </span>

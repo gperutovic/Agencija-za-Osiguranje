@@ -34,15 +34,15 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const icons = {
-    success: <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />,
-    error: <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />,
-    info: <Info className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />,
+    success: <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />,
+    error: <AlertCircle className="w-5 h-5 text-red-700 shrink-0 mt-0.5" />,
+    info: <Info className="w-5 h-5 text-[#0F2942] shrink-0 mt-0.5" />,
   };
 
   const borders = {
-    success: 'border-emerald-200 bg-emerald-50/90 text-emerald-950',
-    error: 'border-rose-200 bg-rose-50/90 text-rose-950',
-    info: 'border-brand-200 bg-brand-50/90 text-brand-950',
+    success: 'border-emerald-200 bg-white text-slate-900',
+    error: 'border-red-200 bg-white text-slate-900',
+    info: 'border-slate-200 bg-white text-slate-900',
   };
 
   return (
@@ -61,24 +61,25 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           <RadixToast.Root
             key={item.id}
             onOpenChange={(open) => !open && removeToast(item.id)}
-            className={`flex items-start gap-3 p-4 rounded-2xl border shadow-floating max-w-sm backdrop-blur-md animate-in slide-in-from-bottom-5 duration-200 pointer-events-auto ${
+            className={`flex items-start gap-3 p-4 rounded-xl border shadow-elevated max-w-sm animate-in slide-in-from-bottom-4 duration-200 pointer-events-auto ${
               borders[item.type]
             }`}
           >
             {icons[item.type]}
-            <div className="grow space-y-0.5">
+            <div className="grow space-y-0.5 text-left">
               {item.title && (
-                <RadixToast.Title className="text-xs font-bold leading-none">
+                <RadixToast.Title className="text-xs font-bold leading-none text-slate-900">
                   {item.title}
                 </RadixToast.Title>
               )}
-              <RadixToast.Description className="text-xs leading-snug">
+              <RadixToast.Description className="text-xs leading-snug text-slate-600">
                 {item.message}
               </RadixToast.Description>
             </div>
             <RadixToast.Close
               onClick={() => removeToast(item.id)}
-              className="rounded-lg p-1 text-slate-400 hover:text-slate-700 hover:bg-black/5"
+              className="rounded-lg p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+              aria-label="Zatvori obavijest"
             >
               <X className="w-4 h-4" />
             </RadixToast.Close>

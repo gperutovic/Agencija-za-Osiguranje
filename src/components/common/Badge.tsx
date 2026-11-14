@@ -29,48 +29,48 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 export const Badge: React.FC<BadgeProps> = ({
   children,
   className,
-  variant = 'brand',
+  variant = 'navy',
   size = 'sm',
   icon,
-  showDot = true,
+  showDot = false,
   ...props
 }) => {
   const variants: Record<string, string> = {
-    emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    success: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    amber: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    warning: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    rose: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
-    danger: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
-    brand: 'bg-orange-500/10 text-[#fb6504] border-orange-500/30',
-    orange: 'bg-orange-500/10 text-[#fb6504] border-orange-500/30',
-    primary: 'bg-orange-500/10 text-[#fb6504] border-orange-500/30',
-    info: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
-    teal: 'bg-teal-500/10 text-teal-400 border-teal-500/30',
-    navy: 'bg-slate-800 text-slate-200 border-slate-700',
-    slate: 'bg-white/[0.04] text-slate-300 border-white/[0.1]',
-    neutral: 'bg-white/[0.04] text-slate-300 border-white/[0.1]',
-    outline: 'bg-transparent text-slate-300 border-white/[0.15]',
+    emerald: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    success: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    teal: 'bg-teal-50 text-teal-800 border-teal-200',
+    amber: 'bg-amber-50 text-amber-800 border-amber-200',
+    warning: 'bg-amber-50 text-amber-800 border-amber-200',
+    rose: 'bg-red-50 text-red-800 border-red-200',
+    danger: 'bg-red-50 text-red-800 border-red-200',
+    brand: 'bg-slate-100 text-[#0F2942] border-slate-200',
+    primary: 'bg-slate-100 text-[#0F2942] border-slate-200',
+    orange: 'bg-amber-50 text-amber-800 border-amber-200',
+    info: 'bg-blue-50 text-blue-800 border-blue-200',
+    navy: 'bg-[#0F2942] text-white border-[#0F2942]',
+    slate: 'bg-slate-100 text-slate-700 border-slate-200',
+    neutral: 'bg-slate-100 text-slate-700 border-slate-200',
+    outline: 'bg-white text-slate-700 border-slate-300',
   };
 
   const sizes = {
-    sm: 'text-[10px] px-2.5 py-0.5 font-mono tracking-wider font-bold uppercase',
-    md: 'text-xs px-3 py-1 font-mono tracking-wider font-bold uppercase',
+    sm: 'text-[11px] px-2.5 py-0.5 font-semibold tracking-wide',
+    md: 'text-xs px-3 py-1 font-semibold',
   };
 
   return (
     <span
       className={twMerge(
         clsx(
-          'inline-flex items-center gap-1.5 rounded-full border leading-none transition-colors backdrop-blur-sm',
-          variants[variant] || variants.brand,
+          'inline-flex items-center gap-1.5 rounded-md border leading-tight transition-colors',
+          variants[variant] || variants.navy,
           sizes[size],
           className
         )
       )}
       {...props}
     >
-      {showDot && <span className="w-1.5 h-1.5 rounded-full bg-currentColor shrink-0 animate-pulse" />}
+      {showDot && <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0" />}
       {icon && <span className="shrink-0">{icon}</span>}
       {children}
     </span>

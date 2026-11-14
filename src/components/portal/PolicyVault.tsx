@@ -99,15 +99,15 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
   const getTypeIcon = (type: Policy['type']) => {
     switch (type) {
       case 'auto':
-        return <Car className="w-5 h-5 text-sky-400" />;
+        return <Car className="w-5 h-5 text-[#0F2942]" />;
       case 'property':
-        return <Home className="w-5 h-5 text-amber-400" />;
+        return <Home className="w-5 h-5 text-amber-700" />;
       case 'life':
-        return <Heart className="w-5 h-5 text-rose-400" />;
+        return <Heart className="w-5 h-5 text-rose-700" />;
       case 'health':
-        return <Activity className="w-5 h-5 text-emerald-400" />;
+        return <Activity className="w-5 h-5 text-emerald-700" />;
       default:
-        return <Shield className="w-5 h-5 text-[#ff7b1a]" />;
+        return <Shield className="w-5 h-5 text-[#0F2942]" />;
     }
   };
 
@@ -115,39 +115,39 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
     <div className="space-y-6">
       {/* Top Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#0F2942]/5 border border-[#0F2942]/15 text-[#0F2942] flex items-center justify-center shrink-0">
             <Shield className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Aktivne police
             </span>
-            <p className="text-2xl font-bold font-mono text-white">{activeCount}</p>
+            <p className="text-2xl font-bold tabular-nums text-slate-900">{activeCount}</p>
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Ističe u 30 dana
             </span>
-            <p className="text-2xl font-bold font-mono text-amber-400">{expiringCount}</p>
+            <p className="text-2xl font-bold tabular-nums text-amber-700">{expiringCount}</p>
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#fb6504]/10 border border-[#fb6504]/20 text-[#ff7b1a] flex items-center justify-center shrink-0">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
             <FileText className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Ukupna ugovorena premija
             </span>
-            <p className="text-xl font-bold font-mono text-white">
+            <p className="text-xl font-bold tabular-nums text-slate-900">
               {formatCurrency(totalAnnualPremium)}
             </p>
           </div>
@@ -155,7 +155,7 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-5 rounded-3xl bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl shadow-xl flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="w-full md:w-72">
           <Input
             placeholder="Pretraži police, broj, ugovaratelja..."
@@ -166,7 +166,7 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
 
         <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
           {/* Category tabs */}
-          <div className="flex items-center bg-white/[0.03] p-1 rounded-2xl border border-white/[0.06] text-xs">
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
             {[
               { id: 'all', label: 'Sve' },
               { id: 'auto', label: 'Auto' },
@@ -176,11 +176,12 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
             ].map((tab) => (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setTypeFilter(tab.id)}
-                className={`px-3 py-1.5 rounded-xl font-medium transition-colors ${
+                className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
                   typeFilter === tab.id
-                    ? 'bg-[#fb6504] text-white font-semibold'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[#0F2942] text-white font-semibold'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {tab.label}
@@ -192,31 +193,31 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-1.5 rounded-2xl bg-white/[0.04] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#fb6504]"
+            className="px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0F2942]"
           >
-            <option value="all" className="bg-[#0a0d16]">Svi statusi</option>
-            <option value="active" className="bg-[#0a0d16]">Aktivne</option>
-            <option value="expiring" className="bg-[#0a0d16]">Ističu uskoro</option>
-            <option value="expired" className="bg-[#0a0d16]">Istekle</option>
+            <option value="all">Svi statusi</option>
+            <option value="active">Aktivne</option>
+            <option value="expiring">Ističu uskoro</option>
+            <option value="expired">Istekle</option>
           </select>
         </div>
       </div>
 
       {/* Policies Grid */}
       {filteredPolicies.length === 0 ? (
-        <div className="p-12 text-center bg-[#0a0d16]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl shadow-xl">
-          <Shield className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="font-bold text-white text-lg">Nema polica koje odgovaraju odabiru</h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-6 font-mono">
-            Pokušajte prilagoditi kriterije pretrage ili ugovorite novu policu osiguranja.
+        <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl shadow-sm">
+          <Shield className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <h3 className="font-bold text-slate-900 text-lg">Nema polica koje odgovaraju odabiru</h3>
+          <p className="text-xs text-slate-500 max-w-md mx-auto mt-1 mb-6">
+            Pokušajte prilagoditi kriterije pretrage ili zatražite novu ponudu osiguranja.
           </p>
           <Button
             variant="primary"
-            onClick={() => navigate('/quote')}
-            className="font-mono text-xs"
+            onClick={() => navigate('/auto-osiguranje')}
+            className="text-xs"
           >
             <Plus className="w-4 h-4 mr-1.5" />
-            Pokreni usporedbu i ugovaranje
+            Usporedi ponude i ugovori policu
           </Button>
         </div>
       ) : (
@@ -229,31 +230,31 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
             return (
               <Card
                 key={policy.id}
-                className="p-6 transition-all hover:border-white/[0.2] border-white/[0.08] bg-[#0a0d16]/90 backdrop-blur-xl text-white shadow-2xl flex flex-col justify-between"
+                className="p-6 transition-all hover:border-slate-300 border-slate-200 bg-white text-slate-900 shadow-sm flex flex-col justify-between"
               >
                 <div>
                   {/* Top Bar */}
-                  <div className="flex items-start justify-between gap-4 pb-4 border-b border-white/[0.08]">
+                  <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+                      <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
                         {getTypeIcon(policy.type)}
                       </div>
                       <div>
-                        <h4 className="font-bold text-white text-base">
+                        <h4 className="font-bold text-slate-900 text-base">
                           {policy.type === 'auto'
                             ? 'Kasko & Obvezno AO'
                             : policy.type === 'property'
-                            ? 'Osiguranje Doma i Imovine'
+                            ? 'Osiguranje doma i imovine'
                             : policy.type === 'life'
-                            ? 'Mješovito Životno Osiguranje'
-                            : 'Dopunsko i Dodatno Zdravstveno'}
+                            ? 'Životno osiguranje'
+                            : 'Dopunsko i dodatno zdravstveno'}
                         </h4>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="font-mono text-xs text-[#ff7b1a] font-semibold tracking-wider">
+                          <span className="font-mono text-xs text-[#0F2942] font-semibold tracking-wider">
                             {policy.policyNumber}
                           </span>
-                          <span className="text-slate-500">&bull;</span>
-                          <span className="text-xs text-slate-300 font-medium">
+                          <span className="text-slate-300">&bull;</span>
+                          <span className="text-xs text-slate-600 font-medium">
                             {policy.insurer}
                           </span>
                         </div>
@@ -273,20 +274,21 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
 
                   {/* Expiration warning badge */}
                   {isExpiringSoon && (
-                    <div className="mt-4 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between text-xs text-amber-300 font-mono">
+                    <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs text-amber-900">
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
                         <span>
                           Ističe za <strong>{daysRemaining} dana</strong> ({formatDate(policy.endDate)})
                         </span>
                       </div>
                       {onRenewPolicy && (
                         <button
+                          type="button"
                           onClick={() => handleRenew(policy.id)}
                           disabled={renewingId === policy.id}
-                          className="font-bold text-[#ff7b1a] hover:underline whitespace-nowrap ml-2"
+                          className="font-semibold text-[#0F2942] hover:underline whitespace-nowrap ml-2"
                         >
-                          {renewingId === policy.id ? 'Obnavlja se...' : 'Obnovi uz popust'}
+                          {renewingId === policy.id ? 'Obnavlja se...' : 'Obnovi policu'}
                         </button>
                       )}
                     </div>
@@ -295,20 +297,20 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                   {/* Details Grid */}
                   <div className="grid grid-cols-2 gap-4 py-4 text-xs">
                     <div>
-                      <span className="text-slate-400 block mb-0.5">Ugovaratelj</span>
-                      <span className="font-semibold text-white truncate block">
+                      <span className="text-slate-500 block mb-0.5">Ugovaratelj</span>
+                      <span className="font-semibold text-slate-900 truncate block">
                         {policy.insuredName}
                       </span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block mb-0.5">Vrijedi do</span>
-                      <span className="font-mono font-semibold text-slate-200">
+                      <span className="text-slate-500 block mb-0.5">Vrijedi do</span>
+                      <span className="tabular-nums font-semibold text-slate-800">
                         {formatDate(policy.endDate)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block mb-0.5">Dinamika plaćanja</span>
-                      <span className="font-medium text-slate-300 capitalize">
+                      <span className="text-slate-500 block mb-0.5">Dinamika plaćanja</span>
+                      <span className="font-medium text-slate-700 capitalize">
                         {policy.paymentFrequency === 'monthly'
                           ? 'Mjesečno'
                           : policy.paymentFrequency === 'quarterly'
@@ -317,8 +319,8 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                       </span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block mb-0.5">Ugovorena premija</span>
-                      <span className="font-mono font-bold text-[#ff7b1a] text-sm">
+                      <span className="text-slate-500 block mb-0.5">Ugovorena premija</span>
+                      <span className="tabular-nums font-bold text-[#0F2942] text-sm">
                         {formatCurrency(policy.premiumAmount)}
                       </span>
                     </div>
@@ -326,17 +328,17 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                 </div>
 
                 {/* Actions Footer */}
-                <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2 mt-2">
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 mt-2">
                   <div className="flex flex-wrap items-center gap-1.5">
                     {/* Official PDF Certificate */}
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => generatePolicyCertificatePdf(policy)}
-                      className="flex items-center gap-1 text-[11px] text-slate-300 hover:text-white"
+                      className="flex items-center gap-1 text-[11px] text-slate-700"
                       title="Preuzmite službenu potvrdu police u PDF formatu"
                     >
-                      <Download className="w-3.5 h-3.5 text-[#fb6504]" />
+                      <Download className="w-3.5 h-3.5 text-[#0F2942]" />
                       Polica (PDF)
                     </Button>
 
@@ -346,7 +348,7 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                         variant="outline"
                         size="sm"
                         onClick={() => generateGreenCardPdf(policy)}
-                        className="flex items-center gap-1 text-[11px] text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10"
+                        className="flex items-center gap-1 text-[11px] text-emerald-800 border-emerald-200 hover:bg-emerald-50"
                         title="Zelena karta / Međunarodna karta osiguranja za inozemstvo"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -359,7 +361,7 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                       variant="ghost"
                       size="sm"
                       onClick={() => openEndorsement(policy)}
-                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white"
+                      className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-slate-900"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                       Izmjena
@@ -370,8 +372,8 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => navigate(`/claims?policyId=${policy.id}`)}
-                      className="flex items-center gap-1 text-[11px] text-rose-400 border-rose-500/20 hover:bg-rose-500/10"
+                      onClick={() => navigate(`/prijava-stete?policyId=${policy.id}`)}
+                      className="flex items-center gap-1 text-[11px] text-rose-700 border-rose-200 hover:bg-rose-50"
                     >
                       Prijavi štetu
                     </Button>
@@ -382,7 +384,7 @@ export const PolicyVault: React.FC<PolicyVaultProps> = ({ policies, onRenewPolic
                         size="sm"
                         onClick={() => handleRenew(policy.id)}
                         disabled={renewingId === policy.id}
-                        className="text-[11px] font-mono shadow-[0_0_12px_rgba(251,101,4,0.3)]"
+                        className="text-[11px]"
                       >
                         {renewingId === policy.id ? 'Obnavlja se...' : 'Obnovi'}
                       </Button>

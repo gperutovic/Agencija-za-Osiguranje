@@ -1,5 +1,5 @@
 /**
- * Službeni podaci o poslovanju, osiguravajućim partnerima, zakonskim ogradama i FAQ setovima
+ * Službeni podaci o poslovanju, partnerskim osigurateljima i FAQ setovima
  * za tržište osiguranja u Republici Hrvatskoj (Agencija Život - ŽIVOT d.o.o.).
  */
 
@@ -22,7 +22,7 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '12.4%',
     solvencyRatio: '215%',
     claimSpeedScore: '4.9/5',
-    highlight: 'Glavni strateški partner & Toyota VIP Kasko program s originalnim dijelovima',
+    highlight: 'Strateški partner i nositelj programa Toyota Centar Zagreb VIP Kasko',
     isPrimaryPartner: true,
   },
   {
@@ -32,7 +32,7 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '25.8%',
     solvencyRatio: '228%',
     claimSpeedScore: '4.8/5',
-    highlight: 'Najveća mreža procjene šteta i dugogodišnja domaća tradicija',
+    highlight: 'Najšira mreža procjene šteta i dugogodišnja tradicija na domaćem tržištu',
   },
   {
     id: 'allianz',
@@ -41,7 +41,7 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '13.1%',
     solvencyRatio: '240%',
     claimSpeedScore: '4.9/5',
-    highlight: 'Vrhunsko dopunsko zdravstveno osiguranje s B-listom i telemedicinom',
+    highlight: 'Dopunsko i dodatno zdravstveno osiguranje s pokrićem B-liste lijekova',
   },
   {
     id: 'wiener',
@@ -50,7 +50,7 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '9.6%',
     solvencyRatio: '202%',
     claimSpeedScore: '4.7/5',
-    highlight: 'Odlični paketi imovinskog osiguranja doma i potresa',
+    highlight: 'Paketi osiguranja stana, obiteljske kuće i zaštite od potresa',
   },
   {
     id: 'laqo',
@@ -59,7 +59,7 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: 'Digital',
     solvencyRatio: '228%',
     claimSpeedScore: '4.8/5',
-    highlight: 'Digitalno 100% ugovaranje putem mobilne aplikacije uz telematiku',
+    highlight: 'Online auto ugovaranje i digitalno vođenje polica',
   },
   {
     id: 'triglav',
@@ -68,7 +68,7 @@ export const CARRIER_PARTNERS: CarrierPartner[] = [
     marketShare: '5.2%',
     solvencyRatio: '210%',
     claimSpeedScore: '4.6/5',
-    highlight: 'Regionalna snaga i pouzdana asistencija na cestama',
+    highlight: 'Pouzdanost u asistenciji na cesti i programima za obiteljsku imovinu',
   },
 ];
 
@@ -88,7 +88,7 @@ export const AGENCY_DETAILS = {
   email: 'osiguranje@agencija-zivot.hr',
   claimsEmail: 'stete@agencija-zivot.hr',
   complaintsEmail: 'prigovori@agencija-zivot.hr',
-  workingHours: 'Pon – Pet: 08:00 – 18:00 h (Online 24/7)',
+  workingHours: 'Pon – Pet: 08:00 – 18:00 h',
   geoCoordinates: {
     latitude: 45.8082,
     longitude: 15.9835,
@@ -99,81 +99,76 @@ export const AGENCY_DETAILS = {
 export const PAYMENT_METHODS = [
   {
     id: 'corvus',
-    name: 'CorvusPay / WSPay',
-    description: 'Do 12 rata bez kamata (Visa, Mastercard, Maestro, Diners)',
+    name: 'CorvusPay / Kartice',
+    description: 'Kartično plaćanje do 12 rata bez kamata (Visa, Mastercard, Diners)',
+  },
+  {
+    id: 'hub3',
+    name: 'HUB 3A Uplatnica',
+    description: 'Standardni SEPA nalog i 2D barkod za mobilno bankarstvo',
   },
   {
     id: 'keks',
     name: 'KEKS Pay',
-    description: 'Trenutno plaćanje mobitelom u par sekundi',
-  },
-  {
-    id: 'aircash',
-    name: 'AirCash Marketplace',
-    description: 'Brza uplata bez unosa broja kartice',
-  },
-  {
-    id: 'hub3',
-    name: 'HUB 3A 2D Barkod',
-    description: 'Uplata skeniranjem barkoda u m-bankarstvu',
+    description: 'Brzo plaćanje putem mobilne aplikacije',
   },
 ];
 
 export const FAQ_DOPUNSKO = [
   {
-    question: 'Zašto je HZZO poskupio dopunsko na 15,00 € mjesečno od veljače 2026.?',
+    question: 'Zašto je cijena police HZZO dopunskog zdravstvenog osiguranja porasla na 15,00 € mjesečno?',
     answer:
-      'Sukladno odluci Upravnog vijeća HZZO-a, od 1. veljače 2026. cijena police dopunskog zdravstvenog osiguranja iznosi fiksnih 15,00 € mjesečno (180,00 € godišnje) za sve punoljetne osiguranike. Zbog tog rasta, privatna osiguranja (Allianz, Generali, Croatia) postala su znatno povoljnija za osiguranike u dobi od 18 do 50 godina, nudeći cijene već od 6,50 € mjesečno.',
+      'Prema važećoj tarifi od 1. veljače 2026., polica HZZO-a iznosi fiksnih 15,00 € mjesečno (180,00 € godišnje) za sve punoljetne osiguranike neovisno o dobi. Za mlađe i srednje dobne skupine (18–50 godina) privatni osiguratelji poput Allianza, Generali i Croatia osiguranja nude usporedive ili šire police od 6,50 € mjesečno.',
   },
   {
-    question: 'Koja je stvarna razlika između HZZO police i privatnog dopunskog osiguranja?',
+    question: 'Koja je razlika između HZZO police i privatnog dopunskog osiguranja?',
     answer:
-      'I HZZO i privatna polica u 100% iznosu pokrivaju sve zakonske participacije u javnom zdravstvu (bolnički dani, operacije, pregledi specijalista, recepti s osnovne A-liste). No, privatne police u pravilu uključuju i pokriće dopunske B-liste lijekova (nadoplata za originalne lijekove) te m-Doktor telemedicinu 24/7, dok HZZO polica to ne sadrži.',
+      'Obje vrste polica u potpunosti pokrivaju zakonske participacije u javnom zdravstvenom sustavu (specijalistički pregledi, bolničko liječenje, A-lista lijekova). Privatne police u pravilu dodatno obuhvaćaju i doplatu za lijekove s dopunske B-liste te uslugu telefonskog ili video liječničkog savjetovanja.',
   },
   {
-    question: 'Što je s osiguranicima starijima od 60 godina?',
+    question: 'Što savjetujete osiguranicima starijima od 60 godina?',
     answer:
-      'Prema našem etičkom aktuarskom savjetovanju, za osobe starije od 60 godina HZZO polica po solidarnoj cijeni od 15,00 €/mj. predstavlja financijski najpovoljniji izbor za osnovne participacije. Privatne police za tu dobnu skupinu preporučujemo isključivo ako klijent izričito traži pokriće B-liste lijekova i pristup privatnim poliklinikama.',
+      'Za osobe starije od 60 godina HZZO polica po jedinstvenoj cijeni od 15,00 € mjesečno u većini slučajeva ostaje najpovoljnija opcija za pokriće participacija. Privatnu policu za tu dobnu skupinu preporučujemo prvenstveno kada postoji izričita potreba za pokrićem lijekova s B-liste ili pregledima u privatnim poliklinikama.',
   },
   {
-    question: 'Postoji li karenca pri prijelazu s HZZO-a na privatnog osiguratelja?',
+    question: 'Postoji li rok čekanja (karenca) pri prelasku s HZZO-a na privatnog osiguratelja?',
     answer:
-      'Ako već imate aktivnu policu HZZO-a ili drugog osiguratelja i prelazite bez prekida unutar 30 dana, karenca se u potpunosti ukida (0 dana čekanja). Polica počinje vrijediti odmah od datuma isteka prethodne police.',
+      'Ako prijelaz obavljate bez prekida osiguranja (unutar 30 dana od isteka ili otkaza prethodne police), karenca se ukida i nova polica stupa na snagu odmah od datuma ugovaranja.',
   },
 ];
 
 export const FAQ_AUTO = [
   {
-    question: 'Kako se određuje cijena obveznog auto osiguranja (AO) u Hrvatskoj?',
+    question: 'Kako se izračunava premija obveznog auto osiguranja (AO)?',
     answer:
-      'Cijena se formira aktuarskom formulom na temelju snage motora (kW), registracijskog područja (npr. ZG zona ima veći rizični faktor od OS ili GS zone), povijesti vožnje i stečenog bonusa (od B0 s 0% do B10 s maksimalnih 50% popusta). Dodatni popusti ostvaruju se za obiteljski paket ili ugovaranje kaska.',
+      'Godišnja premija temelji se na snazi motora vozila (kW), registracijskom području, dobi vlasnika i stečenom bonus-malus stupnju (od 0% u B0 do 50% popusta u B10 razredu). Dodatne uštede ostvaruju se ugovaranjem obiteljskih paketa ili kombiniranjem s kasko policom.',
   },
   {
-    question: 'Mogu li prenijeti 50% bonusa na novo kupljeno vozilo ili drugog člana obitelji?',
+    question: 'Mogu li prenijeti 50% bonusa na drugo vozilo ili člana obitelji?',
     answer:
-      'Da. Prema hrvatskoj regulativi i praksi naših partnera, 50% bonusa prenosi se odmah temeljem kupoprodajnog ugovora ili police prethodnog vozila. Također, omogućujemo prijenos bonusa između bračnih drugova i s roditelja na djecu.',
+      'Da. Stečeni bonus od 50% može se prenijeti na novo kupljeno vozilo temeljem kupoprodajnog ugovora ili police prethodnog vozila, kao i između bračnih drugova te s roditelja na djecu uz odgovarajuću dokumentaciju.',
   },
   {
-    question: 'Što donosi ekskluzivni Toyota Centar Zagreb VIP Kasko program?',
+    question: 'Koje pogodnosti uključuje program Toyota Centar Zagreb VIP Kasko?',
     answer:
-      'Kao ovlašteni partner Toyota Centra Zagreb i Generali osiguranja, našim klijentima jamčimo popravak isključivo s originalnim OEM dijelovima u ovlaštenom servisu, zamjensko Toyota hibridno vozilo za vrijeme popravka, fiksnu franšizu bez skrivenih troškova i 50% popusta na osiguranje doma.',
+      'Vlasnicima vozila Toyota u suradnji s Generali osiguranjem i Toyota Centrom Zagreb osiguravamo popravak isključivo originalnim dijelovima u ovlaštenom servisu, zamjensko vozilo za vrijeme popravka i povoljnije uvjete franšize.',
   },
   {
-    question: 'Kada i kako preuzimam policu i Zelenu kartu?',
+    question: 'Kada dobivam policu i Zelenu kartu za tehnički pregled?',
     answer:
-      'Odmah po autorizaciji plaćanja, digitalna polica i međunarodna karta osiguranja (Zelena karta) generiraju se u PDF formatu s QR kodom i šalju na Vaš e-mail, te su trenutno dostupne u portalu "Moj Život". Polica je odmah vidljiva u bazi MUP-a za tehnički pregled.',
+      'Po potvrdi ponude i evidentiranoj uplati, elektronička polica i međunarodna karta osiguranja dostavljaju se putem e-pošte te su dostupne u vašem klijentskom portalu i odmah vidljive u evidenciji stanica za tehnički pregled.',
   },
 ];
 
 export const FAQ_PROPERTY = [
   {
-    question: 'Pokriva li osnovno osiguranje stana ili kuće potres?',
+    question: 'Je li potres automatski uključen u osnovno osiguranje stana ili kuće?',
     answer:
-      'Ne, rizik potresa (zemljotresa) je zasebno dopunsko pokriće. U našim paketima "ŽIVOT Dom" omogućujemo ugovaranje potresa bez franšize ili s minimalnom franšizom, pokrivajući građevinski dio i stvari kućanstva na novu nabavnu vrijednost.',
+      'Ne, rizik potresa ugovara se kao posebno dopunsko pokriće uz policu imovine. Preporučujemo ugovaranje na punu novu građevinsku vrijednost objekta kako bi u slučaju štete naknada pokrila stvarne troškove obnove.',
   },
   {
-    question: 'Što je franšiza kod osiguranja imovine i kako utječe na cijenu?',
+    question: 'Što znači franšiza i kada ju je smisleno odabrati?',
     answer:
-      'Franšiza je iznos učešća osiguranika u šteti. Ako odaberete franšizu od npr. 150 €, Vaša godišnja premija bit će do 20% niža. Ako odaberete pokriće bez franšize (0 €), osiguranje u cijelosti isplaćuje štetu od prvog eura.',
+      'Franšiza predstavlja ugovoreno sudjelovanje osiguranika u svakoj prijavljenoj šteti (primjerice 150 €). Odabir franšize snižava godišnju cijenu police do 20%, dok pokriće bez franšize (0 €) osigurava isplatu od prvog eura priznate štete.',
   },
 ];

@@ -24,29 +24,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Base styles: responsive touch targets (minimum 44px on mobile)
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none min-h-[44px] active:scale-[0.98]';
+      'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.99]';
 
     const variantStyles = {
       primary:
-        'bg-slate-900 hover:bg-slate-800 text-white shadow-sm hover:shadow-md focus:ring-slate-900 border border-slate-800',
+        'bg-[#0F2942] hover:bg-[#163A5F] text-white shadow-sm focus:ring-[#0F2942] border border-[#0F2942]',
       emerald:
-        'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow-emerald-600/25 hover:shadow-md focus:ring-emerald-500 border border-emerald-600 font-semibold',
+        'bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm focus:ring-emerald-600 border border-emerald-700',
       secondary:
-        'bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-blue-600/25 hover:shadow-md focus:ring-blue-500 border border-blue-600',
+        'bg-blue-700 hover:bg-blue-800 text-white shadow-sm focus:ring-blue-600 border border-blue-700',
       outline:
-        'border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 focus:ring-slate-400 shadow-sm',
+        'border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 focus:ring-slate-400 shadow-subtle',
       ghost:
-        'text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:ring-slate-400 border border-transparent',
+        'text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:ring-slate-300 border border-transparent',
       danger:
-        'bg-rose-600 hover:bg-rose-700 text-white shadow-sm hover:shadow-rose-600/25 focus:ring-rose-500 border border-rose-600',
+        'bg-red-700 hover:bg-red-800 text-white shadow-sm focus:ring-red-600 border border-red-700',
     };
 
     const sizeStyles = {
-      sm: 'text-xs px-3.5 py-2 gap-1.5 min-h-[38px]',
-      md: 'text-sm px-4 py-2.5 gap-2 min-h-[44px]',
-      lg: 'text-base px-6 py-3.5 gap-2.5 min-h-[48px] font-semibold',
+      sm: 'text-xs px-3.5 py-2 gap-1.5 min-h-[36px]',
+      md: 'text-sm px-4 py-2.5 gap-2 min-h-[42px]',
+      lg: 'text-base px-6 py-3 gap-2.5 min-h-[46px]',
     };
 
     return (
@@ -59,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin text-current shrink-0" />
-            <span>Molimo pričekajte...</span>
+            <span>Obrada...</span>
           </>
         ) : (
           <>

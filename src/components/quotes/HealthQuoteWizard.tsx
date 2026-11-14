@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Heart, Activity, ShieldCheck, ArrowRight, ArrowLeft, CheckCircle2, Sparkles, User } from 'lucide-react';
+import { Heart, ArrowRight, ArrowLeft } from 'lucide-react';
 import { calculateHealthPremium, formatEuro } from '../../lib/calculations';
 import { Slider } from '../ui/Slider';
 import { Button } from '../ui/Button';
@@ -28,16 +28,16 @@ export const HealthQuoteWizard: React.FC = () => {
       {step === 1 ? (
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
-            <h3 className="text-xl font-black text-slate-900">Dopunsko i Dodatno Zdravstveno Osiguranje</h3>
-            <p className="text-xs text-slate-500 font-mono mt-0.5">
-              Zaobiđite liste čekanja i osigurajte preglede u najboljim privatnim poliklinikama u roku 48h.
+            <h3 className="text-xl font-bold text-slate-900">Dopunsko i dodatno zdravstveno osiguranje</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Pokriće participacija i pregledi u ugovornim privatnim poliklinikama bez listi čekanja.
             </p>
           </div>
 
           {/* Plan Type Selector */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-slate-700">Vrsta zdravstvenog pokrića</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { id: 'dopunsko' as const, label: 'Samo Dopunsko', desc: 'Participacije HZZO-a' },
                 { id: 'kombinirano' as const, label: 'Kombinirani Paket', desc: 'Dopunsko + Poliklinike' },
@@ -49,12 +49,12 @@ export const HealthQuoteWizard: React.FC = () => {
                   onClick={() => setPlanType(t.id)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     planType === t.id
-                      ? 'border-rose-600 bg-rose-50/70 text-rose-900 font-bold shadow-sm'
-                      : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
+                      ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold ring-1 ring-[#0F2942]'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                   }`}
                 >
-                  <p className="text-xs">{t.label}</p>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">{t.desc}</p>
+                  <p className="text-xs font-semibold">{t.label}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">{t.desc}</p>
                 </button>
               ))}
             </div>
@@ -77,11 +77,11 @@ export const HealthQuoteWizard: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-700">
                   Paket dijagnostike i pregleda u privatnim poliklinikama
                 </label>
-                <div className="grid grid-cols-3 gap-2 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                   {[
                     { id: 'basic' as const, name: 'Osnovni', desc: 'Sistematski + 250 € pregleda' },
                     { id: 'optimal' as const, name: 'Optimal (Preporučeno)', desc: 'MR, CT, ultrazvuk, laboratorij' },
-                    { id: 'premium' as const, name: 'VIP Premium', desc: 'Neograničeno + fizikalna terapija' },
+                    { id: 'premium' as const, name: 'Prošireni Plus', desc: 'Šire specijalističke obrade + fizikalna' },
                   ].map((tier) => (
                     <button
                       key={tier.id}
@@ -89,12 +89,12 @@ export const HealthQuoteWizard: React.FC = () => {
                       onClick={() => setDiagnosticTier(tier.id)}
                       className={`p-3 rounded-xl border text-left transition-all ${
                         diagnosticTier === tier.id
-                          ? 'border-rose-600 bg-white text-rose-900 font-bold shadow-sm ring-1 ring-rose-500'
-                          : 'border-slate-200 bg-white/60 text-slate-600 hover:border-slate-300'
+                          ? 'border-[#0F2942] bg-white text-[#0F2942] font-semibold ring-1 ring-[#0F2942]'
+                          : 'border-slate-200 bg-white/80 text-slate-600 hover:border-slate-300'
                       }`}
                     >
-                      <p className="font-bold">{tier.name}</p>
-                      <p className="text-[10px] text-slate-500 font-mono mt-0.5">{tier.desc}</p>
+                      <p className="font-bold text-slate-900">{tier.name}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">{tier.desc}</p>
                     </button>
                   ))}
                 </div>
@@ -108,14 +108,14 @@ export const HealthQuoteWizard: React.FC = () => {
                   type="checkbox"
                   checked={includeBListDrugs}
                   onChange={(e) => setIncludeBListDrugs(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 rounded text-rose-600 focus:ring-0"
+                  className="mt-0.5 w-4 h-4 rounded accent-[#0F2942]"
                 />
                 <div>
                   <span className="text-xs font-bold text-slate-900 block">
                     Uključi dopunsku listu lijekova (B-lista)
                   </span>
-                  <span className="text-[10px] text-slate-500 font-mono">
-                    Pokriva doplati dio cijene lijekova koje propisuje liječnik opće prakse (+2,50 €/mj.)
+                  <span className="text-[11px] text-slate-500 tabular-nums">
+                    Pokriva doplatu za lijekove s dopunske liste koje propisuje liječnik opće prakse (+2,50 €/mj.)
                   </span>
                 </div>
               </label>
@@ -123,25 +123,25 @@ export const HealthQuoteWizard: React.FC = () => {
           </div>
 
           {/* Real-time Summary Card */}
-          <div className="p-4 bg-rose-50/80 border border-rose-200 rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-[#0F2942]/5 border border-[#0F2942]/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#0F2942] text-white flex items-center justify-center shrink-0">
                 <Heart className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-xs font-bold text-slate-900">{estimate.planName}</p>
-                <p className="text-[11px] text-slate-600 font-mono">
-                  Mjesečno: <strong>{formatEuro(estimate.monthlyPremium)}</strong> ({formatEuro(estimate.annualPremium)} god.)
+                <p className="text-xs text-slate-600 tabular-nums">
+                  Mjesečno: <strong className="text-slate-900">{formatEuro(estimate.monthlyPremium)}</strong> ({formatEuro(estimate.annualPremium)} god.)
                 </p>
               </div>
             </div>
 
             <Button
-              variant="danger"
+              variant="primary"
               size="sm"
               onClick={() => setStep(2)}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold text-xs"
+              className="font-semibold text-xs shrink-0"
             >
               Usporedi osiguratelje
             </Button>
@@ -149,15 +149,15 @@ export const HealthQuoteWizard: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200">
             <div>
-              <h3 className="text-xl font-black text-slate-900">Usporedba zdravstvenih paketa</h3>
-              <p className="text-xs text-slate-500 font-mono">
+              <h3 className="text-xl font-bold text-slate-900">Usporedba zdravstvenih paketa</h3>
+              <p className="text-xs text-slate-500 tabular-nums">
                 {estimate.planName} &bull; Dob: {age} god.
               </p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setStep(1)}
               leftIcon={<ArrowLeft className="w-4 h-4" />}

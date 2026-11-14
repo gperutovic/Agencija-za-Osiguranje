@@ -13,12 +13,12 @@ export const Card: React.FC<CardProps> = ({
   const base = 'rounded-2xl transition-all duration-200 text-left';
 
   const variants = {
-    default: 'bg-white border border-slate-200/80 shadow-sm',
-    elevated: 'bg-white border border-slate-200/80 shadow-md hover:shadow-lg',
+    default: 'bg-white border border-slate-200 shadow-card',
+    elevated: 'bg-white border border-slate-200 shadow-elevated',
     bordered: 'bg-white border-2 border-slate-200 hover:border-slate-300',
-    dark: 'bg-slate-900 border border-slate-800 text-white shadow-xl',
+    dark: 'bg-[#0B1522] border border-slate-800 text-white shadow-elevated',
     interactive:
-      'bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:border-blue-400 cursor-pointer active:scale-[0.99]',
+      'bg-white border border-slate-200 shadow-card hover:shadow-elevated hover:border-slate-300 cursor-pointer',
   };
 
   return (

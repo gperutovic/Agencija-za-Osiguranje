@@ -1,17 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import {
-  Car,
-  ShieldCheck,
-  CheckCircle2,
-  ChevronRight,
-  ArrowRight,
-  ArrowLeft,
-  Sparkles,
-} from 'lucide-react';
+import { Car, ArrowRight, ArrowLeft } from 'lucide-react';
 import { calculateAutoPremium, formatEuro } from '../../lib/calculations';
 import { Slider } from '../ui/Slider';
 import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
 import { ReactiveQuoteResult } from './ReactiveQuoteResult';
 
 const REGISTRATION_ZONES = [
@@ -36,11 +27,6 @@ export const AutoQuoteWizard: React.FC = () => {
   const [bonusPercent, setBonusPercent] = useState(50);
   const [registrationZone, setRegistrationZone] = useState('ZG');
   const [coverageType, setCoverageType] = useState<'ao_only' | 'ao_kasko' | 'kasko_only'>('ao_kasko');
-
-  // Policyholder details
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
 
   // Actuarial calculation
   const quoteEstimate = useMemo(() => {
@@ -77,20 +63,20 @@ export const AutoQuoteWizard: React.FC = () => {
       {step === 1 ? (
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
-            <h3 className="text-xl font-black text-slate-900">Izračun Auto Odgovornosti (AO) i Kaska</h3>
-            <p className="text-xs text-slate-500 font-mono mt-0.5">
-              Prilagodite snagu, vozačku dob i bonus za trenutan izračun premije.
+            <h3 className="text-xl font-bold text-slate-900">Izračun auto odgovornosti (AO) i kaska</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Prilagodite snagu vozila, dob vozača i stečeni bonus za informativni izračun premije.
             </p>
           </div>
 
           {/* Coverage Type Selector */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-slate-700">Vrsta osiguranja</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { id: 'ao_only' as const, label: 'Samo AO (Obvezno)', desc: 'Zakonski minimum' },
-                { id: 'ao_kasko' as const, label: 'AO + Puni Kasko', desc: 'Preporučeno (Ušteda)' },
-                { id: 'kasko_only' as const, label: 'Samo Kasko', desc: 'Imate već AO' },
+                { id: 'ao_kasko' as const, label: 'AO + Puni Kasko', desc: 'Preporučeni paket' },
+                { id: 'kasko_only' as const, label: 'Samo Kasko', desc: 'Dodatno uz postojeći AO' },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -98,12 +84,12 @@ export const AutoQuoteWizard: React.FC = () => {
                   onClick={() => setCoverageType(t.id)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     coverageType === t.id
-                      ? 'border-emerald-600 bg-emerald-50/70 text-emerald-900 font-bold shadow-sm'
-                      : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
+                      ? 'border-[#0F2942] bg-[#0F2942]/5 text-[#0F2942] font-semibold ring-1 ring-[#0F2942]'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                   }`}
                 >
-                  <p className="text-xs">{t.label}</p>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">{t.desc}</p>
+                  <p className="text-xs font-semibold">{t.label}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">{t.desc}</p>
                 </button>
               ))}
             </div>
@@ -150,7 +136,7 @@ export const AutoQuoteWizard: React.FC = () => {
               <select
                 value={registrationZone}
                 onChange={(e) => setRegistrationZone(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white text-slate-800 focus:outline-none focus:border-blue-600 min-h-[44px]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white text-slate-800 focus:outline-none focus:border-[#0F2942] min-h-[44px]"
               >
                 {REGISTRATION_ZONES.map((z) => (
                   <option key={z.code} value={z.code}>
@@ -158,34 +144,34 @@ export const AutoQuoteWizard: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500 font-mono">
-                Registarsko područje određuje osnovnu tablicu rizika u RH.
+              <p className="text-[11px] text-slate-500">
+                Registarsko područje određuje zonu rizika u RH.
               </p>
             </div>
           </div>
 
           {/* Real-time Summary Card */}
-          <div className="p-4 bg-emerald-50/80 border border-emerald-200 rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-[#0F2942]/5 border border-[#0F2942]/20 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#0F2942] text-white flex items-center justify-center shrink-0">
                 <Car className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">
+                <p className="text-xs font-semibold text-slate-900 tabular-nums">
                   {kw} kW &bull; {driverAge} god. &bull; {bonusPercent}% bonus ({registrationZone})
                 </p>
-                <p className="text-[11px] text-slate-600">
-                  Okvirna premija: <strong>{formatEuro(quoteEstimate.totalAnnual)}</strong> godišnje
+                <p className="text-xs text-slate-600 tabular-nums">
+                  Okvirna premija: <strong className="text-slate-900">{formatEuro(quoteEstimate.totalAnnual)}</strong> godišnje
                 </p>
               </div>
             </div>
 
             <Button
-              variant="emerald"
+              variant="primary"
               size="sm"
               onClick={() => setStep(2)}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold text-xs"
+              className="font-semibold text-xs shrink-0"
             >
               Usporedi ponude
             </Button>
@@ -193,15 +179,15 @@ export const AutoQuoteWizard: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200">
             <div>
-              <h3 className="text-xl font-black text-slate-900">Usporedba i prilagodba auto police</h3>
-              <p className="text-xs text-slate-500 font-mono">
-                {kw} kW &bull; {driverAge} god. &bull; {bonusPercent}% bonus
+              <h3 className="text-xl font-bold text-slate-900">Usporedba i prilagodba auto police</h3>
+              <p className="text-xs text-slate-500 tabular-nums">
+                {kw} kW &bull; {driverAge} god. &bull; {bonusPercent}% bonus &bull; {registrationZone}
               </p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setStep(1)}
               leftIcon={<ArrowLeft className="w-4 h-4" />}

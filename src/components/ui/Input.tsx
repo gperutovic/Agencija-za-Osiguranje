@@ -16,13 +16,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5 text-left">
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700 tracking-wide">
+          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700">
             {label}
-            {props.required && <span className="text-rose-500 ml-1">*</span>}
+            {props.required && <span className="text-red-600 ml-1">*</span>}
           </label>
         )}
 
-        <div className="relative rounded-xl shadow-sm">
+        <div className="relative rounded-lg">
           {leftIcon && (
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
               {leftIcon}
@@ -32,12 +32,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             id={inputId}
             ref={ref}
-            className={`block w-full rounded-xl text-sm transition-all duration-200 bg-white border placeholder:text-slate-400 focus:outline-none min-h-[44px] ${
+            className={`block w-full rounded-lg text-sm transition-colors bg-white border placeholder:text-slate-400 focus:outline-none min-h-[42px] ${
               leftIcon ? 'pl-10' : 'pl-3.5'
             } ${rightIcon ? 'pr-10' : 'pr-3.5'} ${
               error
-                ? 'border-rose-300 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-200'
-                : 'border-slate-300 text-slate-900 hover:border-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                : 'border-slate-300 text-slate-900 hover:border-slate-400 focus:border-[#0F2942] focus:ring-2 focus:ring-[#0F2942]/15'
             } ${className}`}
             {...props}
           />
@@ -50,7 +50,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error ? (
-          <p className="flex items-center gap-1 text-xs text-rose-600 font-medium pt-0.5">
+          <p className="flex items-center gap-1 text-xs text-red-600 font-medium pt-0.5">
             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </p>

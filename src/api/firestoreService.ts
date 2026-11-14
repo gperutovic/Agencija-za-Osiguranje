@@ -20,8 +20,52 @@ import {
   QuoteRequest, 
   Appointment,
   CoiCertificate,
-  EndorsementRequest
+  EndorsementRequest,
+  ComplaintRecord,
 } from '../types/database';
+
+const COMPLAINTS_STORAGE_KEY = 'zivot_store_complaints_v1';
+
+/** Recursively strips `undefined` fields from plain objects and arrays before Firestore writes. */
+export function sanitizeForFirestore<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeForFirestore(item)) as unknown as T;
+  }
+  if (value && typeof value === 'object') {
+    const proto = Object.getPrototypeOf(value);
+    if (proto === Object.prototype || proto === null) {
+      const cleaned: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(value)) {
+        if (val !== undefined) {
+          cleaned[key] = sanitizeForFirestore(val);
+        }
+      }
+      return cleaned as T;
+    }
+  }
+  return value;
+}
+
+function getLocalComplaints(): ComplaintRecord[] {
+  try {
+    const raw = localStorage.getItem(COMPLAINTS_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as ComplaintRecord[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalComplaint(record: ComplaintRecord): void {
+  try {
+    const current = getLocalComplaints();
+    localStorage.setItem(
+      COMPLAINTS_STORAGE_KEY,
+      JSON.stringify([record, ...current.filter((c) => c.id !== record.id)])
+    );
+  } catch {
+    // Ignore storage quota errors
+  }
+}
 
 export interface InquiryRecord {
   id: string;
@@ -53,11 +97,11 @@ export const firestoreService = {
 
   async createQuote(quote: Omit<QuoteRequest, 'id' | 'createdAt'> | any): Promise<QuoteRequest> {
     const id = quote.id || `quote-${Date.now()}`;
-    const newQuote: QuoteRequest = {
+    const newQuote = sanitizeForFirestore<QuoteRequest>({
       ...quote,
       id,
       createdAt: quote.createdAt || new Date().toISOString(),
-    };
+    });
     dualStore.saveQuote(newQuote);
 
     try {
@@ -123,12 +167,13 @@ export const firestoreService = {
 
   async createPolicy(policyData: any): Promise<any> {
     const id = policyData.id || `pol-${Date.now()}`;
-    const newPolicy = {
+    const newPolicy = sanitizeForFirestore({
       ...policyData,
       id,
       created_at: policyData.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    };
+    });
+    dualStore.savePolicy(newPolicy);
 
     try {
       await setDoc(doc(db, 'policies', id), newPolicy);
@@ -140,10 +185,10 @@ export const firestoreService = {
 
   async updatePolicy(id: string, updates: Record<string, any>): Promise<void> {
     try {
-      await updateDoc(doc(db, 'policies', id), {
+      await updateDoc(doc(db, 'policies', id), sanitizeForFirestore({
         ...updates,
         updated_at: new Date().toISOString(),
-      });
+      }));
     } catch (e) {
       console.warn('Firestore updatePolicy fallback:', e);
     }
@@ -206,13 +251,15 @@ export const firestoreService = {
   async createClaim(claimData: any): Promise<any> {
     const id = claimData.id || `clm-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const now = new Date().toISOString();
-    const newClaim = {
+    const newClaim = sanitizeForFirestore({
       ...claimData,
       id,
+      claimNumber: claimData.claimNumber || id.toUpperCase(),
       createdAt: claimData.createdAt || now,
       reported_date: claimData.reported_date || now,
       updatedAt: now,
-    };
+    });
+    dualStore.saveClaim(newClaim);
 
     try {
       await setDoc(doc(db, 'claims', id), {
@@ -225,17 +272,52 @@ export const firestoreService = {
     return newClaim;
   },
 
+  async getClaimByNumberOrOib(queryStr: string): Promise<ConsumerClaim | null> {
+    const normalized = queryStr.trim();
+    if (!normalized) return null;
+    const upper = normalized.toUpperCase();
+
+    const matchesQuery = (c: any) =>
+      String(c.claimNumber || c.claim_number || '').toUpperCase() === upper ||
+      String(c.id || '').toUpperCase() === upper ||
+      String(c.claimantOib || '').trim() === normalized;
+
+    try {
+      const snap = await getDocs(collection(db, 'claims'));
+      if (!snap.empty) {
+        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as ConsumerClaim));
+        const match = docs.find(matchesQuery);
+        if (match) return match;
+      }
+    } catch {
+      // Fallback to local dualStore
+    }
+
+    const localMatch = dualStore.getClaims().find(matchesQuery);
+    return localMatch || null;
+  },
+
   async updateClaimStatus(
     id: string,
     status: string,
     brokerNotes?: string
   ): Promise<void> {
-    try {
-      await updateDoc(doc(db, 'claims', id), {
-        status,
+    const localClaims = dualStore.getClaims();
+    const existing = localClaims.find((c) => c.id === id);
+    if (existing) {
+      dualStore.saveClaim({
+        ...existing,
+        status: status as ConsumerClaim['status'],
         ...(brokerNotes !== undefined ? { brokerNotes } : {}),
         updatedAt: new Date().toISOString(),
       });
+    }
+    try {
+      await updateDoc(doc(db, 'claims', id), sanitizeForFirestore({
+        status,
+        ...(brokerNotes !== undefined ? { brokerNotes } : {}),
+        updatedAt: new Date().toISOString(),
+      }));
     } catch {
       // Fallback
     }
@@ -259,7 +341,7 @@ export const firestoreService = {
   },
 
   // ==========================================
-  // 4. CERTIFICATES & DIGITAL CARDS (ACORD 25)
+  // 4. POTVRDE O OSIGURANJU I DIGITALNE KARTICE
   // ==========================================
   async getDigitalCards(): Promise<CoiCertificate[]> {
     try {
@@ -275,11 +357,11 @@ export const firestoreService = {
 
   async createDigitalCard(cardData: CoiCertificate): Promise<CoiCertificate> {
     const id = cardData.id || `coi-${Math.floor(10000 + Math.random() * 90000)}`;
-    const newCard: CoiCertificate = {
+    const newCard = sanitizeForFirestore<CoiCertificate>({
       ...cardData,
       id,
       issued_at: cardData.issued_at || new Date().toISOString(),
-    };
+    });
     try {
       await setDoc(doc(db, 'digital_cards', id), newCard);
     } catch (e) {
@@ -320,12 +402,12 @@ export const firestoreService = {
 
   async createEndorsement(req: Omit<EndorsementRequest, 'id' | 'requestedAt' | 'status'> | EndorsementRequest): Promise<EndorsementRequest> {
     const id = (req as EndorsementRequest).id || `end-2026-${Math.floor(100 + Math.random() * 900)}`;
-    const newEndorsement: EndorsementRequest = {
+    const newEndorsement = sanitizeForFirestore<EndorsementRequest>({
       ...req,
       id,
       requestedAt: (req as EndorsementRequest).requestedAt || new Date().toISOString(),
       status: (req as EndorsementRequest).status || 'pending_review',
-    };
+    });
     try {
       await setDoc(doc(db, 'endorsements', id), newEndorsement);
     } catch (e) {
@@ -361,7 +443,7 @@ export const firestoreService = {
   },
 
   // ==========================================
-  // 6. CERTIFIED BROKER APPOINTMENTS
+  // 6. KONZULTACIJE S OVLAŠTENIM ZASTUPNIKOM
   // ==========================================
   async getAppointments(): Promise<Appointment[]> {
     try {
@@ -377,11 +459,11 @@ export const firestoreService = {
 
   async createAppointment(apt: Omit<Appointment, 'id' | 'createdAt'>): Promise<Appointment> {
     const id = `apt-${Date.now()}`;
-    const newApt: Appointment = {
+    const newApt = sanitizeForFirestore<Appointment>({
       ...apt,
       id,
       createdAt: new Date().toISOString(),
-    };
+    });
     dualStore.saveAppointment(newApt);
 
     try {
@@ -426,25 +508,26 @@ export const firestoreService = {
   },
 
   async saveUserProfile(user: UserProfile): Promise<void> {
-    dualStore.saveUser(user);
+    const sanitized = sanitizeForFirestore(user);
+    dualStore.saveUser(sanitized);
     try {
-      await setDoc(doc(db, 'users', user.uid), user, { merge: true });
+      await setDoc(doc(db, 'users', user.uid), sanitized, { merge: true });
     } catch {
       // Fallback
     }
   },
 
   // ==========================================
-  // 8. CONTACT INQUIRIES & LEAD CAPTURE
+  // 8. CONTACT INQUIRIES, COMPLAINTS & LEAD CAPTURE
   // ==========================================
   async submitInquiry(inquiry: Omit<InquiryRecord, 'id' | 'status' | 'createdAt'>): Promise<InquiryRecord> {
     const id = `inq-${Date.now()}`;
-    const record: InquiryRecord = {
+    const record = sanitizeForFirestore<InquiryRecord>({
       ...inquiry,
       id,
       status: 'new',
       createdAt: new Date().toISOString(),
-    };
+    });
     try {
       await setDoc(doc(db, 'inquiries', id), record);
     } catch (e) {
@@ -465,6 +548,45 @@ export const firestoreService = {
     return [];
   },
 
+  async submitComplaint(
+    complaint: Omit<ComplaintRecord, 'id' | 'protocolId' | 'status' | 'createdAt'>
+  ): Promise<ComplaintRecord> {
+    const num = Math.floor(1000 + Math.random() * 9000);
+    const protocolId = `PRIG-${new Date().getFullYear()}-${num}`;
+    const id = `cmp-${Date.now()}`;
+    const record = sanitizeForFirestore<ComplaintRecord>({
+      ...complaint,
+      id,
+      protocolId,
+      status: 'received',
+      createdAt: new Date().toISOString(),
+    });
+    saveLocalComplaint(record);
+
+    try {
+      await setDoc(doc(db, 'complaints', id), {
+        ...record,
+        serverTimestamp: serverTimestamp(),
+      });
+    } catch (e) {
+      console.warn('Firestore submitComplaint fallback:', e);
+    }
+    return record;
+  },
+
+  async getComplaints(): Promise<ComplaintRecord[]> {
+    try {
+      const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as ComplaintRecord));
+      }
+    } catch {
+      // Fallback
+    }
+    return getLocalComplaints();
+  },
+
   // ==========================================
   // 9. AUTOMATIC CLOUD DATABASE SEEDER
   // ==========================================
@@ -480,36 +602,30 @@ export const firestoreService = {
       const snap = await getDocs(collection(db, 'policies'));
       if (snap.empty) {
         console.log('Seeding Cloud Firestore with institutional insurance records...');
-        // Seed Policies
         for (const policy of seedData.policies) {
-          await setDoc(doc(db, 'policies', policy.id), policy);
+          await setDoc(doc(db, 'policies', policy.id), sanitizeForFirestore(policy));
         }
-        // Seed Claims
         if (seedData.claims) {
           for (const claim of seedData.claims) {
-            await setDoc(doc(db, 'claims', claim.id), claim);
+            await setDoc(doc(db, 'claims', claim.id), sanitizeForFirestore(claim));
           }
         }
-        // Seed Certificates (COIs)
         if (seedData.cois) {
           for (const coi of seedData.cois) {
-            await setDoc(doc(db, 'digital_cards', coi.id), coi);
+            await setDoc(doc(db, 'digital_cards', coi.id), sanitizeForFirestore(coi));
           }
         }
-        // Seed Endorsements
         if (seedData.endorsements) {
           for (const endorsement of seedData.endorsements) {
-            await setDoc(doc(db, 'endorsements', endorsement.id), endorsement);
+            await setDoc(doc(db, 'endorsements', endorsement.id), sanitizeForFirestore(endorsement));
           }
         }
-        // Seed Account
         if (seedData.account) {
-          await setDoc(doc(db, 'users', seedData.account.id), seedData.account);
+          await setDoc(doc(db, 'users', seedData.account.id), sanitizeForFirestore(seedData.account));
         }
-        // Seed Users
         if (seedData.users) {
           for (const user of seedData.users) {
-            await setDoc(doc(db, 'users', user.uid), user);
+            await setDoc(doc(db, 'users', user.uid), sanitizeForFirestore(user));
           }
         }
         console.log('Cloud Firestore successfully seeded!');

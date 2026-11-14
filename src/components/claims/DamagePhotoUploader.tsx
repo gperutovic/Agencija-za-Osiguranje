@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, Image as ImageIcon, X, AlertCircle } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatters';
 
 export interface UploadedEvidenceItem {
   id: string;
@@ -33,7 +32,7 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
     for (let i = 0; i < incoming.length; i++) {
       const file = incoming[i];
       if (file.size > MAX_SIZE) {
-        setError(`Datoteka "${file.name}" premašuje limit od 15 MB.`);
+        setError(`Datoteka "${file.name}" premašuje dopušteno ograničenje od 15 MB.`);
         continue;
       }
 
@@ -65,7 +64,6 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Dropzone Container */}
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -78,10 +76,10 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
           handleFiles(e.dataTransfer.files);
         }}
         onClick={() => fileInputRef.current?.click()}
-        className={`border-2 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all ${
+        className={`border-2 border-dashed rounded-xl p-7 text-center cursor-pointer transition-colors ${
           dragOver
-            ? 'border-[#fb6504] bg-[#fb6504]/10 scale-[0.99]'
-            : 'border-white/[0.15] hover:border-[#fb6504] bg-white/[0.02] hover:bg-white/[0.04]'
+            ? 'border-[#0F2942] bg-slate-100'
+            : 'border-slate-300 hover:border-[#0F2942] bg-slate-50'
         }`}
       >
         <input
@@ -93,16 +91,16 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
           className="hidden"
         />
 
-        <div className="flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-white/[0.05] text-[#fb6504] shadow-sm border border-white/[0.1] flex items-center justify-center">
-            <UploadCloud className="w-6 h-6" />
+        <div className="flex flex-col items-center justify-center gap-2.5">
+          <div className="w-11 h-11 rounded-lg bg-white text-[#0F2942] border border-slate-200 shadow-sm flex items-center justify-center">
+            <UploadCloud className="w-5 h-5" />
           </div>
 
           <div>
-            <p className="text-sm font-bold text-white">
-              Povucite dokaze ovdje ili kliknite za odabir
+            <p className="text-sm font-semibold text-slate-900">
+              Povucite fotografije ili dokumente ovdje, ili kliknite za odabir
             </p>
-            <p className="text-xs text-slate-400 mt-1 font-mono">
+            <p className="text-xs text-slate-500 mt-1">
               Podržani formati: JPG, PNG, HEIC, MP4, PDF (do 15 MB po datoteci)
             </p>
           </div>
@@ -110,40 +108,39 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
       </div>
 
       {error && (
-        <div className="p-3 bg-rose-500/10 rounded-xl border border-rose-500/20 text-xs text-rose-400 flex items-center gap-2">
+        <div className="p-3 bg-red-50 rounded-lg border border-red-200 text-xs text-red-800 flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Uploaded Previews */}
       {items.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
           {items.map((item) => (
             <div
               key={item.id}
-              className="relative group rounded-2xl border border-white/[0.08] bg-white/[0.03] p-2.5 flex flex-col items-center text-center overflow-hidden"
+              className="relative rounded-xl border border-slate-200 bg-white p-2.5 flex flex-col items-center text-center overflow-hidden shadow-sm"
             >
               {item.type === 'image' ? (
                 <img
                   src={item.previewUrl}
                   alt={item.file.name}
-                  className="w-full h-24 object-cover rounded-xl mb-2"
+                  className="w-full h-24 object-cover rounded-lg mb-2"
                 />
               ) : (
-                <div className="w-full h-24 bg-white/[0.04] rounded-xl flex items-center justify-center mb-2 text-slate-400">
+                <div className="w-full h-24 bg-slate-50 rounded-lg flex items-center justify-center mb-2 text-slate-500">
                   {item.type === 'pdf' ? (
-                    <FileText className="w-8 h-8 text-rose-400" />
+                    <FileText className="w-8 h-8 text-red-700" />
                   ) : (
-                    <ImageIcon className="w-8 h-8 text-[#fb6504]" />
+                    <ImageIcon className="w-8 h-8 text-[#0F2942]" />
                   )}
                 </div>
               )}
 
-              <span className="text-[11px] font-medium text-slate-200 truncate w-full px-1">
+              <span className="text-xs font-medium text-slate-800 truncate w-full px-1">
                 {item.file.name}
               </span>
-              <span className="text-[10px] text-slate-500 font-mono">
+              <span className="text-[11px] text-slate-500 tabular-nums">
                 {(item.file.size / 1024 / 1024).toFixed(1)} MB
               </span>
 
@@ -153,8 +150,9 @@ export const DamagePhotoUploader: React.FC<DamagePhotoUploaderProps> = ({
                   e.stopPropagation();
                   removeItem(item.id);
                 }}
-                className="absolute top-2 right-2 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                className="absolute top-2 right-2 p-1 rounded-full bg-slate-900/75 text-white hover:bg-red-700 transition-colors cursor-pointer"
                 title="Ukloni datoteku"
+                aria-label="Ukloni datoteku"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

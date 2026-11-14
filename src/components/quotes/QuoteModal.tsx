@@ -44,32 +44,38 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
   if (!isOpen) return null;
 
   const categories = [
-    { id: 'auto' as InsuranceCategory, label: 'Auto & Kasko', icon: Car },
+    { id: 'auto' as InsuranceCategory, label: 'Auto i kasko', icon: Car },
     { id: 'property' as InsuranceCategory, label: 'Imovina', icon: Home },
     { id: 'health' as InsuranceCategory, label: 'Zdravstvo', icon: HeartPulse },
     { id: 'travel' as InsuranceCategory, label: 'Putno', icon: Plane },
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Informativni izračun osiguranja"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto"
+    >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Card */}
-      <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[92vh] flex flex-col z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[92vh] flex flex-col z-10 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/70">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Izračunaj i usporedi police</h2>
-            <p className="text-xs text-slate-500">10 vodećih osiguratelja • Službene HANFA tarife • Bez provizije</p>
+            <h2 className="text-lg font-bold text-slate-900">Informativni izračun i usporedba ponuda</h2>
+            <p className="text-xs text-slate-500">Agencija Život • Partnerski osiguratelji u RH • Bez agencijske provizije</p>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 rounded-lg transition-colors cursor-pointer"
             aria-label="Zatvori prozor"
           >
             <X className="w-5 h-5" />
@@ -77,7 +83,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
         </div>
 
         {/* Category Tabs */}
-        <div className="px-6 pt-4 pb-2 border-b border-slate-100 bg-white">
+        <div className="px-6 pt-3 pb-3 border-b border-slate-200 bg-white">
           <div className="flex space-x-2 overflow-x-auto scrollbar-none">
             {categories.map((cat) => {
               const Icon = cat.icon;
@@ -85,10 +91,11 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
               return (
                 <button
                   key={cat.id}
+                  type="button"
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold text-xs whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                      ? 'bg-[#0F2942] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
                   }`}
                 >
@@ -101,7 +108,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
         </div>
 
         {/* Wizard Body */}
-        <div className="p-6 overflow-y-auto flex-1 bg-slate-50/30">
+        <div className="p-6 overflow-y-auto flex-1 bg-slate-50/40">
           {activeCategory === 'auto' && <AutoQuoteWizard />}
           {activeCategory === 'property' && <PropertyQuoteWizard />}
           {activeCategory === 'health' && <HealthQuoteWizard />}

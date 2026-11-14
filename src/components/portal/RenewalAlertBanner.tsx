@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Clock, RefreshCw, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
+import { AlertTriangle, RefreshCw, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Policy } from '../../types/database';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { Button } from '../common/Button';
@@ -52,12 +52,12 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
         return (
           <div
             key={p.id}
-            className={`p-4 sm:p-5 rounded-2xl border transition-all backdrop-blur-xl ${
+            className={`p-4 sm:p-5 rounded-2xl border transition-all ${
               isSuccess
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
                 : isExpired
-                ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
-                : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                ? 'bg-rose-50 border-rose-200 text-rose-900'
+                : 'bg-amber-50 border-amber-200 text-amber-900'
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -65,10 +65,10 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                     isSuccess
-                      ? 'bg-emerald-500/20 border-emerald-500/40 text-[#2dd4bf]'
+                      ? 'bg-emerald-100 border-emerald-200 text-emerald-700'
                       : isExpired
-                      ? 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-                      : 'bg-amber-500/20 border-amber-500/40 text-[#fb6504]'
+                      ? 'bg-rose-100 border-rose-200 text-rose-700'
+                      : 'bg-amber-100 border-amber-200 text-amber-700'
                   }`}
                 >
                   {isSuccess ? (
@@ -79,16 +79,16 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-sm sm:text-base text-white">
+                  <h4 className="font-bold text-sm sm:text-base text-slate-900">
                     {isSuccess
                       ? `Uspješno zatražena obnova police ${p.policyNumber}`
                       : isExpired
-                      ? `Polica osiguranja ${p.policyNumber} je istekla!`
-                      : `Upozorenje o isteku: Polica ${p.policyNumber} ističe za ${diffDays} dana`}
+                      ? `Polica osiguranja ${p.policyNumber} je istekla`
+                      : `Podsjetnik na istek: polica ${p.policyNumber} ističe za ${diffDays} dana`}
                   </h4>
-                  <p className="text-xs text-slate-300 mt-0.5">
+                  <p className="text-xs text-slate-600 mt-0.5">
                     {isSuccess
-                      ? 'Vaš zahtjev za obnovom je proslijeđen agentu. Potvrda i nova polica stići će na vaš email.'
+                      ? 'Vaš zahtjev za obnovom je proslijeđen zastupniku. Potvrda i nova polica stići će na vaš e-mail.'
                       : `Polica za ${p.type.toUpperCase()} (${p.insurer}) završava ${formatDate(
                           p.endDate
                         )}. Obnovite na vrijeme bez prekida pokrića.`}
@@ -103,7 +103,7 @@ export const RenewalAlertBanner: React.FC<RenewalAlertBannerProps> = ({
                     size="sm"
                     disabled={renewingId === p.id}
                     onClick={() => handleRenew(p.id)}
-                    className="flex items-center gap-2 whitespace-nowrap shadow-[0_0_15px_rgba(251,101,4,0.3)]"
+                    className="flex items-center gap-2 whitespace-nowrap tabular-nums"
                   >
                     {renewingId === p.id ? (
                       <>

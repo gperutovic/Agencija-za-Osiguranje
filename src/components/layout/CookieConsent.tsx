@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, X, Settings2, Check } from 'lucide-react';
+import { ShieldCheck, X, Settings2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export const CookieConsent: React.FC = () => {
@@ -43,82 +43,87 @@ export const CookieConsent: React.FC = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 sm:left-6 sm:max-w-md z-50 bg-slate-900/95 backdrop-blur-xl rounded-2xl p-5 border border-slate-700/80 shadow-2xl text-xs space-y-3.5 animate-in slide-in-from-bottom-5 duration-300 text-slate-200 text-left">
+    <div
+      role="dialog"
+      aria-label="Postavke privatnosti i kolačića"
+      className="fixed bottom-4 left-4 right-4 sm:left-6 sm:max-w-md z-50 bg-white rounded-xl p-5 border border-slate-200 shadow-xl text-xs space-y-3.5 text-slate-700"
+    >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-2 font-mono font-bold text-white text-sm">
-          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>Zaštita privatnosti i kolačići (GDPR / AZOP)</span>
+        <div className="flex items-center gap-2 font-semibold text-slate-900 text-sm">
+          <ShieldCheck className="w-4 h-4 text-[#0F2942] shrink-0" />
+          <span>Zaštita privatnosti i kolačići</span>
         </div>
         <button
+          type="button"
           onClick={handleDeclineOptional}
-          className="text-slate-400 hover:text-white p-1 transition-colors"
+          className="text-slate-400 hover:text-slate-700 p-1 rounded-md transition-colors cursor-pointer"
           aria-label="Zatvori"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
-      <p className="text-slate-300 leading-relaxed text-xs">
-        Naša web platforma koristi nužne tehničke kolačiće za funkcioniranje kalkulatora premija i sigurnost
-        ugovaranja polica. Uz vaš pristanak, koristimo i analitičke kolačiće za poboljšanje korisničkog iskustva sukladno
-        smjernicama AZOP-a.
+      <p className="text-slate-600 leading-relaxed text-xs">
+        Koristimo nužne tehničke kolačiće za ispravan rad informativnih kalkulatora i sigurnost zahtjeva, a uz vaš
+        pristanak i analitičke kolačiće sukladno Općoj uredbi o zaštiti podataka (GDPR) i smjernicama AZOP-a.
       </p>
 
-      {showSettings ? (
-        <div className="p-3 bg-slate-800/80 rounded-xl space-y-2 border border-slate-700 text-xs">
+      {showSettings && (
+        <div className="p-3 bg-slate-50 rounded-lg space-y-2.5 border border-slate-200 text-xs">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-white">Nužni kolačići</span>
-            <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded">
+            <span className="font-semibold text-slate-900">Nužni tehnički kolačići</span>
+            <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
               Uvijek aktivni
             </span>
           </div>
-          <div className="flex items-center justify-between pt-1 border-t border-slate-700">
-            <label htmlFor="analytics-toggle" className="cursor-pointer">
-              <span className="font-semibold text-white block">Analitički kolačići</span>
-              <span className="text-[10px] text-slate-400">Pomažu nam optimizirati brzinu izračuna</span>
+          <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+            <label htmlFor="analytics-toggle" className="cursor-pointer pr-3">
+              <span className="font-semibold text-slate-900 block">Analitički kolačići</span>
+              <span className="text-[11px] text-slate-500">Mjerenje stabilnosti i brzine izračuna</span>
             </label>
             <input
               id="analytics-toggle"
               type="checkbox"
               checked={analyticsAllowed}
               onChange={(e) => setAnalyticsAllowed(e.target.checked)}
-              className="w-4 h-4 rounded text-blue-600 focus:ring-0"
+              className="w-4 h-4 rounded accent-[#0F2942]"
             />
           </div>
-          <div className="flex items-center justify-between pt-1 border-t border-slate-700">
-            <label htmlFor="marketing-toggle" className="cursor-pointer">
-              <span className="font-semibold text-white block">Marketinški kolačići</span>
-              <span className="text-[10px] text-slate-400">Prikaz relevantnih popusta i akcija</span>
+          <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+            <label htmlFor="marketing-toggle" className="cursor-pointer pr-3">
+              <span className="font-semibold text-slate-900 block">Informativni kolačići</span>
+              <span className="text-[11px] text-slate-500">Prikaz relevantnih akcija osiguratelja</span>
             </label>
             <input
               id="marketing-toggle"
               type="checkbox"
               checked={marketingAllowed}
               onChange={(e) => setMarketingAllowed(e.target.checked)}
-              className="w-4 h-4 rounded text-blue-600 focus:ring-0"
+              className="w-4 h-4 rounded accent-[#0F2942]"
             />
           </div>
 
-          <div className="pt-2 flex gap-2">
-            <Button variant="emerald" size="sm" onClick={handleAcceptSelected} className="flex-1 text-xs">
-              Spremi odabir
+          <div className="pt-1">
+            <Button variant="primary" size="sm" onClick={handleAcceptSelected} className="w-full text-xs">
+              Spremi odabrane postavke
             </Button>
           </div>
         </div>
-      ) : null}
+      )}
 
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1 font-mono text-xs">
-        <Button variant="emerald" size="sm" onClick={handleAcceptAll} className="flex-1 font-bold">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
+        <Button variant="primary" size="sm" onClick={handleAcceptAll} className="flex-1 text-xs">
           Prihvati sve
         </Button>
-        <Button variant="outline" size="sm" onClick={handleDeclineOptional} className="text-slate-200 border-slate-700 hover:bg-slate-800">
+        <Button variant="outline" size="sm" onClick={handleDeclineOptional} className="text-xs">
           Samo nužni
         </Button>
         <button
           type="button"
           onClick={() => setShowSettings(!showSettings)}
-          className="p-2 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+          className="p-2 text-slate-500 hover:text-[#0F2942] rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer"
           title="Postavke kolačića"
+          aria-label="Prilagodi postavke kolačića"
         >
           <Settings2 className="w-4 h-4" />
         </button>

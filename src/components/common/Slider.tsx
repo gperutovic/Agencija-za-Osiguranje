@@ -1,6 +1,5 @@
 import React from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
-import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export interface SliderProps {
@@ -27,10 +26,10 @@ export const Slider: React.FC<SliderProps> = ({
   className,
 }) => {
   return (
-    <div className={twMerge('w-full space-y-2', className)}>
+    <div className={twMerge('w-full space-y-2.5 text-left', className)}>
       <div className="flex items-center justify-between">
-        {label && <label className="text-xs font-semibold text-slate-300">{label}</label>}
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-orange-500/10 text-[#fb6504] border border-orange-500/30 shadow-2xs">
+        {label && <label className="text-xs font-semibold text-slate-700">{label}</label>}
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold tabular-nums bg-slate-100 text-[#0F2942] border border-slate-200">
           {formatValue(value)}
         </span>
       </div>
@@ -43,16 +42,16 @@ export const Slider: React.FC<SliderProps> = ({
         step={step}
         onValueChange={(vals) => onChange(vals[0])}
       >
-        <RadixSlider.Track className="bg-white/10 relative grow rounded-full h-2">
-          <RadixSlider.Range className="absolute bg-gradient-to-r from-[#fb6504] to-[#ff7b1a] rounded-full h-full shadow-glow-orange" />
+        <RadixSlider.Track className="bg-slate-200 relative grow rounded-full h-2">
+          <RadixSlider.Range className="absolute bg-[#0F2942] rounded-full h-full" />
         </RadixSlider.Track>
         <RadixSlider.Thumb
-          className="block w-5 h-5 bg-white border-2 border-[#fb6504] shadow-glow-orange rounded-full hover:scale-110 focus:outline-none focus:ring-4 focus:ring-orange-500/30 transition-transform"
-          aria-label={label || 'Slider'}
+          className="block w-5 h-5 bg-white border-2 border-[#0F2942] shadow-sm rounded-full hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#0F2942]/15 transition-transform"
+          aria-label={label || 'Vrijednost'}
         />
       </RadixSlider.Root>
 
-      <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
+      <div className="flex justify-between items-center text-[11px] text-slate-500 tabular-nums">
         <span>{formatValue(min)}</span>
         {helperText && <span className="text-slate-500">{helperText}</span>}
         <span>{formatValue(max)}</span>

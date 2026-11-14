@@ -1,22 +1,14 @@
 import React, { useState } from 'react';
 import {
   Search,
-  Filter,
   Phone,
   Mail,
-  CheckCircle,
-  Clock,
-  ArrowRight,
-  User,
-  Shield,
-  FileText,
 } from 'lucide-react';
 import { QuoteRequest } from '../../types/database';
 import { formatCurrency, formatDateTime } from '../../utils/formatters';
 import { Badge } from '../common/Badge';
 import { Input } from '../common/Input';
 import { Select } from '../common/Select';
-import { Button } from '../common/Button';
 
 interface LeadsTableProps {
   quotes: QuoteRequest[];
@@ -66,14 +58,16 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
   };
 
   return (
-    <div className="bg-[#0a0d16]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl shadow-2xl overflow-hidden text-white">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden text-slate-900">
       {/* Search and Filters Bar */}
-      <div className="p-5 border-b border-white/[0.08] flex flex-col sm:flex-row gap-3 items-center justify-between">
-        <div className="w-full sm:w-80">
+      <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row gap-3 items-center justify-between bg-slate-50/70">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <Input
-            placeholder="Pretraži klijente, telefon, email..."
+            placeholder="Pretraži klijente, telefon, e-mail..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9"
           />
         </div>
 
@@ -109,7 +103,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="bg-white/[0.02] border-b border-white/[0.08] text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
+            <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
               <th className="py-3.5 px-6">Klijent</th>
               <th className="py-3.5 px-6">Vrsta osiguranja</th>
               <th className="py-3.5 px-6">Godišnja premija</th>
@@ -118,35 +112,35 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
               <th className="py-3.5 px-6 text-right">Upravljanje statusom</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.06]">
+          <tbody className="divide-y divide-slate-100">
             {filteredQuotes.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-500 font-mono">
+                <td colSpan={6} className="text-center py-12 text-slate-500 text-sm">
                   Nema pronađenih upita za odabrane kriterije.
                 </td>
               </tr>
             ) : (
               filteredQuotes.map((q) => (
-                <tr key={q.id} className="hover:bg-white/[0.02] transition-colors">
+                <tr key={q.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="py-4 px-6">
                     <div>
-                      <span className="font-semibold text-white block">
+                      <span className="font-semibold text-slate-900 block">
                         {q.customer.fullName}
                       </span>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-slate-400 font-mono">
+                      <div className="flex flex-wrap items-center gap-3 mt-1 text-xs text-slate-500 tabular-nums">
                         <a
                           href={`tel:${q.customer.phone}`}
-                          className="hover:text-[#fb6504] flex items-center gap-1 transition-colors"
+                          className="hover:text-[#0F2942] flex items-center gap-1 transition-colors"
                         >
-                          <Phone className="w-3 h-3 text-[#fb6504]" />
+                          <Phone className="w-3 h-3 text-[#0F2942]" />
                           {q.customer.phone}
                         </a>
-                        <span>•</span>
+                        <span>&bull;</span>
                         <a
                           href={`mailto:${q.customer.email}`}
-                          className="hover:text-[#fb6504] flex items-center gap-1 transition-colors"
+                          className="hover:text-[#0F2942] flex items-center gap-1 transition-colors"
                         >
-                          <Mail className="w-3 h-3 text-[#fb6504]" />
+                          <Mail className="w-3 h-3 text-[#0F2942]" />
                           {q.customer.email}
                         </a>
                       </div>
@@ -154,7 +148,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                   </td>
 
                   <td className="py-4 px-6">
-                    <span className="capitalize font-medium text-slate-300">
+                    <span className="font-medium text-slate-700">
                       {q.type === 'auto'
                         ? 'Auto osiguranje'
                         : q.type === 'property'
@@ -165,18 +159,18 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                     </span>
                   </td>
 
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-6 tabular-nums">
                     <div>
-                      <span className="font-bold text-[#ff7b1a] font-mono">
+                      <span className="font-bold text-[#0F2942]">
                         {formatCurrency(q.calculatedEstimate.annualPremium)}
                       </span>
-                      <span className="block text-xs text-slate-500 font-mono">
+                      <span className="block text-xs text-slate-500">
                         {formatCurrency(q.calculatedEstimate.monthlyPremium)} / mj.
                       </span>
                     </div>
                   </td>
 
-                  <td className="py-4 px-6 text-xs text-slate-400 font-mono">
+                  <td className="py-4 px-6 text-xs text-slate-500 tabular-nums">
                     {formatDateTime(q.createdAt)}
                   </td>
 
@@ -185,39 +179,43 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ quotes, onStatusChange }
                   </td>
 
                   <td className="py-4 px-6 text-right">
-                    <div className="flex items-center justify-end gap-1.5 font-mono text-xs">
+                    <div className="flex items-center justify-end gap-1.5 text-xs">
                       {q.status === 'new' && (
                         <button
+                          type="button"
                           onClick={() => handleStatusUpdate(q.id, 'contacted')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/20 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200 transition-colors"
                         >
                           Kontaktiraj
                         </button>
                       )}
                       {(q.status === 'new' || q.status === 'contacted') && (
                         <button
+                          type="button"
                           onClick={() => handleStatusUpdate(q.id, 'quoted')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 border border-blue-500/20 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#0F2942]/10 text-[#0F2942] hover:bg-[#0F2942]/15 border border-[#0F2942]/20 transition-colors"
                         >
                           Pošalji ponudu
                         </button>
                       )}
                       {q.status === 'quoted' && (
                         <button
+                          type="button"
                           onClick={() => handleStatusUpdate(q.id, 'bound')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-500/10 text-[#2dd4bf] hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors"
                         >
                           Sklopi policu
                         </button>
                       )}
                       {q.status !== 'lost' && q.status !== 'bound' && (
                         <button
+                          type="button"
                           onClick={() => handleStatusUpdate(q.id, 'lost')}
                           disabled={updatingId === q.id}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-500 hover:text-rose-700 hover:bg-rose-50 transition-colors"
                         >
                           Arhiviraj
                         </button>

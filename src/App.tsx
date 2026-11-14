@@ -58,12 +58,9 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-[#FF0055] selection:text-white">
-        {/* Global Navigation Header with HANFA license & direct quoting triggers */}
-        <Header
-          onOpenQuote={handleOpenQuote}
-          onOpenSavjetnik={handleOpenSavjetnik}
-        />
+      <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-[#0F2942]/15 selection:text-[#0F2942]">
+        {/* Global Navigation Header */}
+        <Header onOpenSavjetnik={handleOpenSavjetnik} />
 
         {/* Dynamic Route Viewport */}
         <main className="flex-1 w-full bg-slate-50 text-slate-900">
@@ -127,13 +124,15 @@ export const App: React.FC = () => {
         {/* Globalni footer sa svim zakonskim ogradama i certifikatima */}
         <Footer />
 
-        {/* Plutajući mobilni pozivni centar (24/7 asistencija i povratni poziv u 15 min) */}
-        <StickyMobileFAB onOpenQuote={handleOpenQuote} />
+        {/* Brzi kontaktni izbornik */}
+        <StickyMobileFAB
+          onOpenQuote={(category) => handleOpenQuote(category as InsuranceCategory | undefined)}
+        />
 
         {/* AZOP / GDPR privola za kolačiće */}
         <CookieConsent />
 
-        {/* Conversational "Agent Savjetnik" Intake Wizard (Lemonade Maya engine) */}
+        {/* Interaktivni upitnik potreba osiguranika */}
         <ConversationalWizard
           isOpen={isSavjetnikOpen}
           onClose={() => setIsSavjetnikOpen(false)}

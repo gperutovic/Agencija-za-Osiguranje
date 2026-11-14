@@ -120,6 +120,24 @@ export interface Claim {
   claimantName?: string;
   claimantPhone?: string;
   claimantEmail?: string;
+  claimantOib?: string;
+  carrierName?: string;
+  category?: string;
+}
+
+export interface ComplaintRecord {
+  id: string;
+  protocolId: string;
+  fullName: string;
+  oib: string;
+  email: string;
+  phone: string;
+  address: string;
+  policyNumber?: string;
+  subject: string;
+  description: string;
+  status: 'received' | 'in_review' | 'resolved';
+  createdAt: string;
 }
 
 export interface Appointment {
