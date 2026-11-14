@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, initializeFirestore } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { UserProfile, Policy, Claim, QuoteRequest, Appointment } from '../types/database';
 
@@ -15,13 +15,7 @@ const firebaseConfig = {
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
-export const db = (() => {
-  try {
-    return initializeFirestore(app, { ignoreUndefinedProperties: true });
-  } catch {
-    return getFirestore(app);
-  }
-})();
+export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // Seed Data for Instant Enterprise Operation
@@ -96,12 +90,12 @@ export const INITIAL_POLICIES: Policy[] = [
     documents: [
       {
         title: 'Polica osiguranja doma i potresa (Generali Dom Sigurnost)',
-        url: '/documents/polica-dom.pdf',
+        url: 'https://example.com/polica-dom.pdf',
         uploadedAt: '2024-04-01T10:00:00Z',
       },
       {
         title: 'Predugovorni informativni dokument (IPID)',
-        url: '/documents/ipid-dom.pdf',
+        url: 'https://example.com/ipid-dom.pdf',
         uploadedAt: '2024-04-01T10:00:00Z',
       },
     ],
@@ -122,12 +116,12 @@ export const INITIAL_POLICIES: Policy[] = [
     documents: [
       {
         title: 'Polica autoodgovornosti i punog kaska s 50% bonusa',
-        url: '/documents/polica-auto.pdf',
+        url: 'https://example.com/polica-auto.pdf',
         uploadedAt: '2025-01-10T09:30:00Z',
       },
       {
         title: 'Potvrda o asistenciji na cesti 24/7 (RH i Europa)',
-        url: '/documents/asistencija.pdf',
+        url: 'https://example.com/asistencija.pdf',
         uploadedAt: '2025-01-10T09:30:00Z',
       },
     ],
@@ -148,7 +142,7 @@ export const INITIAL_POLICIES: Policy[] = [
     documents: [
       {
         title: 'Ugovor o životnom osiguranju ŽIVOT+ s doživljenjem',
-        url: '/documents/polica-zivot.pdf',
+        url: 'https://example.com/polica-zivot.pdf',
         uploadedAt: '2023-11-01T11:00:00Z',
       },
     ],

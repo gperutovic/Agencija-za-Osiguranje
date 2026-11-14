@@ -12,8 +12,6 @@ export interface CarrierPartner {
   claimSpeedScore: string;
   highlight: string;
   isPrimaryPartner?: boolean;
-  rating?: number;
-  reviewCount?: number;
 }
 
 export const CARRIER_PARTNERS: CarrierPartner[] = [

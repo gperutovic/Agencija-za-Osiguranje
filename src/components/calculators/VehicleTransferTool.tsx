@@ -8,17 +8,11 @@ import {
   ArrowRight,
   Info,
   Sparkles,
-  Download,
-  Share2,
-  QrCode,
 } from 'lucide-react';
 import { calculateVehicleTransferCost, formatEuro } from '../../lib/calculations';
-import { Slider } from '../common/Slider';
-import { Button } from '../common/Button';
+import { Slider } from '../ui/Slider';
+import { Button } from '../ui/Button';
 import { QuoteModal } from '../quotes/QuoteModal';
-import { ShareQuoteModal } from '../quotes/ShareQuoteModal';
-import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
-import { generateIpidPdf } from '../../lib/services/ipidService';
 
 interface VehicleTransferToolProps {
   standalone?: boolean;
@@ -31,8 +25,6 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
   const [ageYears, setAgeYears] = useState<number>(6);
   const [retainPlates, setRetainPlates] = useState<boolean>(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState<boolean>(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
-  const [isHub3aModalOpen, setIsHub3aModalOpen] = useState<boolean>(false);
 
   // Approximate Horsepower (KS)
   const horsepower = Math.round(kw * 1.35962);
@@ -45,14 +37,14 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
     <div className="w-full text-left">
       {standalone && (
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-mono font-bold uppercase tracking-wider shadow-2xs">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[#fb6504] text-xs font-mono font-bold uppercase tracking-wider">
             <Calculator className="w-3.5 h-3.5" />
             <span>Službeni Zakonski Izračun (NN 92/21)</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             Kalkulator Prijepisa Vozila
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             Izračunajte točan iznos upravne pristojbe i administrativnih troškova za prijenos
             vlasništva rabljenog motornog vozila u stanicama za tehnički pregled (STP).
           </p>
@@ -60,14 +52,14 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
-        {/* Left Form Inputs */}
-        <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-bento space-y-8">
-          <div className="border-b border-slate-100 pb-4">
-            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Car className="w-5 h-5 text-teal-600" />
+        {/* Left Form Inputs (Dark Obsidian) */}
+        <div className="lg:col-span-7 bg-[#0a0d16] rounded-3xl p-6 sm:p-8 border border-white/[0.08] shadow-2xl space-y-8">
+          <div className="border-b border-white/[0.08] pb-4">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Car className="w-5 h-5 text-[#fb6504]" />
               Podaci o vozilu
             </h3>
-            <p className="text-xs text-slate-500 mt-1 font-mono">
+            <p className="text-xs text-slate-400 mt-1 font-mono">
               Unesite snagu iz prometne dozvole (polje P.2) i starost od prve registracije.
             </p>
           </div>
@@ -75,12 +67,12 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           {/* kW Slider */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-semibold text-slate-200">
                 Snaga motora u kilovatima (kW)
               </label>
               <div className="flex items-center space-x-2">
-                <span className="text-xs text-slate-500 font-mono">~{horsepower} KS</span>
-                <span className="px-3 py-1 bg-teal-50 text-teal-800 font-mono font-bold rounded-lg text-sm border border-teal-200 shadow-2xs">
+                <span className="text-xs text-slate-400 font-mono">~{horsepower} KS</span>
+                <span className="px-3 py-1 bg-[#fb6504]/10 text-[#fb6504] font-mono font-bold rounded-lg text-sm border border-[#fb6504]/20">
                   {kw} kW
                 </span>
               </div>
@@ -104,10 +96,10 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           {/* Age Slider */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-semibold text-slate-200">
                 Starost vozila (od godine proizvodnje)
               </label>
-              <span className="px-3 py-1 bg-slate-100 text-slate-800 font-mono font-bold rounded-lg text-sm border border-slate-200">
+              <span className="px-3 py-1 bg-white/[0.05] text-white font-mono font-bold rounded-lg text-sm border border-white/10">
                 {ageYears} {ageYears === 1 ? 'godina' : ageYears < 5 ? 'godine' : 'godina'}
               </span>
             </div>
@@ -128,13 +120,13 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           </div>
 
           {/* License Plate Toggle */}
-          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80">
+          <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/[0.06]">
             <label className="flex items-start justify-between cursor-pointer">
               <div className="space-y-1 pr-4">
-                <span className="text-xs font-bold text-slate-900 block">
+                <span className="text-xs font-bold text-white block">
                   Zadržavanje postojećih registarskih pločica
                 </span>
-                <span className="text-[11px] text-slate-500 block leading-relaxed">
+                <span className="text-[11px] text-slate-400 block leading-relaxed">
                   Ako kupac i prodavatelj imaju prebivalište u istom registarskom području (npr. ZG u ZG), pločice se mogu zadržati uz uštedu od 8,63 €.
                 </span>
               </div>
@@ -142,14 +134,14 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
                 type="checkbox"
                 checked={retainPlates}
                 onChange={(e) => setRetainPlates(e.target.checked)}
-                className="w-5 h-5 mt-1 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer"
+                className="w-5 h-5 mt-1 text-[#fb6504] rounded border-white/20 bg-white/5 focus:ring-[#fb6504] cursor-pointer"
               />
             </label>
           </div>
 
           {/* Legal Note Box */}
-          <div className="flex items-start space-x-3 text-xs text-slate-600 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
-            <Info className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
+          <div className="flex items-start space-x-3 text-xs text-slate-300 bg-white/[0.02] p-4 rounded-2xl border border-white/[0.06]">
+            <Info className="w-4 h-4 text-[#fb6504] shrink-0 mt-0.5" />
             <p className="leading-relaxed">
               Upravna pristojba na stjecanje rabljenih motornih vozila utvrđena je Zakonom o posebnom porezu na motorna vozila (Narodne novine br. 115/16, 127/17 i 92/21). Obveznik plaćanja je stjecatelj vozila.
             </p>
@@ -158,18 +150,18 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
 
         {/* Right Cost Summary Card */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="bg-[#080c14] text-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/[0.12] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#fb6504]/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-6">
                 <div>
-                  <span className="text-[10px] font-mono font-bold text-teal-400 uppercase tracking-wider">
+                  <span className="text-[10px] font-mono font-bold text-[#fb6504] uppercase tracking-wider">
                     Troškovnik prijenosa
                   </span>
                   <h4 className="text-lg font-bold text-white">Specifikacija za STP</h4>
                 </div>
-                <div className="p-2.5 bg-white/[0.06] rounded-xl text-teal-400 border border-white/10">
+                <div className="p-2.5 bg-white/[0.05] rounded-xl text-[#fb6504] border border-white/10">
                   <FileText className="w-5 h-5" />
                 </div>
               </div>
@@ -211,7 +203,7 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
                 </div>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-slate-800">
+              <div className="mt-6 pt-6 border-t border-white/[0.08]">
                 <div className="flex justify-between items-baseline mb-1">
                   <span className="text-xs font-mono uppercase text-slate-400 font-semibold">
                     UKUPNO ZA UPLATU U STP:
@@ -227,44 +219,8 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
                 </p>
               </div>
 
-              {/* Save Calculation to WhatsApp / E-mail, HUB 3A & IPID */}
-              <div className="mt-5 pt-5 border-t border-slate-800 space-y-2.5">
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsShareModalOpen(true)}
-                    className="py-2.5 px-3 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                  >
-                    <Share2 className="w-3.5 h-3.5 text-teal-400" />
-                    <span>WhatsApp / E-mail</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsHub3aModalOpen(true)}
-                    className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                  >
-                    <QrCode className="w-3.5 h-3.5 text-teal-400" />
-                    <span>HUB 3A Uplatnica</span>
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    generateIpidPdf({
-                      category: 'auto',
-                      carrierName: 'Generali osiguranje d.d.',
-                      customDetails: { kw },
-                    })
-                  }
-                  className="w-full py-2 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                >
-                  <Download className="w-3.5 h-3.5 text-teal-400" />
-                  <span>Preuzmi IPID obrazac za Auto osiguranje (PDF)</span>
-                </button>
-              </div>
-
               {/* Steps at STP */}
-              <div className="mt-6 pt-6 border-t border-slate-800/80 space-y-2 text-xs text-slate-300">
+              <div className="mt-6 pt-6 border-t border-white/[0.06] space-y-2 text-xs text-slate-300">
                 <p className="font-semibold text-white text-[11px] font-mono uppercase tracking-wider">
                   Potrebna dokumentacija za STP:
                 </p>
@@ -289,27 +245,27 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           </div>
 
           {/* Toyota & Generali Cross-Sell Banner */}
-          <div className="bg-gradient-to-br from-teal-50 via-emerald-50/50 to-white rounded-3xl p-6 border border-teal-200/80 text-slate-900 relative overflow-hidden shadow-bento">
+          <div className="bg-gradient-to-br from-[#fb6504]/10 via-emerald-500/5 to-transparent rounded-3xl p-6 border border-[#fb6504]/25 text-white relative overflow-hidden">
             <div className="flex items-start space-x-4">
-              <div className="p-3 bg-teal-600 text-white rounded-2xl shrink-0 shadow-md shadow-teal-600/20">
+              <div className="p-3 bg-[#fb6504] text-white rounded-2xl shrink-0 shadow-lg shadow-[#fb6504]/25">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div className="flex-1">
-                <div className="inline-flex items-center space-x-1.5 text-teal-800 text-[10px] font-mono font-bold uppercase tracking-wider mb-1">
+                <div className="inline-flex items-center space-x-1.5 text-[#fb6504] text-[10px] font-mono font-bold uppercase tracking-wider mb-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Toyota Centar Zagreb &bull; Generali Partner</span>
                 </div>
-                <h4 className="text-base font-bold text-slate-900">
+                <h4 className="text-base font-bold text-white">
                   Kupujete vozilo? Ugovorite osiguranje
                 </h4>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed font-normal">
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                   Prenesite svoj 50% bonus i ugovorite Toyota VIP Kasko ili policu Generali osiguranja
                   uz instant aktivaciju za tehnički pregled.
                 </p>
                 <div className="mt-4">
                   <button
                     onClick={() => setIsQuoteModalOpen(true)}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-600/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#fb6504] hover:bg-[#ff7b1a] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
                   >
                     <span>Izračunaj auto osiguranje</span>
                     <ArrowRight className="w-4 h-4" />
@@ -320,35 +276,6 @@ export const VehicleTransferTool: React.FC<VehicleTransferToolProps> = ({
           </div>
         </div>
       </div>
-
-      {/* HUB 3A Payment Slip Modal */}
-      <Hub3aPaymentSlipModal
-        isOpen={isHub3aModalOpen}
-        onClose={() => setIsHub3aModalOpen(false)}
-        data={{
-          payerName: 'Stjecatelj vozila',
-          amountEur: result.totalCost,
-          paymentDescription: `Prijepis vozila (${kw} kW, ${ageYears} god.) - NN 92/21`,
-        }}
-      />
-
-      {/* Save Calculation to WhatsApp / E-mail Modal */}
-      <ShareQuoteModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-        category="auto"
-        summaryTitle={`Prijepis vozila (${kw} kW, ${ageYears} god.)`}
-        calculatedPriceEur={result.totalCost}
-        monthlyPriceEur={result.totalCost}
-        carrierName="Stanica za tehnički pregled (NN 92/21)"
-        details={{
-          kw,
-          ageYears,
-          administrativeFee: result.administrativeFee,
-          permitFee: result.permitFee,
-          plateFee: retainPlates ? 0 : result.plateFee,
-        }}
-      />
 
       {/* Embedded Quote Modal */}
       <QuoteModal

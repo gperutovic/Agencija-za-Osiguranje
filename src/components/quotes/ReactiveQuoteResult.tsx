@@ -12,18 +12,11 @@ import {
   Car,
   ChevronRight,
   Check,
-  FileText,
-  Download,
-  QrCode,
-  Share2,
 } from 'lucide-react';
 import { formatEuro } from '../../lib/calculations';
-import { Button } from '../common/Button';
-import { Card } from '../common/Card';
-import { CARRIER_PARTNERS } from '../../lib/content/insurance-data';
-import { generateIpidPdf } from '../../lib/services/ipidService';
-import { Hub3aPaymentSlipModal } from '../payment/Hub3aPaymentSlipModal';
-import { ShareQuoteModal } from './ShareQuoteModal';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+import { CARRIER_PARTNERS } from '../../data/mockData';
 
 interface ReactiveQuoteResultProps {
   baseAnnualPrice: number;
@@ -59,13 +52,6 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [selectedPaymentRail, setSelectedPaymentRail] = useState<'card' | 'keks' | 'aircash' | 'hub3a'>('card');
   const [checkoutComplete, setCheckoutComplete] = useState(false);
-
-  // HUB 3A & Share modal state
-  const [hub3aOpen, setHub3aOpen] = useState(false);
-  const [shareOpen, setShareOpen] = useState(false);
-
-  const ipidKey =
-    category === 'property' ? 'property' : category === 'health' ? 'dopunsko' : 'auto';
 
   // Dynamic price calculation
   // Deductible discount: 0€ -> 100%, 150€ -> 85%, 300€ -> 72%
@@ -254,81 +240,29 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
               </button>
             </div>
           </div>
-
-          {/* Mandatory IPID Pre-Contractual Disclosure (IDD EU 2016/97 & HANFA) */}
-          <div className="p-3.5 rounded-2xl bg-slate-800/70 border border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 text-xs">
-              <FileText className="w-4 h-4 text-teal-400 shrink-0" />
-              <div>
-                <span className="font-bold text-white block">
-                  IPID obrazac (Informacije o proizvodu osiguranja)
-                </span>
-                <span className="text-[11px] text-slate-400">
-                  Obvezni predugovorni dokument prije sklapanja ugovora (čl. 381. Zakona o osiguranju)
-                </span>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() =>
-                generateIpidPdf({
-                  category: category === 'property' ? 'imovina' : category === 'health' ? 'dopunsko' : 'auto',
-                  carrierName: 'Generali osiguranje d.d.',
-                  productName,
-                  customDetails: { annualPremium: finalAnnual },
-                })
-              }
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-sm transition-all shrink-0 cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Preuzmi IPID (PDF)</span>
-            </button>
-          </div>
         </div>
 
-        {/* Dual Conversion Buttons + HUB 3A & Share */}
-        <div className="pt-6 border-t border-slate-800 space-y-3 relative z-10">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <Button
-              variant="emerald"
-              size="lg"
-              onClick={() => setIsCheckoutModalOpen(true)}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="flex-1 font-bold shadow-lg shadow-emerald-900/30"
-            >
-              Ugovori policu online
-            </Button>
+        {/* Dual Conversion Buttons */}
+        <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative z-10">
+          <Button
+            variant="emerald"
+            size="lg"
+            onClick={() => setIsCheckoutModalOpen(true)}
+            rightIcon={<ArrowRight className="w-4 h-4" />}
+            className="flex-1 font-bold shadow-lg shadow-emerald-900/30"
+          >
+            Ugovori policu online
+          </Button>
 
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => setHub3aOpen(true)}
-              leftIcon={<QrCode className="w-4 h-4 text-teal-400" />}
-              className="text-white border-slate-700 hover:bg-slate-800 font-semibold text-xs sm:text-sm"
-            >
-              HUB 3A 2D Barkod uplatnica
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button
-              type="button"
-              onClick={() => setShareOpen(true)}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-teal-500/40 text-teal-300 font-bold text-xs transition-all cursor-pointer"
-            >
-              <Share2 className="w-3.5 h-3.5" />
-              <span>Spremi ponudu na WhatsApp / E-mail</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsCallbackModalOpen(true)}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs transition-all cursor-pointer"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Zatraži poziv agenta (15 min)</span>
-            </button>
-          </div>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => setIsCallbackModalOpen(true)}
+            leftIcon={<PhoneCall className="w-4 h-4 text-emerald-400" />}
+            className="text-white border-slate-700 hover:bg-slate-800 font-semibold text-xs sm:text-sm"
+          >
+            Zatraži poziv agenta (15 min)
+          </Button>
         </div>
       </Card>
 
@@ -352,7 +286,7 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                     <div>
                       <h5 className="font-bold text-sm text-slate-900">{carrier.shortName}</h5>
                       <span className="text-[10px] text-slate-400 font-mono">
-                        Ocjena: {carrier.rating || carrier.claimSpeedScore} ★
+                        Ocjena: {carrier.rating} ★ ({carrier.reviewCount})
                       </span>
                     </div>
                     {isBestRate && (
@@ -555,11 +489,7 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
 
                     <button
                       type="button"
-                      onClick={() => {
-                        setSelectedPaymentRail('hub3a');
-                        setIsCheckoutModalOpen(false);
-                        setHub3aOpen(true);
-                      }}
+                      onClick={() => setSelectedPaymentRail('hub3a')}
                       className={`p-3 rounded-xl border text-left flex items-center justify-between ${
                         selectedPaymentRail === 'hub3a'
                           ? 'border-slate-800 bg-slate-100 text-slate-900 font-bold'
@@ -575,7 +505,7 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1 text-slate-600">
                   <p className="flex items-center gap-1 text-slate-900 font-bold">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    Sigurna transakcija &amp; Zaštita potrošača
+                    Sigurna transakcija & HANFA zaštita potrošača
                   </p>
                   <p className="text-[11px] text-slate-500">
                     Polica ima izravnu pravnu snagu. Preuzimanje digitalnog certifikata i Zelene karte omogućeno je odmah po autorizaciji.
@@ -603,35 +533,6 @@ export const ReactiveQuoteResult: React.FC<ReactiveQuoteResultProps> = ({
           </div>
         </div>
       )}
-
-      {/* HUB 3A 2D Barcode Payment Slip Modal */}
-      <Hub3aPaymentSlipModal
-        isOpen={hub3aOpen}
-        onClose={() => setHub3aOpen(false)}
-        data={{
-          payerName: callbackName || 'Ugovaratelj osiguranja',
-          amountEur: finalAnnual,
-          paymentDescription: `Premija osiguranja - ${productName}`,
-        }}
-      />
-
-      {/* Save Quote to WhatsApp / E-mail Modal */}
-      <ShareQuoteModal
-        isOpen={shareOpen}
-        onClose={() => setShareOpen(false)}
-        category={category === 'property' ? 'property' : category === 'health' ? 'health' : 'auto'}
-        summaryTitle={productName}
-        calculatedPriceEur={finalAnnual}
-        monthlyPriceEur={finalMonthly}
-        carrierName="Generali osiguranje d.d."
-        details={{
-          ...inputsSummary,
-          deductible,
-          glassBreakage,
-          roadAssistance,
-          bonusProtection,
-        }}
-      />
     </div>
   );
 };

@@ -4,23 +4,22 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 // Layout & Global Components
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { StickyMobileFAB } from './components/layout/StickyMobileFAB';
+import { StickyMobileFAB } from './components/ui/StickyMobileFAB';
 import { CookieConsent } from './components/layout/CookieConsent';
 import { QuoteModal } from './components/quotes/QuoteModal';
 import { ConversationalWizard } from './components/conversational/ConversationalWizard';
 import { InsuranceCategory } from './lib/types';
 
 // Core Insurtech Funnels & Pages
-import HomePage from './pages/HomePage';
-import AutoOsiguranjePage from './pages/AutoInsurancePage';
-import DopunskoZdravstvenoPage from './pages/DopunskoHealthPage';
-import ImovinaPage from './pages/PropertyInsurancePage';
-import ClaimsReportingPage from './pages/ClaimsReportingPage';
-import ONamaPage from './pages/AboutUsPage';
-import PrigovoriPage from './pages/ComplaintsPage';
-import VehicleTransferPage from './pages/VehicleTransferPage';
-import LegalImpressumPage from './pages/LegalImpressumPage';
-import PolicyExpiryReminderPage from './pages/PolicyExpiryReminderPage';
+import HomePage from './app/page';
+import AutoOsiguranjePage from './app/auto-osiguranje/page';
+import DopunskoZdravstvenoPage from './app/dopunsko-zdravstveno/page';
+import ImovinaPage from './app/imovina/page';
+import ClaimsReportingPage from './app/prijava-stete/page';
+import ONamaPage from './app/o-nama/page';
+import PrigovoriPage from './app/prigovori/page';
+import VehicleTransferPage from './app/kalkulator-prijepisa/page';
+import LegalImpressumPage from './app/o-nama-pravno/page';
 
 // Portal, Admin, & Auxiliary Pages
 import { PortalDashboardPage } from './pages/PortalDashboardPage';
@@ -59,8 +58,8 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-teal-600 selection:text-white">
-        {/* Global Navigation Header */}
+      <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-[#FF0055] selection:text-white">
+        {/* Global Navigation Header with HANFA license & direct quoting triggers */}
         <Header
           onOpenQuote={handleOpenQuote}
           onOpenSavjetnik={handleOpenSavjetnik}
@@ -93,17 +92,13 @@ export const App: React.FC = () => {
             <Route path="/claims" element={<ClaimsReportingPage />} />
             <Route path="/claims/file" element={<ClaimsReportingPage />} />
 
-            {/* 7. O nama i tim */}
+            {/* 7. O nama, HANFA licenca ZO-88912 i tim */}
             <Route path="/o-nama" element={<ONamaPage />} />
             <Route path="/about" element={<ONamaPage />} />
 
             {/* 8. Zakonski postupak rješavanja prigovora potrošača (čl. 401.) */}
             <Route path="/prigovori" element={<PrigovoriPage />} />
             <Route path="/zalbe" element={<PrigovoriPage />} />
-
-            {/* 8b. Podsjetnik na istek police osiguranja */}
-            <Route path="/podsjetnik-isteka" element={<PolicyExpiryReminderPage />} />
-            <Route path="/podsjetnik" element={<PolicyExpiryReminderPage />} />
 
             {/* 9. Pravne stranice, IDD obavijest i izvansudsko rješavanje sporova */}
             <Route path="/o-nama-pravno" element={<LegalImpressumPage />} />
