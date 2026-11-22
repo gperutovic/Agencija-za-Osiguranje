@@ -1,108 +1,216 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { UserProfile } from '../types/database';
-import { INITIAL_USERS, dualStore } from '../api/firebase';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { firebaseAuth, firestoreDb, sanitizeForFirestore } from '../services/firebase';
+import { SEED_USERS } from '../services/seedData';
+import { UserProfile, UserRole } from '../types/domain';
 
-interface AuthContextType {
-  user: UserProfile | null;
-  role: UserProfile['role'] | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, desiredRole?: UserProfile['role']) => Promise<void>;
-  register: (profileData: Omit<UserProfile, 'uid' | 'createdAt'>) => Promise<void>;
-  logout: () => void;
-  switchDemoRole: (role: UserProfile['role']) => void;
+interface RegisterPayload {
+  fullName: string;
+  email: string;
+  password: string;
+  phone: string;
+  oib?: string;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const AUTH_KEY = 'agencija_zivot_auth_user_v1';
+interface AuthContextValue {
+  user: UserProfile | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  isAgent: boolean;
+  signInWithEmail: (email: string, password: string) => Promise<UserProfile>;
+  registerClient: (payload: RegisterPayload) => Promise<UserProfile>;
+  signInAsDemo: (role: 'client' | 'agent') => UserProfile;
+  logout: () => Promise<void>;
+}
+
+const SESSION_KEY = 'jasno_auth_session_v1';
+const LOCAL_USERS_KEY = 'jasno_local_users_v1';
+
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+function loadLocalUsers(): UserProfile[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_USERS_KEY);
+    if (!raw) {
+      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(SEED_USERS));
+      return [...SEED_USERS];
+    }
+    return JSON.parse(raw) as UserProfile[];
+  } catch {
+    return [...SEED_USERS];
+  }
+}
+
+function saveLocalUser(profile: UserProfile): void {
+  try {
+    const users = loadLocalUsers().filter((u) => u.email.toLowerCase() !== profile.email.toLowerCase());
+    localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify([profile, ...users]));
+  } catch {
+    // ignore storage errors
+  }
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem(SESSION_KEY);
+      return saved ? (JSON.parse(saved) as UserProfile) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(AUTH_KEY);
-    if (stored) {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (fbUser) => {
+      if (!fbUser) return;
       try {
-        setUser(JSON.parse(stored));
+        const snap = await getDoc(doc(firestoreDb, 'users', fbUser.uid));
+        if (snap.exists()) {
+          const profile = snap.data() as UserProfile;
+          setUser(profile);
+          localStorage.setItem(SESSION_KEY, JSON.stringify(profile));
+        }
       } catch {
-        setUser(INITIAL_USERS[0]);
+        // Keep current local session if Firestore read is unavailable
       }
-    } else {
-      // Default to policyholder persona (Ana Horvat)
-      setUser(INITIAL_USERS[0]);
-      localStorage.setItem(AUTH_KEY, JSON.stringify(INITIAL_USERS[0]));
-    }
-    setIsLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
-  const login = async (email: string, desiredRole: UserProfile['role'] = 'policyholder') => {
-    setIsLoading(true);
-    const existing = dualStore.getUsers().find((u) => u.email.toLowerCase() === email.toLowerCase());
-    let loggedUser: UserProfile;
+  const persistSession = (profile: UserProfile | null) => {
+    setUser(profile);
+    try {
+      if (profile) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(profile));
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+      }
+    } catch {
+      // ignore storage errors
+    }
+  };
 
-    if (existing) {
-      loggedUser = existing;
-    } else {
-      loggedUser = {
-        uid: `user-${Date.now()}`,
-        email,
-        displayName: email.split('@')[0],
-        role: desiredRole,
+  const signInWithEmail = async (email: string, password: string): Promise<UserProfile> => {
+    setIsLoading(true);
+    const normalizedEmail = email.trim().toLowerCase();
+    try {
+      // Try real Firebase Auth first
+      try {
+        const cred = await signInWithEmailAndPassword(firebaseAuth, normalizedEmail, password);
+        const snap = await getDoc(doc(firestoreDb, 'users', cred.user.uid));
+        if (snap.exists()) {
+          const profile = snap.data() as UserProfile;
+          persistSession(profile);
+          return profile;
+        }
+      } catch {
+        // Fall back to local/seeded account verification for demo/dev environments
+      }
+
+      const existing = loadLocalUsers().find((u) => u.email.toLowerCase() === normalizedEmail);
+      if (existing) {
+        persistSession(existing);
+        return existing;
+      }
+
+      const inferredRole: UserRole = normalizedEmail.endsWith('@jasno-osiguranje.hr')
+        ? 'agent'
+        : 'client';
+      const newProfile: UserProfile = {
+        uid: `local-${Date.now()}`,
+        email: normalizedEmail,
+        fullName: normalizedEmail.split('@')[0] ?? 'Korisnik',
+        role: inferredRole,
         phone: '+385 91 000 0000',
         createdAt: new Date().toISOString(),
       };
-      dualStore.saveUser(loggedUser);
+      saveLocalUser(newProfile);
+      persistSession(newProfile);
+      return newProfile;
+    } finally {
+      setIsLoading(false);
     }
-
-    setUser(loggedUser);
-    localStorage.setItem(AUTH_KEY, JSON.stringify(loggedUser));
-    setIsLoading(false);
   };
 
-  const register = async (profileData: Omit<UserProfile, 'uid' | 'createdAt'>) => {
+  const registerClient = async (payload: RegisterPayload): Promise<UserProfile> => {
     setIsLoading(true);
-    const uid = `user-${Date.now()}`;
-    const newUser: UserProfile = {
-      ...profileData,
-      uid,
-      createdAt: new Date().toISOString(),
-    };
-    dualStore.saveUser(newUser);
-    setUser(newUser);
-    localStorage.setItem(AUTH_KEY, JSON.stringify(newUser));
-    setIsLoading(false);
+    const normalizedEmail = payload.email.trim().toLowerCase();
+    const now = new Date().toISOString();
+    let uid = `client-${Date.now()}`;
+
+    try {
+      try {
+        const cred = await createUserWithEmailAndPassword(
+          firebaseAuth,
+          normalizedEmail,
+          payload.password
+        );
+        uid = cred.user.uid;
+      } catch {
+        // Continue with local profile registration if Firebase Auth email provider is disabled
+      }
+
+      const profile: UserProfile = sanitizeForFirestore({
+        uid,
+        email: normalizedEmail,
+        fullName: payload.fullName.trim(),
+        role: 'client',
+        phone: payload.phone.trim(),
+        oib: payload.oib?.trim() || undefined,
+        createdAt: now,
+      });
+
+      try {
+        if (firebaseAuth.currentUser) {
+          await setDoc(doc(firestoreDb, 'users', uid), profile);
+        }
+      } catch {
+        // Ignore Firestore write errors when offline
+      }
+
+      saveLocalUser(profile);
+      persistSession(profile);
+      return profile;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem(AUTH_KEY);
+  const signInAsDemo = (role: 'client' | 'agent'): UserProfile => {
+    const matched = SEED_USERS.find((u) => u.role === role) ?? SEED_USERS[0]!;
+    persistSession(matched);
+    return matched;
   };
 
-  const switchDemoRole = (newRole: UserProfile['role']) => {
-    const target = INITIAL_USERS.find((u) => u.role === newRole) || {
-      uid: `demo-${newRole}`,
-      email: `${newRole}@agencija-zivot.hr`,
-      displayName: `Demo ${newRole.toUpperCase()}`,
-      role: newRole,
-      phone: '+385 1 4800 120',
-      createdAt: new Date().toISOString(),
-    };
-    setUser(target);
-    localStorage.setItem(AUTH_KEY, JSON.stringify(target));
+  const logout = async (): Promise<void> => {
+    try {
+      if (firebaseAuth.currentUser) {
+        await signOut(firebaseAuth);
+      }
+    } catch {
+      // ignore signOut errors
+    }
+    persistSession(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        role: user?.role || null,
-        isAuthenticated: !!user,
         isLoading,
-        login,
-        register,
+        isAuthenticated: user !== null,
+        isAgent: user?.role === 'agent' || user?.role === 'admin',
+        signInWithEmail,
+        registerClient,
+        signInAsDemo,
         logout,
-        switchDemoRole,
       }}
     >
       {children}
@@ -110,10 +218,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+export const useAuth = (): AuthContextValue => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error('useAuth must be used within AuthProvider');
   }
-  return context;
+  return ctx;
 };

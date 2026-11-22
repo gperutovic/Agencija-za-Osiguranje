@@ -1,60 +1,1249 @@
 rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model — Jasno Digital Insurance Agency Platform
+// (Firestore Standard Edition, Republic of Croatia / HANFA / GDPR)
+// Aligned with src/types/domain.ts & src/services/agencyRepository.ts
+// ===============================================================
+//
+// Collection: users
+// Document ID: {uid} (Firebase Auth UID)
+// Fields:
+//   - uid: string (required, == {uid}, 1..128 chars, immutable)
+//   - email: string (required, valid email, 5..254 chars, immutable for owner)
+//   - fullName: string (required, 1..120 chars)
+//   - role: string (required, enum: 'client' | 'agent' | 'admin'; self-create MUST be 'client'; only admin may change)
+//   - phone: string (optional/nullable, empty or valid phone 6..30 chars)
+//   - oib: string (optional/nullable, empty or 11-digit Croatian OIB)
+//   - city: string (optional/nullable, 0..100 chars)
+//   - postalCode: string (optional/nullable, empty or 5-digit postal code)
+//   - createdAt: timestamp | ISO-8601 string (required, immutable)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: quotes
+// Document ID: {quoteId}
+// Fields:
+//   - id: string (optional, == {quoteId}, 1..128 chars, immutable)
+//   - referenceNumber: string (required, 1..64 chars, immutable)
+//   - userId: string (optional/nullable, on create must equal request.auth.uid if set; immutable once set)
+//   - productLine: string (required, enum of 7 Croatian lines, immutable)
+//   - bundleProducts: list<string> (optional, <= 7 items, elements in product lines)
+//   - inputs: map (optional, strict discriminated ProductQuoteInput matching productLine)
+//   - customization: map (optional, CoverageCustomization with bounded deductible/multiplier/billingCycle/addons)
+//   - selectedOffer: map (optional, CarrierOffer with bounded prices/strings/lists)
+//   - customer: map (required; fullName 1..120, valid email, optional bounded phone/oib/iban/address/city/postalCode/companyName)
+//   - consents: map (required, immutable; ipidAcknowledged == true, gdprEssential == true, optional gdprMarketing/timestamp/policyVersion)
+//   - status: string (required, enum: 'new' | 'quoted' | 'bound' | 'lost'; must be 'new' on create)
+//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
+//   - source: string (optional, enum: 'quote_engine' | 'switch_save' | 'ai_escalation')
+//   - notes: string (optional/nullable, 0..4000 chars)
+//   - createdAt: timestamp | ISO-8601 string (required, immutable)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: switch_analyses
+// Document ID: {analysisId}
+// Fields:
+//   - id: string (optional, == {analysisId}, 1..128 chars, immutable)
+//   - referenceNumber: string (optional, 1..64 chars, immutable)
+//   - userId: string (optional/nullable, on create must equal request.auth.uid if set; immutable once set)
+//   - fileName: string (required, 1..255 chars, immutable)
+//   - fileSizeBytes: number (optional, 0..52428800, immutable)
+//   - parsedVia: string (optional, enum: 'gemini_ai' | 'local_analyzer', immutable)
+//   - extractedPolicy: map (required; insurer, productLine, expiryDate, currentAnnualPremium, optional policyNumber/bonusPercent/deductible)
+//   - estimatedNewAnnualPremium: number (optional, 0..10000000)
+//   - estimatedAnnualSavings: number (required, 0..10000000)
+//   - reminderScheduledFor: timestamp | ISO-8601 string (optional/nullable)
+//   - customerName: string (optional/nullable, 0..120 chars)
+//   - customerEmail: string (optional/nullable, valid email)
+//   - customerPhone: string (optional/nullable, valid phone)
+//   - status: string (required, enum: 'new' | 'quoted' | 'bound' | 'lost' | 'reviewed' | 'contacted' | 'converted' | 'archived'; must be 'new' on create)
+//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
+//   - notes: string (optional/nullable, 0..4000 chars)
+//   - createdAt: timestamp | ISO-8601 string (required, immutable)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: policies
+// Document ID: {policyId}
+// Fields:
+//   - id: string (optional, == {policyId}, 1..128 chars)
+//   - policyNumber: string (required, 1..64 chars, immutable for owner)
+//   - userId: string (required, 1..128 chars, immutable for owner)
+//   - clientName: string (required, 1..120 chars, immutable for owner)
+//   - clientOib: string (required, 11-digit OIB, immutable for owner)
+//   - productLine: string (required, enum of 7 lines, immutable for owner)
+//   - carrierName: string (required, 1..120 chars, immutable for owner)
+//   - status: string (required, enum: 'active' | 'expiring_soon' | 'expired' | 'pending_renewal'; owner may only transition active/expiring_soon -> pending_renewal)
+//   - startDate: timestamp | ISO-8601 string (required, immutable for owner)
+//   - expiryDate: timestamp | ISO-8601 string (required, immutable for owner)
+//   - annualPremium: number (required, 0..10000000, immutable for owner)
+//   - monthlyPremium: number (required, 0..1000000, immutable for owner)
+//   - deductible: number (required, 0..1000000, immutable for owner)
+//   - coverageLimit: number (required, 0..100000000, immutable for owner)
+//   - assetSummary: string (optional/nullable, 0..300 chars, immutable for owner)
+//   - vehiclePlate: string (optional/nullable, 0..24 chars, immutable for owner)
+//   - propertyAddress: string (optional/nullable, 0..250 chars, immutable for owner)
+//   - greenCardNumber: string (optional/nullable, 0..64 chars, immutable for owner)
+//   - ipidCode: string (optional/nullable, 0..64 chars, immutable for owner)
+//   - renewalReminderSentAt: timestamp | ISO-8601 string (optional/nullable, immutable for owner)
+//   - endorsements: list<map> (optional, <= 50 items; owner may only prepend/append 1 requested endorsement per update)
+//   - createdAt: timestamp | ISO-8601 string (optional/nullable, immutable for owner)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: claims
+// Document ID: {claimId}
+// Fields:
+//   - id: string (optional, == {claimId}, 1..128 chars, immutable)
+//   - referenceNumber: string (required, 1..64 chars, immutable)
+//   - userId: string (optional/nullable, on create must equal request.auth.uid if set, immutable)
+//   - policyNumber: string (required, 1..64 chars, immutable)
+//   - productLine: string (optional/nullable, enum of 7 lines, immutable)
+//   - carrierName: string (optional/nullable, 0..120 chars, immutable)
+//   - claimantName: string (required, 1..120 chars, immutable)
+//   - claimantOib: string (required, 11-digit OIB, immutable)
+//   - claimantEmail: string (required, valid email, immutable)
+//   - claimantPhone: string (optional/nullable, valid phone, immutable)
+//   - incidentDate: timestamp | ISO-8601 string (optional/nullable, immutable)
+//   - incidentTime: string (optional/nullable, 0..20 chars, immutable)
+//   - incidentLocation: string (optional/nullable, 0..250 chars, immutable)
+//   - description: string (required, 1..4000 chars, immutable)
+//   - policeReportFiled: bool (optional, immutable)
+//   - attachments: list<map> (optional, <= 20 items; owner may only append 1..5 valid attachments per update)
+//   - stage: string (required, enum: 'received' | 'insurer_review' | 'assessment' | 'paid'; must be 'received' on create; sequential agent/admin transitions)
+//   - stageHistory: list<map> (optional, <= 30 items, append-only audit trail)
+//   - consents: map (required, immutable; gdprEssential == true)
+//   - estimatedAmount: number (optional/nullable, 0..100000000; agent/admin editable)
+//   - createdAt: timestamp | ISO-8601 string (required, immutable)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: escalations
+// Document ID: {escalationId}
+// Fields:
+//   - id: string (optional, == {escalationId}, 1..128 chars, immutable)
+//   - referenceNumber: string (required, 1..64 chars, immutable)
+//   - userId: string (optional/nullable, on create must equal request.auth.uid if set; immutable once set)
+//   - customerName: string (optional/nullable, 0..120 chars)
+//   - customerEmail: string (required, valid email, immutable)
+//   - customerPhone: string (optional/nullable, valid phone)
+//   - topic: string (required, 1..200 chars, immutable)
+//   - transcript: list<AiChatMessage | string> (required, <= 50 entries, immutable)
+//   - status: string (required; on create 'open' or 'new' matching domain.ts QuotePipelineStatus)
+//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
+//   - notes: string (optional/nullable, 0..4000 chars)
+//   - createdAt: timestamp | ISO-8601 string (required, immutable)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: messages
+// Document ID: {messageId}
+// Fields (fully immutable audit trail — no update or delete):
+//   - id: string (optional, == {messageId}, 1..128 chars)
+//   - threadUserId: string (required, 1..128 chars; client must match auth.uid)
+//   - senderRole: string (required, enum: 'client' | 'agent'; client -> 'client', agent/admin -> 'agent')
+//   - senderName: string (required, 1..120 chars)
+//   - text: string (required, 1..2000 chars)
+//   - createdAt: timestamp | ISO-8601 string (required)
+//
+// Collection: complaints (Art. 401 Croatian Insurance Act statutory register)
+// Document ID: {complaintId}
+// Fields:
+//   - id: string (optional, == {complaintId}, 1..128 chars, immutable)
+//   - protocolNumber: string (required, 1..64 chars, immutable)
+//   - fullName: string (required, 1..120 chars, immutable)
+//   - oib: string (required, 11-digit OIB, immutable)
+//   - email: string (required, valid email, immutable)
+//   - phone: string (optional/nullable, valid phone, immutable)
+//   - address: string (optional/nullable, 0..250 chars, immutable)
+//   - policyNumber: string (optional/nullable, 0..64 chars, immutable)
+//   - subject: string (required, 1..200 chars, immutable)
+//   - description: string (required, 1..5000 chars, immutable)
+//   - status: string (required, enum: 'received' | 'in_review' | 'resolved'; must be 'received' on create)
+//   - statutoryDeadlineDate: timestamp | ISO-8601 string (optional/nullable, immutable)
+//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
+//   - resolutionNotes: string (optional/nullable, 0..5000 chars; disallowed on public create)
+//   - consents: map (optional/nullable, immutable)
+//   - createdAt: timestamp | ISO-8601 string (required, immutable)
+//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// ===============================================================
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // User Accounts & Licensed Advisor Profiles
-    match /users/{userId} {
-      allow read, write: if true;
+    // ===============================================================
+    // Helper Functions — Authentication & RBAC
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
     }
 
-    // Comparative Quotes & Leads
+    function isSignedIn() {
+      return isAuthenticated();
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isRecordOwner() {
+      return isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) ||
+             request.resource.data.uid == request.auth.uid;
+    }
+
+    function uidNotModified() {
+      return !('uid' in request.resource.data) ||
+             request.resource.data.uid == resource.data.uid;
+    }
+
+    function hasRoleClaim(allowedRoles) {
+      return isSignedIn() &&
+             'role' in request.auth.token &&
+             request.auth.token.role in allowedRoles;
+    }
+
+    function userDocExists() {
+      return isSignedIn() &&
+             exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function userDocRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return hasRoleClaim(['admin']) ||
+             (userDocExists() && userDocRole() == 'admin');
+    }
+
+    function isAgentOrAdmin() {
+      return hasRoleClaim(['agent', 'admin']) ||
+             (userDocExists() && userDocRole() in ['agent', 'admin']);
+    }
+
+    // ===============================================================
+    // Helper Functions — Primitive, Format & Schema Validators
+    // ===============================================================
+
+    function hasRequiredFields(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(data, fields) {
+      return data.keys().hasOnly(fields);
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    function isBoundedString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isNonEmptyString(val, maxLen) {
+      return isBoundedString(val, 1, maxLen);
+    }
+
+    function isOptionalString(data, field, minLen, maxLen) {
+      return !(field in data) ||
+             data[field] == null ||
+             isBoundedString(data[field], minLen, maxLen);
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+             email.size() >= 5 &&
+             email.size() <= 254 &&
+             email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+
+    function isValidUrl(url) {
+      return url is string &&
+             url.size() >= 8 &&
+             url.size() <= 2048 &&
+             (url.matches('^https://.*') || url.matches('^http://.*'));
+    }
+
+    function isValidImageDataUrl(dataUrl) {
+      return dataUrl is string &&
+             dataUrl.size() >= 20 &&
+             dataUrl.size() <= 350000 &&
+             dataUrl.matches('^data:image/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=]+$');
+    }
+
+    function isValidOib(oib) {
+      return oib is string &&
+             oib.size() == 11 &&
+             oib.matches('^[0-9]{11}$');
+    }
+
+    function isValidOptionalOib(data, field) {
+      return !(field in data) ||
+             data[field] == null ||
+             data[field] == '' ||
+             isValidOib(data[field]);
+    }
+
+    function isValidPhone(phone) {
+      return phone is string &&
+             phone.size() >= 6 &&
+             phone.size() <= 30 &&
+             phone.matches('^[+0-9()\\s/-]+$');
+    }
+
+    function isValidOptionalPhone(data, field) {
+      return !(field in data) ||
+             data[field] == null ||
+             data[field] == '' ||
+             isValidPhone(data[field]);
+    }
+
+    function isValidOptionalPostalCode(data, field) {
+      return !(field in data) ||
+             data[field] == null ||
+             data[field] == '' ||
+             (data[field] is string && data[field].matches('^[0-9]{5}$'));
+    }
+
+    // Format check for ISO-8601 date or datetime strings (YYYY-MM-DD or full ISO timestamp).
+    // Prefer Firestore `timestamp` where strict calendar logic is required.
+    function isValidDateString(dateStr) {
+      return dateStr is string &&
+             dateStr.size() >= 10 &&
+             dateStr.size() <= 40 &&
+             dateStr.matches('^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})?)?$');
+    }
+
+    function isValidDateTime(val) {
+      return val is timestamp || isValidDateString(val);
+    }
+
+    function isScopedPath(path) {
+      return isSignedIn() &&
+             path is string &&
+             path.size() <= 512 &&
+             !path.matches('.*\\.\\..*') &&
+             path.matches('^users/' + request.auth.uid + '/[a-zA-Z0-9/_.-]+$');
+    }
+
+    function isValidStoragePath(path) {
+      return path is string &&
+             path.size() >= 1 &&
+             path.size() <= 512 &&
+             !path.matches('.*\\.\\..*') && (
+               isScopedPath(path) ||
+               path.matches('^(claims|policies|switch)/[a-zA-Z0-9/_.-]+$')
+             );
+    }
+
+    function isValidNumber(val, minVal, maxVal) {
+      return val is number && val >= minVal && val <= maxVal;
+    }
+
+    function isValidList(listVal, maxSize) {
+      return listVal is list && listVal.size() <= maxSize;
+    }
+
+    function isValidMap(mapData, allowedKeys) {
+      return mapData is map && mapData.keys().hasOnly(allowedKeys);
+    }
+
+    function isValidProductLine(line) {
+      return line is string &&
+             line in ['auto', 'imovina', 'zdravstveno', 'zivotno', 'putno', 'ljubimci', 'poslovno'];
+    }
+
+    // Ownership binding for public-create collections:
+    // - Signed-out callers MUST omit userId (or pass null) to prevent spoofing another user's portal.
+    // - Signed-in callers may either omit/null userId or set it strictly to their own auth UID.
+    function isValidCreateUserId(data) {
+      return !('userId' in data) ||
+             data.userId == null ||
+             (isSignedIn() && data.userId is string && data.userId == request.auth.uid);
+    }
+
+    function isValidOptionalStoredUserId(data) {
+      return !('userId' in data) ||
+             data.userId == null ||
+             isNonEmptyString(data.userId, 128);
+    }
+
+    // Allows agent/admin to link an anonymous lead/record to a registered user once,
+    // while preventing reassignment after a userId is already bound.
+    function isUserIdImmutableOrLinkable() {
+      return (!('userId' in resource.data) || resource.data.userId == null)
+        ? isValidOptionalStoredUserId(request.resource.data)
+        : ('userId' in request.resource.data && request.resource.data.userId == resource.data.userId);
+    }
+
+    function isValidQuoteConsents(consents) {
+      return isValidMap(consents, ['ipidAcknowledged', 'gdprEssential', 'gdprMarketing', 'timestamp', 'policyVersion']) &&
+             hasRequiredFields(consents, ['ipidAcknowledged', 'gdprEssential']) &&
+             consents.ipidAcknowledged == true &&
+             consents.gdprEssential == true &&
+             (!('gdprMarketing' in consents) || consents.gdprMarketing is bool) &&
+             (!('timestamp' in consents) || isValidDateTime(consents.timestamp)) &&
+             (!('policyVersion' in consents) || isNonEmptyString(consents.policyVersion, 40));
+    }
+
+    function isValidClaimConsents(consents) {
+      return isValidMap(consents, ['ipidAcknowledged', 'gdprEssential', 'gdprMarketing', 'timestamp', 'policyVersion']) &&
+             hasRequiredFields(consents, ['gdprEssential']) &&
+             consents.gdprEssential == true &&
+             (!('ipidAcknowledged' in consents) || consents.ipidAcknowledged is bool) &&
+             (!('gdprMarketing' in consents) || consents.gdprMarketing is bool) &&
+             (!('timestamp' in consents) || isValidDateTime(consents.timestamp)) &&
+             (!('policyVersion' in consents) || isNonEmptyString(consents.policyVersion, 40));
+    }
+
+    // ===============================================================
+    // Domain Validators (Called in BOTH create and update rules)
+    // ===============================================================
+
+    // 1. Users (/users/{uid})
+    function isValidUser(data, uid) {
+      return hasOnlyAllowedFields(data, [
+               'uid', 'email', 'fullName', 'role', 'phone',
+               'oib', 'city', 'postalCode', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, ['uid', 'email', 'fullName', 'role', 'createdAt']) &&
+             data.uid is string && data.uid == uid && data.uid.size() >= 1 && data.uid.size() <= 128 &&
+             isValidEmail(data.email) &&
+             isNonEmptyString(data.fullName, 120) &&
+             data.role in ['client', 'agent', 'admin'] &&
+             isValidOptionalPhone(data, 'phone') &&
+             isValidOptionalOib(data, 'oib') &&
+             isOptionalString(data, 'city', 0, 100) &&
+             isValidOptionalPostalCode(data, 'postalCode') &&
+             isValidDateTime(data.createdAt) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    // 2. Quotes (/quotes/{quoteId})
+    function isValidQuoteCustomer(c) {
+      return isValidMap(c, [
+               'fullName', 'email', 'phone', 'oib', 'iban',
+               'address', 'city', 'postalCode', 'companyName'
+             ]) &&
+             hasRequiredFields(c, ['fullName', 'email']) &&
+             isNonEmptyString(c.fullName, 120) &&
+             isValidEmail(c.email) &&
+             isValidOptionalPhone(c, 'phone') &&
+             isValidOptionalOib(c, 'oib') &&
+             isOptionalString(c, 'iban', 0, 34) &&
+             isOptionalString(c, 'address', 0, 200) &&
+             isOptionalString(c, 'city', 0, 100) &&
+             isValidOptionalPostalCode(c, 'postalCode') &&
+             isOptionalString(c, 'companyName', 0, 150);
+    }
+
+    function isValidCoverageCustomization(c) {
+      return isValidMap(c, ['deductible', 'coverageMultiplier', 'coverageLimit', 'billingCycle', 'addons']) &&
+             (!('deductible' in c) || isValidNumber(c.deductible, 0, 1000000)) &&
+             (!('coverageMultiplier' in c) || isValidNumber(c.coverageMultiplier, 0.5, 5)) &&
+             (!('coverageLimit' in c) || isValidNumber(c.coverageLimit, 0, 100000000)) &&
+             (!('billingCycle' in c) || c.billingCycle in ['monthly', 'annual']) &&
+             (!('addons' in c) || (
+               isValidMap(c.addons, ['glass', 'hail', 'animals', 'roadside', 'earthquake']) &&
+               (!('glass' in c.addons) || c.addons.glass is bool) &&
+               (!('hail' in c.addons) || c.addons.hail is bool) &&
+               (!('animals' in c.addons) || c.addons.animals is bool) &&
+               (!('roadside' in c.addons) || c.addons.roadside is bool) &&
+               (!('earthquake' in c.addons) || c.addons.earthquake is bool)
+             ));
+    }
+
+    function isValidCarrierOffer(o) {
+      return isValidMap(o, [
+               'carrierId', 'carrierName', 'carrierShortName', 'rating', 'tierLabel',
+               'monthlyPrice', 'annualPrice', 'baseAnnualBeforeBundle',
+               'bundleDiscountPercent', 'deductible', 'coverageLimit',
+               'coveredItems', 'excludedItems', 'ipidCode', 'highlightBadge'
+             ]) &&
+             (!('carrierId' in o) || isNonEmptyString(o.carrierId, 64)) &&
+             (!('carrierName' in o) || isNonEmptyString(o.carrierName, 120)) &&
+             (!('carrierShortName' in o) || isNonEmptyString(o.carrierShortName, 64)) &&
+             (!('rating' in o) || isNonEmptyString(o.rating, 40)) &&
+             (!('tierLabel' in o) || isNonEmptyString(o.tierLabel, 80)) &&
+             (!('monthlyPrice' in o) || isValidNumber(o.monthlyPrice, 0, 1000000)) &&
+             (!('annualPrice' in o) || isValidNumber(o.annualPrice, 0, 10000000)) &&
+             (!('baseAnnualBeforeBundle' in o) || isValidNumber(o.baseAnnualBeforeBundle, 0, 10000000)) &&
+             (!('bundleDiscountPercent' in o) || isValidNumber(o.bundleDiscountPercent, 0, 100)) &&
+             (!('deductible' in o) || isValidNumber(o.deductible, 0, 1000000)) &&
+             (!('coverageLimit' in o) || isValidNumber(o.coverageLimit, 0, 100000000)) &&
+             (!('coveredItems' in o) || (
+               isValidList(o.coveredItems, 30) &&
+               (o.coveredItems.size() == 0 || (
+                 isBoundedString(o.coveredItems[0], 1, 300) &&
+                 isBoundedString(o.coveredItems[o.coveredItems.size() - 1], 1, 300)
+               ))
+             )) &&
+             (!('excludedItems' in o) || (
+               isValidList(o.excludedItems, 30) &&
+               (o.excludedItems.size() == 0 || (
+                 isBoundedString(o.excludedItems[0], 1, 300) &&
+                 isBoundedString(o.excludedItems[o.excludedItems.size() - 1], 1, 300)
+               ))
+             )) &&
+             (!('ipidCode' in o) || isNonEmptyString(o.ipidCode, 64)) &&
+             isOptionalString(o, 'highlightBadge', 0, 80);
+    }
+
+    function isValidAutoQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'plateNumber', 'make', 'model', 'year',
+               'kw', 'bonusPercent', 'youngDriver', 'annualMileage', 'kaskoTier'
+             ]) &&
+             inp.productLine == 'auto' &&
+             isOptionalString(inp, 'plateNumber', 0, 24) &&
+             isOptionalString(inp, 'make', 0, 60) &&
+             isOptionalString(inp, 'model', 0, 60) &&
+             (!('year' in inp) || isValidNumber(inp.year, 1950, 2035)) &&
+             (!('kw' in inp) || isValidNumber(inp.kw, 1, 1500)) &&
+             (!('bonusPercent' in inp) || isValidNumber(inp.bonusPercent, 0, 100)) &&
+             (!('youngDriver' in inp) || inp.youngDriver is bool) &&
+             (!('annualMileage' in inp) || inp.annualMileage in ['under_10k', '10k_20k', 'over_20k']) &&
+             (!('kaskoTier' in inp) || inp.kaskoTier in ['ao_only', 'mini_kasko', 'full_kasko']);
+    }
+
+    function isValidPropertyQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'city', 'postalCode', 'propertyType', 'areaSqm',
+               'coverageScope', 'includeEarthquake', 'includeFlood', 'includeBurglary'
+             ]) &&
+             inp.productLine == 'imovina' &&
+             isOptionalString(inp, 'city', 0, 100) &&
+             isOptionalString(inp, 'postalCode', 0, 12) &&
+             (!('propertyType' in inp) || inp.propertyType in ['stan', 'kuca']) &&
+             (!('areaSqm' in inp) || isValidNumber(inp.areaSqm, 5, 10000)) &&
+             (!('coverageScope' in inp) || inp.coverageScope in ['building', 'contents', 'both']) &&
+             (!('includeEarthquake' in inp) || inp.includeEarthquake is bool) &&
+             (!('includeFlood' in inp) || inp.includeFlood is bool) &&
+             (!('includeBurglary' in inp) || inp.includeBurglary is bool);
+    }
+
+    function isValidHealthQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'age', 'planTier', 'includeBListDrugs', 'includeDiagnostics', 'familyMembers'
+             ]) &&
+             inp.productLine == 'zdravstveno' &&
+             (!('age' in inp) || isValidNumber(inp.age, 0, 120)) &&
+             (!('planTier' in inp) || inp.planTier in ['dopunsko', 'dodatno', 'kombinirano']) &&
+             (!('includeBListDrugs' in inp) || inp.includeBListDrugs is bool) &&
+             (!('includeDiagnostics' in inp) || inp.includeDiagnostics is bool) &&
+             (!('familyMembers' in inp) || isValidNumber(inp.familyMembers, 1, 20));
+    }
+
+    function isValidLifeQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'age', 'smoker', 'sumInsured', 'termYears', 'includeCriticalIllness'
+             ]) &&
+             inp.productLine == 'zivotno' &&
+             (!('age' in inp) || isValidNumber(inp.age, 18, 85)) &&
+             (!('smoker' in inp) || inp.smoker is bool) &&
+             (!('sumInsured' in inp) || isValidNumber(inp.sumInsured, 1000, 10000000)) &&
+             (!('termYears' in inp) || isValidNumber(inp.termYears, 1, 50)) &&
+             (!('includeCriticalIllness' in inp) || inp.includeCriticalIllness is bool);
+    }
+
+    function isValidTravelQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'destination', 'days', 'travelers', 'includeWinterSports', 'includeCancellation'
+             ]) &&
+             inp.productLine == 'putno' &&
+             (!('destination' in inp) || inp.destination in ['eu', 'world_excl_us', 'world_incl_us']) &&
+             (!('days' in inp) || isValidNumber(inp.days, 1, 365)) &&
+             (!('travelers' in inp) || isValidNumber(inp.travelers, 1, 50)) &&
+             (!('includeWinterSports' in inp) || inp.includeWinterSports is bool) &&
+             (!('includeCancellation' in inp) || inp.includeCancellation is bool);
+    }
+
+    function isValidPetQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'petType', 'petAgeYears', 'breedSize', 'includeLiability'
+             ]) &&
+             inp.productLine == 'ljubimci' &&
+             (!('petType' in inp) || inp.petType in ['dog', 'cat']) &&
+             (!('petAgeYears' in inp) || isValidNumber(inp.petAgeYears, 0, 30)) &&
+             (!('breedSize' in inp) || inp.breedSize in ['small', 'medium', 'large']) &&
+             (!('includeLiability' in inp) || inp.includeLiability is bool);
+    }
+
+    function isValidBusinessQuoteInput(inp) {
+      return isValidMap(inp, [
+               'productLine', 'companyType', 'employees', 'annualRevenueBand',
+               'includeProfessionalLiability', 'includeCyber'
+             ]) &&
+             inp.productLine == 'poslovno' &&
+             (!('companyType' in inp) || inp.companyType in ['obrt', 'doo', 'slobodna_djelatnost']) &&
+             (!('employees' in inp) || isValidNumber(inp.employees, 1, 100000)) &&
+             (!('annualRevenueBand' in inp) || inp.annualRevenueBand in ['under_100k', '100k_500k', 'over_500k']) &&
+             (!('includeProfessionalLiability' in inp) || inp.includeProfessionalLiability is bool) &&
+             (!('includeCyber' in inp) || inp.includeCyber is bool);
+    }
+
+    function isValidQuoteInputs(inp, productLine) {
+      return inp is map &&
+             'productLine' in inp &&
+             inp.productLine == productLine && (
+               (productLine == 'auto' && isValidAutoQuoteInput(inp)) ||
+               (productLine == 'imovina' && isValidPropertyQuoteInput(inp)) ||
+               (productLine == 'zdravstveno' && isValidHealthQuoteInput(inp)) ||
+               (productLine == 'zivotno' && isValidLifeQuoteInput(inp)) ||
+               (productLine == 'putno' && isValidTravelQuoteInput(inp)) ||
+               (productLine == 'ljubimci' && isValidPetQuoteInput(inp)) ||
+               (productLine == 'poslovno' && isValidBusinessQuoteInput(inp))
+             );
+    }
+
+    function isValidQuote(data, quoteId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'referenceNumber', 'userId', 'productLine', 'bundleProducts',
+               'inputs', 'customization', 'selectedOffer', 'customer', 'consents',
+               'status', 'assignedAgent', 'source', 'notes', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'referenceNumber', 'productLine', 'customer', 'consents', 'status', 'createdAt'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == quoteId && data.id.size() <= 128)) &&
+             isNonEmptyString(data.referenceNumber, 64) &&
+             isValidOptionalStoredUserId(data) &&
+             isValidProductLine(data.productLine) &&
+             (!('bundleProducts' in data) || (
+               isValidList(data.bundleProducts, 7) &&
+               data.bundleProducts.hasOnly(['auto', 'imovina', 'zdravstveno', 'zivotno', 'putno', 'ljubimci', 'poslovno'])
+             )) &&
+             (!('inputs' in data) || data.inputs == null || isValidQuoteInputs(data.inputs, data.productLine)) &&
+             (!('customization' in data) || data.customization == null || isValidCoverageCustomization(data.customization)) &&
+             (!('selectedOffer' in data) || data.selectedOffer == null || isValidCarrierOffer(data.selectedOffer)) &&
+             isValidQuoteCustomer(data.customer) &&
+             isValidQuoteConsents(data.consents) &&
+             data.status in ['new', 'quoted', 'bound', 'lost'] &&
+             isOptionalString(data, 'assignedAgent', 0, 128) &&
+             (!('source' in data) || data.source in ['quote_engine', 'switch_save', 'ai_escalation']) &&
+             isOptionalString(data, 'notes', 0, 4000) &&
+             isValidDateTime(data.createdAt) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    function isValidQuoteStatusTransition(prevStatus, nextStatus) {
+      return prevStatus == nextStatus ||
+             (prevStatus == 'new' && nextStatus in ['quoted', 'bound', 'lost']) ||
+             (prevStatus == 'quoted' && nextStatus in ['new', 'bound', 'lost']) ||
+             (prevStatus == 'lost' && nextStatus in ['new', 'quoted']) ||
+             (prevStatus == 'bound' && nextStatus in ['quoted', 'lost']);
+    }
+
+    // 3. Switch & Save Analyses (/switch_analyses/{analysisId})
+    function isValidExtractedPolicy(ep) {
+      return isValidMap(ep, [
+               'insurer', 'productLine', 'policyNumber', 'expiryDate',
+               'currentAnnualPremium', 'bonusPercent', 'deductible'
+             ]) &&
+             hasRequiredFields(ep, ['insurer', 'productLine', 'expiryDate', 'currentAnnualPremium']) &&
+             isNonEmptyString(ep.insurer, 120) &&
+             isValidProductLine(ep.productLine) &&
+             isOptionalString(ep, 'policyNumber', 0, 64) &&
+             isValidDateTime(ep.expiryDate) &&
+             isValidNumber(ep.currentAnnualPremium, 0, 10000000) &&
+             (!('bonusPercent' in ep) || ep.bonusPercent == null || isValidNumber(ep.bonusPercent, 0, 100)) &&
+             (!('deductible' in ep) || ep.deductible == null || isValidNumber(ep.deductible, 0, 1000000));
+    }
+
+    function isValidSwitchAnalysis(data, analysisId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'referenceNumber', 'userId', 'fileName', 'fileSizeBytes', 'parsedVia',
+               'extractedPolicy', 'estimatedNewAnnualPremium', 'estimatedAnnualSavings',
+               'reminderScheduledFor', 'customerName', 'customerEmail', 'customerPhone',
+               'status', 'assignedAgent', 'notes', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'fileName', 'extractedPolicy', 'estimatedAnnualSavings', 'status', 'createdAt'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == analysisId && data.id.size() <= 128)) &&
+             isOptionalString(data, 'referenceNumber', 1, 64) &&
+             isValidOptionalStoredUserId(data) &&
+             isNonEmptyString(data.fileName, 255) &&
+             (!('fileSizeBytes' in data) || data.fileSizeBytes == null || isValidNumber(data.fileSizeBytes, 0, 52428800)) &&
+             (!('parsedVia' in data) || data.parsedVia in ['gemini_ai', 'local_analyzer']) &&
+             isValidExtractedPolicy(data.extractedPolicy) &&
+             (!('estimatedNewAnnualPremium' in data) || data.estimatedNewAnnualPremium == null || isValidNumber(data.estimatedNewAnnualPremium, 0, 10000000)) &&
+             isValidNumber(data.estimatedAnnualSavings, 0, 10000000) &&
+             (!('reminderScheduledFor' in data) || data.reminderScheduledFor == null || data.reminderScheduledFor == '' || isValidDateTime(data.reminderScheduledFor)) &&
+             isOptionalString(data, 'customerName', 0, 120) &&
+             (!('customerEmail' in data) || data.customerEmail == null || data.customerEmail == '' || isValidEmail(data.customerEmail)) &&
+             isValidOptionalPhone(data, 'customerPhone') &&
+             data.status in ['new', 'quoted', 'bound', 'lost', 'reviewed', 'contacted', 'converted', 'archived'] &&
+             isOptionalString(data, 'assignedAgent', 0, 128) &&
+             isOptionalString(data, 'notes', 0, 4000) &&
+             isValidDateTime(data.createdAt) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    function isValidSwitchStatusTransition(prevStatus, nextStatus) {
+      return prevStatus == nextStatus ||
+             (prevStatus == 'new' && nextStatus in ['quoted', 'bound', 'lost', 'reviewed', 'contacted', 'converted', 'archived']) ||
+             (prevStatus == 'quoted' && nextStatus in ['new', 'bound', 'lost']) ||
+             (prevStatus == 'lost' && nextStatus in ['new', 'quoted']) ||
+             (prevStatus == 'bound' && nextStatus in ['quoted', 'lost']) ||
+             (prevStatus == 'reviewed' && nextStatus in ['contacted', 'converted', 'archived']) ||
+             (prevStatus == 'contacted' && nextStatus in ['converted', 'archived']) ||
+             (prevStatus == 'archived' && nextStatus in ['reviewed', 'contacted']);
+    }
+
+    // 4. Policies (/policies/{policyId})
+    function isValidOwnerEndorsementItem(item) {
+      return isValidMap(item, [
+               'id', 'type', 'summary', 'description', 'note', 'status', 'createdAt'
+             ]) &&
+             hasRequiredFields(item, ['type', 'status', 'createdAt']) &&
+             isOptionalString(item, 'id', 1, 128) &&
+             item.type in ['add_driver', 'change_address', 'add_coverage', 'renewal_request'] &&
+             isOptionalString(item, 'summary', 1, 2000) &&
+             isOptionalString(item, 'description', 1, 2000) &&
+             isOptionalString(item, 'note', 1, 2000) &&
+             item.status == 'requested' &&
+             isValidDateTime(item.createdAt);
+    }
+
+    // Owner may prepend (agencyRepository.ts) or append exactly 1 requested endorsement
+    // without modifying or deleting any existing endorsement entries.
+    function isValidOwnerEndorsementUpdate() {
+      let hasOld = 'endorsements' in resource.data && resource.data.endorsements is list;
+      let oldList = hasOld ? resource.data.endorsements : [];
+      let hasNew = 'endorsements' in request.resource.data && request.resource.data.endorsements is list;
+      let newList = hasNew ? request.resource.data.endorsements : [];
+      return newList.size() <= 50 && (
+               newList == oldList ||
+               (
+                 newList.size() == oldList.size() + 1 && (
+                   (newList[1:newList.size()] == oldList && isValidOwnerEndorsementItem(newList[0])) ||
+                   (newList[0:oldList.size()] == oldList && isValidOwnerEndorsementItem(newList[oldList.size()]))
+                 )
+               )
+             );
+    }
+
+    function isValidPolicy(data, policyId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'policyNumber', 'userId', 'clientName', 'clientOib',
+               'productLine', 'carrierName', 'status', 'startDate', 'expiryDate',
+               'annualPremium', 'monthlyPremium', 'deductible', 'coverageLimit',
+               'assetSummary', 'vehiclePlate', 'propertyAddress', 'greenCardNumber',
+               'ipidCode', 'renewalReminderSentAt', 'endorsements', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'policyNumber', 'userId', 'clientName', 'clientOib', 'productLine',
+               'carrierName', 'status', 'startDate', 'expiryDate',
+               'annualPremium', 'monthlyPremium', 'deductible', 'coverageLimit'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == policyId && data.id.size() <= 128)) &&
+             isNonEmptyString(data.policyNumber, 64) &&
+             isNonEmptyString(data.userId, 128) &&
+             isNonEmptyString(data.clientName, 120) &&
+             isValidOib(data.clientOib) &&
+             isValidProductLine(data.productLine) &&
+             isNonEmptyString(data.carrierName, 120) &&
+             data.status in ['active', 'expiring_soon', 'expired', 'pending_renewal'] &&
+             isValidDateTime(data.startDate) &&
+             isValidDateTime(data.expiryDate) &&
+             isValidNumber(data.annualPremium, 0, 10000000) &&
+             isValidNumber(data.monthlyPremium, 0, 1000000) &&
+             isValidNumber(data.deductible, 0, 1000000) &&
+             isValidNumber(data.coverageLimit, 0, 100000000) &&
+             isOptionalString(data, 'assetSummary', 0, 300) &&
+             isOptionalString(data, 'vehiclePlate', 0, 24) &&
+             isOptionalString(data, 'propertyAddress', 0, 250) &&
+             isOptionalString(data, 'greenCardNumber', 0, 64) &&
+             isOptionalString(data, 'ipidCode', 0, 64) &&
+             (!('renewalReminderSentAt' in data) || data.renewalReminderSentAt == null || isValidDateTime(data.renewalReminderSentAt)) &&
+             (!('endorsements' in data) || isValidList(data.endorsements, 50)) &&
+             (!('createdAt' in data) || data.createdAt == null || isValidDateTime(data.createdAt)) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    // 5. Claims (/claims/{claimId})
+    function isValidAttachmentItem(att) {
+      return isValidMap(att, [
+               'id', 'name', 'fileName', 'mimeType', 'type',
+               'sizeBytes', 'size', 'previewDataUrl', 'storageUrl', 'url', 'storagePath', 'uploadedAt'
+             ]) &&
+             att.size() >= 1 &&
+             isOptionalString(att, 'id', 1, 128) &&
+             isOptionalString(att, 'name', 1, 255) &&
+             isOptionalString(att, 'fileName', 1, 255) &&
+             isOptionalString(att, 'mimeType', 1, 100) &&
+             isOptionalString(att, 'type', 1, 100) &&
+             (!('sizeBytes' in att) || isValidNumber(att.sizeBytes, 0, 26214400)) &&
+             (!('size' in att) || isValidNumber(att.size, 0, 26214400)) &&
+             (!('previewDataUrl' in att) || att.previewDataUrl == null || isValidImageDataUrl(att.previewDataUrl)) &&
+             (!('storageUrl' in att) || att.storageUrl == null || isValidUrl(att.storageUrl)) &&
+             (!('url' in att) || att.url == null || isValidUrl(att.url)) &&
+             (!('storagePath' in att) || att.storagePath == null || isValidStoragePath(att.storagePath)) &&
+             (!('uploadedAt' in att) || isValidDateTime(att.uploadedAt));
+    }
+
+    function areInitialAttachmentsValid(attList) {
+      let n = attList.size();
+      return n <= 10 &&
+             (n < 1 || isValidAttachmentItem(attList[0])) &&
+             (n < 2 || isValidAttachmentItem(attList[1])) &&
+             (n < 3 || isValidAttachmentItem(attList[2])) &&
+             (n < 4 || isValidAttachmentItem(attList[3])) &&
+             (n < 5 || isValidAttachmentItem(attList[4])) &&
+             (n < 6 || isValidAttachmentItem(attList[5])) &&
+             (n < 7 || isValidAttachmentItem(attList[6])) &&
+             (n < 8 || isValidAttachmentItem(attList[7])) &&
+             (n < 9 || isValidAttachmentItem(attList[8])) &&
+             (n < 10 || isValidAttachmentItem(attList[9]));
+    }
+
+    function isValidOwnerAttachmentAppend() {
+      let hasOld = 'attachments' in resource.data && resource.data.attachments is list;
+      let oldList = hasOld ? resource.data.attachments : [];
+      let hasNew = 'attachments' in request.resource.data && request.resource.data.attachments is list;
+      let newList = hasNew ? request.resource.data.attachments : [];
+      let added = newList.size() - oldList.size();
+      return hasNew &&
+             newList.size() <= 20 &&
+             added >= 1 && added <= 5 &&
+             newList[0:oldList.size()] == oldList &&
+             isValidAttachmentItem(newList[oldList.size()]) &&
+             (added < 2 || isValidAttachmentItem(newList[oldList.size() + 1])) &&
+             (added < 3 || isValidAttachmentItem(newList[oldList.size() + 2])) &&
+             (added < 4 || isValidAttachmentItem(newList[oldList.size() + 3])) &&
+             (added < 5 || isValidAttachmentItem(newList[oldList.size() + 4]));
+    }
+
+    function isValidStageHistoryEntry(entry) {
+      return isValidMap(entry, ['stage', 'note', 'timestamp', 'actor', 'updatedBy']) &&
+             hasRequiredFields(entry, ['stage', 'timestamp']) &&
+             entry.stage in ['received', 'insurer_review', 'assessment', 'paid'] &&
+             isOptionalString(entry, 'note', 0, 1000) &&
+             isValidDateTime(entry.timestamp) &&
+             isOptionalString(entry, 'actor', 0, 128) &&
+             isOptionalString(entry, 'updatedBy', 0, 128);
+    }
+
+    function isValidStageHistoryUpdate() {
+      let hasOld = 'stageHistory' in resource.data && resource.data.stageHistory is list;
+      let oldList = hasOld ? resource.data.stageHistory : [];
+      let hasNew = 'stageHistory' in request.resource.data && request.resource.data.stageHistory is list;
+      let newList = hasNew ? request.resource.data.stageHistory : [];
+      return !('stageHistory' in request.resource.data) || (
+               hasNew &&
+               newList.size() <= 30 &&
+               newList.size() >= oldList.size() &&
+               newList[0:oldList.size()] == oldList &&
+               (newList.size() == 0 || isValidStageHistoryEntry(newList[newList.size() - 1]))
+             );
+    }
+
+    function isValidClaimStageTransition(prevStage, nextStage) {
+      return prevStage == nextStage ||
+             (prevStage == 'received' && nextStage == 'insurer_review') ||
+             (prevStage == 'insurer_review' && nextStage == 'assessment') ||
+             (prevStage == 'assessment' && nextStage == 'paid');
+    }
+
+    function isValidClaim(data, claimId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'referenceNumber', 'userId', 'policyNumber', 'productLine',
+               'carrierName', 'claimantName', 'claimantOib', 'claimantEmail',
+               'claimantPhone', 'incidentDate', 'incidentTime', 'incidentLocation',
+               'description', 'policeReportFiled', 'attachments', 'stage',
+               'stageHistory', 'consents', 'estimatedAmount', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'referenceNumber', 'policyNumber', 'claimantName', 'claimantOib',
+               'claimantEmail', 'description', 'stage', 'consents', 'createdAt'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == claimId && data.id.size() <= 128)) &&
+             isNonEmptyString(data.referenceNumber, 64) &&
+             isValidOptionalStoredUserId(data) &&
+             isNonEmptyString(data.policyNumber, 64) &&
+             (!('productLine' in data) || data.productLine == null || isValidProductLine(data.productLine)) &&
+             isOptionalString(data, 'carrierName', 0, 120) &&
+             isNonEmptyString(data.claimantName, 120) &&
+             isValidOib(data.claimantOib) &&
+             isValidEmail(data.claimantEmail) &&
+             isValidOptionalPhone(data, 'claimantPhone') &&
+             (!('incidentDate' in data) || data.incidentDate == null || isValidDateTime(data.incidentDate)) &&
+             isOptionalString(data, 'incidentTime', 0, 20) &&
+             isOptionalString(data, 'incidentLocation', 0, 250) &&
+             isNonEmptyString(data.description, 4000) &&
+             (!('policeReportFiled' in data) || data.policeReportFiled is bool) &&
+             (!('attachments' in data) || isValidList(data.attachments, 20)) &&
+             data.stage in ['received', 'insurer_review', 'assessment', 'paid'] &&
+             (!('stageHistory' in data) || (
+               isValidList(data.stageHistory, 30) &&
+               (data.stageHistory.size() == 0 || isValidStageHistoryEntry(data.stageHistory[0]))
+             )) &&
+             isValidClaimConsents(data.consents) &&
+             (!('estimatedAmount' in data) || data.estimatedAmount == null || isValidNumber(data.estimatedAmount, 0, 100000000)) &&
+             isValidDateTime(data.createdAt) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    // 6. AI Escalations (/escalations/{escalationId})
+    function isValidAdvisorChatCard(card) {
+      return isValidMap(card, ['type', 'title', 'subtitle', 'productLine', 'bullets', 'priceHint']) &&
+             hasRequiredFields(card, ['type', 'title', 'subtitle']) &&
+             card.type in ['coverage_comparison', 'quote_cta'] &&
+             isNonEmptyString(card.title, 160) &&
+             isNonEmptyString(card.subtitle, 300) &&
+             (!('productLine' in card) || card.productLine == null || isValidProductLine(card.productLine)) &&
+             (!('bullets' in card) || (
+               isValidList(card.bullets, 15) &&
+               (card.bullets.size() == 0 || (
+                 isBoundedString(card.bullets[0], 1, 300) &&
+                 isBoundedString(card.bullets[card.bullets.size() - 1], 1, 300)
+               ))
+             )) &&
+             isOptionalString(card, 'priceHint', 0, 80);
+    }
+
+    function isValidTranscriptEntry(entry) {
+      return isBoundedString(entry, 1, 2000) || (
+               isValidMap(entry, ['id', 'sender', 'role', 'text', 'content', 'timestamp', 'createdAt', 'card']) &&
+               entry.size() >= 1 &&
+               isOptionalString(entry, 'id', 1, 128) &&
+               (!('sender' in entry) || entry.sender in ['user', 'assistant', 'client', 'agent']) &&
+               (!('role' in entry) || entry.role in ['user', 'assistant', 'model', 'system', 'client', 'agent']) &&
+               isOptionalString(entry, 'text', 0, 4000) &&
+               isOptionalString(entry, 'content', 0, 4000) &&
+               (!('timestamp' in entry) || isValidDateTime(entry.timestamp)) &&
+               (!('createdAt' in entry) || isValidDateTime(entry.createdAt)) &&
+               (!('card' in entry) || entry.card == null || isValidAdvisorChatCard(entry.card))
+             );
+    }
+
+    function isValidEscalation(data, escalationId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'referenceNumber', 'userId', 'customerName', 'customerEmail',
+               'customerPhone', 'topic', 'transcript', 'status', 'assignedAgent',
+               'notes', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'referenceNumber', 'customerEmail', 'topic', 'transcript', 'status', 'createdAt'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == escalationId && data.id.size() <= 128)) &&
+             isNonEmptyString(data.referenceNumber, 64) &&
+             isValidOptionalStoredUserId(data) &&
+             isOptionalString(data, 'customerName', 0, 120) &&
+             isValidEmail(data.customerEmail) &&
+             isValidOptionalPhone(data, 'customerPhone') &&
+             isNonEmptyString(data.topic, 200) &&
+             isValidList(data.transcript, 50) &&
+             (data.transcript.size() == 0 || (
+               isValidTranscriptEntry(data.transcript[0]) &&
+               isValidTranscriptEntry(data.transcript[data.transcript.size() - 1])
+             )) &&
+             data.status in ['open', 'new', 'quoted', 'bound', 'lost', 'in_progress', 'resolved', 'closed'] &&
+             isOptionalString(data, 'assignedAgent', 0, 128) &&
+             isOptionalString(data, 'notes', 0, 4000) &&
+             isValidDateTime(data.createdAt) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    function isValidEscalationStatusTransition(prevStatus, nextStatus) {
+      return prevStatus == nextStatus ||
+             (prevStatus in ['open', 'new'] && nextStatus in ['in_progress', 'quoted', 'bound', 'lost', 'resolved', 'closed']) ||
+             (prevStatus == 'in_progress' && nextStatus in ['resolved', 'closed']) ||
+             (prevStatus == 'quoted' && nextStatus in ['new', 'bound', 'lost', 'resolved', 'closed']) ||
+             (prevStatus == 'lost' && nextStatus in ['new', 'quoted']) ||
+             (prevStatus == 'bound' && nextStatus in ['quoted', 'lost', 'closed']) ||
+             (prevStatus == 'resolved' && nextStatus in ['in_progress', 'closed']);
+    }
+
+    // 7. Messages (/messages/{messageId})
+    function isValidMessage(data, messageId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'threadUserId', 'senderRole', 'senderName', 'text', 'createdAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'threadUserId', 'senderRole', 'senderName', 'text', 'createdAt'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == messageId && data.id.size() <= 128)) &&
+             isNonEmptyString(data.threadUserId, 128) &&
+             data.senderRole in ['client', 'agent'] &&
+             isNonEmptyString(data.senderName, 120) &&
+             isBoundedString(data.text, 1, 2000) &&
+             isValidDateTime(data.createdAt);
+    }
+
+    // 8. Statutory Complaints (/complaints/{complaintId})
+    function isValidComplaint(data, complaintId) {
+      return hasOnlyAllowedFields(data, [
+               'id', 'protocolNumber', 'fullName', 'oib', 'email', 'phone',
+               'address', 'policyNumber', 'subject', 'description', 'status',
+               'statutoryDeadlineDate', 'assignedAgent', 'resolutionNotes',
+               'consents', 'createdAt', 'updatedAt'
+             ]) &&
+             hasRequiredFields(data, [
+               'protocolNumber', 'fullName', 'oib', 'email',
+               'subject', 'description', 'status', 'createdAt'
+             ]) &&
+             (!('id' in data) || (data.id is string && data.id == complaintId && data.id.size() <= 128)) &&
+             isNonEmptyString(data.protocolNumber, 64) &&
+             isNonEmptyString(data.fullName, 120) &&
+             isValidOib(data.oib) &&
+             isValidEmail(data.email) &&
+             isValidOptionalPhone(data, 'phone') &&
+             isOptionalString(data, 'address', 0, 250) &&
+             isOptionalString(data, 'policyNumber', 0, 64) &&
+             isNonEmptyString(data.subject, 200) &&
+             isNonEmptyString(data.description, 5000) &&
+             data.status in ['received', 'in_review', 'resolved'] &&
+             (!('statutoryDeadlineDate' in data) || data.statutoryDeadlineDate == null || isValidDateTime(data.statutoryDeadlineDate)) &&
+             isOptionalString(data, 'assignedAgent', 0, 128) &&
+             isOptionalString(data, 'resolutionNotes', 0, 5000) &&
+             (!('consents' in data) || data.consents == null || isValidClaimConsents(data.consents)) &&
+             isValidDateTime(data.createdAt) &&
+             (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
+    }
+
+    function isValidComplaintStatusTransition(prevStatus, nextStatus) {
+      return prevStatus == nextStatus ||
+             (prevStatus == 'received' && nextStatus == 'in_review') ||
+             (prevStatus == 'in_review' && nextStatus == 'resolved');
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // 1. User Profiles & Roles (contains PII — never publicly readable)
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAgentOrAdmin();
+
+      // Only the signed-in owner may create their own profile, strictly with role == 'client'.
+      allow create: if isOwner(uid) &&
+                       uidUnchanged() &&
+                       isValidUser(request.resource.data, uid) &&
+                       request.resource.data.role == 'client';
+
+      // Owner may update non-privileged profile fields only (role, uid, email, createdAt immutable).
+      // Only an admin may update roles (agents cannot self-elevate to admin).
+      allow update: if isValidUser(request.resource.data, uid) &&
+                       uidNotModified() &&
+                       areImmutableFieldsUnchanged(['uid', 'email', 'createdAt']) && (
+                         (
+                           isOwner(uid) &&
+                           request.resource.data.role == resource.data.role &&
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'fullName', 'phone', 'oib', 'city', 'postalCode', 'updatedAt'
+                           ])
+                         ) ||
+                         (
+                           isAdmin() &&
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'role', 'fullName', 'phone', 'oib', 'city', 'postalCode', 'updatedAt'
+                           ])
+                         )
+                       );
+
+      allow delete: if false;
+    }
+
+    // 2. Insurance Quote Submissions
     match /quotes/{quoteId} {
-      allow read, write: if true;
+      allow read: if isAgentOrAdmin() || isRecordOwner();
+
+      // Public intake (anonymous or signed-in) with strict schema, consent & ownership validation.
+      allow create: if isValidQuote(request.resource.data, quoteId) &&
+                       request.resource.data.status == 'new' &&
+                       isValidCreateUserId(request.resource.data) &&
+                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null);
+
+      // Agency ops status progression, assignment, and notes only.
+      allow update: if isAgentOrAdmin() &&
+                       isValidQuote(request.resource.data, quoteId) &&
+                       areImmutableFieldsUnchanged(['id', 'referenceNumber', 'productLine', 'consents', 'createdAt']) &&
+                       isUserIdImmutableOrLinkable() &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                         'status', 'assignedAgent', 'notes', 'selectedOffer', 'updatedAt', 'userId'
+                       ]) &&
+                       isValidQuoteStatusTransition(resource.data.status, request.resource.data.status);
+
+      allow delete: if false;
     }
 
-    // Policies In-Force & Bound Contracts
+    // 3. Switch & Save Policy Analyses
+    match /switch_analyses/{analysisId} {
+      allow read: if isAgentOrAdmin() || isRecordOwner();
+
+      allow create: if isValidSwitchAnalysis(request.resource.data, analysisId) &&
+                       request.resource.data.status == 'new' &&
+                       isValidCreateUserId(request.resource.data) &&
+                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null);
+
+      allow update: if isAgentOrAdmin() &&
+                       isValidSwitchAnalysis(request.resource.data, analysisId) &&
+                       areImmutableFieldsUnchanged(['id', 'referenceNumber', 'fileName', 'fileSizeBytes', 'parsedVia', 'createdAt']) &&
+                       isUserIdImmutableOrLinkable() &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                         'status', 'assignedAgent', 'notes', 'reminderScheduledFor',
+                         'extractedPolicy', 'estimatedNewAnnualPremium', 'estimatedAnnualSavings',
+                         'updatedAt', 'userId'
+                       ]) &&
+                       isValidSwitchStatusTransition(resource.data.status, request.resource.data.status);
+
+      allow delete: if false;
+    }
+
+    // 4. Active & Historical Policies
     match /policies/{policyId} {
-      allow read, write: if true;
+      allow read: if isAgentOrAdmin() || isRecordOwner();
+
+      allow create: if isAgentOrAdmin() &&
+                       isValidPolicy(request.resource.data, policyId);
+
+      // Agent/admin may update validated policy fields.
+      // Policy owner may ONLY request renewal (status -> 'pending_renewal') or prepend/append a requested
+      // endorsement without altering financial, carrier, or ownership fields.
+      allow update: if isValidPolicy(request.resource.data, policyId) && (
+                         isAgentOrAdmin() ||
+                         (
+                           isRecordOwner() &&
+                           areImmutableFieldsUnchanged([
+                             'id', 'policyNumber', 'userId', 'clientName', 'clientOib',
+                             'productLine', 'carrierName', 'startDate', 'expiryDate',
+                             'annualPremium', 'monthlyPremium', 'deductible', 'coverageLimit',
+                             'assetSummary', 'vehiclePlate', 'propertyAddress', 'greenCardNumber',
+                             'ipidCode', 'renewalReminderSentAt', 'createdAt'
+                           ]) &&
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'endorsements', 'status', 'updatedAt'
+                           ]) &&
+                           (
+                             request.resource.data.status == resource.data.status ||
+                             (
+                               resource.data.status in ['active', 'expiring_soon'] &&
+                               request.resource.data.status == 'pending_renewal'
+                             )
+                           ) &&
+                           isValidOwnerEndorsementUpdate()
+                         )
+                       );
+
+      allow delete: if isAgentOrAdmin();
     }
 
-    // FNOL First Notice of Loss Claims
+    // 5. Digital FNOL Claims
     match /claims/{claimId} {
-      allow read, write: if true;
+      allow read: if isAgentOrAdmin() || isRecordOwner();
+
+      // Public FNOL intake (anonymous or signed-in) with strict schema & GDPR consent validation.
+      allow create: if isValidClaim(request.resource.data, claimId) &&
+                       request.resource.data.stage == 'received' &&
+                       isValidCreateUserId(request.resource.data) &&
+                       (!('attachments' in request.resource.data) || areInitialAttachmentsValid(request.resource.data.attachments));
+
+      // Agent/admin progresses triage stage, stageHistory, estimatedAmount & updatedAt.
+      // Signed-in owner may ONLY append new attachments and update updatedAt without altering stage.
+      allow update: if isValidClaim(request.resource.data, claimId) &&
+                       areImmutableFieldsUnchanged([
+                         'id', 'referenceNumber', 'userId', 'policyNumber', 'productLine',
+                         'carrierName', 'claimantName', 'claimantOib', 'claimantEmail',
+                         'claimantPhone', 'incidentDate', 'incidentTime', 'incidentLocation',
+                         'description', 'policeReportFiled', 'consents', 'createdAt'
+                       ]) && (
+                         (
+                           isAgentOrAdmin() &&
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'stage', 'stageHistory', 'estimatedAmount', 'updatedAt'
+                           ]) &&
+                           isValidClaimStageTransition(resource.data.stage, request.resource.data.stage) &&
+                           isValidStageHistoryUpdate()
+                         ) ||
+                         (
+                           isRecordOwner() &&
+                           request.resource.data.stage == resource.data.stage &&
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'attachments', 'updatedAt'
+                           ]) &&
+                           isValidOwnerAttachmentAppend()
+                         )
+                       );
+
+      allow delete: if false;
     }
 
-    // Policy Endorsement & Change Requests
-    match /endorsements/{endorsementId} {
-      allow read, write: if true;
+    // 6. AI Advisor Human Escalations
+    match /escalations/{escalationId} {
+      allow read: if isAgentOrAdmin() || isRecordOwner();
+
+      // Accepts 'open' (spec) or 'new' (domain.ts QuotePipelineStatus) on public intake.
+      allow create: if isValidEscalation(request.resource.data, escalationId) &&
+                       request.resource.data.status in ['open', 'new'] &&
+                       isValidCreateUserId(request.resource.data) &&
+                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null);
+
+      allow update: if isAgentOrAdmin() &&
+                       isValidEscalation(request.resource.data, escalationId) &&
+                       areImmutableFieldsUnchanged([
+                         'id', 'referenceNumber', 'customerEmail', 'topic', 'transcript', 'createdAt'
+                       ]) &&
+                       isUserIdImmutableOrLinkable() &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                         'status', 'assignedAgent', 'notes', 'updatedAt', 'userId'
+                       ]) &&
+                       isValidEscalationStatusTransition(resource.data.status, request.resource.data.status);
+
+      allow delete: if false;
     }
 
-    // Advisor Consultations & Callback Requests
-    match /appointments/{appointmentId} {
-      allow read, write: if true;
+    // 7. Client-Advisor Message Center (Immutable Audit Trail)
+    match /messages/{messageId} {
+      allow read: if isAgentOrAdmin() ||
+                     (isSignedIn() && resource.data.threadUserId == request.auth.uid);
+
+      allow create: if isSignedIn() &&
+                       isValidMessage(request.resource.data, messageId) && (
+                         (
+                           request.resource.data.threadUserId == request.auth.uid &&
+                           request.resource.data.senderRole == 'client'
+                         ) ||
+                         (
+                           isAgentOrAdmin() &&
+                           request.resource.data.senderRole == 'agent'
+                         )
+                       );
+
+      allow update, delete: if false;
     }
 
-    // Digital Insurance Certificates & Cards
-    match /digital_cards/{cardId} {
-      allow read, write: if true;
-    }
-
-    // Contact Inquiries & Feedback
-    match /inquiries/{inquiryId} {
-      allow read, write: if true;
-    }
-
-    // Leads from Interactive Calculators & Guided Intake
-    match /leads/{leadId} {
-      allow read, write: if true;
-    }
-
-    // IDD Demands and Needs Assessments
-    match /needs_assessments/{assessmentId} {
-      allow read, write: if true;
-    }
-
-    // Official Complaints Register (čl. 401. Zakona o osiguranju)
+    // 8. Statutory Complaints Register (Art. 401 Croatian Insurance Act)
     match /complaints/{complaintId} {
-      allow read, write: if true;
+      allow read: if isAgentOrAdmin();
+
+      allow create: if isValidComplaint(request.resource.data, complaintId) &&
+                       request.resource.data.status == 'received' &&
+                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null) &&
+                       (!('resolutionNotes' in request.resource.data) || request.resource.data.resolutionNotes == null);
+
+      allow update: if isAgentOrAdmin() &&
+                       isValidComplaint(request.resource.data, complaintId) &&
+                       areImmutableFieldsUnchanged([
+                         'id', 'protocolNumber', 'fullName', 'oib', 'email', 'phone',
+                         'address', 'policyNumber', 'subject', 'description',
+                         'statutoryDeadlineDate', 'consents', 'createdAt'
+                       ]) &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                         'status', 'assignedAgent', 'resolutionNotes', 'updatedAt'
+                       ]) &&
+                       isValidComplaintStatusTransition(resource.data.status, request.resource.data.status);
+
+      allow delete: if false;
+    }
+
+    // 9. Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

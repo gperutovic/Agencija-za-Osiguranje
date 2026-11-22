@@ -1,18 +1,20 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    function isAuthenticated() {
-      return request.auth != null;
-    }
     match /claims/{claimId}/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() &&
-        request.resource.size < 15 * 1024 * 1024 &&
-        (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf');
+      allow create: if request.resource.size < 10 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*')
+            || request.resource.contentType == 'application/pdf');
+      allow read: if request.auth != null;
     }
-    match /policies/{userId}/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+    match /switch-policies/{analysisId}/{fileName} {
+      allow create: if request.resource.size < 10 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*')
+            || request.resource.contentType == 'application/pdf');
+      allow read: if request.auth != null;
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
     }
   }
 }

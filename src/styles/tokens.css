@@ -1,0 +1,26 @@
+:root {
+  /* Surface & Border Tokens (Swiss-Editorial Light System) */
+  --color-canvas: #FFFFFF;
+  --color-canvas-warm: #F7F7F5;
+  --color-border: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+
+  /* Typography Ink Hierarchy */
+  --color-ink: #111827;
+  --color-ink-secondary: #4B5563;
+  --color-ink-muted: #6B7280;
+
+  /* Single Primary Brand Accent — Re-theme entire platform here */
+  --color-accent: #FF006E;
+  --color-accent-hover: #D9005D;
+  --color-accent-soft: #FFF0F6;
+
+  /* Semantic Status Palette (Validation & Claims ONLY) */
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-danger: #DC2626;
+
+  /* Editorial Typography Pairing */
+  --font-display: 'Instrument Serif', Georgia, Cambria, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}

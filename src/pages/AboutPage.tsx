@@ -1,0 +1,123 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
+import { BRAND_CONFIG } from '../config/brand';
+import { Button } from '../components/ui/Button';
+
+export const AboutPage: React.FC = () => {
+  return (
+    <div className="bg-canvas py-14 sm:py-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Intro */}
+        <section className="max-w-3xl space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent">
+            O agenciji {BRAND_CONFIG.brandName}
+          </p>
+          <h1 className="font-display text-4xl sm:text-6xl text-ink leading-tight">
+            Digitalna agencija izgrađena oko jasnoće, brzine i stvarnog zastupanja.
+          </h1>
+          <p className="text-base sm:text-lg text-ink-secondary leading-relaxed">
+            {BRAND_CONFIG.legalName} je HANFA-licencirano društvo za zastupanje u osiguranju.
+            Vjerujemo da ugovaranje osiguranja u Hrvatskoj ne smije zahtijevati sate telefoniranja
+            niti čitanje nečitljivih uvjeta.
+          </p>
+        </section>
+
+        {/* How Remuneration Works — Transparency Pillar */}
+        <section className="rounded-editorial bg-canvas-warm border border-hairline p-8 sm:p-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="space-y-2">
+            <h2 className="font-sans text-base font-bold text-ink">0 € dodatnog troška</h2>
+            <p className="text-sm text-ink-secondary leading-relaxed">
+              Našu uslugu financiraju osiguravajuća društva putem ugovorene zastupničke provizije.
+              Cijena police za vas jednaka je ili povoljnija nego izravno kod osiguratelja.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="font-sans text-base font-bold text-ink">7 partnerskih društava</h2>
+            <p className="text-sm text-ink-secondary leading-relaxed">
+              Ne nudimo samo jednu kuću — na jednom zaslonu uspoređujemo Allianz, Croatia,
+              Generali, Wiener, Triglav, Savu i Groupamu.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="font-sans text-base font-bold text-ink">Ljudska podrška kod štete</h2>
+            <p className="text-sm text-ink-secondary leading-relaxed">
+              Digitalno ugovaranje štedi vrijeme, a kad nastupi štetni događaj naš licencirani tim
+              vodi prijavu i praćenje isplate u vaše ime.
+            </p>
+          </div>
+        </section>
+
+        {/* Licensed Advisors */}
+        <section className="space-y-6">
+          <div className="space-y-1">
+            <h2 className="font-display text-3xl sm:text-4xl text-ink">
+              Licencirani zastupnici u osiguranju
+            </h2>
+            <p className="text-sm text-ink-secondary">
+              Svi savjetnici upisani su u registar Hrvatske agencije za nadzor financijskih usluga
+              (HANFA).
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {BRAND_CONFIG.licensedAdvisors.map((adv) => (
+              <div
+                key={adv.id}
+                className="rounded-editorial border border-hairline bg-canvas p-6 space-y-2"
+              >
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-status-success">
+                  <ShieldCheck className="w-4 h-4" strokeWidth={1.75} />
+                  <span className="tabular-nums">HANFA {adv.hanfaLicense}</span>
+                </div>
+                <h3 className="font-sans text-base font-bold text-ink">{adv.name}</h3>
+                <p className="text-xs text-ink-secondary">{adv.titleHr}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Partner Insurers */}
+        <section className="space-y-5">
+          <h2 className="font-display text-3xl text-ink">Osiguravajuća društva koja zastupamo</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {BRAND_CONFIG.partnerInsurers.map((partner) => (
+              <div
+                key={partner.id}
+                className="rounded-editorial border border-hairline bg-canvas p-5 space-y-2"
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="font-sans text-sm font-bold text-ink">{partner.name}</h3>
+                  <span className="text-[11px] font-semibold text-ink-muted">{partner.rating}</span>
+                </div>
+                <ul className="space-y-1 text-xs text-ink-secondary">
+                  {partner.strengthsHr.map((s) => (
+                    <li key={s}>• {s}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA & Regulatory Link */}
+        <section className="pt-8 border-t border-hairline flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <a
+            href={BRAND_CONFIG.hanfaRegistryUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:text-accent transition-colors"
+          >
+            <span>Provjeri upis u javnom Registru HANFA</span>
+            <ExternalLink className="w-4 h-4" strokeWidth={1.5} />
+          </a>
+          <Link to="/izracun">
+            <Button size="lg">
+              <span>Izračunaj cijenu u 90 sekundi</span>
+              <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
+            </Button>
+          </Link>
+        </section>
+      </div>
+    </div>
+  );
+};
