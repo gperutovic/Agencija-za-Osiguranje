@@ -18,9 +18,13 @@ export interface UserProfile {
   role: UserRole;
   phone: string;
   oib?: string;
+  address?: string;
   city?: string;
   postalCode?: string;
+  assignedAgent?: string;
+  assignedAgentLicense?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface ConsentRecord {
@@ -163,6 +167,7 @@ export interface QuoteSubmission {
   consents: ConsentRecord;
   status: QuotePipelineStatus;
   assignedAgent?: string;
+  policyId?: string;
   source: 'quote_engine' | 'switch_save' | 'ai_escalation';
   notes?: string;
   createdAt: string;
@@ -177,6 +182,22 @@ export interface ExtractedPolicyFields {
   currentAnnualPremium: number;
   bonusPercent?: number;
   deductible?: number;
+  vehiclePlate?: string;
+  areaSqm?: number;
+}
+
+export interface PolicyParseResult {
+  parsedVia: 'gemini_ai' | 'local_analyzer';
+  extracted: ExtractedPolicyFields;
+  confidenceScore: number; // 0..1
+  lowConfidenceFields: string[];
+  warnings: string[];
+  competingOffers: CarrierOffer[];
+  estimatedNewAnnualPremium: number;
+  estimatedAnnualSavings: number;
+  storagePath?: string;
+  storageUrl?: string;
+  degradedNotice?: string;
 }
 
 export interface SwitchAnalysisRecord {
@@ -185,17 +206,24 @@ export interface SwitchAnalysisRecord {
   userId?: string;
   fileName: string;
   fileSizeBytes: number;
+  storagePath?: string;
+  storageUrl?: string;
   parsedVia: 'gemini_ai' | 'local_analyzer';
+  confidenceScore?: number;
+  warnings?: string[];
   extractedPolicy: ExtractedPolicyFields;
   estimatedNewAnnualPremium: number;
   estimatedAnnualSavings: number;
   reminderScheduledFor: string; // YYYY-MM-DD (30 days before expiry)
+  reminderNotified?: boolean;
   customerName?: string;
   customerEmail?: string;
   customerPhone?: string;
   status: QuotePipelineStatus;
   assignedAgent?: string;
+  notes?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface PolicyEndorsement {
@@ -203,6 +231,9 @@ export interface PolicyEndorsement {
   type: 'add_driver' | 'change_address' | 'add_coverage' | 'renewal_request';
   summary: string;
   status: 'requested' | 'completed';
+  agentNote?: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
   createdAt: string;
 }
 
@@ -223,10 +254,19 @@ export interface PolicyRecord {
   coverageLimit: number;
   assetSummary: string;
   vehiclePlate?: string;
+  propertyAddress?: string;
   greenCardNumber?: string;
   ipidCode: string;
+  policyPdfUrl?: string;
+  policyPdfPath?: string;
+  ipidPdfUrl?: string;
+  assignedAgent?: string;
+  assignedAgentLicense?: string;
+  sourceQuoteId?: string;
   renewalReminderSentAt?: string;
   endorsements: PolicyEndorsement[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type ClaimStage = 'received' | 'insurer_review' | 'assessment' | 'paid';
@@ -238,6 +278,7 @@ export interface ClaimAttachment {
   sizeBytes: number;
   previewDataUrl?: string;
   storageUrl?: string;
+  storagePath?: string;
   uploadedAt: string;
 }
 
@@ -245,6 +286,7 @@ export interface ClaimStageHistoryItem {
   stage: ClaimStage;
   note: string;
   timestamp: string;
+  actor?: string;
 }
 
 export interface ClaimRecord {
@@ -263,12 +305,24 @@ export interface ClaimRecord {
   incidentLocation: string;
   description: string;
   policeReportFiled: boolean;
+  policeStation?: string;
+  policeReportNumber?: string;
   attachments: ClaimAttachment[];
   stage: ClaimStage;
   stageHistory: ClaimStageHistoryItem[];
   consents: ConsentRecord;
   estimatedAmount?: number;
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface TrackedClaimPublic {
+  referenceNumber: string;
+  policyNumberMasked: string;
+  productLine: ProductLine;
+  carrierName: string;
+  stage: ClaimStage;
+  stageHistory: ClaimStageHistoryItem[];
   updatedAt: string;
 }
 
@@ -287,6 +341,8 @@ export interface AiChatMessage {
   text: string;
   timestamp: string;
   card?: AdvisorChatCard;
+  source?: 'gemini' | 'fallback';
+  degradedNotice?: string;
 }
 
 export interface AiEscalationRecord {
@@ -300,7 +356,9 @@ export interface AiEscalationRecord {
   transcript: AiChatMessage[];
   status: QuotePipelineStatus;
   assignedAgent?: string;
+  notes?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface AdvisorThreadMessage {
@@ -325,5 +383,8 @@ export interface ComplaintRecord {
   description: string;
   status: 'received' | 'in_review' | 'resolved';
   statutoryDeadlineDate: string;
+  assignedAgent?: string;
+  resolutionNotes?: string;
   createdAt: string;
+  updatedAt?: string;
 }

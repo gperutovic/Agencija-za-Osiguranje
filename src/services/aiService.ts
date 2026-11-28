@@ -1,185 +1,171 @@
-import { BRAND_CONFIG } from '../config/brand';
 import {
   AdvisorChatCard,
   AiChatMessage,
   ExtractedPolicyFields,
+  Language,
+  PolicyParseResult,
   ProductLine,
 } from '../types/domain';
 import { addDaysIso } from '../utils/formatters';
+import { buildCompetingOffersFromExtracted } from '../utils/pricingEngine';
+import { firebaseAuth, getOptionalAppCheckToken } from './firebase';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
+const API_BASE = ((import.meta.env.VITE_API_BASE_URL as string | undefined) || '').replace(/\/$/, '');
 
-const ADVISOR_SYSTEM_PROMPT = `Ti si digitalni AI savjetnik hrvatske agencije za zastupanje u osiguranju "${BRAND_CONFIG.brandName}" (${BRAND_CONFIG.legalName}, pod nadzorom HANFA-e).
-Odgovaraj na prirodnom, jasnom hrvatskom jeziku bez marketinškog žargona i sitnih slova.
-Specijaliziran si za:
-- Hrvatsko obvezno auto osiguranje (AO), bonus-malus sustav do 50%, mini i puni kasko, franšizu i Europsko izvješće o nezgodi.
-- Osiguranje stana i kuće u Hrvatskoj, osobito osiguranje od potresa na novonabavnu građevinsku vrijednost bez podosiguranja.
-- Dopunsko zdravstveno osiguranje (HZZO 15 €/mj. vs privatni osiguratelji od 9,50 €/mj., B-lista lijekova) i dodatno zdravstveno.
-- Životno osiguranje i vinkulaciju stambenih kredita, putno, ljubimce i poslovna (SME) osiguranja.
-Budi koncizan (max 4-5 rečenica), jasan i konkretan. Nikada ne izmišljaj obvezujuće tarife — uvijek naglasi da se precizne ponude dobivaju kroz naš 90-sekundni kalkulator ili uz ovlaštenog zastupnika.`;
-
-interface GeminiResponsePayload {
-  candidates?: Array<{
-    content?: {
-      parts?: Array<{ text?: string }>;
-    };
-  }>;
-}
-
-async function callGeminiText(prompt: string, systemInstruction: string): Promise<string | null> {
-  if (!GEMINI_API_KEY) return null;
-  try {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemInstruction }] },
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 450 },
-      }),
-    });
-    if (!response.ok) return null;
-    const data = (await response.json()) as GeminiResponsePayload;
-    return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? null;
-  } catch {
-    return null;
-  }
-}
-
-function inferContextualCard(query: string): AdvisorChatCard {
-  const q = query.toLowerCase();
-  if (q.includes('potres') || q.includes('stan') || q.includes('kuć') || q.includes('imovina') || q.includes('dom')) {
-    return {
-      type: 'coverage_comparison',
-      title: 'Osiguranje doma + Potres bez podosiguranja',
-      subtitle: 'Usporedba 7 hrvatskih osiguratelja na novonabavnu vrijednost',
-      productLine: 'imovina',
-      priceHint: 'od 11,00 € / mj.',
-      bullets: [
-        'Požar, izljev vode i odgovornost prema susjedima',
-        'Potres obračunat na građevinsku vrijednost (bez amortizacije)',
-        'Usklađeno za vinkulaciju stambenog kredita u svim bankama',
-      ],
-    };
-  }
-  if (q.includes('auto') || q.includes('kasko') || q.includes('bonus') || q.includes('registrac') || q.includes('ao')) {
-    return {
-      type: 'coverage_comparison',
-      title: 'Auto AO + Kasko usporedba',
-      subtitle: 'Prijenos do 50% bonusa i prilagodba franšize uživo',
-      productLine: 'auto',
-      priceHint: 'od 19,00 € / mj.',
-      bullets: [
-        'AO + Mini Kasko ili Puni Kasko (franšiza 0 € – 500 €)',
-        'Opcije loma stakala, tuče, naleta na divljač i 24/7 asistencije',
-        'Digitalna Zelena karta odmah u Moj Profil novčaniku',
-      ],
-    };
-  }
-  if (q.includes('zdrav') || q.includes('dopunsk') || q.includes('hzzo') || q.includes('pregled')) {
-    return {
-      type: 'coverage_comparison',
-      title: 'Dopunsko & Dodatno zdravstveno',
-      subtitle: 'Pokriće participacija, B-liste lijekova i privatnih poliklinika',
-      productLine: 'zdravstveno',
-      priceHint: 'od 9,50 € / mj.',
-      bullets: [
-        'Ušteda u odnosu na HZZO policu (15,00 € / mj.)',
-        'Opcija pokrića dopunske B-liste lijekova bez ograničenja',
-        'Specijalistički pregledi i MR/CT dijagnostika bez čekanja',
-      ],
-    };
-  }
-  if (q.includes('kredit') || q.includes('život') || q.includes('zivot') || q.includes('vinkul')) {
-    return {
-      type: 'quote_cta',
-      title: 'Životno osiguranje i vinkulacija kredita',
-      subtitle: 'Izračunajte orientacijsku premiju i zatražite vinkulacijski list',
-      productLine: 'zivotno',
-      priceHint: 'od 14,00 € / mj.',
-      bullets: [
-        'Fiksna ili padajuća svota za stambene kredite',
-        'Mogućnost pokrića 20+ teških bolesti',
-      ],
-    };
-  }
-  if (q.includes('put') || q.includes('skij') || q.includes('inozem')) {
-    return {
-      type: 'quote_cta',
-      title: 'Putno zdravstveno osiguranje',
-      subtitle: 'Polica spremna u 60 sekundi za Europu i svijet',
-      productLine: 'putno',
-      priceHint: 'od 8,00 € / put',
-    };
-  }
-  if (q.includes('obrt') || q.includes('tvrtk') || q.includes('d.o.o') || q.includes('poslov') || q.includes('cyber')) {
-    return {
-      type: 'quote_cta',
-      title: 'Poslovno osiguranje za obrte i SME',
-      subtitle: 'Profesionalna odgovornost, uredska oprema i cyber zaštita',
-      productLine: 'poslovno',
-      priceHint: 'od 29,00 € / mj.',
-    };
-  }
-  return {
-    type: 'quote_cta',
-    title: 'Izračunaj ponude u 90 sekundi',
-    subtitle: 'Usporedi 7 hrvatskih osiguratelja bez sitnih slova i bez naknade',
-    productLine: 'auto',
-    priceHint: 'Ušteda do 15% u paketu',
+async function buildApiHeaders(): Promise<Record<string, string>> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
   };
+  try {
+    const idToken = await firebaseAuth.currentUser?.getIdToken();
+    if (idToken) headers.Authorization = `Bearer ${idToken}`;
+  } catch {
+    // Proceed unauthenticated if token unavailable
+  }
+  const appCheckToken = await getOptionalAppCheckToken();
+  if (appCheckToken) {
+    headers['X-Firebase-AppCheck'] = appCheckToken;
+  }
+  return headers;
 }
 
-function generateDeterministicCroatianReply(query: string): string {
-  const q = query.toLowerCase();
-  if (q.includes('potres')) {
-    return 'Osiguranje od potresa u Hrvatskoj ugovara se kao poseban dodatak polici imovine. Ključno je ugovoriti građevinsku novonabavnu vrijednost (oko 1.800–2.000 €/m²) bez podosiguranja kako bi u slučaju štete odšteta pokrila stvarni trošak sanacije. Franšizu za potres (najčešće 2% ili fiksni iznos) možete usporediti izravno u našem kalkulatoru imovine.';
-  }
-  if (q.includes('kasko') || q.includes('franšiz') || q.includes('fransiz') || q.includes('auto') || q.includes('bonus')) {
-    return 'Obvezno auto osiguranje (AO) pokriva isključivo štetu koju nanesete trećim osobama, dok Kasko pokriva štetu na vašem vozilu (sudar, krađa, tuča, vandalizam). Odabirom franšize od 150 € ili 300 € godišnja kasko premija pada za 10% do 20%, a vaš stečeni bonus do 50% slobodno prenosite između svih hrvatskih osiguratelja.';
-  }
-  if (q.includes('dopunsk') || q.includes('hzzo') || q.includes('zdrav')) {
-    return 'Privatno dopunsko zdravstveno osiguranje pokriva sve iste bolničke i ambulantne participacije kao HZZO (koji iznosi 15,00 €/mj.), ali za mlađe i srednje dobne skupine kreće već od 9,50 €/mj. Preporučujemo uključiti i B-listu lijekova kako biste izbjegli doplate u ljekarni.';
-  }
-  if (q.includes('štet') || q.includes('stet') || q.includes('nezgod') || q.includes('fnol')) {
-    return 'Kod prometne nezgode bez ozlijeđenih ispunite Europsko izvješće o nezgodi i fotografirajte štetu iz više kutova (uključujući registracije). Štetu možete prijaviti odmah putem našeg digitalnog FNOL obrasca u manje od 3 minute — naš tim zastupnika preuzima komunikaciju s osigurateljem i prati procjenu do isplate.';
-  }
-  if (q.includes('kredit') || q.includes('vinkul') || q.includes('život') || q.includes('zivot')) {
-    return 'Za vinkulaciju stambenog kredita banke u Hrvatskoj prihvaćaju policu imovine (požar i izljev vode) te riziko policu životnog osiguranja. Kroz našu agenciju možete usporediti tarife svih partnerskih društava, a vinkulacijski list pripremamo bez dodatne naknade.';
-  }
-  return 'Kao ovlašteni zastupnik u osiguranju uspoređujemo ponude 7 vodećih hrvatskih osiguratelja (Allianz, Croatia, Generali, Wiener, Triglav, Sava, Groupama) bez ikakve agencijske naknade za vas. Recite mi što želite osigurati (vozilo, dom/potres, zdravlje, putovanje ili tvrtku) ili kliknite karticu ispod za 90-sekundni izračun.';
+export interface AdvisorReplyResult {
+  text: string;
+  card: AdvisorChatCard;
+  recommendedProductLine: ProductLine;
+  shouldOfferEscalation: boolean;
+  source: 'gemini' | 'fallback';
+  degradedNotice?: string;
 }
 
-export async function askInsuranceAdvisor(
-  userQuestion: string,
-  history: AiChatMessage[]
-): Promise<{ text: string; card: AdvisorChatCard }> {
-  const recentContext = history
-    .slice(-4)
-    .map((m) => `${m.sender === 'user' ? 'Klijent' : 'Savjetnik'}: ${m.text}`)
-    .join('\n');
+function buildLocalFallbackReply(question: string, language: Language): AdvisorReplyResult {
+  const q = question.toLowerCase();
+  const isEn = language === 'en';
+  let line: ProductLine = 'auto';
 
-  const fullPrompt = recentContext
-    ? `Prethodni kontekst:\n${recentContext}\n\nNovo pitanje klijenta: ${userQuestion}`
-    : userQuestion;
+  if (
+    q.includes('potres') ||
+    q.includes('stan') ||
+    q.includes('kuć') ||
+    q.includes('krov') ||
+    q.includes('dron') ||
+    q.includes('imovina') ||
+    q.includes('dom') ||
+    q.includes('home') ||
+    q.includes('roof') ||
+    q.includes('earthquake')
+  ) {
+    line = 'imovina';
+  } else if (q.includes('zdrav') || q.includes('dopunsk') || q.includes('hzzo') || q.includes('health')) {
+    line = 'zdravstveno';
+  } else if (q.includes('kredit') || q.includes('život') || q.includes('zivot') || q.includes('vinkul') || q.includes('life')) {
+    line = 'zivotno';
+  } else if (q.includes('put') || q.includes('skij') || q.includes('travel') || q.includes('ski')) {
+    line = 'putno';
+  } else if (q.includes('pas') || q.includes('mačk') || q.includes('ljubim') || q.includes('pet')) {
+    line = 'ljubimci';
+  } else if (q.includes('obrt') || q.includes('tvrtk') || q.includes('d.o.o') || q.includes('cyber') || q.includes('business')) {
+    line = 'poslovno';
+  }
 
-  const geminiReply = await callGeminiText(fullPrompt, ADVISOR_SYSTEM_PROMPT);
   return {
-    text: geminiReply ?? generateDeterministicCroatianReply(userQuestion),
-    card: inferContextualCard(userQuestion),
+    text: isEn
+      ? 'Live AI advisor API is currently unreachable. You can immediately run our 90-second comparison across 7 Croatian insurers or click "Transfer to a human agent" so a HANFA-licensed advisor answers your exact question directly.'
+      : 'AI savjetnik API trenutno nije dostupan za generiranje odgovora uživo. Možete odmah pokrenuti naš 90-sekundni izračun kod 7 hrvatskih osiguratelja ili jednim klikom prebaciti upit našem licenciranom zastupniku za precizan odgovor.',
+    recommendedProductLine: line,
+    shouldOfferEscalation: true,
+    card: {
+      type: 'quote_cta',
+      title: isEn ? 'Compare 7 Croatian Insurers in 90s' : 'Usporedi 7 hrvatskih osiguratelja u 90s',
+      subtitle: isEn
+        ? 'Real-time deductible & coverage sliders at €0 agency fee'
+        : 'Prilagodba franšize i pokrića uživo bez agencijske naknade',
+      productLine: line,
+      priceHint: isEn ? 'Up to 15% bundle savings' : 'Ušteda do 15% u paketu',
+    },
+    source: 'fallback',
+    degradedNotice: isEn
+      ? 'Live Gemini AI backend is currently offline — showing honest fallback mode.'
+      : 'Gemini AI servis trenutno nije dostupan — prikazan je pričuvni način bez AI generiranja.',
   };
 }
 
 /**
- * Extracts structured policy metadata from an uploaded PDF/image file.
- * Uses Gemini API when `VITE_GEMINI_API_KEY` is configured, and falls back to
- * an intelligent client-side filename/metadata analyzer so users can always verify & edit fields.
+ * Calls server-side Cloud Function `POST /api/ai/advisor` where `GEMINI_API_KEY`
+ * is securely managed in Firebase Secret Manager (never exposed in the client bundle).
  */
-export async function analyzeUploadedPolicyFile(file: File): Promise<{
-  parsedVia: 'gemini_ai' | 'local_analyzer';
-  extracted: ExtractedPolicyFields;
-}> {
+export async function askInsuranceAdvisor(
+  userQuestion: string,
+  history: AiChatMessage[],
+  language: Language = 'hr'
+): Promise<AdvisorReplyResult> {
+  try {
+    const headers = await buildApiHeaders();
+    const res = await fetch(`${API_BASE}/api/ai/advisor`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        question: userQuestion,
+        language,
+        history: history.slice(-8).map((m) => ({
+          sender: m.sender,
+          text: m.text,
+        })),
+      }),
+    });
+
+    if (!res.ok) {
+      return buildLocalFallbackReply(userQuestion, language);
+    }
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      return buildLocalFallbackReply(userQuestion, language);
+    }
+
+    const data = (await res.json()) as {
+      reply: string;
+      suggestedCard: AdvisorChatCard;
+      recommendedProductLine: ProductLine;
+      shouldOfferEscalation: boolean;
+      source: 'gemini' | 'fallback';
+      degradedNotice?: string;
+    };
+
+    if (!data.reply) {
+      return buildLocalFallbackReply(userQuestion, language);
+    }
+
+    return {
+      text: data.reply,
+      card: data.suggestedCard,
+      recommendedProductLine: data.recommendedProductLine,
+      shouldOfferEscalation: data.shouldOfferEscalation,
+      source: data.source,
+      degradedNotice: data.degradedNotice,
+    };
+  } catch {
+    return buildLocalFallbackReply(userQuestion, language);
+  }
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === 'string' ? reader.result : '';
+      resolve(result.split(',')[1] ?? '');
+    };
+    reader.onerror = () => reject(new Error('File read error'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function buildLocalFallbackPolicyParse(
+  file: File,
+  language: Language,
+  reason: string
+): PolicyParseResult {
   const fallbackDate = addDaysIso(new Date().toISOString().slice(0, 10), 42);
   const nameLower = file.name.toLowerCase();
 
@@ -192,6 +178,8 @@ export async function analyzeUploadedPolicyFile(file: File): Promise<{
     guessedLine = 'zivotno';
   } else if (nameLower.includes('put')) {
     guessedLine = 'putno';
+  } else if (nameLower.includes('ljubim') || nameLower.includes('pet')) {
+    guessedLine = 'ljubimci';
   } else if (nameLower.includes('poslov') || nameLower.includes('tvrtk') || nameLower.includes('sme')) {
     guessedLine = 'poslovno';
   }
@@ -215,83 +203,93 @@ export async function analyzeUploadedPolicyFile(file: File): Promise<{
             ? 680
             : 290;
 
-  if (GEMINI_API_KEY && file.size < 4 * 1024 * 1024) {
-    try {
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = typeof reader.result === 'string' ? reader.result : '';
-          resolve(result.split(',')[1] ?? '');
-        };
-        reader.onerror = () => reject(new Error('File read error'));
-        reader.readAsDataURL(file);
-      });
+  const extracted: ExtractedPolicyFields = {
+    insurer: guessedInsurer,
+    productLine: guessedLine,
+    policyNumber: '',
+    expiryDate: fallbackDate,
+    currentAnnualPremium: guessedPremium,
+    bonusPercent: guessedLine === 'auto' ? 50 : undefined,
+    deductible: guessedLine === 'auto' || guessedLine === 'imovina' ? 150 : 0,
+  };
 
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [
-                {
-                  text: 'Extract Croatian insurance policy details as strict JSON with keys: insurer (string), productLine (one of auto,imovina,zdravstveno,zivotno,putno,ljubimci,poslovno), policyNumber (string), expiryDate (YYYY-MM-DD), currentAnnualPremium (number in EUR), bonusPercent (number or 50), deductible (number or 150). Return ONLY raw JSON.',
-                },
-                {
-                  inline_data: {
-                    mime_type: file.type || 'application/pdf',
-                    data: base64,
-                  },
-                },
-              ],
-            },
-          ],
-          generationConfig: {
-            response_mime_type: 'application/json',
-            temperature: 0.1,
-          },
-        }),
-      });
-
-      if (response.ok) {
-        const data = (await response.json()) as GeminiResponsePayload;
-        const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (rawText) {
-          const parsed = JSON.parse(rawText) as Partial<ExtractedPolicyFields>;
-          return {
-            parsedVia: 'gemini_ai',
-            extracted: {
-              insurer: parsed.insurer || guessedInsurer,
-              productLine: parsed.productLine || guessedLine,
-              policyNumber: parsed.policyNumber || `POL-${Math.floor(100000 + Math.random() * 900000)}`,
-              expiryDate: parsed.expiryDate || fallbackDate,
-              currentAnnualPremium:
-                typeof parsed.currentAnnualPremium === 'number' && parsed.currentAnnualPremium > 0
-                  ? parsed.currentAnnualPremium
-                  : guessedPremium,
-              bonusPercent: typeof parsed.bonusPercent === 'number' ? parsed.bonusPercent : 50,
-              deductible: typeof parsed.deductible === 'number' ? parsed.deductible : 150,
-            },
-          };
-        }
-      }
-    } catch {
-      // Fall through cleanly to local analyzer
-    }
-  }
+  const priced = buildCompetingOffersFromExtracted(extracted, language);
 
   return {
     parsedVia: 'local_analyzer',
-    extracted: {
-      insurer: guessedInsurer,
-      productLine: guessedLine,
-      policyNumber: `POL-${Math.floor(100000 + Math.random() * 899999)}`,
-      expiryDate: fallbackDate,
-      currentAnnualPremium: guessedPremium,
-      bonusPercent: guessedLine === 'auto' ? 50 : undefined,
-      deductible: guessedLine === 'auto' || guessedLine === 'imovina' ? 150 : 0,
-    },
+    extracted,
+    confidenceScore: 0.35,
+    lowConfidenceFields: ['policyNumber', 'expiryDate', 'currentAnnualPremium'],
+    warnings: [
+      language === 'en'
+        ? 'OCR backend was unreachable — please verify policy number, expiry date, and current annual premium manually.'
+        : 'AI OCR servis trenutno nije dostupan — molimo provjerite i ručno upišite točan broj police, datum isteka i godišnju premiju.',
+    ],
+    competingOffers: priced.competingOffers,
+    estimatedNewAnnualPremium: priced.estimatedNewAnnualPremium,
+    estimatedAnnualSavings: priced.estimatedAnnualSavings,
+    degradedNotice: reason,
   };
+}
+
+/**
+ * Sends uploaded policy document to server-side `POST /api/ai/parse-policy`
+ * which persists privately to Firebase Storage, runs Gemini multimodal structured OCR,
+ * and computes genuine competing offers via the Pricing Engine.
+ */
+export async function analyzeUploadedPolicyFile(
+  file: File,
+  language: Language = 'hr'
+): Promise<PolicyParseResult> {
+  try {
+    const base64Data = await fileToBase64(file);
+    const headers = await buildApiHeaders();
+
+    const res = await fetch(`${API_BASE}/api/ai/parse-policy`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        fileName: file.name,
+        mimeType: file.type || 'application/pdf',
+        base64Data,
+        language,
+      }),
+    });
+
+    if (!res.ok) {
+      return buildLocalFallbackPolicyParse(
+        file,
+        language,
+        language === 'en'
+          ? 'OCR server returned an error — switched to manual verification.'
+          : 'OCR servis je vratio pogrešku — omogućena je ručna provjera.'
+      );
+    }
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      return buildLocalFallbackPolicyParse(
+        file,
+        language,
+        language === 'en'
+          ? 'OCR API endpoint is not deployed yet — manual verification enabled.'
+          : 'AI OCR backend trenutno nije aktivan — omogućena je ručna provjera.'
+      );
+    }
+
+    const data = (await res.json()) as PolicyParseResult;
+    if (!data.extracted) {
+      return buildLocalFallbackPolicyParse(file, language, 'Invalid OCR payload');
+    }
+
+    return data;
+  } catch {
+    return buildLocalFallbackPolicyParse(
+      file,
+      language,
+      language === 'en'
+        ? 'Unable to reach OCR API — manual verification enabled.'
+        : 'Nije moguće kontaktirati OCR API — omogućena je ručna provjera.'
+    );
+  }
 }

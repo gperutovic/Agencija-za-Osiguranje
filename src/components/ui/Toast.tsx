@@ -25,7 +25,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const showToast = useCallback(
     (message: string, variant: ToastVariant = 'info') => {
       const id = Date.now() + Math.floor(Math.random() * 1000);
-      setToasts((prev) => [...prev.slice(-2), { id, message, variant }]);
+      // Max 2 stacked toasts so notifications never clutter the screen
+      setToasts((prev) => [...prev.slice(-1), { id, message, variant }]);
       setTimeout(() => dismiss(id), 4500);
     },
     [dismiss]
@@ -36,11 +37,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {children}
       <div
         aria-live="polite"
-        className="fixed top-20 right-4 z-50 flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm pointer-events-none"
+        style={{ bottom: 'var(--toast-bottom-offset, 1.25rem)' }}
+        className="fixed right-4 z-[60] flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm pointer-events-none transition-[bottom] duration-200"
       >
         {toasts.map((item) => (
           <div
             key={item.id}
+            role="status"
             className="pointer-events-auto flex items-start gap-3 rounded-editorial bg-canvas border border-hairline shadow-elevated px-4 py-3 text-sm text-ink animate-step"
           >
             {item.variant === 'success' && (

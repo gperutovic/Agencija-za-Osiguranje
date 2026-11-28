@@ -1,7 +1,7 @@
-# ARCHITECTURE & IMPLEMENTATION PLAN — JASNO Digital Insurance Agency Platform
+# ARCHITECTURE & IMPLEMENTATION PLAN — VEDRO Digital Insurance Agency Platform
 
 **Project Workspace:** `agencija-zivot-insurance` (deployed to Firebase project `agencija-za-osiguranje`)  
-**Brand Identity:** **Jasno** (*Jasno d.o.o. za zastupanje u osiguranju* — fully configurable in `src/config/brand.ts`)  
+**Brand Identity:** **Vedro** (*Vedro d.o.o. za zastupanje u osiguranju* — fully configurable in `src/config/brand.ts`)  
 **Regulatory Jurisdiction:** Republic of Croatia (*Zakon o osiguranju*, HANFA supervision, EU IDD 2016/97, GDPR/AZOP)  
 **Design System:** Swiss-Editorial InsurTech (inspired by Lemonade.com: pure white `#FFFFFF` + warm off-white `#F7F7F5`, hairline `#E5E7EB`, deep ink `#111827`, single Signal Coral/Magenta accent `#FF006E`, editorial `Instrument Serif` + `Plus Jakarta Sans` with `tabular-nums`, bespoke thin-stroke monochrome line-art SVGs).
 

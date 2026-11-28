@@ -1,7 +1,7 @@
 {
-  "name": "jasno-insurance-platform",
+  "name": "vedro-insurance-platform",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,12 +9,15 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:rules": "vitest run tests/security-rules/firestore.rules.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
+    "@pdf-lib/fontkit": "^1.1.1",
     "firebase": "^11.1.0",
     "lucide-react": "^0.469.0",
+    "pdf-lib": "^1.17.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
@@ -22,10 +25,13 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.1",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "dejavu-fonts-ttf": "^2.37.3",
+    "playwright-core": "^1.65.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",

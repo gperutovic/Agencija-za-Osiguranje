@@ -1,7 +1,7 @@
 rules_version = '2';
 
 // ===============================================================
-// Assumed Data Model — Jasno Digital Insurance Agency Platform
+// Assumed Data Model — Vedro Digital Insurance Agency Platform
 // (Firestore Standard Edition, Republic of Croatia / HANFA / GDPR)
 // Aligned with src/types/domain.ts & src/services/agencyRepository.ts
 // ===============================================================
@@ -12,156 +12,60 @@ rules_version = '2';
 //   - uid: string (required, == {uid}, 1..128 chars, immutable)
 //   - email: string (required, valid email, 5..254 chars, immutable for owner)
 //   - fullName: string (required, 1..120 chars)
-//   - role: string (required, enum: 'client' | 'agent' | 'admin'; self-create MUST be 'client'; only admin may change)
+//   - role: string (required, enum: 'client' | 'agent' | 'admin'; self-create MUST be 'client'; managed via Admin SDK/custom claims)
 //   - phone: string (optional/nullable, empty or valid phone 6..30 chars)
 //   - oib: string (optional/nullable, empty or 11-digit Croatian OIB)
+//   - address: string (optional/nullable, 0..200 chars)
 //   - city: string (optional/nullable, 0..100 chars)
 //   - postalCode: string (optional/nullable, empty or 5-digit postal code)
+//   - assignedAgent: string (optional/nullable, 0..128 chars; agent/admin editable)
+//   - assignedAgentLicense: string (optional/nullable, 0..64 chars; agent/admin editable)
 //   - createdAt: timestamp | ISO-8601 string (required, immutable)
 //   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
 //
 // Collection: quotes
 // Document ID: {quoteId}
 // Fields:
-//   - id: string (optional, == {quoteId}, 1..128 chars, immutable)
-//   - referenceNumber: string (required, 1..64 chars, immutable)
-//   - userId: string (optional/nullable, on create must equal request.auth.uid if set; immutable once set)
-//   - productLine: string (required, enum of 7 Croatian lines, immutable)
-//   - bundleProducts: list<string> (optional, <= 7 items, elements in product lines)
-//   - inputs: map (optional, strict discriminated ProductQuoteInput matching productLine)
-//   - customization: map (optional, CoverageCustomization with bounded deductible/multiplier/billingCycle/addons)
-//   - selectedOffer: map (optional, CarrierOffer with bounded prices/strings/lists)
-//   - customer: map (required; fullName 1..120, valid email, optional bounded phone/oib/iban/address/city/postalCode/companyName)
-//   - consents: map (required, immutable; ipidAcknowledged == true, gdprEssential == true, optional gdprMarketing/timestamp/policyVersion)
-//   - status: string (required, enum: 'new' | 'quoted' | 'bound' | 'lost'; must be 'new' on create)
-//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
-//   - source: string (optional, enum: 'quote_engine' | 'switch_save' | 'ai_escalation')
-//   - notes: string (optional/nullable, 0..4000 chars)
-//   - createdAt: timestamp | ISO-8601 string (required, immutable)
-//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//   - id, referenceNumber, userId, productLine, bundleProducts, inputs, customization,
+//     selectedOffer, customer, consents, status, assignedAgent, policyId, source, notes,
+//     createdAt, updatedAt
 //
 // Collection: switch_analyses
 // Document ID: {analysisId}
 // Fields:
-//   - id: string (optional, == {analysisId}, 1..128 chars, immutable)
-//   - referenceNumber: string (optional, 1..64 chars, immutable)
-//   - userId: string (optional/nullable, on create must equal request.auth.uid if set; immutable once set)
-//   - fileName: string (required, 1..255 chars, immutable)
-//   - fileSizeBytes: number (optional, 0..52428800, immutable)
-//   - parsedVia: string (optional, enum: 'gemini_ai' | 'local_analyzer', immutable)
-//   - extractedPolicy: map (required; insurer, productLine, expiryDate, currentAnnualPremium, optional policyNumber/bonusPercent/deductible)
-//   - estimatedNewAnnualPremium: number (optional, 0..10000000)
-//   - estimatedAnnualSavings: number (required, 0..10000000)
-//   - reminderScheduledFor: timestamp | ISO-8601 string (optional/nullable)
-//   - customerName: string (optional/nullable, 0..120 chars)
-//   - customerEmail: string (optional/nullable, valid email)
-//   - customerPhone: string (optional/nullable, valid phone)
-//   - status: string (required, enum: 'new' | 'quoted' | 'bound' | 'lost' | 'reviewed' | 'contacted' | 'converted' | 'archived'; must be 'new' on create)
-//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
-//   - notes: string (optional/nullable, 0..4000 chars)
-//   - createdAt: timestamp | ISO-8601 string (required, immutable)
-//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//   - id, referenceNumber, userId, fileName, fileSizeBytes, storagePath, storageUrl,
+//     parsedVia, confidenceScore, warnings, extractedPolicy, estimatedNewAnnualPremium,
+//     estimatedAnnualSavings, reminderScheduledFor, reminderNotified, customerName,
+//     customerEmail, customerPhone, status, assignedAgent, notes, createdAt, updatedAt
 //
 // Collection: policies
 // Document ID: {policyId}
 // Fields:
-//   - id: string (optional, == {policyId}, 1..128 chars)
-//   - policyNumber: string (required, 1..64 chars, immutable for owner)
-//   - userId: string (required, 1..128 chars, immutable for owner)
-//   - clientName: string (required, 1..120 chars, immutable for owner)
-//   - clientOib: string (required, 11-digit OIB, immutable for owner)
-//   - productLine: string (required, enum of 7 lines, immutable for owner)
-//   - carrierName: string (required, 1..120 chars, immutable for owner)
-//   - status: string (required, enum: 'active' | 'expiring_soon' | 'expired' | 'pending_renewal'; owner may only transition active/expiring_soon -> pending_renewal)
-//   - startDate: timestamp | ISO-8601 string (required, immutable for owner)
-//   - expiryDate: timestamp | ISO-8601 string (required, immutable for owner)
-//   - annualPremium: number (required, 0..10000000, immutable for owner)
-//   - monthlyPremium: number (required, 0..1000000, immutable for owner)
-//   - deductible: number (required, 0..1000000, immutable for owner)
-//   - coverageLimit: number (required, 0..100000000, immutable for owner)
-//   - assetSummary: string (optional/nullable, 0..300 chars, immutable for owner)
-//   - vehiclePlate: string (optional/nullable, 0..24 chars, immutable for owner)
-//   - propertyAddress: string (optional/nullable, 0..250 chars, immutable for owner)
-//   - greenCardNumber: string (optional/nullable, 0..64 chars, immutable for owner)
-//   - ipidCode: string (optional/nullable, 0..64 chars, immutable for owner)
-//   - renewalReminderSentAt: timestamp | ISO-8601 string (optional/nullable, immutable for owner)
-//   - endorsements: list<map> (optional, <= 50 items; owner may only prepend/append 1 requested endorsement per update)
-//   - createdAt: timestamp | ISO-8601 string (optional/nullable, immutable for owner)
-//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//   - id, policyNumber, userId, clientName, clientOib, productLine, carrierName, status,
+//     startDate, expiryDate, annualPremium, monthlyPremium, deductible, coverageLimit,
+//     assetSummary, vehiclePlate, propertyAddress, greenCardNumber, ipidCode,
+//     policyPdfUrl, policyPdfPath, ipidPdfUrl, assignedAgent, assignedAgentLicense,
+//     sourceQuoteId, renewalReminderSentAt, endorsements, createdAt, updatedAt
 //
 // Collection: claims
 // Document ID: {claimId}
 // Fields:
-//   - id: string (optional, == {claimId}, 1..128 chars, immutable)
-//   - referenceNumber: string (required, 1..64 chars, immutable)
-//   - userId: string (optional/nullable, on create must equal request.auth.uid if set, immutable)
-//   - policyNumber: string (required, 1..64 chars, immutable)
-//   - productLine: string (optional/nullable, enum of 7 lines, immutable)
-//   - carrierName: string (optional/nullable, 0..120 chars, immutable)
-//   - claimantName: string (required, 1..120 chars, immutable)
-//   - claimantOib: string (required, 11-digit OIB, immutable)
-//   - claimantEmail: string (required, valid email, immutable)
-//   - claimantPhone: string (optional/nullable, valid phone, immutable)
-//   - incidentDate: timestamp | ISO-8601 string (optional/nullable, immutable)
-//   - incidentTime: string (optional/nullable, 0..20 chars, immutable)
-//   - incidentLocation: string (optional/nullable, 0..250 chars, immutable)
-//   - description: string (required, 1..4000 chars, immutable)
-//   - policeReportFiled: bool (optional, immutable)
-//   - attachments: list<map> (optional, <= 20 items; owner may only append 1..5 valid attachments per update)
-//   - stage: string (required, enum: 'received' | 'insurer_review' | 'assessment' | 'paid'; must be 'received' on create; sequential agent/admin transitions)
-//   - stageHistory: list<map> (optional, <= 30 items, append-only audit trail)
-//   - consents: map (required, immutable; gdprEssential == true)
-//   - estimatedAmount: number (optional/nullable, 0..100000000; agent/admin editable)
-//   - createdAt: timestamp | ISO-8601 string (required, immutable)
-//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//   - id, referenceNumber, userId, policyNumber, productLine, carrierName, claimantName,
+//     claimantOib, claimantEmail, claimantPhone, incidentDate, incidentTime,
+//     incidentLocation, description, policeReportFiled, policeStation, policeReportNumber,
+//     attachments, stage, stageHistory, consents, estimatedAmount, createdAt, updatedAt
 //
 // Collection: escalations
 // Document ID: {escalationId}
-// Fields:
-//   - id: string (optional, == {escalationId}, 1..128 chars, immutable)
-//   - referenceNumber: string (required, 1..64 chars, immutable)
-//   - userId: string (optional/nullable, on create must equal request.auth.uid if set; immutable once set)
-//   - customerName: string (optional/nullable, 0..120 chars)
-//   - customerEmail: string (required, valid email, immutable)
-//   - customerPhone: string (optional/nullable, valid phone)
-//   - topic: string (required, 1..200 chars, immutable)
-//   - transcript: list<AiChatMessage | string> (required, <= 50 entries, immutable)
-//   - status: string (required; on create 'open' or 'new' matching domain.ts QuotePipelineStatus)
-//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
-//   - notes: string (optional/nullable, 0..4000 chars)
-//   - createdAt: timestamp | ISO-8601 string (required, immutable)
-//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
 //
-// Collection: messages
+// Collection: messages (Immutable Audit Trail)
 // Document ID: {messageId}
-// Fields (fully immutable audit trail — no update or delete):
-//   - id: string (optional, == {messageId}, 1..128 chars)
-//   - threadUserId: string (required, 1..128 chars; client must match auth.uid)
-//   - senderRole: string (required, enum: 'client' | 'agent'; client -> 'client', agent/admin -> 'agent')
-//   - senderName: string (required, 1..120 chars)
-//   - text: string (required, 1..2000 chars)
-//   - createdAt: timestamp | ISO-8601 string (required)
 //
-// Collection: complaints (Art. 401 Croatian Insurance Act statutory register)
+// Collection: complaints (Art. 401 Croatian Insurance Act Statutory Register)
 // Document ID: {complaintId}
-// Fields:
-//   - id: string (optional, == {complaintId}, 1..128 chars, immutable)
-//   - protocolNumber: string (required, 1..64 chars, immutable)
-//   - fullName: string (required, 1..120 chars, immutable)
-//   - oib: string (required, 11-digit OIB, immutable)
-//   - email: string (required, valid email, immutable)
-//   - phone: string (optional/nullable, valid phone, immutable)
-//   - address: string (optional/nullable, 0..250 chars, immutable)
-//   - policyNumber: string (optional/nullable, 0..64 chars, immutable)
-//   - subject: string (required, 1..200 chars, immutable)
-//   - description: string (required, 1..5000 chars, immutable)
-//   - status: string (required, enum: 'received' | 'in_review' | 'resolved'; must be 'received' on create)
-//   - statutoryDeadlineDate: timestamp | ISO-8601 string (optional/nullable, immutable)
-//   - assignedAgent: string (optional/nullable, 0..128 chars; disallowed on public create)
-//   - resolutionNotes: string (optional/nullable, 0..5000 chars; disallowed on public create)
-//   - consents: map (optional/nullable, immutable)
-//   - createdAt: timestamp | ISO-8601 string (required, immutable)
-//   - updatedAt: timestamp | ISO-8601 string (optional/nullable)
+//
+// Collection: sla_alerts (Server-generated operational renewal/SLA warnings)
+// Document ID: {alertId}
 //
 // ===============================================================
 
@@ -169,7 +73,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ===============================================================
-    // Helper Functions — Authentication & RBAC
+    // Helper Functions — Authentication & Authoritative Custom Claim RBAC
     // ===============================================================
 
     function isAuthenticated() {
@@ -198,29 +102,19 @@ service cloud.firestore {
              request.resource.data.uid == resource.data.uid;
     }
 
+    // Roles come EXCLUSIVELY from Firebase Auth Custom Claims (`request.auth.token.role`)
     function hasRoleClaim(allowedRoles) {
       return isSignedIn() &&
              'role' in request.auth.token &&
              request.auth.token.role in allowedRoles;
     }
 
-    function userDocExists() {
-      return isSignedIn() &&
-             exists(/databases/$(database)/documents/users/$(request.auth.uid));
-    }
-
-    function userDocRole() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
-    }
-
     function isAdmin() {
-      return hasRoleClaim(['admin']) ||
-             (userDocExists() && userDocRole() == 'admin');
+      return hasRoleClaim(['admin']);
     }
 
     function isAgentOrAdmin() {
-      return hasRoleClaim(['agent', 'admin']) ||
-             (userDocExists() && userDocRole() in ['agent', 'admin']);
+      return hasRoleClaim(['agent', 'admin']);
     }
 
     // ===============================================================
@@ -267,11 +161,12 @@ service cloud.firestore {
              (url.matches('^https://.*') || url.matches('^http://.*'));
     }
 
-    function isValidImageDataUrl(dataUrl) {
+    // Strict cap (~60 KB) so only tiny preview thumbnails are ever allowed; full media lives in Cloud Storage
+    function isValidThumbnailDataUrl(dataUrl) {
       return dataUrl is string &&
              dataUrl.size() >= 20 &&
-             dataUrl.size() <= 350000 &&
-             dataUrl.matches('^data:image/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=]+$');
+             dataUrl.size() <= 85000 &&
+             dataUrl.matches('^data:image/(png|jpeg|jpg|webp);base64,[A-Za-z0-9+/=]+$');
     }
 
     function isValidOib(oib) {
@@ -308,8 +203,6 @@ service cloud.firestore {
              (data[field] is string && data[field].matches('^[0-9]{5}$'));
     }
 
-    // Format check for ISO-8601 date or datetime strings (YYYY-MM-DD or full ISO timestamp).
-    // Prefer Firestore `timestamp` where strict calendar logic is required.
     function isValidDateString(dateStr) {
       return dateStr is string &&
              dateStr.size() >= 10 &&
@@ -335,7 +228,7 @@ service cloud.firestore {
              path.size() <= 512 &&
              !path.matches('.*\\.\\..*') && (
                isScopedPath(path) ||
-               path.matches('^(claims|policies|switch)/[a-zA-Z0-9/_.-]+$')
+               path.matches('^(claims|policies|switch|switch-policies)/[a-zA-Z0-9/_.-]+$')
              );
     }
 
@@ -356,9 +249,6 @@ service cloud.firestore {
              line in ['auto', 'imovina', 'zdravstveno', 'zivotno', 'putno', 'ljubimci', 'poslovno'];
     }
 
-    // Ownership binding for public-create collections:
-    // - Signed-out callers MUST omit userId (or pass null) to prevent spoofing another user's portal.
-    // - Signed-in callers may either omit/null userId or set it strictly to their own auth UID.
     function isValidCreateUserId(data) {
       return !('userId' in data) ||
              data.userId == null ||
@@ -371,8 +261,6 @@ service cloud.firestore {
              isNonEmptyString(data.userId, 128);
     }
 
-    // Allows agent/admin to link an anonymous lead/record to a registered user once,
-    // while preventing reassignment after a userId is already bound.
     function isUserIdImmutableOrLinkable() {
       return (!('userId' in resource.data) || resource.data.userId == null)
         ? isValidOptionalStoredUserId(request.resource.data)
@@ -406,8 +294,9 @@ service cloud.firestore {
     // 1. Users (/users/{uid})
     function isValidUser(data, uid) {
       return hasOnlyAllowedFields(data, [
-               'uid', 'email', 'fullName', 'role', 'phone',
-               'oib', 'city', 'postalCode', 'createdAt', 'updatedAt'
+               'uid', 'email', 'fullName', 'role', 'phone', 'oib',
+               'address', 'city', 'postalCode', 'assignedAgent',
+               'assignedAgentLicense', 'createdAt', 'updatedAt'
              ]) &&
              hasRequiredFields(data, ['uid', 'email', 'fullName', 'role', 'createdAt']) &&
              data.uid is string && data.uid == uid && data.uid.size() >= 1 && data.uid.size() <= 128 &&
@@ -416,8 +305,11 @@ service cloud.firestore {
              data.role in ['client', 'agent', 'admin'] &&
              isValidOptionalPhone(data, 'phone') &&
              isValidOptionalOib(data, 'oib') &&
+             isOptionalString(data, 'address', 0, 200) &&
              isOptionalString(data, 'city', 0, 100) &&
              isValidOptionalPostalCode(data, 'postalCode') &&
+             isOptionalString(data, 'assignedAgent', 0, 128) &&
+             isOptionalString(data, 'assignedAgentLicense', 0, 64) &&
              isValidDateTime(data.createdAt) &&
              (!('updatedAt' in data) || data.updatedAt == null || isValidDateTime(data.updatedAt));
     }
@@ -603,7 +495,7 @@ service cloud.firestore {
       return hasOnlyAllowedFields(data, [
                'id', 'referenceNumber', 'userId', 'productLine', 'bundleProducts',
                'inputs', 'customization', 'selectedOffer', 'customer', 'consents',
-               'status', 'assignedAgent', 'source', 'notes', 'createdAt', 'updatedAt'
+               'status', 'assignedAgent', 'policyId', 'source', 'notes', 'createdAt', 'updatedAt'
              ]) &&
              hasRequiredFields(data, [
                'referenceNumber', 'productLine', 'customer', 'consents', 'status', 'createdAt'
@@ -623,6 +515,7 @@ service cloud.firestore {
              isValidQuoteConsents(data.consents) &&
              data.status in ['new', 'quoted', 'bound', 'lost'] &&
              isOptionalString(data, 'assignedAgent', 0, 128) &&
+             isOptionalString(data, 'policyId', 0, 128) &&
              (!('source' in data) || data.source in ['quote_engine', 'switch_save', 'ai_escalation']) &&
              isOptionalString(data, 'notes', 0, 4000) &&
              isValidDateTime(data.createdAt) &&
@@ -641,7 +534,8 @@ service cloud.firestore {
     function isValidExtractedPolicy(ep) {
       return isValidMap(ep, [
                'insurer', 'productLine', 'policyNumber', 'expiryDate',
-               'currentAnnualPremium', 'bonusPercent', 'deductible'
+               'currentAnnualPremium', 'bonusPercent', 'deductible',
+               'vehiclePlate', 'areaSqm'
              ]) &&
              hasRequiredFields(ep, ['insurer', 'productLine', 'expiryDate', 'currentAnnualPremium']) &&
              isNonEmptyString(ep.insurer, 120) &&
@@ -650,15 +544,18 @@ service cloud.firestore {
              isValidDateTime(ep.expiryDate) &&
              isValidNumber(ep.currentAnnualPremium, 0, 10000000) &&
              (!('bonusPercent' in ep) || ep.bonusPercent == null || isValidNumber(ep.bonusPercent, 0, 100)) &&
-             (!('deductible' in ep) || ep.deductible == null || isValidNumber(ep.deductible, 0, 1000000));
+             (!('deductible' in ep) || ep.deductible == null || isValidNumber(ep.deductible, 0, 1000000)) &&
+             isOptionalString(ep, 'vehiclePlate', 0, 24) &&
+             (!('areaSqm' in ep) || ep.areaSqm == null || isValidNumber(ep.areaSqm, 5, 10000));
     }
 
     function isValidSwitchAnalysis(data, analysisId) {
       return hasOnlyAllowedFields(data, [
-               'id', 'referenceNumber', 'userId', 'fileName', 'fileSizeBytes', 'parsedVia',
+               'id', 'referenceNumber', 'userId', 'fileName', 'fileSizeBytes',
+               'storagePath', 'storageUrl', 'parsedVia', 'confidenceScore', 'warnings',
                'extractedPolicy', 'estimatedNewAnnualPremium', 'estimatedAnnualSavings',
-               'reminderScheduledFor', 'customerName', 'customerEmail', 'customerPhone',
-               'status', 'assignedAgent', 'notes', 'createdAt', 'updatedAt'
+               'reminderScheduledFor', 'reminderNotified', 'customerName', 'customerEmail',
+               'customerPhone', 'status', 'assignedAgent', 'notes', 'createdAt', 'updatedAt'
              ]) &&
              hasRequiredFields(data, [
                'fileName', 'extractedPolicy', 'estimatedAnnualSavings', 'status', 'createdAt'
@@ -668,11 +565,19 @@ service cloud.firestore {
              isValidOptionalStoredUserId(data) &&
              isNonEmptyString(data.fileName, 255) &&
              (!('fileSizeBytes' in data) || data.fileSizeBytes == null || isValidNumber(data.fileSizeBytes, 0, 52428800)) &&
+             (!('storagePath' in data) || data.storagePath == null || isValidStoragePath(data.storagePath)) &&
+             (!('storageUrl' in data) || data.storageUrl == null || isValidUrl(data.storageUrl)) &&
              (!('parsedVia' in data) || data.parsedVia in ['gemini_ai', 'local_analyzer']) &&
+             (!('confidenceScore' in data) || data.confidenceScore == null || isValidNumber(data.confidenceScore, 0, 1)) &&
+             (!('warnings' in data) || (
+               isValidList(data.warnings, 10) &&
+               (data.warnings.size() == 0 || isBoundedString(data.warnings[0], 1, 400))
+             )) &&
              isValidExtractedPolicy(data.extractedPolicy) &&
              (!('estimatedNewAnnualPremium' in data) || data.estimatedNewAnnualPremium == null || isValidNumber(data.estimatedNewAnnualPremium, 0, 10000000)) &&
              isValidNumber(data.estimatedAnnualSavings, 0, 10000000) &&
              (!('reminderScheduledFor' in data) || data.reminderScheduledFor == null || data.reminderScheduledFor == '' || isValidDateTime(data.reminderScheduledFor)) &&
+             (!('reminderNotified' in data) || data.reminderNotified is bool) &&
              isOptionalString(data, 'customerName', 0, 120) &&
              (!('customerEmail' in data) || data.customerEmail == null || data.customerEmail == '' || isValidEmail(data.customerEmail)) &&
              isValidOptionalPhone(data, 'customerPhone') &&
@@ -709,8 +614,6 @@ service cloud.firestore {
              isValidDateTime(item.createdAt);
     }
 
-    // Owner may prepend (agencyRepository.ts) or append exactly 1 requested endorsement
-    // without modifying or deleting any existing endorsement entries.
     function isValidOwnerEndorsementUpdate() {
       let hasOld = 'endorsements' in resource.data && resource.data.endorsements is list;
       let oldList = hasOld ? resource.data.endorsements : [];
@@ -733,7 +636,9 @@ service cloud.firestore {
                'productLine', 'carrierName', 'status', 'startDate', 'expiryDate',
                'annualPremium', 'monthlyPremium', 'deductible', 'coverageLimit',
                'assetSummary', 'vehiclePlate', 'propertyAddress', 'greenCardNumber',
-               'ipidCode', 'renewalReminderSentAt', 'endorsements', 'createdAt', 'updatedAt'
+               'ipidCode', 'policyPdfUrl', 'policyPdfPath', 'ipidPdfUrl',
+               'assignedAgent', 'assignedAgentLicense', 'sourceQuoteId',
+               'renewalReminderSentAt', 'endorsements', 'createdAt', 'updatedAt'
              ]) &&
              hasRequiredFields(data, [
                'policyNumber', 'userId', 'clientName', 'clientOib', 'productLine',
@@ -759,6 +664,12 @@ service cloud.firestore {
              isOptionalString(data, 'propertyAddress', 0, 250) &&
              isOptionalString(data, 'greenCardNumber', 0, 64) &&
              isOptionalString(data, 'ipidCode', 0, 64) &&
+             (!('policyPdfUrl' in data) || data.policyPdfUrl == null || isValidUrl(data.policyPdfUrl)) &&
+             (!('policyPdfPath' in data) || data.policyPdfPath == null || isValidStoragePath(data.policyPdfPath)) &&
+             (!('ipidPdfUrl' in data) || data.ipidPdfUrl == null || isValidUrl(data.ipidPdfUrl)) &&
+             isOptionalString(data, 'assignedAgent', 0, 128) &&
+             isOptionalString(data, 'assignedAgentLicense', 0, 64) &&
+             isOptionalString(data, 'sourceQuoteId', 0, 128) &&
              (!('renewalReminderSentAt' in data) || data.renewalReminderSentAt == null || isValidDateTime(data.renewalReminderSentAt)) &&
              (!('endorsements' in data) || isValidList(data.endorsements, 50)) &&
              (!('createdAt' in data) || data.createdAt == null || isValidDateTime(data.createdAt)) &&
@@ -777,9 +688,9 @@ service cloud.firestore {
              isOptionalString(att, 'fileName', 1, 255) &&
              isOptionalString(att, 'mimeType', 1, 100) &&
              isOptionalString(att, 'type', 1, 100) &&
-             (!('sizeBytes' in att) || isValidNumber(att.sizeBytes, 0, 26214400)) &&
-             (!('size' in att) || isValidNumber(att.size, 0, 26214400)) &&
-             (!('previewDataUrl' in att) || att.previewDataUrl == null || isValidImageDataUrl(att.previewDataUrl)) &&
+             (!('sizeBytes' in att) || isValidNumber(att.sizeBytes, 0, 10485760)) &&
+             (!('size' in att) || isValidNumber(att.size, 0, 10485760)) &&
+             (!('previewDataUrl' in att) || att.previewDataUrl == null || isValidThumbnailDataUrl(att.previewDataUrl)) &&
              (!('storageUrl' in att) || att.storageUrl == null || isValidUrl(att.storageUrl)) &&
              (!('url' in att) || att.url == null || isValidUrl(att.url)) &&
              (!('storagePath' in att) || att.storagePath == null || isValidStoragePath(att.storagePath)) &&
@@ -854,8 +765,9 @@ service cloud.firestore {
                'id', 'referenceNumber', 'userId', 'policyNumber', 'productLine',
                'carrierName', 'claimantName', 'claimantOib', 'claimantEmail',
                'claimantPhone', 'incidentDate', 'incidentTime', 'incidentLocation',
-               'description', 'policeReportFiled', 'attachments', 'stage',
-               'stageHistory', 'consents', 'estimatedAmount', 'createdAt', 'updatedAt'
+               'description', 'policeReportFiled', 'policeStation', 'policeReportNumber',
+               'attachments', 'stage', 'stageHistory', 'consents', 'estimatedAmount',
+               'createdAt', 'updatedAt'
              ]) &&
              hasRequiredFields(data, [
                'referenceNumber', 'policyNumber', 'claimantName', 'claimantOib',
@@ -876,6 +788,8 @@ service cloud.firestore {
              isOptionalString(data, 'incidentLocation', 0, 250) &&
              isNonEmptyString(data.description, 4000) &&
              (!('policeReportFiled' in data) || data.policeReportFiled is bool) &&
+             isOptionalString(data, 'policeStation', 0, 120) &&
+             isOptionalString(data, 'policeReportNumber', 0, 64) &&
              (!('attachments' in data) || isValidList(data.attachments, 20)) &&
              data.stage in ['received', 'insurer_review', 'assessment', 'paid'] &&
              (!('stageHistory' in data) || (
@@ -908,7 +822,7 @@ service cloud.firestore {
 
     function isValidTranscriptEntry(entry) {
       return isBoundedString(entry, 1, 2000) || (
-               isValidMap(entry, ['id', 'sender', 'role', 'text', 'content', 'timestamp', 'createdAt', 'card']) &&
+               isValidMap(entry, ['id', 'sender', 'role', 'text', 'content', 'timestamp', 'createdAt', 'card', 'source', 'degradedNotice']) &&
                entry.size() >= 1 &&
                isOptionalString(entry, 'id', 1, 128) &&
                (!('sender' in entry) || entry.sender in ['user', 'assistant', 'client', 'agent']) &&
@@ -917,7 +831,9 @@ service cloud.firestore {
                isOptionalString(entry, 'content', 0, 4000) &&
                (!('timestamp' in entry) || isValidDateTime(entry.timestamp)) &&
                (!('createdAt' in entry) || isValidDateTime(entry.createdAt)) &&
-               (!('card' in entry) || entry.card == null || isValidAdvisorChatCard(entry.card))
+               (!('card' in entry) || entry.card == null || isValidAdvisorChatCard(entry.card)) &&
+               (!('source' in entry) || entry.source in ['gemini', 'fallback']) &&
+               isOptionalString(entry, 'degradedNotice', 0, 400)
              );
     }
 
@@ -1024,10 +940,12 @@ service cloud.firestore {
       allow create: if isOwner(uid) &&
                        uidUnchanged() &&
                        isValidUser(request.resource.data, uid) &&
-                       request.resource.data.role == 'client';
+                       request.resource.data.role == 'client' &&
+                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null) &&
+                       (!('assignedAgentLicense' in request.resource.data) || request.resource.data.assignedAgentLicense == null);
 
       // Owner may update non-privileged profile fields only (role, uid, email, createdAt immutable).
-      // Only an admin may update roles (agents cannot self-elevate to admin).
+      // Only admin may update role; agent/admin may assign advisor metadata.
       allow update: if isValidUser(request.resource.data, uid) &&
                        uidNotModified() &&
                        areImmutableFieldsUnchanged(['uid', 'email', 'createdAt']) && (
@@ -1035,13 +953,21 @@ service cloud.firestore {
                            isOwner(uid) &&
                            request.resource.data.role == resource.data.role &&
                            request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-                             'fullName', 'phone', 'oib', 'city', 'postalCode', 'updatedAt'
+                             'fullName', 'phone', 'oib', 'address', 'city', 'postalCode', 'updatedAt'
+                           ])
+                         ) ||
+                         (
+                           isAgentOrAdmin() &&
+                           request.resource.data.role == resource.data.role &&
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'assignedAgent', 'assignedAgentLicense', 'updatedAt'
                            ])
                          ) ||
                          (
                            isAdmin() &&
                            request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-                             'role', 'fullName', 'phone', 'oib', 'city', 'postalCode', 'updatedAt'
+                             'role', 'fullName', 'phone', 'oib', 'address', 'city', 'postalCode',
+                             'assignedAgent', 'assignedAgentLicense', 'updatedAt'
                            ])
                          )
                        );
@@ -1053,19 +979,18 @@ service cloud.firestore {
     match /quotes/{quoteId} {
       allow read: if isAgentOrAdmin() || isRecordOwner();
 
-      // Public intake (anonymous or signed-in) with strict schema, consent & ownership validation.
       allow create: if isValidQuote(request.resource.data, quoteId) &&
                        request.resource.data.status == 'new' &&
                        isValidCreateUserId(request.resource.data) &&
-                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null);
+                       (!('assignedAgent' in request.resource.data) || request.resource.data.assignedAgent == null) &&
+                       (!('policyId' in request.resource.data) || request.resource.data.policyId == null);
 
-      // Agency ops status progression, assignment, and notes only.
       allow update: if isAgentOrAdmin() &&
                        isValidQuote(request.resource.data, quoteId) &&
                        areImmutableFieldsUnchanged(['id', 'referenceNumber', 'productLine', 'consents', 'createdAt']) &&
                        isUserIdImmutableOrLinkable() &&
                        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-                         'status', 'assignedAgent', 'notes', 'selectedOffer', 'updatedAt', 'userId'
+                         'status', 'assignedAgent', 'policyId', 'notes', 'selectedOffer', 'updatedAt', 'userId'
                        ]) &&
                        isValidQuoteStatusTransition(resource.data.status, request.resource.data.status);
 
@@ -1086,7 +1011,7 @@ service cloud.firestore {
                        areImmutableFieldsUnchanged(['id', 'referenceNumber', 'fileName', 'fileSizeBytes', 'parsedVia', 'createdAt']) &&
                        isUserIdImmutableOrLinkable() &&
                        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-                         'status', 'assignedAgent', 'notes', 'reminderScheduledFor',
+                         'status', 'assignedAgent', 'notes', 'reminderScheduledFor', 'reminderNotified',
                          'extractedPolicy', 'estimatedNewAnnualPremium', 'estimatedAnnualSavings',
                          'updatedAt', 'userId'
                        ]) &&
@@ -1102,9 +1027,6 @@ service cloud.firestore {
       allow create: if isAgentOrAdmin() &&
                        isValidPolicy(request.resource.data, policyId);
 
-      // Agent/admin may update validated policy fields.
-      // Policy owner may ONLY request renewal (status -> 'pending_renewal') or prepend/append a requested
-      // endorsement without altering financial, carrier, or ownership fields.
       allow update: if isValidPolicy(request.resource.data, policyId) && (
                          isAgentOrAdmin() ||
                          (
@@ -1114,7 +1036,9 @@ service cloud.firestore {
                              'productLine', 'carrierName', 'startDate', 'expiryDate',
                              'annualPremium', 'monthlyPremium', 'deductible', 'coverageLimit',
                              'assetSummary', 'vehiclePlate', 'propertyAddress', 'greenCardNumber',
-                             'ipidCode', 'renewalReminderSentAt', 'createdAt'
+                             'ipidCode', 'policyPdfUrl', 'policyPdfPath', 'ipidPdfUrl',
+                             'assignedAgent', 'assignedAgentLicense', 'sourceQuoteId',
+                             'renewalReminderSentAt', 'createdAt'
                            ]) &&
                            request.resource.data.diff(resource.data).affectedKeys().hasOnly([
                              'endorsements', 'status', 'updatedAt'
@@ -1137,20 +1061,18 @@ service cloud.firestore {
     match /claims/{claimId} {
       allow read: if isAgentOrAdmin() || isRecordOwner();
 
-      // Public FNOL intake (anonymous or signed-in) with strict schema & GDPR consent validation.
       allow create: if isValidClaim(request.resource.data, claimId) &&
                        request.resource.data.stage == 'received' &&
                        isValidCreateUserId(request.resource.data) &&
                        (!('attachments' in request.resource.data) || areInitialAttachmentsValid(request.resource.data.attachments));
 
-      // Agent/admin progresses triage stage, stageHistory, estimatedAmount & updatedAt.
-      // Signed-in owner may ONLY append new attachments and update updatedAt without altering stage.
       allow update: if isValidClaim(request.resource.data, claimId) &&
                        areImmutableFieldsUnchanged([
                          'id', 'referenceNumber', 'userId', 'policyNumber', 'productLine',
                          'carrierName', 'claimantName', 'claimantOib', 'claimantEmail',
                          'claimantPhone', 'incidentDate', 'incidentTime', 'incidentLocation',
-                         'description', 'policeReportFiled', 'consents', 'createdAt'
+                         'description', 'policeReportFiled', 'policeStation', 'policeReportNumber',
+                         'consents', 'createdAt'
                        ]) && (
                          (
                            isAgentOrAdmin() &&
@@ -1177,7 +1099,6 @@ service cloud.firestore {
     match /escalations/{escalationId} {
       allow read: if isAgentOrAdmin() || isRecordOwner();
 
-      // Accepts 'open' (spec) or 'new' (domain.ts QuotePipelineStatus) on public intake.
       allow create: if isValidEscalation(request.resource.data, escalationId) &&
                        request.resource.data.status in ['open', 'new'] &&
                        isValidCreateUserId(request.resource.data) &&
@@ -1241,7 +1162,16 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // 9. Default Deny Catch-All
+    // 9. Server-Generated Operational SLA Alerts
+    match /sla_alerts/{alertId} {
+      allow read: if isAgentOrAdmin();
+      allow update: if isAgentOrAdmin() &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resolved', 'updatedAt']) &&
+                       request.resource.data.resolved is bool;
+      allow create, delete: if false;
+    }
+
+    // 10. Default Deny Catch-All
     match /{document=**} {
       allow read, write: if false;
     }

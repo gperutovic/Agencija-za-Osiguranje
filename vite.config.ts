@@ -10,7 +10,8 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
-          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage', 'firebase/app-check'],
+          pdf: ['pdf-lib', '@pdf-lib/fontkit'],
           icons: ['lucide-react'],
         },
       },

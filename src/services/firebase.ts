@@ -1,7 +1,15 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { initializeAppCheck, ReCaptchaV3Provider, getToken as getAppCheckToken, type AppCheck } from 'firebase/app-check';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import {
+  connectFirestoreEmulator,
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  type Firestore,
+} from 'firebase/firestore';
+import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBM2g2zVhRbEkxTsFnKL-NpgT4XBDsDBks',
@@ -14,8 +22,68 @@ const firebaseConfig = {
 
 export const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 export const firebaseAuth = getAuth(firebaseApp);
-export const firestoreDb = getFirestore(firebaseApp);
+
+function createFirestore(): Firestore {
+  // Enable multi-tab IndexedDB offline persistence in browser environments
+  if (typeof window !== 'undefined' && typeof indexedDB !== 'undefined') {
+    try {
+      return initializeFirestore(firebaseApp, {
+        localCache: persistentLocalCache({
+          tabManager: persistentMultipleTabManager(),
+        }),
+      });
+    } catch {
+      return getFirestore(firebaseApp);
+    }
+  }
+  return getFirestore(firebaseApp);
+}
+
+export const firestoreDb = createFirestore();
 export const firebaseStorage = getStorage(firebaseApp);
+
+// Optional Firebase App Check (activates automatically when VITE_RECAPTCHA_SITE_KEY is configured)
+let appCheckInstance: AppCheck | null = null;
+const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
+if (typeof window !== 'undefined' && recaptchaSiteKey) {
+  try {
+    appCheckInstance = initializeAppCheck(firebaseApp, {
+      provider: new ReCaptchaV3Provider(recaptchaSiteKey),
+      isTokenAutoRefreshEnabled: true,
+    });
+  } catch {
+    appCheckInstance = null;
+  }
+}
+
+export async function getOptionalAppCheckToken(): Promise<string | null> {
+  if (!appCheckInstance) return null;
+  try {
+    const result = await getAppCheckToken(appCheckInstance, false);
+    return result.token || null;
+  } catch {
+    return null;
+  }
+}
+
+// Optional Firebase Emulator Suite wiring for local development
+export const USE_FIREBASE_EMULATORS =
+  Boolean(import.meta.env.DEV) && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true';
+
+let emulatorsConnected = false;
+if (USE_FIREBASE_EMULATORS && !emulatorsConnected && typeof window !== 'undefined') {
+  emulatorsConnected = true;
+  try {
+    connectAuthEmulator(firebaseAuth, 'http://127.0.0.1:9099', { disableWarnings: true });
+    connectFirestoreEmulator(firestoreDb, '127.0.0.1', 8080);
+    connectStorageEmulator(firebaseStorage, '127.0.0.1', 9199);
+  } catch {
+    // Already connected during HMR
+  }
+}
+
+export const IS_DEMO_MODE =
+  Boolean(import.meta.env.DEV) && import.meta.env.VITE_ENABLE_DEMO_MODE === 'true';
 
 /**
  * Recursively removes `undefined` fields so Firestore `setDoc`/`updateDoc` never throw.

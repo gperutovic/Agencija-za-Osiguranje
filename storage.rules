@@ -1,18 +1,93 @@
 rules_version = '2';
+
+// ===============================================================
+// Hardened Cloud Storage Security Rules — Vedro Insurance Agency
+// Strict GDPR Tenant Isolation + Verified Staff Custom Claims
+// ===============================================================
+
 service firebase.storage {
   match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAgentOrAdmin() {
+      return isSignedIn() &&
+             'role' in request.auth.token &&
+             request.auth.token.role in ['agent', 'admin'];
+    }
+
+    function isValidUploadFile() {
+      return request.resource != null &&
+             request.resource.size > 0 &&
+             request.resource.size <= 10 * 1024 * 1024 &&
+             request.resource.contentType in [
+               'image/jpeg',
+               'image/png',
+               'image/webp',
+               'application/pdf'
+             ];
+    }
+
+    function isResourceOwnerByMetadata() {
+      return isSignedIn() &&
+             resource != null &&
+             resource.metadata != null &&
+             'ownerUid' in resource.metadata &&
+             resource.metadata.ownerUid == request.auth.uid;
+    }
+
+    function isValidOwnerMetadataOnCreate() {
+      return (
+               !isSignedIn() && (
+                 request.resource.metadata == null ||
+                 !('ownerUid' in request.resource.metadata) ||
+                 request.resource.metadata.ownerUid == ''
+               )
+             ) || (
+               isSignedIn() &&
+               request.resource.metadata != null &&
+               'ownerUid' in request.resource.metadata &&
+               request.resource.metadata.ownerUid == request.auth.uid
+             );
+    }
+
+    // 1. User-scoped uploads (/users/{uid}/{folder}/{fileName})
+    match /users/{uid}/{folder}/{fileName} {
+      allow read: if (isSignedIn() && request.auth.uid == uid) || isAgentOrAdmin();
+      allow create: if isSignedIn() &&
+                       request.auth.uid == uid &&
+                       folder in ['claims', 'policies', 'switch'] &&
+                       isValidUploadFile();
+      allow update: if false;
+      allow delete: if isAgentOrAdmin();
+    }
+
+    // 2. FNOL Claim Attachments (/claims/{claimId}/{fileName})
+    // Guests & signed-in claimants may create valid <=10MB files (or use signed upload URLs);
+    // ONLY the owning claimant (matching metadata.ownerUid) or licensed agent/admin may read.
     match /claims/{claimId}/{fileName} {
-      allow create: if request.resource.size < 10 * 1024 * 1024
-        && (request.resource.contentType.matches('image/.*')
-            || request.resource.contentType == 'application/pdf');
-      allow read: if request.auth != null;
+      allow read: if isAgentOrAdmin() || isResourceOwnerByMetadata();
+      allow create: if isValidUploadFile() && isValidOwnerMetadataOnCreate();
+      allow update, delete: if false;
     }
+
+    // 3. Switch & Save Uploaded Policies (/switch-policies/{analysisId}/{fileName})
     match /switch-policies/{analysisId}/{fileName} {
-      allow create: if request.resource.size < 10 * 1024 * 1024
-        && (request.resource.contentType.matches('image/.*')
-            || request.resource.contentType == 'application/pdf');
-      allow read: if request.auth != null;
+      allow read: if isAgentOrAdmin() || isResourceOwnerByMetadata();
+      allow create: if isValidUploadFile() && isValidOwnerMetadataOnCreate();
+      allow update, delete: if false;
     }
+
+    // 4. Issued Carrier Policy & IPID Documents (/policies/{policyId}/{fileName})
+    match /policies/{policyId}/{fileName} {
+      allow read: if isAgentOrAdmin() || isResourceOwnerByMetadata();
+      allow create, update: if isAgentOrAdmin() && isValidUploadFile();
+      allow delete: if isAgentOrAdmin();
+    }
+
+    // 5. Default Deny Catch-All
     match /{allPaths=**} {
       allow read, write: if false;
     }

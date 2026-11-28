@@ -5,24 +5,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        canvas: 'var(--color-canvas)',
-        'canvas-warm': 'var(--color-canvas-warm)',
-        hairline: 'var(--color-border)',
-        'hairline-strong': 'var(--color-border-strong)',
+        canvas: 'rgb(var(--color-canvas-rgb) / <alpha-value>)',
+        'canvas-warm': 'rgb(var(--color-canvas-warm-rgb) / <alpha-value>)',
+        hairline: 'rgb(var(--color-border-rgb) / <alpha-value>)',
+        'hairline-strong': 'rgb(var(--color-border-strong-rgb) / <alpha-value>)',
         ink: {
-          DEFAULT: 'var(--color-ink)',
-          secondary: 'var(--color-ink-secondary)',
-          muted: 'var(--color-ink-muted)',
+          DEFAULT: 'rgb(var(--color-ink-rgb) / <alpha-value>)',
+          secondary: 'rgb(var(--color-ink-secondary-rgb) / <alpha-value>)',
+          muted: 'rgb(var(--color-ink-muted-rgb) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: 'var(--color-accent)',
-          hover: 'var(--color-accent-hover)',
-          soft: 'var(--color-accent-soft)',
+          DEFAULT: 'rgb(var(--color-accent-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--color-accent-hover-rgb) / <alpha-value>)',
+          soft: 'rgb(var(--color-accent-soft-rgb) / <alpha-value>)',
         },
         status: {
-          success: 'var(--color-success)',
-          warning: 'var(--color-warning)',
-          danger: 'var(--color-danger)',
+          success: 'rgb(var(--color-success-rgb) / <alpha-value>)',
+          warning: 'rgb(var(--color-warning-rgb) / <alpha-value>)',
+          danger: 'rgb(var(--color-danger-rgb) / <alpha-value>)',
         },
       },
       fontFamily: {

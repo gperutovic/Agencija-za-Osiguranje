@@ -1,3 +1,5 @@
+import type { ProductLine } from '../types/domain';
+
 export interface PartnerInsurer {
   id: string;
   name: string;
@@ -10,8 +12,19 @@ export interface PartnerInsurer {
   ipidPrefix: string;
 }
 
+export interface LicensedAdvisor {
+  id: string;
+  name: string;
+  titleHr: string;
+  titleEn: string;
+  hanfaLicense: string;
+}
+
 export interface BrandConfig {
   brandName: string;
+  storagePrefix: string;
+  domain: string;
+  siteUrl: string;
   taglineHr: string;
   taglineEn: string;
   legalName: string;
@@ -33,28 +46,30 @@ export interface BrandConfig {
   claimsPhone: string;
   email: string;
   complaintsEmail: string;
+  paymentIban: string;
   workingHoursHr: string;
   workingHoursEn: string;
+  defaultAdvisorDeskHr: string;
+  defaultAdvisorDeskEn: string;
   accentHex: string;
   verifiedRating: number;
   verifiedReviewCount: number;
-  licensedAdvisors: Array<{
-    id: string;
-    name: string;
-    titleHr: string;
-    hanfaLicense: string;
-  }>;
+  commissionRatesByLine: Record<ProductLine, number>;
+  licensedAdvisors: LicensedAdvisor[];
   partnerInsurers: PartnerInsurer[];
 }
 
 export const BRAND_CONFIG: BrandConfig = {
-  brandName: 'Jasno',
+  brandName: 'Vedro',
+  storagePrefix: 'vedro',
+  domain: 'vedro-osiguranje.hr',
+  siteUrl: 'https://agencija-za-osiguranje.web.app',
   taglineHr: 'Osiguranje bez sitnih slova. Ugovoreno za 90 sekundi.',
   taglineEn: 'Insurance without the fine print. Bound in 90 seconds.',
-  legalName: 'Jasno d.o.o. za zastupanje u osiguranju',
+  legalName: 'Vedro d.o.o. za zastupanje u osiguranju',
   legalStatusHr: 'Društvo za zastupanje u osiguranju pod nadzorom HANFA-e',
   legalStatusEn: 'Authorized Insurance Agency supervised by HANFA',
-  oib: '48291047315',
+  oib: '48291047313',
   mbs: '081429031',
   courtRegistry: 'Trgovački sud u Zagrebu',
   shareCapital: '2.500,00 EUR (uplaćen u cijelosti)',
@@ -68,30 +83,45 @@ export const BRAND_CONFIG: BrandConfig = {
   phone: '+385 1 4800 910',
   phoneHref: 'tel:+38514800910',
   claimsPhone: '+385 1 4800 911',
-  email: 'podrska@jasno-osiguranje.hr',
-  complaintsEmail: 'prigovori@jasno-osiguranje.hr',
+  email: 'podrska@vedro-osiguranje.hr',
+  complaintsEmail: 'prigovori@vedro-osiguranje.hr',
+  paymentIban: 'HR1210010051863000160',
   workingHoursHr: 'Pon – Pet: 08:00 – 19:00 | Sub: 09:00 – 13:00 | Digitalna prijava štete 24/7',
   workingHoursEn: 'Mon – Fri: 08:00 – 19:00 | Sat: 09:00 – 13:00 | Digital Claims 24/7',
+  defaultAdvisorDeskHr: 'Vedro tim ovlaštenih zastupnika',
+  defaultAdvisorDeskEn: 'Vedro Licensed Advisory Desk',
   accentHex: '#FF006E',
   verifiedRating: 4.9,
   verifiedReviewCount: 1840,
+  commissionRatesByLine: {
+    auto: 0.12,
+    imovina: 0.18,
+    zdravstveno: 0.15,
+    zivotno: 0.2,
+    putno: 0.22,
+    ljubimci: 0.16,
+    poslovno: 0.15,
+  },
   licensedAdvisors: [
     {
       id: 'agent-marko',
       name: 'Marko Kovač',
       titleHr: 'Viši ovlašteni zastupnik u osiguranju',
+      titleEn: 'Senior Licensed Insurance Advisor',
       hanfaLicense: 'ZO-2024-11820',
     },
     {
       id: 'agent-petra',
       name: 'Petra Novak',
       titleHr: 'Specijalistica za štete i imovinska osiguranja',
+      titleEn: 'Claims & Property Insurance Specialist',
       hanfaLicense: 'ZO-2023-09451',
     },
     {
       id: 'agent-luka',
       name: 'Luka Babić',
       titleHr: 'Zastupnik za gospodarska i flotna osiguranja',
+      titleEn: 'Commercial & Fleet Insurance Advisor',
       hanfaLicense: 'ZO-2025-14002',
     },
   ],
@@ -175,3 +205,7 @@ export const BRAND_CONFIG: BrandConfig = {
     },
   ],
 };
+
+export function storageKey(suffix: string): string {
+  return `${BRAND_CONFIG.storagePrefix}_${suffix}`;
+}

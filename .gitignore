@@ -21,5 +21,7 @@ dist-ssr
 .env
 .env.production
 
-# Firebase cache
+# Firebase cache & compiled functions
 .firebase/
+functions/lib/
+functions/node_modules/

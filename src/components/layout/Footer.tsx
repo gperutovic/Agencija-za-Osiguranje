@@ -2,17 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 import { BRAND_CONFIG } from '../../config/brand';
+import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { PRODUCT_CATALOG } from '../../i18n/translations';
 import { BrandWordmark } from '../illustrations/EditorialIllustrations';
 
 export const Footer: React.FC = () => {
   const { language, copy } = useLanguage();
+  const { isAgent } = useAuth();
 
   return (
     <footer className="bg-ink text-white border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-12">
-        {/* 4-Column Information Architecture */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Column 1: Brand & Contact */}
           <div className="space-y-4">
@@ -83,11 +84,13 @@ export const Footer: React.FC = () => {
                   {copy.nav.myProfile}
                 </Link>
               </li>
-              <li>
-                <Link to="/admin" className="hover:text-white transition-colors">
-                  {language === 'hr' ? 'Portal za zastupnike' : 'Agency Operations Portal'}
-                </Link>
-              </li>
+              {isAgent ? (
+                <li>
+                  <Link to="/admin" className="hover:text-white transition-colors">
+                    {language === 'hr' ? 'Portal za zastupnike' : 'Agency Operations Portal'}
+                  </Link>
+                </li>
+              ) : null}
             </ul>
           </div>
 
@@ -119,7 +122,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/prigovori" className="hover:text-white transition-colors">
-                  {language === 'hr' ? 'Prigovori potrošača (čl. 401.)' : 'Consumer Complaints'}
+                  {language === 'hr' ? 'Prigovori potrošača (čl. 401.)' : 'Consumer Complaints (Art. 401)'}
                 </Link>
               </li>
               <li>
@@ -129,7 +132,7 @@ export const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-white/80 hover:text-accent transition-colors"
                 >
-                  <span>Registar HANFA</span>
+                  <span>{language === 'hr' ? 'Registar HANFA' : 'HANFA Registry'}</span>
                   <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
                 </a>
               </li>
@@ -143,17 +146,18 @@ export const Footer: React.FC = () => {
             <span>{BRAND_CONFIG.legalName}</span>
             <span>OIB: {BRAND_CONFIG.oib}</span>
             <span>MBS: {BRAND_CONFIG.mbs}</span>
-            <span>HANFA upisnik: {BRAND_CONFIG.hanfaRegistrationNumber}</span>
+            <span>
+              {language === 'hr' ? 'HANFA upisnik:' : 'HANFA Registry:'}{' '}
+              {BRAND_CONFIG.hanfaRegistrationNumber}
+            </span>
           </div>
           <p>{copy.footer.disclosure}</p>
           <p>
-            <strong className="text-white/80 font-medium">
-              {language === 'hr' ? 'Zastupana društva za osiguranje:' : 'Represented insurers:'}
-            </strong>{' '}
+            <strong className="text-white/80 font-medium">{copy.footer.representedInsurers}</strong>{' '}
             {BRAND_CONFIG.partnerInsurers.map((p) => p.name).join(' • ')}.
           </p>
           <p className="text-white/45">
-            © {new Date().getFullYear()} {BRAND_CONFIG.legalName}. Sva prava pridržana.
+            © {new Date().getFullYear()} {BRAND_CONFIG.legalName}. {copy.footer.rightsReserved}
           </p>
         </div>
       </div>

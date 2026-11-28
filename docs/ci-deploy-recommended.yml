@@ -1,0 +1,78 @@
+name: CI/CD Pipeline - Test, Build & Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  verify_and_deploy:
+    name: Typecheck, Test, Build & Deploy Vedro Platform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: Frontend Strict Typecheck
+        run: npm run typecheck
+
+      - name: Frontend Unit Tests (Validators, Pricing Engine, Vector PDFs)
+        run: npm run test
+
+      - name: Build Production Frontend Bundle
+        run: npm run build
+
+      - name: Install Cloud Functions Dependencies
+        working-directory: functions
+        run: npm ci
+
+      - name: Cloud Functions Typecheck & Build
+        working-directory: functions
+        run: npm run build
+
+      - name: Cloud Functions Unit Tests
+        working-directory: functions
+        run: npm run test
+
+      - name: Archive Production Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-build
+          path: dist
+
+      - name: Deploy Hosting, Rules, Indexes, Storage & Functions to Firebase
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && env.FIREBASE_TOKEN != ''
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          npx firebase-tools deploy \
+            --only hosting,firestore:rules,firestore:indexes,storage,functions \
+            --token "$FIREBASE_TOKEN" \
+            --project agencija-za-osiguranje --non-interactive
+        continue-on-error: true
+
+      - name: Fallback Hosting Deploy via Service Account (if configured)
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && env.FIREBASE_SERVICE_ACCOUNT != ''
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: agencija-za-osiguranje
+        continue-on-error: true

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, ShieldCheck, Star } from 'lucide-react';
+import { ArrowRight, Check, FileUp, ShieldCheck, Star } from 'lucide-react';
 import { BRAND_CONFIG } from '../config/brand';
 import { useLanguage } from '../i18n/LanguageContext';
 import { PRODUCT_CATALOG } from '../i18n/translations';
@@ -16,30 +16,14 @@ import {
 } from '../components/illustrations/EditorialIllustrations';
 import { Button } from '../components/ui/Button';
 
-const HERO_PILLS: ProductLine[] = ['auto', 'imovina', 'zdravstveno', 'zivotno', 'putno', 'poslovno'];
-
-const CLIENT_REVIEWS = [
-  {
-    name: 'Maja K.',
-    city: 'Zagreb',
-    product: 'Auto AO + Puni Kasko',
-    quote:
-      'Usporedila sam 7 osiguratelja u manje od dvije minute, bez ijednog neželjenog poziva. Polica i Zelena karta stigli su odmah u Moj Profil.',
-  },
-  {
-    name: 'Ivan B.',
-    city: 'Split',
-    product: 'Prijava štete (FNOL)',
-    quote:
-      'Kad mi je kamenčić razbio vjetrobransko staklo, prijavio sam štetu preko mobitela s tri fotografije. Zastupnik je riješio sve s procjeniteljem.',
-  },
-  {
-    name: 'Petra & Luka M.',
-    city: 'Rijeka',
-    product: 'Paket Auto + Dom (Potres)',
-    quote:
-      'Spojili smo osiguranje stana s potresom i auto kasko. Uštedjeli smo 12% i napokon nam je jasno napisano što polica pokriva, a što ne.',
-  },
+const HERO_PILLS: ProductLine[] = [
+  'auto',
+  'imovina',
+  'zdravstveno',
+  'zivotno',
+  'putno',
+  'ljubimci',
+  'poslovno',
 ];
 
 export const HomePage: React.FC = () => {
@@ -68,6 +52,14 @@ export const HomePage: React.FC = () => {
     navigate(`/izracun/${primary}${query}`);
   };
 
+  const formattedRating =
+    language === 'en'
+      ? BRAND_CONFIG.verifiedRating.toFixed(1)
+      : BRAND_CONFIG.verifiedRating.toFixed(1).replace('.', ',');
+  const formattedCount = BRAND_CONFIG.verifiedReviewCount.toLocaleString(
+    language === 'en' ? 'en-US' : 'hr-HR'
+  );
+
   return (
     <div className="bg-canvas text-ink">
       {/* 1. EDITORIAL HERO SECTION — Pure White Canvas */}
@@ -81,11 +73,11 @@ export const HomePage: React.FC = () => {
               {copy.hero.subheadline}
             </p>
 
-            {/* Quick Product Selector Pills */}
+            {/* Quick Product Selector Pills — All 7 lines reachable in 1 click */}
             <div
               className="flex flex-wrap items-center justify-center gap-2 pt-2"
               role="radiogroup"
-              aria-label="Brzi odabir osiguranja"
+              aria-label={copy.hero.quickPickerAria}
             >
               {HERO_PILLS.map((id) => {
                 const meta = PRODUCT_CATALOG.find((p) => p.id === id);
@@ -147,7 +139,7 @@ export const HomePage: React.FC = () => {
               <span className="inline-flex items-center gap-1.5 tabular-nums">
                 <Star className="w-4 h-4 text-accent fill-accent" strokeWidth={1.5} />
                 <span>
-                  {BRAND_CONFIG.verifiedRating.toFixed(1).replace('.', ',')} / 5 ({BRAND_CONFIG.verifiedReviewCount.toLocaleString('hr-HR')} {copy.hero.trustRating})
+                  {formattedRating} / 5 ({formattedCount} {copy.hero.trustRating})
                 </span>
               </span>
               <span>{copy.hero.trustFee}</span>
@@ -155,7 +147,7 @@ export const HomePage: React.FC = () => {
 
             <div
               className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold tracking-wide text-ink-muted uppercase"
-              aria-label="Partnerski osiguratelji"
+              aria-label={copy.hero.partnersAria}
             >
               {BRAND_CONFIG.partnerInsurers.map((insurer) => (
                 <span key={insurer.id}>{insurer.shortName}</span>
@@ -165,7 +157,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. PRODUCT & BUNDLE SHOWCASE — Warm Architectural Off-White */}
+      {/* 2. PRODUCT & BUNDLE SHOWCASE — Balanced 4 × 2 Grid (7 lines + Switch & Save card) */}
       <section className="bg-canvas-warm py-20 sm:py-24 border-b border-hairline">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
@@ -190,7 +182,6 @@ export const HomePage: React.FC = () => {
                       : 'border-hairline hover:border-hairline-strong shadow-subtle'
                   }`}
                 >
-                  {/* Top-left Lemonade-style checkbox + optional understated tag */}
                   <div className="flex items-center justify-between mb-4">
                     <span
                       className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
@@ -222,15 +213,45 @@ export const HomePage: React.FC = () => {
 
                   <div className="pt-4 mt-4 border-t border-hairline flex items-baseline justify-between tabular-nums">
                     <span className="text-xs text-ink-muted uppercase tracking-wider font-medium">
-                      {copy.bundle.fromMonth} {formatEurWhole(product.startingMonthlyEur)} / mj.
+                      {copy.bundle.fromMonth} {formatEurWhole(product.startingMonthlyEur)}{' '}
+                      {product.isSingleTrip ? copy.units.perTripShort : copy.units.perMonthShort}
                     </span>
                     <span className="text-xs text-ink-secondary font-medium">
-                      {formatEurWhole(product.startingAnnualEur)} / god.
+                      {product.isSingleTrip
+                        ? `${formatEurWhole(product.startingAnnualEur)} ${copy.units.perYearShort}`
+                        : `${formatEurWhole(product.startingAnnualEur)} ${copy.units.perYearShort}`}
                     </span>
                   </div>
                 </button>
               );
             })}
+
+            {/* Balanced 8th Editorial Card — Eliminates Orphan Grid Slot */}
+            <Link
+              to="/usporedi-policu"
+              className="group rounded-editorial bg-ink text-white border border-ink p-6 flex flex-col justify-between shadow-card hover:bg-ink/95 transition-all"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-accent">
+                  {copy.bundle.switchCardEyebrow}
+                </span>
+                <FileUp className="w-4 h-4 text-white/70 group-hover:text-accent transition-colors" strokeWidth={1.75} />
+              </div>
+
+              <div className="space-y-2.5 my-2">
+                <h3 className="font-display text-2xl text-white leading-snug">
+                  {copy.bundle.switchCardTitle}
+                </h3>
+                <p className="text-xs text-white/75 leading-relaxed">
+                  {copy.bundle.switchCardBody}
+                </p>
+              </div>
+
+              <div className="pt-4 mt-4 border-t border-white/15 flex items-center justify-between text-xs font-semibold text-white group-hover:text-accent transition-colors">
+                <span>{copy.bundle.switchCardCta}</span>
+                <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
+              </div>
+            </Link>
           </div>
 
           {/* Live Bundle Bar */}
@@ -331,14 +352,12 @@ export const HomePage: React.FC = () => {
                 ))}
               </div>
               <h2 className="font-display text-3xl sm:text-5xl text-ink">
-                {language === 'hr'
-                  ? 'Brzina kad ugovaraš. Podrška kad zatrebaš.'
-                  : 'Fast when quoting. Present when you claim.'}
+                {copy.reviews.heading}
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {CLIENT_REVIEWS.map((review) => (
+              {copy.reviews.items.map((review) => (
                 <article
                   key={review.name}
                   className="rounded-editorial bg-canvas border border-hairline p-6 flex flex-col justify-between space-y-5"

@@ -1,3 +1,9 @@
+/**
+ * Strictly local-dev / Firebase Emulator seed fixtures.
+ * NEVER imported into production Firestore reads — gated behind
+ * `import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_MODE === 'true'`.
+ */
+import { BRAND_CONFIG } from '../config/brand';
 import {
   AdvisorThreadMessage,
   AiEscalationRecord,
@@ -13,31 +19,35 @@ import { addDaysIso } from '../utils/formatters';
 
 const todayIso = new Date().toISOString().slice(0, 10);
 
-export const DEMO_CLIENT_OIB = computeOibControlDigit('2618210515');
+export const DEMO_CLIENT_OIB = computeOibControlDigit('2618210515'); // 26182105152
 export const DEMO_CLIENT_2_OIB = computeOibControlDigit('4928173645');
 export const DEMO_AGENT_OIB = computeOibControlDigit('7319204851');
 
 export const SEED_USERS: UserProfile[] = [
   {
     uid: 'demo-client-ana',
-    email: 'ana.horvat@jasno-klijent.hr',
+    email: `ana.horvat@klijent.${BRAND_CONFIG.domain}`,
     fullName: 'Ana Horvat',
     role: 'client',
     phone: '+385 91 542 8810',
     oib: DEMO_CLIENT_OIB,
+    address: 'Maksimirska cesta 44',
     city: 'Zagreb',
     postalCode: '10000',
+    assignedAgent: BRAND_CONFIG.licensedAdvisors[0]?.name,
+    assignedAgentLicense: BRAND_CONFIG.licensedAdvisors[0]?.hanfaLicense,
     createdAt: '2026-01-12T09:00:00.000Z',
   },
   {
     uid: 'demo-agent-marko',
-    email: 'marko.kovac@jasno-osiguranje.hr',
+    email: `marko.kovac@${BRAND_CONFIG.domain}`,
     fullName: 'Marko Kovač',
     role: 'agent',
-    phone: '+385 1 4800 910',
+    phone: BRAND_CONFIG.phone,
     oib: DEMO_AGENT_OIB,
-    city: 'Zagreb',
-    postalCode: '10000',
+    address: BRAND_CONFIG.address,
+    city: BRAND_CONFIG.city,
+    postalCode: BRAND_CONFIG.postalCode,
     createdAt: '2025-09-01T08:00:00.000Z',
   },
 ];
@@ -62,7 +72,10 @@ export const SEED_POLICIES: PolicyRecord[] = [
     vehiclePlate: 'ZG-4821-MK',
     greenCardNumber: 'HR/012/441082',
     ipidCode: 'IPID-GEN-AUTO-2026',
+    assignedAgent: BRAND_CONFIG.licensedAdvisors[0]?.name,
+    assignedAgentLicense: BRAND_CONFIG.licensedAdvisors[0]?.hanfaLicense,
     endorsements: [],
+    createdAt: '2026-01-12T09:30:00.000Z',
   },
   {
     id: 'pol-home-02',
@@ -80,8 +93,12 @@ export const SEED_POLICIES: PolicyRecord[] = [
     deductible: 150,
     coverageLimit: 138000,
     assetSummary: 'Stan 74 m², Maksimir, Zagreb • Građevinski dio + Stvari + Potres',
+    propertyAddress: 'Maksimirska cesta 44, 10000 Zagreb',
     ipidCode: 'IPID-CRO-IMOVINA-2026',
+    assignedAgent: BRAND_CONFIG.licensedAdvisors[1]?.name,
+    assignedAgentLicense: BRAND_CONFIG.licensedAdvisors[1]?.hanfaLicense,
     endorsements: [],
+    createdAt: '2026-01-14T11:00:00.000Z',
   },
   {
     id: 'pol-health-03',
@@ -100,7 +117,10 @@ export const SEED_POLICIES: PolicyRecord[] = [
     coverageLimit: 5000,
     assetSummary: 'Dopunsko + B-lista lijekova i 1 sistematski pregled godišnje',
     ipidCode: 'IPID-WIE-ZDRAVSTVENO-2026',
+    assignedAgent: BRAND_CONFIG.licensedAdvisors[0]?.name,
+    assignedAgentLicense: BRAND_CONFIG.licensedAdvisors[0]?.hanfaLicense,
     endorsements: [],
+    createdAt: '2026-04-10T08:15:00.000Z',
   },
   {
     id: 'pol-fleet-04',
@@ -119,7 +139,10 @@ export const SEED_POLICIES: PolicyRecord[] = [
     coverageLimit: 250000,
     assetSummary: 'Profesionalna odgovornost + Cyber zaštita (12 zaposlenih)',
     ipidCode: 'IPID-ALZ-POSLOVNO-2026',
+    assignedAgent: BRAND_CONFIG.licensedAdvisors[2]?.name,
+    assignedAgentLicense: BRAND_CONFIG.licensedAdvisors[2]?.hanfaLicense,
     endorsements: [],
+    createdAt: '2026-01-19T14:20:00.000Z',
   },
 ];
 
@@ -250,7 +273,7 @@ export const SEED_QUOTES: QuoteSubmission[] = [
     assignedAgent: 'Marko Kovač',
     source: 'quote_engine',
     createdAt: '2026-11-19T14:10:00.000Z',
-    updatedAt: '2026-11-19T15:00:00.000Z',
+    updatedAt: '2026-11-19T14:32:00.000Z',
   },
 ];
 
@@ -261,6 +284,7 @@ export const SEED_SWITCH_ANALYSES: SwitchAnalysisRecord[] = [
     fileName: 'polica-kasko-2025.pdf',
     fileSizeBytes: 428190,
     parsedVia: 'local_analyzer',
+    confidenceScore: 0.72,
     extractedPolicy: {
       insurer: 'Croatia osiguranje d.d.',
       productLine: 'auto',
@@ -291,12 +315,13 @@ export const SEED_CLAIMS: ClaimRecord[] = [
     carrierName: 'Generali osiguranje d.d.',
     claimantName: 'Ana Horvat',
     claimantOib: DEMO_CLIENT_OIB,
-    claimantEmail: 'ana.horvat@jasno-klijent.hr',
+    claimantEmail: `ana.horvat@klijent.${BRAND_CONFIG.domain}`,
     claimantPhone: '+385 91 542 8810',
     incidentDate: addDaysIso(todayIso, -6),
     incidentTime: '17:40',
     incidentLocation: 'Zagreb, Slavonska avenija 12',
-    description: 'Oštećenje vjetrobranskog stakla uslijed udarca kamenčića s vozila ispred u prometu.',
+    description:
+      'Oštećenje vjetrobranskog stakla uslijed udarca kamenčića s vozila ispred u prometu.',
     policeReportFiled: false,
     attachments: [
       {
@@ -312,29 +337,31 @@ export const SEED_CLAIMS: ClaimRecord[] = [
       {
         stage: 'received',
         note: 'Prijava zaprimljena putem digitalnog FNOL sustava.',
-        timestamp: addDaysIso(todayIso, -6),
+        timestamp: `${addDaysIso(todayIso, -6)}T18:05:00.000Z`,
       },
       {
         stage: 'insurer_review',
         note: 'Dokumentacija proslijeđena Generali odjelu za štete.',
-        timestamp: addDaysIso(todayIso, -5),
+        timestamp: `${addDaysIso(todayIso, -5)}T09:20:00.000Z`,
+        actor: 'Petra Novak',
       },
       {
         stage: 'assessment',
         note: 'Odobrena zamjena u ovlaštenom servisu bez franšize.',
-        timestamp: addDaysIso(todayIso, -2),
+        timestamp: `${addDaysIso(todayIso, -2)}T11:45:00.000Z`,
+        actor: 'Petra Novak',
       },
     ],
     consents: {
       ipidAcknowledged: true,
       gdprEssential: true,
       gdprMarketing: false,
-      timestamp: addDaysIso(todayIso, -6),
+      timestamp: `${addDaysIso(todayIso, -6)}T18:05:00.000Z`,
       policyVersion: '2026.1',
     },
     estimatedAmount: 540,
-    createdAt: addDaysIso(todayIso, -6),
-    updatedAt: addDaysIso(todayIso, -2),
+    createdAt: `${addDaysIso(todayIso, -6)}T18:05:00.000Z`,
+    updatedAt: `${addDaysIso(todayIso, -2)}T11:45:00.000Z`,
   },
 ];
 
@@ -387,9 +414,12 @@ export const SEED_COMPLAINTS: ComplaintRecord[] = [
     address: 'Ilica 112, 10000 Zagreb',
     policyNumber: 'TRG-AO-2025-88211',
     subject: 'Upit o obračunu proporcionalnog povrata premije',
-    description: 'Molim provjeru izračuna povrata neiskorištenog dijela premije nakon odjave vozila.',
+    description:
+      'Molim provjeru izračuna povrata neiskorištenog dijela premije nakon odjave vozila.',
     status: 'in_review',
+    assignedAgent: 'Marko Kovač',
     statutoryDeadlineDate: addDaysIso(todayIso, 11),
-    createdAt: addDaysIso(todayIso, -4),
+    createdAt: `${addDaysIso(todayIso, -4)}T10:00:00.000Z`,
+    updatedAt: `${addDaysIso(todayIso, -3)}T11:00:00.000Z`,
   },
 ];

@@ -1,15 +1,50 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, User, X, ShieldCheck, ArrowRight } from 'lucide-react';
+import { BRAND_CONFIG } from '../../config/brand';
 import { useAuth } from '../../context/AuthContext';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { PRODUCT_CATALOG } from '../../i18n/translations';
 import { formatEurWhole } from '../../utils/formatters';
 import { BrandWordmark, ProductIllustration } from '../illustrations/EditorialIllustrations';
 import { Button } from '../ui/Button';
 
+const LanguageSwitcher: React.FC = () => {
+  const { language, setLanguage } = useLanguage();
+  return (
+    <div
+      role="group"
+      aria-label={language === 'hr' ? 'Odabir jezika' : 'Language selector'}
+      className="inline-flex items-center rounded-lg border border-hairline bg-canvas-warm p-0.5 text-[11px] font-semibold"
+    >
+      <button
+        type="button"
+        onClick={() => setLanguage('hr')}
+        aria-pressed={language === 'hr'}
+        className={`px-2 py-1 rounded-md transition-colors ${
+          language === 'hr' ? 'bg-ink text-white shadow-subtle' : 'text-ink-muted hover:text-ink'
+        }`}
+      >
+        HR
+      </button>
+      <button
+        type="button"
+        onClick={() => setLanguage('en')}
+        aria-pressed={language === 'en'}
+        className={`px-2 py-1 rounded-md transition-colors ${
+          language === 'en' ? 'bg-ink text-white shadow-subtle' : 'text-ink-muted hover:text-ink'
+        }`}
+      >
+        EN
+      </button>
+    </div>
+  );
+};
+
 export const Header: React.FC = () => {
-  const { language, toggleLanguage, copy } = useLanguage();
+  const { language, copy } = useLanguage();
   const { user, isAgent } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -17,6 +52,9 @@ export const Header: React.FC = () => {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
+  const mobileDrawerRef = useRef<HTMLDivElement>(null);
+
+  useFocusTrap(mobileOpen, mobileDrawerRef, () => setMobileOpen(false));
 
   useEffect(() => {
     setMegaOpen(false);
@@ -32,7 +70,6 @@ export const Header: React.FC = () => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setMegaOpen(false);
-        setMobileOpen(false);
       }
     };
     document.addEventListener('mousedown', handleOutside);
@@ -53,13 +90,14 @@ export const Header: React.FC = () => {
         <Link
           to="/"
           className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
-          aria-label="Jasno Naslovna"
+          aria-label={`${BRAND_CONFIG.brandName} ${copy.nav.homeAriaSuffix}`}
+          aria-current={isActive('/') ? 'page' : undefined}
         >
           <BrandWordmark />
         </Link>
 
         {/* Center: Max 5 Clean Top-Level Items */}
-        <nav aria-label="Glavna navigacija" className="hidden lg:flex items-center gap-1">
+        <nav aria-label={copy.nav.mainNavLabel} className="hidden lg:flex items-center gap-1">
           {/* 1. Osiguranja Mega-Menu */}
           <div ref={megaRef} className="relative">
             <button
@@ -98,8 +136,8 @@ export const Header: React.FC = () => {
                           {language === 'hr' ? product.nameHr : product.nameEn}
                         </div>
                         <div className="text-xs text-ink-muted tabular-nums">
-                          {language === 'hr' ? 'od' : 'from'}{' '}
-                          {formatEurWhole(product.startingMonthlyEur)} / mj.
+                          {copy.units.from} {formatEurWhole(product.startingMonthlyEur)}{' '}
+                          {product.isSingleTrip ? copy.units.perTripShort : copy.units.perMonthShort}
                         </div>
                       </div>
                     </Link>
@@ -126,6 +164,7 @@ export const Header: React.FC = () => {
           {/* 2. Usporedi policu */}
           <Link
             to="/usporedi-policu"
+            aria-current={isActive('/usporedi-policu') ? 'page' : undefined}
             className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
               isActive('/usporedi-policu')
                 ? 'text-ink bg-canvas-warm'
@@ -138,6 +177,7 @@ export const Header: React.FC = () => {
           {/* 3. Prijava štete */}
           <Link
             to="/prijava-stete"
+            aria-current={isActive('/prijava-stete') ? 'page' : undefined}
             className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
               isActive('/prijava-stete')
                 ? 'text-ink bg-canvas-warm'
@@ -150,6 +190,7 @@ export const Header: React.FC = () => {
           {/* 4. AI Savjetnik */}
           <Link
             to="/ai-savjetnik"
+            aria-current={isActive('/ai-savjetnik') ? 'page' : undefined}
             className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
               isActive('/ai-savjetnik')
                 ? 'text-ink bg-canvas-warm'
@@ -162,6 +203,7 @@ export const Header: React.FC = () => {
           {/* 5. O nama */}
           <Link
             to="/o-nama"
+            aria-current={isActive('/o-nama') ? 'page' : undefined}
             className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
               isActive('/o-nama')
                 ? 'text-ink bg-canvas-warm'
@@ -174,18 +216,12 @@ export const Header: React.FC = () => {
 
         {/* Right Actions (Desktop) */}
         <div className="hidden lg:flex items-center gap-2.5">
-          <button
-            type="button"
-            onClick={toggleLanguage}
-            className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-ink-muted hover:text-ink hover:bg-canvas-warm transition-colors uppercase tracking-wider"
-            aria-label="Promijeni jezik"
-          >
-            {language === 'hr' ? 'HR' : 'EN'}
-          </button>
+          <LanguageSwitcher />
 
           {isAgent ? (
             <Link
               to="/admin"
+              aria-current={isActive('/admin') ? 'page' : undefined}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-ink border border-hairline hover:bg-canvas-warm transition-colors"
             >
               <ShieldCheck className="w-4 h-4" strokeWidth={1.5} />
@@ -195,6 +231,7 @@ export const Header: React.FC = () => {
 
           <Link
             to="/moj-profil"
+            aria-current={isActive('/moj-profil') ? 'page' : undefined}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium text-ink-secondary hover:text-ink hover:bg-canvas-warm transition-colors"
           >
             <User className="w-4 h-4" strokeWidth={1.5} />
@@ -206,7 +243,7 @@ export const Header: React.FC = () => {
           </Button>
         </div>
 
-        {/* Mobile Actions (< 1024px) — Clean, zero stacking collision */}
+        {/* Mobile Actions (< 1024px) */}
         <div className="flex lg:hidden items-center gap-2">
           <Button size="sm" onClick={() => navigate('/izracun')}>
             {language === 'hr' ? 'Izračunaj' : 'Prices'}
@@ -215,7 +252,7 @@ export const Header: React.FC = () => {
             type="button"
             onClick={() => setMobileOpen(true)}
             className="p-2 rounded-lg text-ink hover:bg-canvas-warm transition-colors"
-            aria-label="Otvori izbornik"
+            aria-label={copy.nav.openMenu}
             aria-expanded={mobileOpen}
           >
             <Menu className="w-6 h-6" strokeWidth={1.5} />
@@ -223,106 +260,124 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Single-Layer Thumb-Friendly Mobile Slide-Over Sheet */}
-      {mobileOpen ? (
-        <div
-          className="fixed inset-0 z-50 lg:hidden bg-ink/40 flex justify-end"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Mobilna navigacija"
-          onClick={() => setMobileOpen(false)}
-        >
-          <div
-            className="w-[86vw] max-w-sm h-full bg-canvas border-l border-hairline flex flex-col animate-step"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="h-16 px-5 border-b border-hairline flex items-center justify-between">
-              <BrandWordmark />
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={toggleLanguage}
-                  className="px-2.5 py-1 rounded text-xs font-semibold text-ink-muted hover:text-ink border border-hairline"
-                >
-                  {language === 'hr' ? 'EN' : 'HR'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMobileOpen(false)}
-                  className="p-2 rounded-lg text-ink hover:bg-canvas-warm"
-                  aria-label="Zatvori izbornik"
-                >
-                  <X className="w-5 h-5" strokeWidth={1.5} />
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
-              <div className="space-y-1">
-                <p className="px-2 text-[11px] font-semibold uppercase tracking-wider text-ink-muted mb-2">
-                  {copy.nav.insurances}
-                </p>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {PRODUCT_CATALOG.map((p) => (
-                    <Link
-                      key={p.id}
-                      to={`/izracun/${p.id}`}
-                      className="px-3 py-2.5 rounded-lg bg-canvas-warm text-sm font-medium text-ink hover:text-accent transition-colors"
+      {/* Portaled Mobile Slide-Over Sheet — Real Dimmed Backdrop, Zero Double-Logo Bleed */}
+      {mobileOpen && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-50 lg:hidden bg-ink/50 backdrop-blur-[2px] flex justify-end"
+              role="dialog"
+              aria-modal="true"
+              aria-label={copy.nav.mobileNavLabel}
+              onClick={() => setMobileOpen(false)}
+            >
+              <div
+                ref={mobileDrawerRef}
+                tabIndex={-1}
+                className="w-[86vw] max-w-sm h-full bg-canvas border-l border-hairline shadow-elevated flex flex-col animate-step focus:outline-none"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="h-16 px-5 border-b border-hairline flex items-center justify-between shrink-0 bg-canvas">
+                  <BrandWordmark />
+                  <div className="flex items-center gap-2">
+                    <LanguageSwitcher />
+                    <button
+                      type="button"
+                      onClick={() => setMobileOpen(false)}
+                      className="p-2 rounded-lg text-ink hover:bg-canvas-warm"
+                      aria-label={copy.nav.closeMenu}
                     >
-                      {language === 'hr' ? p.nameHr : p.nameEn}
+                      <X className="w-5 h-5" strokeWidth={1.5} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6 bg-canvas">
+                  <div className="space-y-1">
+                    <p className="px-2 text-[11px] font-semibold uppercase tracking-wider text-ink-muted mb-2">
+                      {copy.nav.insurances}
+                    </p>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {PRODUCT_CATALOG.map((p) => (
+                        <Link
+                          key={p.id}
+                          to={`/izracun/${p.id}`}
+                          className="px-3 py-2.5 rounded-lg bg-canvas-warm text-sm font-medium text-ink hover:text-accent transition-colors"
+                        >
+                          {language === 'hr' ? p.nameHr : p.nameEn}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 border-t border-hairline pt-4">
+                    <Link
+                      to="/usporedi-policu"
+                      aria-current={isActive('/usporedi-policu') ? 'page' : undefined}
+                      className={`block px-2 py-2.5 text-base font-medium rounded-lg ${
+                        isActive('/usporedi-policu') ? 'text-accent bg-accent-soft/60' : 'text-ink hover:text-accent'
+                      }`}
+                    >
+                      {copy.nav.switchPolicy}
                     </Link>
-                  ))}
+                    <Link
+                      to="/prijava-stete"
+                      aria-current={isActive('/prijava-stete') ? 'page' : undefined}
+                      className={`block px-2 py-2.5 text-base font-medium rounded-lg ${
+                        isActive('/prijava-stete') ? 'text-accent bg-accent-soft/60' : 'text-ink hover:text-accent'
+                      }`}
+                    >
+                      {copy.nav.claims}
+                    </Link>
+                    <Link
+                      to="/ai-savjetnik"
+                      aria-current={isActive('/ai-savjetnik') ? 'page' : undefined}
+                      className={`block px-2 py-2.5 text-base font-medium rounded-lg ${
+                        isActive('/ai-savjetnik') ? 'text-accent bg-accent-soft/60' : 'text-ink hover:text-accent'
+                      }`}
+                    >
+                      {copy.nav.aiAdvisor}
+                    </Link>
+                    <Link
+                      to="/o-nama"
+                      aria-current={isActive('/o-nama') ? 'page' : undefined}
+                      className={`block px-2 py-2.5 text-base font-medium rounded-lg ${
+                        isActive('/o-nama') ? 'text-accent bg-accent-soft/60' : 'text-ink hover:text-accent'
+                      }`}
+                    >
+                      {copy.nav.about}
+                    </Link>
+                    <Link
+                      to="/moj-profil"
+                      aria-current={isActive('/moj-profil') ? 'page' : undefined}
+                      className={`block px-2 py-2.5 text-base font-medium rounded-lg ${
+                        isActive('/moj-profil') ? 'text-accent bg-accent-soft/60' : 'text-ink hover:text-accent'
+                      }`}
+                    >
+                      {user ? user.fullName : copy.nav.myProfile}
+                    </Link>
+                    {isAgent ? (
+                      <Link
+                        to="/admin"
+                        aria-current={isActive('/admin') ? 'page' : undefined}
+                        className="flex items-center gap-2 px-2 py-2.5 text-sm font-semibold text-ink hover:text-accent"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-accent" strokeWidth={1.75} />
+                        <span>{copy.nav.adminOps}</span>
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="p-5 border-t border-hairline shrink-0 bg-canvas">
+                  <Button fullWidth size="lg" onClick={() => navigate('/izracun')}>
+                    {copy.nav.getQuote}
+                  </Button>
                 </div>
               </div>
-
-              <div className="space-y-1 border-t border-hairline pt-4">
-                <Link
-                  to="/usporedi-policu"
-                  className="block px-2 py-2.5 text-base font-medium text-ink hover:text-accent"
-                >
-                  {copy.nav.switchPolicy}
-                </Link>
-                <Link
-                  to="/prijava-stete"
-                  className="block px-2 py-2.5 text-base font-medium text-ink hover:text-accent"
-                >
-                  {copy.nav.claims}
-                </Link>
-                <Link
-                  to="/ai-savjetnik"
-                  className="block px-2 py-2.5 text-base font-medium text-ink hover:text-accent"
-                >
-                  {copy.nav.aiAdvisor}
-                </Link>
-                <Link
-                  to="/o-nama"
-                  className="block px-2 py-2.5 text-base font-medium text-ink hover:text-accent"
-                >
-                  {copy.nav.about}
-                </Link>
-                <Link
-                  to="/moj-profil"
-                  className="block px-2 py-2.5 text-base font-medium text-ink hover:text-accent"
-                >
-                  {copy.nav.myProfile}
-                </Link>
-                <Link
-                  to="/admin"
-                  className="block px-2 py-2.5 text-sm font-medium text-ink-muted hover:text-ink"
-                >
-                  {copy.nav.adminOps}
-                </Link>
-              </div>
-            </div>
-
-            <div className="p-5 border-t border-hairline">
-              <Button fullWidth size="lg" onClick={() => navigate('/izracun')}>
-                {copy.nav.getQuote}
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : null}
+            </div>,
+            document.body
+          )
+        : null}
     </header>
   );
 };
